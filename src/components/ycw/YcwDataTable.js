@@ -263,7 +263,7 @@ function Right({ data }) {
                     {row.jobs}
                   </TableCell>
                   <NavLink
-                    to={`add/details/${row.id}`}
+                    to={`/ycw/add/details/${row.id}`}
                     style={{
                       textDecoration: "none",
                       display: "grid",

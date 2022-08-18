@@ -28,7 +28,7 @@ function App() {
         
         
         <Route path="/ycw/add" element={<AddNewData/>}/>
-        <Route path="/add/details/:id" element={<Details/>}/>
+        <Route path="/ycw/add/details/:id" element={<Details/>}/>
 
         <Route path="/cx" element={<Cx/>}/>
         <Route path="/cx/new" element={<AddNewCustomer/>}/>
