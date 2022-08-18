@@ -9,10 +9,18 @@ import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { Cuisines, JobType, Language } from "../../AlllData";
-
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow, { tableRowClasses } from "@mui/material/TableRow";
+import Multiselected from "../Multiselected/Multiselected";
+import CheckBox from "@mui/icons-material/CheckBox";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 function SkillExpDetails() {
   const [age, setAge] = React.useState("");
@@ -23,38 +31,39 @@ function SkillExpDetails() {
   const [vegNonveg, setVegNonveg] = React.useState("");
   const [cuisinesKnown, setCuisinesKnown] = React.useState([]);
   const [primaryLanguage, setPrimaryLanguage] = React.useState();
-  const [otherLanguages, setOtherLanguages] = React.useState();
+  const [otherLanguages, setOtherLanguages] = React.useState([]);
   const [totalExp, setTotalExp] = React.useState();
   const [experienceRemarks, setExperienceRemarks] = React.useState();
   const [lastJobType, setLastJobType] = React.useState();
   const [lastJobDuration, setLastJobDuration] = React.useState();
   const [ReasonLeaving, setReasonLeaving] = React.useState();
 
-  console.log("cusins is ", cuisinesKnown);
+  console.log("other language is ", typeof otherLanguages);
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
   return (
-    <Box marginTop={7}   
-    sx={{
-      display: "grid",
-      gap: 1,
-    }}>
-      <h5 >Skill and Experience Details</h5>
+    <Box
+      marginTop={7}
+      sx={{
+        display: "grid",
+        gap: 1,
+      }}
+    >
+      <h5>Skill and Experience Details</h5>
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
           rowGap: "30px",
-          justifyContent:"space-between"
-
+          justifyContent: "space-between",
         }}
       >
-        <FormControl sx={{  minWidth: 120, width:"48.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Primary Skill</InputLabel>
           <Select
-            sx={{ width:"100%"}}
+            sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             label="Primary Skill"
@@ -65,13 +74,13 @@ function SkillExpDetails() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {JobType.map((items)=>(
+            {JobType.map((items) => (
               <MenuItem value={items.job}>{items.job}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        <FormControl sx={{  minWidth: 120, width:"48.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Secondary Skill</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -85,13 +94,13 @@ function SkillExpDetails() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {JobType.map((items)=>(
+            {JobType.map((items) => (
               <MenuItem value={items.job}>{items.job}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        <FormControl sx={{ minWidth: 120, width:"48.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Tertiary Skill</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -105,14 +114,14 @@ function SkillExpDetails() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {JobType.map((items)=>(
+            {JobType.map((items) => (
               <MenuItem value={items.job}>{items.job}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
         <TextField
-          sx={{ width:"48.5%", }}
+          sx={{ width: "23%" }}
           size="small"
           id="outlined-basic"
           label="Skill Remarks"
@@ -122,7 +131,65 @@ function SkillExpDetails() {
           }}
         />
 
-        <FormControl sx={{ minWidth: 120, width:"48.5%" }} size="small">
+        {/*........................................................ Skill table .............................................*/}
+        <Box sx={{ width: "100%" }}>
+          <TableContainer>
+            <Table
+              size="small"
+              sx={{ minWidth: "100%", border: "1px solid grey" }}
+              aria-label="simple table"
+            >
+              <TableHead sx={{ backgroundColor: "#fff1f1" }}>
+                <TableRow>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Skill Name
+                  </TableCell>
+                  <TableCell sx={{ width: "10%" }} align="left">
+                    Type
+                  </TableCell>
+                  <TableCell align="left">Work</TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                <TableRow>
+                  <TableCell align="left">{primarySkill}</TableCell>
+                  <TableCell align="left">Primary</TableCell>
+                  <TableCell align="left">
+                    <Multiselected
+                      data={primarySkill}
+                      setData={setCuisinesKnown}
+                    />
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell align="left">{secondarySkill}</TableCell>
+                  <TableCell align="left">Secondary</TableCell>
+                  <TableCell align="left">
+                    <Multiselected
+                      data={secondarySkill}
+                      setData={setCuisinesKnown}
+                    />
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell align="left">{tertiarySkill}</TableCell>
+                  <TableCell align="left">Tertiar</TableCell>
+                  <TableCell align="left">
+                    <Multiselected
+                      data={tertiarySkill}
+                      setData={setCuisinesKnown}
+                    />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Can Cook Veg/Non-veg?</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -170,14 +237,16 @@ function SkillExpDetails() {
           )}
         />
 
-        <FormControl sx={{ minWidth: 120, width:"31.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Primary Language</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             label="Primary Language"
-            onChange={handleChange}
+            onChange={(e) => {
+              setPrimaryLanguage(e.target.value);
+            }}
           >
             <MenuItem value="">
               <em>None</em>
@@ -208,7 +277,7 @@ function SkillExpDetails() {
               {option.language}
             </li>
           )}
-          style={{ width: "31.5%" }}
+          style={{ width: "100%" }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -219,8 +288,72 @@ function SkillExpDetails() {
           )}
         />
 
+        {/*........................................................ Language Table.............................................*/}
+        <Box sx={{ width: "100%" }}>
+          <TableContainer>
+            <Table
+              size="small"
+              sx={{ minWidth: "100%", border: "1px solid grey" }}
+              aria-label="simple table"
+            >
+              <TableHead sx={{ backgroundColor: "#fff1f1" }}>
+                <TableRow>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Language
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Type
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Read
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Write
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Speak
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                <TableRow>
+                  <TableCell align="left">{primaryLanguage}</TableCell>
+                  <TableCell align="left">Primary</TableCell>
+                  <TableCell align="left">
+                    <Checkbox {...label} color="success" />
+                  </TableCell>
+                  <TableCell align="left">
+                    <Checkbox {...label} color="success" />
+                  </TableCell>
+                  <TableCell align="left">
+                    <Checkbox {...label} color="success" />
+                  </TableCell>
+                </TableRow>
+
+                {otherLanguages.map((item) => (
+                  <TableRow>
+                    <TableCell align="left">{item.language}</TableCell>
+                    <TableCell align="left">Secondary</TableCell>
+                    <TableCell align="left">
+                      <Checkbox {...label} color="success" />
+                    </TableCell>
+                    <TableCell align="left">
+                      <Checkbox {...label} color="success" />
+                    </TableCell>
+                    <TableCell align="left">
+                      <Checkbox {...label} color="success" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        {/*........................................................ Language Table.............................................*/}
+
         <TextField
-          sx={{ width: "31.5%" }}
+          sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"
           label="Total Experience"
@@ -230,7 +363,7 @@ function SkillExpDetails() {
           }}
         />
 
-<TextField
+        <TextField
           sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"
@@ -241,7 +374,7 @@ function SkillExpDetails() {
           }}
         />
 
-<Autocomplete
+        <Autocomplete
           multiple
           id="checkboxes-tags-demo"
           options={JobType}
@@ -272,8 +405,7 @@ function SkillExpDetails() {
           )}
         />
 
-
-    <TextField
+        <TextField
           sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"
@@ -285,7 +417,7 @@ function SkillExpDetails() {
           }}
         />
 
-           <TextField
+        <TextField
           sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"

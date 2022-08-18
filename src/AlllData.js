@@ -260,5 +260,3 @@ export const drivingCarType = [
 ]
 
 
-//Skill and Experience Details=={}
-
