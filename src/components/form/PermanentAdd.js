@@ -7,17 +7,20 @@ import Select from "@mui/material/Select";
 import { AddressData } from "../../AddressData";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-function PermanentAdd() {
-  const [check, setCheck] = React.useState(false);
-  const [addressL1, setAddressL1] = React.useState("");
-  const [addressL2, setAddressL2] = React.useState("");
-  const [landmark, setLandmark] = React.useState("");
-  const [pinCode, setPinCode] = React.useState("");
-  const [country, setCountry] = React.useState("");
-  const [state, setState] = React.useState("");
-  const [city, setCity] = React.useState("");
-  const [locality, setLocality] = React.useState("");
-  const [addressProofType, setAddressProofType] = React.useState("");
+function PermanentAdd(props) {
+
+  const {
+    addressL1, setAddressL1,
+    addressL2, setAddressL2,
+    landmark, setLandmark,
+    pinCode, setPinCode,
+    country, setCountry,
+    state, setState,
+    city, setCity,
+    locality, setLocality,
+    addressProofType, setAddressProofType,
+    check, setCheck
+  } = props
 
   const res = AddressData.filter((word) => word.admin_name === state);
 
@@ -29,17 +32,7 @@ function PermanentAdd() {
   var set = new Set(arr);
   let newArr = [...set];
 
-  console.log({
-    addressL1,
-    addressL2,
-    landmark,
-    pinCode,
-    country,
-    state,
-    city,
-    locality,
-    addressProofType,
-  });
+
 
   return (
     <Box sx={{ marginTop: 7 }}>

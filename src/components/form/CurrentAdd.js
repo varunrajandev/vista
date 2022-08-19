@@ -6,28 +6,19 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { AddressData } from "../../AddressData";
 
-function CurrentAdd() {
-  const [addressL1, setAddressL1] = React.useState("");
-  const [addressL2, setAddressL2] = React.useState("");
-  const [landmark, setLandmark] = React.useState("");
-  const [pinCode, setPinCode] = React.useState("");
-  const [country, setCountry] = React.useState("");
-  const [state, setState] = React.useState("");
-  const [city, setCity] = React.useState("");
-  const [locality, setLocality] = React.useState("");
-  const [addressProofType, setAddressProofType] = React.useState("");
+function CurrentAdd(props) {
 
-  console.log({
-    addressL1,
-    addressL2,
-    landmark,
-    pinCode,
-    country,
-    state,
-    city,
-    locality,
-    addressProofType,
-  });
+const {
+  addressL1, setAddressL1,
+  addressL2, setAddressL2,
+  landmark, setLandmark,
+  pinCode, setPinCode,
+  country, setCountry,
+  state, setState,
+  city, setCity,
+  locality, setLocality,
+  addressProofType, setAddressProofType,
+} = props
 
   const res = AddressData.filter((word) => word.admin_name === state);
 

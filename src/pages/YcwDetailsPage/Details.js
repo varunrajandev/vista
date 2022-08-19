@@ -1,12 +1,13 @@
 import React from 'react'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom';
+import YcwNav from '../../components/Details/YcwNav';
 
 function Details() {
     const { id } = useParams();
   return (
-    <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
-        this is the details page of id {id}
+    <Box bgcolor="#e1e2e3" flex={7}>
+        <YcwNav/>
     </Box>
   )
 }

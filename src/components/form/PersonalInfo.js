@@ -11,51 +11,36 @@ import { maritalstatus } from "../../AlllData";
 import { LoadingButton } from "@mui/lab";
 import SaveIcon from "@mui/icons-material/Save";
 
-function PersonalInfo() {
-  const [walk, setWalk] = React.useState("");
-  const [fname, setFname] = React.useState("");
-  const [mname, setMname] = React.useState("");
-  const [lname, setLname] = React.useState("");
-  const [gender, setGender] = React.useState("");
-  const [phoneNumber, setPhoneNumber] = React.useState();
-  const [alternateNumber, setAlternateNumber] = React.useState();
-  const [whatsappAvailable, setWhatsappAvailable] = React.useState();
-  const [whatsapp, setWhatsapp] = React.useState();
-  const [value, setValue] = React.useState();
-  const [maritalStatus, setMaritalStatus] = React.useState("");
-  const [religion, setReligion] = React.useState("");
-  const [education, setEducation] = React.useState("");
-  const [educationalRemarks, setEducationalRemarks] = React.useState("");
-  const [covidStatus, setCovidStatus] = React.useState("");
-  const [medicalCondition, setMedicalCondition] = React.useState("");
-  const [ submitted, setSubmitted ] = React.useState(false)
+function PersonalInfo(props) {
+  const {
+    walk, setWalk,
+    fname, setFname,
+    mname, setMname,
+    lname, setLname,
+    gender, setGender,
+    phoneNumber, setPhoneNumber,
+    alternateNumber, setAlternateNumber,
+    whatsappAvailable, setWhatsappAvailable,
+    whatsapp, setWhatsapp,
+    value, setValue,
+    maritalStatus, setMaritalStatus,
+    religion, setReligion,
+    education, setEducation,
+    educationalRemarks, setEducationalRemarks,
+    covidStatus, setCovidStatus,
+    medicalCondition, setMedicalCondition,
+    submitted, setSubmitted
+  } = props;
 
   const handleChange = (event) => {
     setWalk(event.target.value);
   };
 
   setTimeout(() => {
-    setSubmitted(false)
+    setSubmitted(false);
   }, 2000);
 
-  console.log({
-    medicalCondition,
-    covidStatus,
-    educationalRemarks,
-    education,
-    religion,
-    maritalStatus,
-    value,
-    whatsapp,
-    whatsappAvailable,
-    alternateNumber,
-    phoneNumber,
-    walk,
-    gender,
-    fname,
-    mname,
-    lname,
-  });
+
   return (
     <form>
       <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
@@ -365,15 +350,15 @@ function PersonalInfo() {
           }}
         />
       </Box>
-      <Box sx={{display:"grid", gap:4, justifyContent:"right", mt:2}}>
+      <Box sx={{ display: "grid", gap: 4, justifyContent: "right", mt: 2 }}>
         <LoadingButton
           loading={submitted}
           loadingPosition="start"
           startIcon={<SaveIcon />}
           variant="outlined"
           size="small"
-          onClick={()=>{
-            setSubmitted(true)
+          onClick={() => {
+            setSubmitted(true);
           }}
         >
           Save

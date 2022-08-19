@@ -10,7 +10,7 @@ import Cx from "./pages/CX/Cx";
 import JobsTable from "./pages/Jobs/JobsTable";
 import AddNewCustomer from "./pages/CX/AddNewCustomer";
 import AddNewRequest from "./pages/Jobs/AddNewRequest";
-import Details from "./pages/Details";
+import Details from "./pages/YcwDetailsPage/Details";
 
 
 

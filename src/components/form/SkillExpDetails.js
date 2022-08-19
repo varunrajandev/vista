@@ -30,15 +30,32 @@ function SkillExpDetails() {
   const [skillRemarks, setSkillRemarks] = React.useState("");
   const [vegNonveg, setVegNonveg] = React.useState("");
   const [cuisinesKnown, setCuisinesKnown] = React.useState([]);
-  const [primaryLanguage, setPrimaryLanguage] = React.useState();
+  const [primaryLanguage, setPrimaryLanguage] = React.useState("");
   const [otherLanguages, setOtherLanguages] = React.useState([]);
   const [totalExp, setTotalExp] = React.useState();
   const [experienceRemarks, setExperienceRemarks] = React.useState();
-  const [lastJobType, setLastJobType] = React.useState();
+  const [lastJobType, setLastJobType] = React.useState([]);
   const [lastJobDuration, setLastJobDuration] = React.useState();
   const [ReasonLeaving, setReasonLeaving] = React.useState();
+  const [values, setValues] = React.useState(false);
 
-  console.log("other language is ", typeof otherLanguages);
+  const [otherLanguagesD, setOtherLanguagesD] = React.useState([
+    {
+      language: {primaryLanguage},
+      type: "",
+      read: false,
+      write: false,
+      speak: false,
+    },
+  ]);
+
+  const handleClick = () => {
+    console.log(otherLanguagesD);
+  };
+
+  console.log("read:", otherLanguagesD.read);
+  console.log("Write:", otherLanguagesD.write);
+  console.log("speak", otherLanguagesD.speak);
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -321,34 +338,76 @@ function SkillExpDetails() {
                   <TableCell align="left">{primaryLanguage}</TableCell>
                   <TableCell align="left">Primary</TableCell>
                   <TableCell align="left">
-                    <Checkbox {...label} color="success" />
+                    <Checkbox
+                      size="small"
+                      {...label}
+                      color="success"
+                      value={otherLanguagesD.read}
+                      onChange={(e) => {
+                        setOtherLanguagesD({
+                          ...otherLanguagesD,
+                          read: e.target.checked,
+                        });
+                      }}
+                    />
                   </TableCell>
                   <TableCell align="left">
-                    <Checkbox {...label} color="success" />
+                    <Checkbox
+                      size="small"
+                      {...label}
+                      color="success"
+                      value={otherLanguagesD.write}
+                      onChange={(e) => {
+                        setOtherLanguagesD({
+                          ...otherLanguagesD,
+                          write: e.target.checked,
+                        });
+                      }}
+                    />
                   </TableCell>
                   <TableCell align="left">
-                    <Checkbox {...label} color="success" />
+                    <Checkbox
+                      size="small"
+                      {...label}
+                      color="success"
+                      value={otherLanguagesD.speak}
+                      onChange={(e) => {
+                        setOtherLanguagesD({
+                          ...otherLanguagesD,
+                          speak: e.target.checked,
+                        });
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
 
                 {otherLanguages.map((item) => (
                   <TableRow>
-                    <TableCell align="left">{item.language}</TableCell>
+                    <TableCell
+                      onChange={(e) => {
+                        setOtherLanguagesD({ language: e.target.value });
+                      }}
+                      align="left"
+                    >
+                      {item.language}
+                    </TableCell>
                     <TableCell align="left">Secondary</TableCell>
                     <TableCell align="left">
-                      <Checkbox {...label} color="success" />
+                      <Checkbox size="small" {...label} color="success" />
                     </TableCell>
                     <TableCell align="left">
-                      <Checkbox {...label} color="success" />
+                      <Checkbox size="small" {...label} color="success" />
                     </TableCell>
                     <TableCell align="left">
-                      <Checkbox {...label} color="success" />
+                      <Checkbox size="small" {...label} color="success" />
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
+          <button onClick={handleClick}>Click</button>
         </Box>
         {/*........................................................ Language Table.............................................*/}
 
