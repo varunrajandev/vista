@@ -54,10 +54,56 @@ function AddNewYcw() {
   const [addressProofTypep, setAddressProofTypep] = React.useState("");
   const [check, setCheck] = React.useState(false);
 
+  //Skill and Experience Deatails
+  const [primarySkill, setPrimarySkill] = React.useState("");
+  const [secondarySkill, setSecondarySkill] = React.useState("");
+  const [tertiarySkill, setTertiarySkill] = React.useState("");
+  const [skillRemarks, setSkillRemarks] = React.useState("");
+  const [vegNonveg, setVegNonveg] = React.useState("");
+  const [cuisinesKnown, setCuisinesKnown] = React.useState([]);
+  const [primaryLanguage, setPrimaryLanguage] = React.useState("");
+  const [otherLanguages, setOtherLanguages] = React.useState([]);
+  const [totalExp, setTotalExp] = React.useState();
+  const [experienceRemarks, setExperienceRemarks] = React.useState();
+  const [lastJobType, setLastJobType] = React.useState([]);
+  const [lastJobDuration, setLastJobDuration] = React.useState();
+  const [reasonLeaving, setReasonLeaving] = React.useState();
+  // const [values, setValues] = React.useState(false);
+
+  //job requirements:
+  const [openToTraining, setOpenToTraining] = React.useState(false);
+  const [preferJob, setPreferJob] = React.useState([]);
+  const [preferWorkHour, setPreferWorkHour] = React.useState([]);
+  const [startTime, setStartTime] = React.useState(null);
+  const [endTime, setEndTime] = React.useState(null);
+  const [vehicleAvailable, setVehicleAvailable] = React.useState("")
+  const [minSal, setMinSal] = React.useState("")
+  const [maxSal, setMaxSal] = React.useState("")
+  const [traningMode, setTraningMode] = React.useState("")
+  const [jobRemarks, setJobRemarks] = React.useState("");
+
+  //bank account
+  const [inputFields, setInputFields] = useState([
+    {
+      AccounType: "",
+      bankName: "",
+      branchName: "",
+      branchAddress: "",
+      accountHoderName: "",
+      accountNumber: "",
+      IfceCode: "",
+      BankAccountProof: "",
+    },
+  ]);
 
 
   
 const [name, setName] = useState("")
+
+const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
+const endTimeFormat = endTime ? endTime.toLocaleTimeString() : '';
+
+
  const handleClick = ()=>{
   console.log("Current Addrress",{
     addressL1,
@@ -82,7 +128,39 @@ const [name, setName] = useState("")
     localityp,
     addressProofTypep,
   });
-      }
+
+  console.log({
+     primarySkill,
+    secondarySkill,
+    tertiarySkill,
+    skillRemarks,
+    vegNonveg,
+    cuisinesKnown,
+    primaryLanguage,
+    otherLanguages,
+    totalExp,
+    experienceRemarks,
+    lastJobType,
+    lastJobDuration,
+    reasonLeaving,
+  })
+
+console.log({
+  openToTraining,
+  preferJob,
+  preferWorkHour,
+  startTimeFormat,
+  endTimeFormat,
+  vehicleAvailable,
+  minSal,
+  maxSal,
+  traningMode,
+  jobRemarks
+})
+
+console.log("inputFields:", inputFields )
+
+}
       
  return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
@@ -151,10 +229,39 @@ const [name, setName] = useState("")
         />
 
         <SkillExpDetails 
-          
+          primarySkill={primarySkill} setPrimarySkill={setPrimarySkill}
+          secondarySkill={secondarySkill} setSecondarySkill={setSecondarySkill}
+          tertiarySkill={tertiarySkill} setTertiarySkill={setTertiarySkill}
+          skillRemarks={skillRemarks} setSkillRemarks={setSkillRemarks}
+          vegNonveg={vegNonveg} setVegNonveg={setVegNonveg}
+          cuisinesKnown={cuisinesKnown} setCuisinesKnown={setCuisinesKnown}
+          primaryLanguage={primaryLanguage} setPrimaryLanguage={setPrimaryLanguage}
+          otherLanguages={otherLanguages} setOtherLanguages={setOtherLanguages}
+          totalExp={totalExp} setTotalExp={setTotalExp}
+          experienceRemarks={experienceRemarks} setExperienceRemarks={setExperienceRemarks}
+          lastJobType={lastJobType} setLastJobType={setLastJobType}
+          lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}
+          ReasonLeaving={reasonLeaving} setReasonLeaving={setReasonLeaving}
+          // values={values} setValue={setValue}
         />
-        <JobRequirement />
-        <BankAccount/>
+        <JobRequirement 
+          openToTraining={openToTraining} setOpenToTraining={setOpenToTraining}
+          preferJob={preferJob} setPreferJob={setPreferJob}
+          preferWorkHour={preferWorkHour} setPreferWorkHour={setPreferWorkHour}
+          startTime={startTime} setStartTime={setStartTime}
+          endTime={endTime} setEndTime={setEndTime}
+          vehicleAvailable={vehicleAvailable} setVehicleAvailable={setVehicleAvailable}
+          minSal={minSal} setMinSal={setMinSal}
+          maxSal={maxSal} setMaxSal={setMaxSal}
+          traningMode={traningMode} setTraningMode={setTraningMode}
+          jobRemarks={jobRemarks} setJobRemarks={setJobRemarks}
+
+
+        />
+        <BankAccount
+        setInputFields={setInputFields}
+        inputFields={inputFields}
+        />
         <Document />
         <HouseHoldMemberInfo 
           name={name} 

@@ -22,44 +22,26 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-function SkillExpDetails() {
-  const [age, setAge] = React.useState("");
-  const [primarySkill, setPrimarySkill] = React.useState("");
-  const [secondarySkill, setSecondarySkill] = React.useState("");
-  const [tertiarySkill, setTertiarySkill] = React.useState("");
-  const [skillRemarks, setSkillRemarks] = React.useState("");
-  const [vegNonveg, setVegNonveg] = React.useState("");
-  const [cuisinesKnown, setCuisinesKnown] = React.useState([]);
-  const [primaryLanguage, setPrimaryLanguage] = React.useState("");
-  const [otherLanguages, setOtherLanguages] = React.useState([]);
-  const [totalExp, setTotalExp] = React.useState();
-  const [experienceRemarks, setExperienceRemarks] = React.useState();
-  const [lastJobType, setLastJobType] = React.useState([]);
-  const [lastJobDuration, setLastJobDuration] = React.useState();
-  const [ReasonLeaving, setReasonLeaving] = React.useState();
-  const [values, setValues] = React.useState(false);
+function SkillExpDetails(props) {
 
-  const [otherLanguagesD, setOtherLanguagesD] = React.useState([
-    {
-      language: {primaryLanguage},
-      type: "",
-      read: false,
-      write: false,
-      speak: false,
-    },
-  ]);
+  const {
+    primarySkill, setPrimarySkill,
+    secondarySkill, setSecondarySkill,
+    tertiarySkill, setTertiarySkill,
+    skillRemarks, setSkillRemarks,
+    vegNonveg, setVegNonveg,
+    cuisinesKnown, setCuisinesKnown,
+    primaryLanguage, setPrimaryLanguage,
+    otherLanguages, setOtherLanguages,
+    totalExp, setTotalExp,
+    experienceRemarks, setExperienceRemarks,
+    lastJobType, setLastJobType,
+    lastJobDuration, setLastJobDuration,
+    ReasonLeaving, setReasonLeaving,
+    // values, setValue,
 
-  const handleClick = () => {
-    console.log(otherLanguagesD);
-  };
+  } = props
 
-  console.log("read:", otherLanguagesD.read);
-  console.log("Write:", otherLanguagesD.write);
-  console.log("speak", otherLanguagesD.speak);
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   return (
     <Box
       marginTop={7}
@@ -168,7 +150,7 @@ function SkillExpDetails() {
                 </TableRow>
               </TableHead>
 
-              <TableBody>
+              <TableBody >
                 <TableRow>
                   <TableCell align="left">{primarySkill}</TableCell>
                   <TableCell align="left">Primary</TableCell>
@@ -213,7 +195,7 @@ function SkillExpDetails() {
             labelId="demo-select-small"
             id="demo-select-small"
             label="Can Cook Veg/Non-veg?"
-            onChange={handleChange}
+            onChange={(e)=>{setVegNonveg(e.target.value)}}
           >
             <MenuItem value="">
               <em>None</em>
@@ -342,13 +324,6 @@ function SkillExpDetails() {
                       size="small"
                       {...label}
                       color="success"
-                      value={otherLanguagesD.read}
-                      onChange={(e) => {
-                        setOtherLanguagesD({
-                          ...otherLanguagesD,
-                          read: e.target.checked,
-                        });
-                      }}
                     />
                   </TableCell>
                   <TableCell align="left">
@@ -356,13 +331,7 @@ function SkillExpDetails() {
                       size="small"
                       {...label}
                       color="success"
-                      value={otherLanguagesD.write}
-                      onChange={(e) => {
-                        setOtherLanguagesD({
-                          ...otherLanguagesD,
-                          write: e.target.checked,
-                        });
-                      }}
+                   
                     />
                   </TableCell>
                   <TableCell align="left">
@@ -370,13 +339,6 @@ function SkillExpDetails() {
                       size="small"
                       {...label}
                       color="success"
-                      value={otherLanguagesD.speak}
-                      onChange={(e) => {
-                        setOtherLanguagesD({
-                          ...otherLanguagesD,
-                          speak: e.target.checked,
-                        });
-                      }}
                     />
                   </TableCell>
                 </TableRow>
@@ -384,30 +346,37 @@ function SkillExpDetails() {
                 {otherLanguages.map((item) => (
                   <TableRow>
                     <TableCell
-                      onChange={(e) => {
-                        setOtherLanguagesD({ language: e.target.value });
-                      }}
                       align="left"
                     >
                       {item.language}
                     </TableCell>
                     <TableCell align="left">Secondary</TableCell>
                     <TableCell align="left">
-                      <Checkbox size="small" {...label} color="success" />
+                      <Checkbox
+                        size="small"
+                        {...label}
+                        color="success"
+                      />
                     </TableCell>
                     <TableCell align="left">
-                      <Checkbox size="small" {...label} color="success" />
+                      <Checkbox
+                      size="small"
+                        {...label}
+                        color="success"
+                      />
                     </TableCell>
                     <TableCell align="left">
-                      <Checkbox size="small" {...label} color="success" />
+                      <Checkbox
+                        size="small"
+                        {...label}
+                        color="success"
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-
-          <button onClick={handleClick}>Click</button>
         </Box>
         {/*........................................................ Language Table.............................................*/}
 

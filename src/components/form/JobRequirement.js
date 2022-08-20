@@ -16,13 +16,19 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-function JobRequirement() {
-  const [openToTraining, setOpenToTraining] = React.useState(false);
-  const [preferJob, setPreferJob] = React.useState([]);
-  const [startTime, setStartTime] = React.useState(null);
-  const [endtTime, setEndtTime] = React.useState(null);
+function JobRequirement(props) {
+const {  
+  openToTraining, setOpenToTraining,
+  preferJob, setPreferJob,
+  preferWorkHour, setPreferWorkHour,
+  startTime, setStartTime,
+  endTime, setEndTime,
+  vehicleAvailable, setVehicleAvailable,
+  minSal, setMinSal,
+  maxSal, setMaxSal,
+  traningMode, setTraningMode,
+  jobRemarks, setJobRemarks,} = props;
 
- 
 
   return (
     <Box  
@@ -78,7 +84,7 @@ function JobRequirement() {
           disableCloseOnSelect
           getOptionLabel={(option) => option.hour}
           onChange={(event, newValue) => {
-            setPreferJob([...newValue]);
+            setPreferWorkHour([...newValue]);
           }}
           renderOption={(props, option, { selected }) => (
             <li {...props}>
@@ -107,6 +113,7 @@ function JobRequirement() {
             <TimePicker
               label="Preferred Start Time"
               value={startTime}
+              disableIgnoringDatePartForTimeValidation={false}
               onChange={(newValue) => {
                 setStartTime(newValue);
               }}
@@ -119,9 +126,9 @@ function JobRequirement() {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <TimePicker
               label="Preferred End Time"
-              value={endtTime}
+              value={endTime}
               onChange={(newValue) => {
-                setEndtTime(newValue);
+                setEndTime(newValue);
               }}
               renderInput={(params) => (
                 <TextField size="small" sx={{ width: "18%" }} {...params} />
@@ -129,13 +136,22 @@ function JobRequirement() {
             />
           </LocalizationProvider>
 
-        <TextField
-          sx={{ width: "18%" }}
-          size="small"
-          id="outlined-basic"
-          label="Cycle/Bike available for travel? "
-          variant="outlined"
-        />
+          <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
+          <InputLabel id="demo-select-small">Cycle/Bike available for travel?</InputLabel>
+          <Select
+            sx={{ width: "100%" }}
+            labelId="demo-select-small"
+            id="demo-select-small"
+            label="Cycle/Bike available for travel?"
+            onChange={(e)=>{
+              setVehicleAvailable(e.target.value)
+            }}
+          >
+          
+            <MenuItem value={true}>YES</MenuItem>
+            <MenuItem value={false}>NO</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
 
       <Box
@@ -151,6 +167,9 @@ function JobRequirement() {
           id="outlined-basic"
           label="Expected Salary[min]"
           variant="outlined"
+          onChange={(e)=>{
+            setMinSal(e.target.value)
+          }}
         />
         <TextField
           sx={{ width: "18%" }}
@@ -158,8 +177,11 @@ function JobRequirement() {
           id="outlined-basic"
           label="Expected Salary[max]"
           variant="outlined"
+          onChange={(e)=>{
+            setMaxSal(e.target.value)
+          }}
         />
- <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
           <InputLabel id="demo-select-small">Open to Training?</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -184,6 +206,9 @@ function JobRequirement() {
             id="demo-select-small"
             label="Training Mode"
             disabled={!openToTraining}
+            onChange={(e)=>{
+              setTraningMode(e.target.value)
+            }}
           >
           
             <MenuItem value={"Online"}>Online</MenuItem>
@@ -199,7 +224,11 @@ function JobRequirement() {
           id="outlined-basic"
           label="Job Remarks"
           variant="outlined"
+          onChange={(e)=>{
+            setJobRemarks(e.target.value)
+          }}
         />
+          
       </Box>
     </Box>
   );

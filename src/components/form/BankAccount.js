@@ -10,24 +10,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
 
-function BankAccount() {
+function BankAccount(props) {
   const [selectedOptions, setSelectedOptions] = useState([]);
-
   const [checked, setChecked] = useState(true);
-
-  const [inputFields, setInputFields] = useState([
-    {
-      AccounType: "",
-      bankName: "",
-      branchName: "",
-      branchAddress: "",
-      accountHoderName: "",
-      accountNumber: "",
-      IfceCode: "",
-      BankAccountProof: "",
-    },
-  ]);
-
+ 
+  const {setInputFields, inputFields} = props;
 
   const handleChangeInput = (index, event) => {
     const values = [...inputFields];
@@ -41,9 +28,7 @@ function BankAccount() {
 
   const handleChangei = (event, value) => setSelectedOptions(value);
 
-
-
-  const handleSubmit = (e) => {
+ const handleSubmit = (e) => {
     e.preventDefault();
     console.log("inputs", inputFields);
     console.log("selectedOptions is",selectedOptions)

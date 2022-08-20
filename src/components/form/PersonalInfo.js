@@ -32,6 +32,8 @@ function PersonalInfo(props) {
     submitted, setSubmitted
   } = props;
 
+  console.log("DOB is ",value)
+
   const handleChange = (event) => {
     setWalk(event.target.value);
   };
