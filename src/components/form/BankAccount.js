@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import {
   TextField,
   IconButton,
-  Button,
-  Autocomplete,
+  // Button,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -11,10 +14,9 @@ import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
 
 function BankAccount(props) {
-  const [selectedOptions, setSelectedOptions] = useState([]);
   const [checked, setChecked] = useState(true);
- 
-  const {setInputFields, inputFields} = props;
+
+  const { setInputFields, inputFields } = props;
 
   const handleChangeInput = (index, event) => {
     const values = [...inputFields];
@@ -26,12 +28,9 @@ function BankAccount(props) {
     setChecked(event.target.checked);
   };
 
-  const handleChangei = (event, value) => setSelectedOptions(value);
-
- const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log("inputs", inputFields);
-    console.log("selectedOptions is",selectedOptions)
   };
 
   const handleAddFields = () => {
@@ -57,11 +56,13 @@ function BankAccount(props) {
   };
 
   return (
-    <Box   sx={{
-      marginTop: 7,
-      display: "grid",
-      gap: .3,
-    }}>
+    <Box
+      sx={{
+        marginTop: 7,
+        display: "grid",
+        gap: 0.3,
+      }}
+    >
       <Box
         style={{
           display: "flex",
@@ -91,117 +92,116 @@ function BankAccount(props) {
           <Box
             sx={{
               display: "flex",
-              flexWrap:"wrap",
-              rowGap:"30px",
-              justifyContent:"space-between",
-              marginBottom:5 
+              flexWrap: "wrap",
+              rowGap: "30px",
+              justifyContent: "space-between",
+              marginBottom: 5,
             }}
           >
-         
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={top100Films}
-                getOptionLabel={(option) => option.label}
-                sx={{ width: "18%" }}
-                onChange={handleChangei}
-                filterSelectedOptions
-                renderInput={(params) => (
-                  <TextField
-                    sx={{ bgcolor: "white", borderRadius: "5px" }}
-                    {...params}
-                    name="AccounType"
-                    label="Type of Account"
-                    size="small"
-                    // value={inputField.AccounType}
-                    
-                  />
-                )}
-              />
+      
 
-              <TextField
-                style={{ width: "18%" }}
-                name="bankName"
-                label="Name of the the Bank"
-                size="small"
-                value={inputField.bankName}
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="branchName"
-                label="Branch Name"
-                value={inputField.branchName}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
+            <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+              <InputLabel id="demo-select-small">Type of Account</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={inputField.AccounType}
+                label="Type of Account"
+                ononChange={(event) => handleChangeInput(index, event)}
 
-              <TextField
-                style={{ width: "38.5%" }}
-                name="branchAddress"
-                label="Branch Address"
-                value={inputField.branchAddress}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"Current"}>Apna</MenuItem>
+                <MenuItem value={"Saving"}>Quikr</MenuItem>
+                <MenuItem value={"Others"}>OLX</MenuItem>
+            </Select>
+            </FormControl>
+
+            <TextField
+              style={{ width: "18%" }}
+              name="bankName"
+              label="Name of the the Bank"
+              size="small"
+              value={inputField.bankName}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="branchName"
+              label="Branch Name"
+              value={inputField.branchName}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+
+            <TextField
+              style={{ width: "38.5%" }}
+              name="branchAddress"
+              label="Branch Address"
+              value={inputField.branchAddress}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
             {/* </div>
 
             <div style={{ display: "flex", justifyContent: "space-between" }}> */}
-              <TextField
-                style={{ width: "18%" }}
-                name="accountHoderName"
-                label="Account Holder Name"
-                value={inputField.accountHoderName}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="accountNumber"
-                label="Account Number"
-                value={inputField.accountNumber}
-                size="small"
-                type={Number}
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="IfceCode"
-                label="IFSC Code"
-                value={inputField.IfceCode}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="BankAccountProof"
-                label="Bank Account Proof*"
-                value={inputField.BankAccountProof}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justfyContent: "space-between",
-                  width: "18%",
-                  alignItems: "center",
-                }}
-              >
-                <IconButton aria-label="delete">
-                  <DeleteIcon onClick={() => handleRemoveFields(index)} />
-                </IconButton>
+            <TextField
+              style={{ width: "18%" }}
+              name="accountHoderName"
+              label="Account Holder Name"
+              value={inputField.accountHoderName}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="accountNumber"
+              label="Account Number"
+              value={inputField.accountNumber}
+              size="small"
+              type={Number}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="IfceCode"
+              label="IFSC Code"
+              value={inputField.IfceCode}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="BankAccountProof"
+              label="Bank Account Proof*"
+              value={inputField.BankAccountProof}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <div
+              style={{
+                display: "flex",
+                justfyContent: "space-between",
+                width: "18%",
+                alignItems: "center",
+              }}
+            >
+              <IconButton aria-label="delete">
+                <DeleteIcon onClick={() => handleRemoveFields(index)} />
+              </IconButton>
 
-                <Switch
-                  checked={checked}
-                  onChange={handleChange}
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-                <span style={{ fontSize: "13px", fontWeight: "bolder" }}>
-                  Default
-                </span>
-              </div>
-            
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ "aria-label": "controlled" }}
+              />
+              <span style={{ fontSize: "13px", fontWeight: "bolder" }}>
+                Default
+              </span>
+            </div>
           </Box>
         ))}
         {/* <Button
@@ -212,16 +212,11 @@ function BankAccount(props) {
         >
           send
         </Button> */}
-
       </form>
     </Box>
   );
 }
 
-const top100Films = [
-  { label: "Saving"},
-  { label: "Current"},
-  { label: "ohter"},
-];
+
 
 export default BankAccount;

@@ -10,7 +10,7 @@ import Cx from "./pages/CX/Cx";
 import JobsTable from "./pages/Jobs/JobsTable";
 import AddNewCustomer from "./pages/CX/AddNewCustomer";
 import AddNewRequest from "./pages/Jobs/AddNewRequest";
-import Details from "./pages/YcwDetailsPage/Details";
+import DashBoard from "./pages/YcwDetailsPage/JobDetails/DashBoard";
 
 
 
@@ -28,7 +28,7 @@ function App() {
         
         
         <Route path="/ycw/add" element={<AddNewData/>}/>
-        <Route path="/ycw/add/details/:id" element={<Details/>}/>
+        <Route path="/ycw/add/dashboard/:id" element={<DashBoard/>}/>
 
         <Route path="/cx" element={<Cx/>}/>
         <Route path="/cx/new" element={<AddNewCustomer/>}/>

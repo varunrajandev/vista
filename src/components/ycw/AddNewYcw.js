@@ -85,7 +85,7 @@ function AddNewYcw() {
   //bank account
   const [inputFields, setInputFields] = useState([
     {
-      AccounType: "",
+      AccounType:"",
       bankName: "",
       branchName: "",
       branchAddress: "",
@@ -161,6 +161,10 @@ console.log({
 console.log("inputFields:", inputFields )
 
 }
+
+// setInterval(() => {
+//   handleClick()
+// },2000);
       
  return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>

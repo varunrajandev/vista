@@ -152,62 +152,62 @@ function Right({ data }) {
             <TableHead bgColor={"#e1e2e3"}>
               <TableRow>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "950" }}
+                  sx={{ fontSize: "10px", fontWeight: "950", width:"7%" }}
                   align="left"
                 >
                   YCW ID
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"12%" }}
                   align="left"
                 >
                   NAME
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"15%" }}
                   align="left"
                 >
                   PHONE#
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
                   align="left"
                 >
                   GENDER
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
                   align="left"
                 >
                   CITY
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"15%" }}
                   align="left"
                 >
                   SKILLS
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
                   align="left"
                 >
                   EXP.(YRS.)
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"8%" }}
                   align="left"
                 >
                   WORK HOURS
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"5%" }}
                   align="left"
                 >
                   #JOBS
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
-                  align="left"
+                  align="center"
                 >
                   STATUS
                 </TableCell>
@@ -263,19 +263,21 @@ function Right({ data }) {
                     {row.jobs}
                   </TableCell>
                   <NavLink
-                    to={`/ycw/add/details/${row.id}`}
+                    to={`/ycw/add/dashboard/${row.id}`}
                     style={{
                       textDecoration: "none",
-                      display: "grid",
-                      justifyContent: "center",
+                      display:"flex",
+                      justifyContent:"center"
+                      
                     }}
                   >
-                    <TableCell sx={{ fontSize: "8px" }} align="left">
+                    <TableCell align="left">
                       <Typography
                         sx={{
+                          width:"150px",
                           padding: "5px",
                           borderRadius: "10px",
-                          fontSize: "10px",
+                          fontSize: "12px",
                           textAlign: "center",
                           fontWeight: "900",
                         }}

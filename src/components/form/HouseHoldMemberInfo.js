@@ -35,12 +35,12 @@ const StyleBox = styled(Box)({
   gap: "5px",
 });
 
-const Div1 = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  margin: "5px",
-});
+// const Div1 = styled("div")({
+//   display: "flex",
+//   justifyContent: "space-between",
+//   alignItems: "center",
+//   margin: "5px",
+// });
 
 const Div2 = styled("div")({
   display: "flex",

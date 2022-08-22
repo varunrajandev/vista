@@ -43,7 +43,9 @@ function YcwNav() {
           gap: "25px",
           mt: "60px",
           backgroundColor: "#edf4ff",
-          padding:"15px"
+          padding:"15px",
+          borderBottomLeftRadius:"15px",
+          borderBottomRightRadius:"15px"
         }}
       >
         <StyleLi>PROFILE</StyleLi>
