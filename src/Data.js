@@ -224,3 +224,18 @@ export const jobData = [
     status: "ACTIVE",
   },
 ];
+
+
+export const steps = [
+  "Applied",
+  "Shortlisted",
+  "Interview Schduled",
+  "CX Interview",
+  "Trial Scheduled",
+  "In-House Trail",
+  "CX House Trial",
+  "Contract Generation",
+  "Contract Signing CX",
+  "Contract Signing YCW",
+  "Job Started",
+];
