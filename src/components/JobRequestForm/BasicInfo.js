@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,6 +27,19 @@ function BasicInfo() {
   const [sizeOfHouse, setSizeOfHouse] = React.useState();
   const [pets, setPets] = React.useState();
   const [noOfPets, setNoOfPets] = React.useState();
+
+  const [newData, setNewData] = React.useState([]);
+
+
+  // useEffect(() => {
+  // const dataFetch = async ()=>{
+  //   let data = await fetch("http://3.111.186.100:8080/user/get/religion");
+  //   let res = await data.json();
+  //  setNewData(res.data);
+  // }
+  //   dataFetch()
+  // }, [])
+  
 
   const handleChange = (event) => {
     setJobTypes(event.target.value);
@@ -174,12 +187,10 @@ function BasicInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Muslim"}>Muslim</MenuItem>
-            <MenuItem value={"Hindu"}>Hindu</MenuItem>
-            <MenuItem value={"Christian"}>Christian</MenuItem>
-            <MenuItem value={"Sikh"}>Sikh</MenuItem>
-            <MenuItem value={"Jain"}>Jain</MenuItem>
-            <MenuItem value={"Others"}>Others</MenuItem>
+            {newData.map((item)=>(
+              <MenuItem value={item.value}>{item.value}</MenuItem>
+            ))}
+            
           </Select>
         </FormControl>
 

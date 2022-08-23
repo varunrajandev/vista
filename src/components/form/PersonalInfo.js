@@ -22,7 +22,7 @@ function PersonalInfo(props) {
     alternateNumber, setAlternateNumber,
     whatsappAvailable, setWhatsappAvailable,
     whatsapp, setWhatsapp,
-    value, setValue,
+    birthDay, setBirthDay,
     maritalStatus, setMaritalStatus,
     religion, setReligion,
     education, setEducation,
@@ -32,7 +32,7 @@ function PersonalInfo(props) {
     submitted, setSubmitted
   } = props;
 
-  console.log("DOB is ",value)
+  console.log(gender)
 
   const handleChange = (event) => {
     setWalk(event.target.value);
@@ -154,7 +154,7 @@ function PersonalInfo(props) {
               setGender(event.target.value);
             }}
           >
-            <MenuItem value={"Male"}>Male</MenuItem>
+            <MenuItem value={"MALE"}>Male</MenuItem>
             <MenuItem value={"Female"}>Female</MenuItem>
             <MenuItem value={"Transgender"}>Transgender</MenuItem>
           </Select>
@@ -221,7 +221,7 @@ function PersonalInfo(props) {
           <DesktopDatePicker
             label="DOB"
             onChange={(newValue) => {
-              setValue(newValue);
+              setBirthDay(newValue);
             }}
             renderInput={(params) => (
               <TextField {...params} size="small" sx={{ width: "18%" }} />
@@ -264,7 +264,7 @@ function PersonalInfo(props) {
               <em>None</em>
             </MenuItem>
             <MenuItem value={"Muslim"}>Muslim</MenuItem>
-            <MenuItem value={"Hindu"}>Hindu</MenuItem>
+            <MenuItem value={"HINDU"}>Hindu</MenuItem>
             <MenuItem value={"Christian"}>Christian</MenuItem>
             <MenuItem value={"Sikh"}>Sikh</MenuItem>
             <MenuItem value={"Jain"}>Jain</MenuItem>

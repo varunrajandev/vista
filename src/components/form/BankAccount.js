@@ -37,14 +37,14 @@ function BankAccount(props) {
     setInputFields([
       ...inputFields,
       {
-        AccounType: "",
+        accountType:"",
         bankName: "",
         branchName: "",
         branchAddress: "",
         accountHoderName: "",
         accountNumber: "",
-        IfceCode: "",
-        BankAccountProof: "",
+        ifscCode: "",
+        bankAccountProof: "",
       },
     ]);
   };
