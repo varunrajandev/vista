@@ -14,7 +14,7 @@ import axios from "axios";
 
 function AddNewYcw() {
   // YCW Personal information useState
-  const [walk, setWalk] = React.useState("");
+  const [source, setSource] = React.useState("");
   const [firstname, setFirstname] = React.useState("");
   const [middlename, setMiddlename] = React.useState("");
   const [lastname, setLastname] = React.useState("");
@@ -30,7 +30,7 @@ function AddNewYcw() {
   const [educationalRemarks, setEducationalRemarks] = React.useState("");
   const [covidStatus, setCovidStatus] = React.useState("");
   const [medicalCondition, setMedicalCondition] = React.useState("");
-  const [submitted, setSubmitted ] = React.useState(false)
+  const [submitted, setSubmitted] = React.useState(false)
 
   //YCW  current Address information useState
   const [addressLine1, setAddressLine1] = React.useState("");
@@ -86,7 +86,7 @@ function AddNewYcw() {
   //bank account
   const [inputFields, setInputFields] = useState([
     {
-      accountType:"",
+      accountType: "",
       bankName: "",
       branchName: "",
       branchAddress: "",
@@ -97,113 +97,202 @@ function AddNewYcw() {
     },
   ]);
 
-
+  const [name, setName] = useState("")
   
-const [name, setName] = useState("")
 
-const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
-const endTimeFormat = endTime ? endTime.toLocaleTimeString() : '';
+  const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
+  const endTimeFormat = endTime ? endTime.toLocaleTimeString() : '';
 
 
-//  const handleClick = ()=>{
-// //   console.log("Current Addrress",{
-// //     addressLine1,
-// //     addressLine2,
-// //     landmark,
-// //     postalCode,
-// //     countryName,
-// //     stateName,
-// //     cityName,
-// //     locality,
-// //     addressProofType,
-// //   });
+  //  const handleClick = ()=>{
+  // //   console.log("Current Addrress",{
+  // //     addressLine1,
+  // //     addressLine2,
+  // //     landmark,
+  // //     postalCode,
+  // //     countryName,
+  // //     stateName,
+  // //     cityName,
+  // //     locality,
+  // //     addressProofType,
+  // //   });
 
-// //   console.log("permanaent",{
-// //     addressL1p,
-// //     addressL2p,
-// //     landmarkp,
-// //     pinCodep,
-// //     countryp,
-// //     statep,
-// //     cityp,
-// //     localityp,
-// //     addressProofTypep,
-// //   });
+  // //   console.log("permanaent",{
+  // //     addressL1p,
+  // //     addressL2p,
+  // //     landmarkp,
+  // //     pinCodep,
+  // //     countryp,
+  // //     statep,
+  // //     cityp,
+  // //     localityp,
+  // //     addressProofTypep,
+  // //   });
 
-// //   console.log({
-// //      primarySkill,
-// //     secondarySkill,
-// //     tertiarySkill,
-// //     skillRemarks,
-// //     cookType,//
-// //     cuisinesKnown,
-// //     primaryLanguage,
-// //     otherLanguages,
-// //     totalExp,
-// //     experienceRemarks,
-// //     lastJobType,
-// //     lastJobDuration,
-// //     reasonLeaving,
-// //   })
+  // //   console.log({
+  // //      primarySkill,
+  // //     secondarySkill,
+  // //     tertiarySkill,
+  // //     skillRemarks,
+  // //     cookType,//
+  // //     cuisinesKnown,
+  // //     primaryLanguage,
+  // //     otherLanguages,
+  // //     totalExp,
+  // //     experienceRemarks,
+  // //     lastJobType,
+  // //     lastJobDuration,
+  // //     reasonLeaving,
+  // //   })
 
-// // console.log({
-// //   openToTraining,
-// //   preferJob,
-// //   workingHour,
-// //   startTimeFormat,
-// //   endTimeFormat,
-// //   vehicle,
-// //   minSalaryExpected,
-// //   maxSalaryExpected,
-// //   traningMode,
-// //   jobRemarks
-// // })
+  // // console.log({
+  // //   openToTraining,
+  // //   preferJob,
+  // //   workingHour,
+  // //   startTimeFormat,
+  // //   endTimeFormat,
+  // //   vehicle,
+  // //   minSalaryExpected,
+  // //   maxSalaryExpected,
+  // //   traningMode,
+  // //   jobRemarks
+  // // })
 
-// // console.log("inputFields:", inputFields )
+  // // console.log("inputFields:", inputFields )
 
-// }
+  // }
 
-// setInterval(() => {
-//   handleClick()
-// },2000);
-     
+  // setInterval(() => {
+  //   handleClick()
+  // },2000);
 
-const  handleClick = async ()=>{
-  let personalInformation = {
-    firstname,
-    middlename,
-    lastname,
-    gender,
-    alternateMobileNumber,
-    mobile,
-    religion,
-    maritalStatus,
-    education,
-    educationalRemarks,
-    covidStatus,
-    medicalCondition,
-    birthday
-};
 
-try {
-    await axios.post("http://3.6.37.67:8080/user/worker/save",
-    {
-      userAndProfileDto:personalInformation
-    });
-    alert("User Registration successfull")
-} catch (error) {
-  alert("User Registration Faild", error)
-}
-}
+  const handleClick = async () => {
+    const Current_Addrress={
+          addressLine1,
+          addressLine2,
+          landmark,
+          postalCode,
+          countryName,
+          stateName,
+          cityName,
+          locality,
+          addressProofType,
+        }
 
- return (
+    try {
+      await axios.post("http://13.126.160.155:8080/user/worker/save",
+        {
+          "addressDtos": [
+            {
+              "addressLine1": "string",
+              "addressLine2": "string",
+              "addressProofType": "AAADHAR_CARD",
+              "cityName": "string",
+              "countryName": "string",
+              "landmark": "string",
+              "locality": "string",
+              "permanent": true,
+              "postalCode": "string",
+              "stateName": "string"
+            }
+          ],
+          "bankDetailsDtos": inputFields,
+
+          "documentRequestDtos": [
+            {
+              "approvalStatus": "string",
+              "bucketName": "string",
+              "documentContext": "KYC",
+              "documentSideType": "FRONT",
+              "documentUploadType": "PASSPORT",
+              "fileName": "string",
+              "filePath": "string",
+              "fileUrl": "string",
+              "metadata": "string",
+              "rejectedReason": "string",
+              "verified": true
+            }
+          ],
+          "jobRequirementDtos": [
+            {
+              "endTime": "string",
+              "jobRemarks": "string",
+              "maxSalaryExpected": "string",
+              "minSalaryExpected": "string",
+              "openToTraining": true,
+              "startTime": "string",
+              "traningMode": "ONLINE",
+              "vehicle": "string",
+              "workingHours": "_0_TO_2_HOURS"
+            }
+          ],
+          "skillsMappingDto": [
+            {
+              "cookType": "ONLY_VEG",
+              "experienceRemarks": "string",
+              "jobtype": "HOUSEKEEPING",
+              "lastJobDuration": "string",
+              "primaryId": 0,
+              "reasonForLeavingJob": "string",
+              "secondarySkillId": 0,
+              "skillRemarks": "string",
+              "teritarySkillId": 0,
+              "totalExperience": 0,
+            }
+          ],
+          "userAndProfileDto": {
+            "alternateMobileNumber": "string",
+            "arrivalDate": null,
+            "birthday": birthday,
+            "bloodGroup": "O_POSITIVE",
+            "covidStatus": covidStatus,
+            "createdBy": "string",
+            "department": "TECH",
+            "departmentName": "string",
+            "educationalRemarks": educationalRemarks,
+            "email": "string",
+            "emailVerified": true,
+            "firstName": firstname,
+            "formStatus": "DRAFT",
+            "gender": gender,
+            "isSecondaryMobileVerified": "string",
+            "isoCode": "string",
+            "lastName": lastname,
+            "maritalStatus": maritalStatus,
+            "medicalCondition": medicalCondition,
+            "medium": "PHONE_CALL",
+            "middleName": middlename,
+            "mobile": mobile,
+            "mobileVerified": true,
+            "nationality": "INDIAN",
+            "nextDestination": "string",
+            "otp": 0,
+            "professsion": "BUSINESS_OWNER",
+            "religion": religion,
+            "secondaryEmail": "string",
+            "source": source,
+            "status": true,
+            "updatedBy": "string",
+            "userType": "WORKER",
+            "whatsappAvailable": isWhatsappAvailable,
+            "whatsappNumber": whatsappNumber
+          }
+        });
+      alert("User Registration successfull")
+    } catch (error) {
+      alert("User Registration Faild", error)
+    }
+  }
+
+  return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
       {/* //Add Ycw Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6">Add New YCW</Typography>
         <Typography sx={{ display: "flex", gap: 2 }}>
           {/* Buttons */}
-          <YcwButtons data = {handleClick} />
+          <YcwButtons data={handleClick} />
 
         </Typography>
       </Box>
@@ -211,14 +300,14 @@ try {
       <Box
         marginTop={5}
         sx={{
-          
+
           padding: 3,
           bgcolor: "white",
           borderRadius: 3,
         }}
       >
-        <PersonalInfo 
-          walk={walk} setWalk={setWalk}
+        <PersonalInfo
+          walk={source} setWalk={setSource}
           fname={firstname} setFname={setFirstname}
           mname={middlename} setMname={setMiddlename}
           lname={lastname} setLname={setLastname}
@@ -227,7 +316,7 @@ try {
           alternateNumber={alternateMobileNumber} setAlternateNumber={setAlternateMobileNumber}
           whatsappAvailable={isWhatsappAvailable} setWhatsappAvailable={setIsWhatsappAvailable}
           whatsapp={whatsappNumber} setWhatsapp={setWhatsappNumber}
-          birthDay={birthday} setBirthBay={setBirthday}
+          birthday={birthday} setBirthday={setBirthday}
           maritalStatus={maritalStatus} setMaritalStatus={setMaritalStatus}
           religion={religion} setReligion={setReligion}
           education={education} setEducation={setEducation}
@@ -249,7 +338,7 @@ try {
           addressProofType={addressProofType} setAddressProofType={setAddressProofType}
         />
 
-        <PermanentAdd 
+        <PermanentAdd
           addressL1={addressL1p} setAddressL1={setAddressL1p}
           addressL2={addressL2p} setAddressL2={setAddressL2p}
           landmark={landmarkp} setLandmark={setLandmarkp}
@@ -262,7 +351,7 @@ try {
           check={check} setCheck={setCheck}
         />
 
-        <SkillExpDetails 
+        <SkillExpDetails
           primarySkill={primarySkill} setPrimarySkill={setPrimarySkill}
           secondarySkill={secondarySkill} setSecondarySkill={setSecondarySkill}
           tertiarySkill={tertiarySkill} setTertiarySkill={setTertiarySkill}
@@ -276,9 +365,9 @@ try {
           lastJobType={lastJobType} setLastJobType={setLastJobType}
           lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}
           ReasonLeaving={reasonLeaving} setReasonLeaving={setReasonLeaving}
-          // values={values} setValue={setValue}
+        // values={values} setValue={setValue}
         />
-        <JobRequirement 
+        <JobRequirement
           openToTraining={openToTraining} setOpenToTraining={setOpenToTraining}
           preferJob={preferJob} setPreferJob={setPreferJob}
           preferWorkHour={workingHour} setPreferWorkHour={setWorkingHour}
@@ -289,16 +378,14 @@ try {
           maxSal={maxSalaryExpected} setMaxSal={setMaxSalaryExpected}
           traningMode={traningMode} setTraningMode={setTraningMode}
           jobRemarks={jobRemarks} setJobRemarks={setJobRemarks}
-
-
-        />
+          />
         <BankAccount
-        setInputFields={setInputFields}
-        inputFields={inputFields}
+          setInputFields={setInputFields}
+          inputFields={inputFields}
         />
         <Document />
-        <HouseHoldMemberInfo 
-          name={name} 
+        <HouseHoldMemberInfo
+          name={name}
           setName={setName}
         />
       </Box>

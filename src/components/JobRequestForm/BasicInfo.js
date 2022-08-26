@@ -45,21 +45,26 @@ function BasicInfo() {
     setJobTypes(event.target.value);
   };
 
-  console.log({
-    budgetMin,
-    budgetMax,
-    genderPreference,
-    agePreference,
-    religionPreference,
-    trainingPreference,
-    jobTypes,
-    languagePreference,
-    workDuration,
-    dailyStartTime,
-    membersInFamily,
-    value,
-    remarks,
-  });
+  const handleClick = ()=>{
+    console.log({
+      budgetMin,
+      budgetMax,
+      genderPreference,
+      agePreference,
+      religionPreference,
+      trainingPreference,
+      jobTypes,
+      languagePreference,
+      workDuration,
+      dailyStartTime,
+      membersInFamily,
+      value,
+      remarks,
+    });
+
+  }
+ 
+
   return (
     <>
       <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
@@ -79,6 +84,7 @@ function BasicInfo() {
             value={jobTypes}
             label="Job Type"
             onChange={handleChange}
+            required={true}
           >
             <MenuItem value="">
               <em>None</em>
@@ -264,6 +270,7 @@ function BasicInfo() {
           size="small"
           id="outlined-basic"
           label="Budget [max]"
+          type="number"
           variant="outlined"
           onChange={(e) => {
             setBudgetMax(e.target.value);
@@ -276,6 +283,7 @@ function BasicInfo() {
           id="outlined-basic"
           label="Budget [min]"
           variant="outlined"
+          type="number"
           onChange={(e) => {
             setBudgetMin(e.target.value);
           }}
@@ -335,6 +343,8 @@ function BasicInfo() {
         <div style={{ width: "18%" }}></div>
         <div style={{ width: "18%" }}></div>
       </Box>
+
+      <button onClick={handleClick}>click</button>
     </>
   );
 }

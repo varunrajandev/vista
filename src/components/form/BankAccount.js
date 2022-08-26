@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   IconButton,
@@ -7,16 +7,30 @@ import {
   FormControl,
   InputLabel,
   Select,
+  Autocomplete,
+  Checkbox,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
+import { FilterData } from "../../AlllData";
 
 function BankAccount(props) {
   const [checked, setChecked] = useState(true);
-
+  const [accountTypeDD, setAccountTypeDD] = useState([]);
   const { setInputFields, inputFields } = props;
+
+  useEffect(() => {
+    async function fetchData() {
+      let response = await fetch(
+        "http://13.126.160.155:8080/user/worker/get/accountType"
+      );
+      let data = await response.json();
+      setAccountTypeDD(data.data);
+    }
+    fetchData();
+  }, []);
 
   const handleChangeInput = (index, event) => {
     const values = [...inputFields];
@@ -37,7 +51,7 @@ function BankAccount(props) {
     setInputFields([
       ...inputFields,
       {
-        accountType:"",
+        accountType: "",
         bankName: "",
         branchName: "",
         branchAddress: "",
@@ -98,26 +112,21 @@ function BankAccount(props) {
               marginBottom: 5,
             }}
           >
-      
-
             <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
               <InputLabel id="demo-select-small">Type of Account</InputLabel>
               <Select
                 sx={{ width: "100%" }}
                 labelId="demo-select-small"
                 id="demo-select-small"
-                value={inputField.AccounType}
+                name="accountType"
+                value={inputField.accountType}
                 label="Type of Account"
-                ononChange={(event) => handleChangeInput(index, event)}
-
+                onChange={(event) => handleChangeInput(index, event)}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={"Current"}>Apna</MenuItem>
-                <MenuItem value={"Saving"}>Quikr</MenuItem>
-                <MenuItem value={"Others"}>OLX</MenuItem>
-            </Select>
+                {accountTypeDD.map((item) => (
+                  <MenuItem value={item.key}>{item.value}</MenuItem>
+                ))}
+              </Select>
             </FormControl>
 
             <TextField
@@ -204,19 +213,9 @@ function BankAccount(props) {
             </div>
           </Box>
         ))}
-        {/* <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          onClick={handleSubmit}
-        >
-          send
-        </Button> */}
       </form>
     </Box>
   );
 }
-
-
 
 export default BankAccount;

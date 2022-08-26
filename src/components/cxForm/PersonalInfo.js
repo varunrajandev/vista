@@ -34,6 +34,7 @@ function PersonalInfo() {
     fname,
     mname,
     lname,
+    email
   });
   return (
     <Box

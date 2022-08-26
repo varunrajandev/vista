@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, TextField, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,11 +7,18 @@ import Select from "@mui/material/Select";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { maritalstatus } from "../../AlllData";
+import { maritalstatus, sourcing } from "../../AlllData";
 import { LoadingButton } from "@mui/lab";
 import SaveIcon from "@mui/icons-material/Save";
 
 function PersonalInfo(props) {
+  const [sourcingDD, setSourcingDD] = useState([])
+  const [religionDD, setReligionDD] = useState([])
+  const [maritalDD, setMaritalDD] = useState([])
+  const [genderDD, setGenderDD] = useState([])
+  const [covidDD, setCovidDD] = useState([])
+
+
   const {
     walk, setWalk,
     fname, setFname,
@@ -22,7 +29,7 @@ function PersonalInfo(props) {
     alternateNumber, setAlternateNumber,
     whatsappAvailable, setWhatsappAvailable,
     whatsapp, setWhatsapp,
-    birthDay, setBirthDay,
+    birthday, setBirthday,
     maritalStatus, setMaritalStatus,
     religion, setReligion,
     education, setEducation,
@@ -32,7 +39,26 @@ function PersonalInfo(props) {
     submitted, setSubmitted
   } = props;
 
-  console.log(gender)
+  useEffect(() => {
+    const dataFetch = async () => {
+      let sourceData = await fetch("http://13.126.160.155:8080/user/worker/get/sourceChannel");
+      let religionData = await fetch("http://13.126.160.155:8080/user/worker/get/religion");
+      let maritalData = await fetch("http://13.126.160.155:8080/user/worker/get/maritalStatus")
+      let genderData = await fetch("http://13.126.160.155:8080/user/get/gender")
+      let covidData = await fetch("http://13.126.160.155:8080/user/worker/get/covidVaccination")
+      let res = await sourceData.json();
+      let res1 = await religionData.json();
+      let res2 = await maritalData.json();
+      let res3 = await genderData.json();
+      let res4 = await covidData.json();
+      setSourcingDD(res.data)
+      setReligionDD(res1.data)
+      setMaritalDD(res2.data)
+      setGenderDD(res3.data)
+      setCovidDD(res4.data)
+    }
+    dataFetch()
+  }, [])
 
   const handleChange = (event) => {
     setWalk(event.target.value);
@@ -66,21 +92,9 @@ function PersonalInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Apna"}>Apna</MenuItem>
-            <MenuItem value={"Quikr"}>Quikr</MenuItem>
-            <MenuItem value={"OLX"}>OLX</MenuItem>
-            <MenuItem value={"Newspaper"}>Newspaper</MenuItem>
-            <MenuItem value={"JobHai"}>JobHai</MenuItem>
-            <MenuItem value={"Facebook"}>Facebook</MenuItem>
-            <MenuItem value={"Website"}>Website</MenuItem>
-            <MenuItem value={"Helpers4U"}>Helpers4U</MenuItem>
-            <MenuItem value={"Field Activity"}>Branch Officer</MenuItem>
-            <MenuItem value={"Broker/Agency"}>Broker/Agency</MenuItem>
-            <MenuItem value={"Reference"}>Reference</MenuItem>
-            <MenuItem value={"WorkIndia"}>WorkIndia</MenuItem>
-            <MenuItem value={"Instagram"}>Instagram</MenuItem>
-            <MenuItem value={"Field office"}>Field office</MenuItem>
-            <MenuItem value={"Others"}>Others</MenuItem>
+            {sourcingDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -154,9 +168,9 @@ function PersonalInfo(props) {
               setGender(event.target.value);
             }}
           >
-            <MenuItem value={"MALE"}>Male</MenuItem>
-            <MenuItem value={"Female"}>Female</MenuItem>
-            <MenuItem value={"Transgender"}>Transgender</MenuItem>
+            {genderDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -220,8 +234,9 @@ function PersonalInfo(props) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="DOB"
+            value={birthday}
             onChange={(newValue) => {
-              setBirthDay(newValue);
+              setBirthday(newValue);
             }}
             renderInput={(params) => (
               <TextField {...params} size="small" sx={{ width: "18%" }} />
@@ -243,8 +258,8 @@ function PersonalInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {maritalstatus.map((item) => (
-              <MenuItem value={item.status}>{item.status}</MenuItem>
+            {maritalDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -263,12 +278,9 @@ function PersonalInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Muslim"}>Muslim</MenuItem>
-            <MenuItem value={"HINDU"}>Hindu</MenuItem>
-            <MenuItem value={"Christian"}>Christian</MenuItem>
-            <MenuItem value={"Sikh"}>Sikh</MenuItem>
-            <MenuItem value={"Jain"}>Jain</MenuItem>
-            <MenuItem value={"Others"}>Others</MenuItem>
+            {religionDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -334,10 +346,9 @@ function PersonalInfo(props) {
               setCovidStatus(e.target.value);
             }}
           >
-            <MenuItem value={"Unvaccinated"}>Unvaccinated</MenuItem>
-            <MenuItem value={"First Dose"}>First Dose</MenuItem>
-            <MenuItem value={"Both Dose"}>Both Dose</MenuItem>
-            <MenuItem value={"Booster"}>Booster</MenuItem>
+            {covidDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
