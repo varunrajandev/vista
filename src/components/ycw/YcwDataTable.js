@@ -179,37 +179,37 @@ return (
                   YCW ID
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"12%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"13%" }}
                   align="left"
                 >
                   NAME
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"15%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"10%" }}
                   align="left"
                 >
                   PHONE#
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"5%" }}
                   align="left"
                 >
                   GENDER
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"5%" }}
                   align="left"
                 >
                   CITY
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"15%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"18%" }}
                   align="left"
                 >
                   SKILLS
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"8%" }}
                   align="left"
                 >
                   EXP.(YRS.)
@@ -221,7 +221,7 @@ return (
                   WORK HOURS
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"5%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"8%" }}
                   align="left"
                 >
                   #JOBS
