@@ -8,8 +8,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { maritalstatus, sourcing } from "../../AlllData";
-import { LoadingButton } from "@mui/lab";
-import SaveIcon from "@mui/icons-material/Save";
 
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
@@ -126,7 +124,7 @@ function PersonalInfo(props) {
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          label="Middle Name*"
+          label="Middle Name"
           variant="outlined"
           onChange={(event) => {
             setMname(event.target.value);
@@ -363,21 +361,7 @@ function PersonalInfo(props) {
           }}
         />
       </Box>
-      <Box sx={{ display: "grid", gap: 4, justifyContent: "right", mt: 2 }}>
-        <LoadingButton
-          loading={submitted}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="outlined"
-          size="small"
-          onClick={() => {
-            setSubmitted(true);
-          }}
-        >
-          Save
-        </LoadingButton>
-      </Box>
-    </form>
+       </form>
   );
 }
 
