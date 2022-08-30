@@ -14,6 +14,9 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { NavLink } from "react-router-dom";
 import { FilterData } from "../../AlllData";
+import { useSelector } from "react-redux/es/exports";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -71,8 +74,26 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function Right({ data }) {
-  return (
+function Right() {
+const [tableData, setTableData] = React.useState([])
+
+useEffect(() => {
+  const fetchData= async()=>{
+    let data = await fetch("http://13.126.160.155:8080/user/worker/get/all/worker?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
+    let res = await data.json();
+    let newData = await res.data;
+    setTableData(newData.data);
+  }
+  fetchData();
+}, [])
+
+{tableData.map((item)=>(
+  console.log("item",item.gender)
+))}
+
+ 
+
+return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
       {/* //Add Ycw Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -152,72 +173,74 @@ function Right({ data }) {
             <TableHead bgColor={"#e1e2e3"}>
               <TableRow>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "950" }}
+                  sx={{ fontSize: "10px", fontWeight: "950", width:"7%" }}
                   align="left"
                 >
                   YCW ID
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"12%" }}
                   align="left"
                 >
                   NAME
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"15%" }}
                   align="left"
                 >
                   PHONE#
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
                   align="left"
                 >
                   GENDER
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
                   align="left"
                 >
                   CITY
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"15%" }}
                   align="left"
                 >
                   SKILLS
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"7%" }}
                   align="left"
                 >
                   EXP.(YRS.)
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"8%" }}
                   align="left"
                 >
                   WORK HOURS
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width:"5%" }}
                   align="left"
                 >
                   #JOBS
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
-                  align="left"
+                  align="center"
                 >
                   STATUS
                 </TableCell>
               </TableRow>
             </TableHead>
 
+           
+
             <TableBody component={Paper}>
-              {data.map((row) => (
+              {tableData.map((item)=>(
                 <StyledTableRow
-                  key={row.id}
+                  key={item.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     zIndex: "999",
@@ -226,74 +249,83 @@ function Right({ data }) {
                   <TableCell
                     sx={{ fontSize: "13px" }}
                     component="th"
-                    scope="row"
+                    scope="item"
                     style={{
                       borderLeft:
-                        (row.status === "ACTIVE & AVAILABLE" &&
+                        (item.profileStatus.value === "ACTIVE & AVAILABLE" &&
                           "5px solid green") ||
-                        (row.status === "ACTIVE & UNAVAILABLE" &&
+                        (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
                           "5px solid #f7aa02") ||
-                        (row.status === "INACTIVE" && "5px solid red"),
+                        (item.profileStatus.value === "INACTIVE" && "5px solid red"),
                     }}
                   >
-                    {row.id}
+                    {item.userId || "NO DATA"}
                   </TableCell>
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.name}
+                   <TableCell sx={{ fontSize: "13px" }} align="left">
+                    {item.name|| "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.phone}
+                    {item.mobileNo|| "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.gender}
+                    {item.gender.value || "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.city}
+                    {item.cityName || "NO DATA"}
                   </TableCell>
+                
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.skill}
+                    {item.skill || "NO DATA"}
                   </TableCell>
+                    
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.exp}
+                    {item.totalExperience || "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.workHour}
+                    {item.workingHours.value || "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.jobs}
+                    {"NO DATA"}
                   </TableCell>
                   <NavLink
-                    to={`add/details/${row.id}`}
+                    to={`/ycw/add/dashboard/${item.userId}`}
                     style={{
                       textDecoration: "none",
-                      display: "grid",
-                      justifyContent: "center",
+                      display:"flex",
+                      justifyContent:"center"
+                      
                     }}
                   >
-                    <TableCell sx={{ fontSize: "8px" }} align="left">
+                    <TableCell align="left">
                       <Typography
                         sx={{
+                          width:"150px",
                           padding: "5px",
                           borderRadius: "10px",
-                          fontSize: "10px",
+                          fontSize: "12px",
                           textAlign: "center",
                           fontWeight: "900",
                         }}
                         style={{
                           backgroundColor:
-                            (row.status === "ACTIVE & AVAILABLE" &&
+                            (item.profileStatus.value === "ACTIVE & AVAILABLE" &&
                               "#cef5ce") ||
-                            (row.status === "ACTIVE & UNAVAILABLE" &&
+                            (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
                               "#f0edce") ||
-                            (row.status === "INACTIVE" && "#fcb1b8"),
+                            (item.profileStatus.value === "INACTIVE" && "#fcb1b8"),
                           color:
-                            (row.status === "ACTIVE & AVAILABLE" && "green") ||
-                            (row.status === "ACTIVE & UNAVAILABLE" &&
+                            (item.profileStatus.value === "ACTIVE & AVAILABLE" && "green") ||
+                            (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
                               "#f7aa02") ||
-                            (row.status === "INACTIVE" && "red"),
+                            (item.profileStatus.value === "INACTIVE" && "red"),
                         }}
                       >
-                        {row.status}
+                          {item.profileStatus.value || "NO DATA"}
                       </Typography>
                     </TableCell>
                   </NavLink>

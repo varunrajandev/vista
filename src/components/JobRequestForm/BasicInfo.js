@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -28,25 +28,43 @@ function BasicInfo() {
   const [pets, setPets] = React.useState();
   const [noOfPets, setNoOfPets] = React.useState();
 
+  const [newData, setNewData] = React.useState([]);
+
+
+  // useEffect(() => {
+  // const dataFetch = async ()=>{
+  //   let data = await fetch("http://3.111.186.100:8080/user/get/religion");
+  //   let res = await data.json();
+  //  setNewData(res.data);
+  // }
+  //   dataFetch()
+  // }, [])
+  
+
   const handleChange = (event) => {
     setJobTypes(event.target.value);
   };
 
-  console.log({
-    budgetMin,
-    budgetMax,
-    genderPreference,
-    agePreference,
-    religionPreference,
-    trainingPreference,
-    jobTypes,
-    languagePreference,
-    workDuration,
-    dailyStartTime,
-    membersInFamily,
-    value,
-    remarks,
-  });
+  const handleClick = ()=>{
+    console.log({
+      budgetMin,
+      budgetMax,
+      genderPreference,
+      agePreference,
+      religionPreference,
+      trainingPreference,
+      jobTypes,
+      languagePreference,
+      workDuration,
+      dailyStartTime,
+      membersInFamily,
+      value,
+      remarks,
+    });
+
+  }
+ 
+
   return (
     <>
       <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
@@ -66,6 +84,7 @@ function BasicInfo() {
             value={jobTypes}
             label="Job Type"
             onChange={handleChange}
+            required={true}
           >
             <MenuItem value="">
               <em>None</em>
@@ -174,12 +193,10 @@ function BasicInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Muslim"}>Muslim</MenuItem>
-            <MenuItem value={"Hindu"}>Hindu</MenuItem>
-            <MenuItem value={"Christian"}>Christian</MenuItem>
-            <MenuItem value={"Sikh"}>Sikh</MenuItem>
-            <MenuItem value={"Jain"}>Jain</MenuItem>
-            <MenuItem value={"Others"}>Others</MenuItem>
+            {newData.map((item)=>(
+              <MenuItem value={item.value}>{item.value}</MenuItem>
+            ))}
+            
           </Select>
         </FormControl>
 
@@ -253,6 +270,7 @@ function BasicInfo() {
           size="small"
           id="outlined-basic"
           label="Budget [max]"
+          type="number"
           variant="outlined"
           onChange={(e) => {
             setBudgetMax(e.target.value);
@@ -265,6 +283,7 @@ function BasicInfo() {
           id="outlined-basic"
           label="Budget [min]"
           variant="outlined"
+          type="number"
           onChange={(e) => {
             setBudgetMin(e.target.value);
           }}
@@ -324,6 +343,8 @@ function BasicInfo() {
         <div style={{ width: "18%" }}></div>
         <div style={{ width: "18%" }}></div>
       </Box>
+
+      <button onClick={handleClick}>click</button>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Box, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,52 +9,86 @@ import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { Cuisines, JobType, Language } from "../../AlllData";
-
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow, { tableRowClasses } from "@mui/material/TableRow";
+import Multiselected from "../Multiselected/Multiselected";
+import CheckBox from "@mui/icons-material/CheckBox";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-function SkillExpDetails() {
-  const [age, setAge] = React.useState("");
-  const [primarySkill, setPrimarySkill] = React.useState("");
-  const [secondarySkill, setSecondarySkill] = React.useState("");
-  const [tertiarySkill, setTertiarySkill] = React.useState("");
-  const [skillRemarks, setSkillRemarks] = React.useState("");
-  const [vegNonveg, setVegNonveg] = React.useState("");
-  const [cuisinesKnown, setCuisinesKnown] = React.useState([]);
-  const [primaryLanguage, setPrimaryLanguage] = React.useState();
-  const [otherLanguages, setOtherLanguages] = React.useState();
-  const [totalExp, setTotalExp] = React.useState();
-  const [experienceRemarks, setExperienceRemarks] = React.useState();
-  const [lastJobType, setLastJobType] = React.useState();
-  const [lastJobDuration, setLastJobDuration] = React.useState();
-  const [ReasonLeaving, setReasonLeaving] = React.useState();
+function SkillExpDetails(props) {
+  const [pSkillDD, setPSkillDD] = useState([])
+  const [sSkillDD, setSSkillDD] = useState([])
+  const [tSkillDD, setTSkillDD] = useState([])
+  const [primarylanguageDD, setPrimarylanguageDD] = useState([])
+  const [otherlanguageDD, setOtherlanguageDD] = useState([])
+  const [jobtypeDD, setJobtypeDD] = useState([])
+  
+const {
+    primarySkill, setPrimarySkill,
+    secondarySkill, setSecondarySkill,
+    tertiarySkill, setTertiarySkill,
+    skillRemarks, setSkillRemarks,
+    vegNonveg, setVegNonveg,
+    cuisinesKnown, setCuisinesKnown,
+    primaryLanguage, setPrimaryLanguage,
+    otherLanguages, setOtherLanguages,
+    totalExp, setTotalExp,
+    experienceRemarks, setExperienceRemarks,
+    lastJobType, setLastJobType,
+    lastJobDuration, setLastJobDuration,
+    ReasonLeaving, setReasonLeaving,
+    // values, setValue,
+  } = props
 
-  console.log("cusins is ", cuisinesKnown);
+  useEffect(() => {
+    async function fetchData() {
+      let primarySkilldata = await fetch("http://13.126.160.155:8080/user/drop-down/get/skills");
+      let primaryLanguagedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/primaryLanguage");
+      let otherLanguagedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/otherLanguages");
+      let Jobtypedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/jobType");
+      let res = await primarySkilldata.json();
+      let res1 = await primaryLanguagedata.json();
+      let res2 = await otherLanguagedata.json();
+      let res3 = await Jobtypedata.json();
+      setPSkillDD(res.data || [{ value: "NO DATA" }]);
+      setSSkillDD(res.data || [{ value: "NO DATA" }]);
+      setTSkillDD(res.data || [{ value: "NO DATA" }]);
+      setPrimarylanguageDD(res1.data || [{ value: "NO DATA" }]);
+      setOtherlanguageDD(res2.data || [{ value: "NO DATA" }]);
+      setJobtypeDD(res3.data || [{ value: "NO DATA" }]);
+    }
+    fetchData()
+  }, [])
+  
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   return (
-    <Box marginTop={7}   
-    sx={{
-      display: "grid",
-      gap: 1,
-    }}>
-      <h5 >Skill and Experience Details</h5>
+    <Box
+      marginTop={7}
+      sx={{
+        display: "grid",
+        gap: 1,
+      }}
+    >
+      <h5>Skill and Experience Details</h5>
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
           rowGap: "30px",
-          justifyContent:"space-between"
-
+          justifyContent: "space-between",
         }}
       >
-        <FormControl sx={{  minWidth: 120, width:"48.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Primary Skill</InputLabel>
           <Select
-            sx={{ width:"100%"}}
+            sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             label="Primary Skill"
@@ -62,16 +96,13 @@ function SkillExpDetails() {
               setPrimarySkill(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {JobType.map((items)=>(
-              <MenuItem value={items.job}>{items.job}</MenuItem>
+            {pSkillDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        <FormControl sx={{  minWidth: 120, width:"48.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Secondary Skill</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -82,16 +113,13 @@ function SkillExpDetails() {
               setSecondarySkill(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {JobType.map((items)=>(
-              <MenuItem value={items.job}>{items.job}</MenuItem>
+            {sSkillDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        <FormControl sx={{ minWidth: 120, width:"48.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Tertiary Skill</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -102,17 +130,14 @@ function SkillExpDetails() {
               setTertiarySkill(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {JobType.map((items)=>(
-              <MenuItem value={items.job}>{items.job}</MenuItem>
+            {tSkillDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
         <TextField
-          sx={{ width:"48.5%", }}
+          sx={{ width: "23%" }}
           size="small"
           id="outlined-basic"
           label="Skill Remarks"
@@ -122,14 +147,72 @@ function SkillExpDetails() {
           }}
         />
 
-        <FormControl sx={{ minWidth: 120, width:"48.5%" }} size="small">
+        {/*........................................................ Skill table .............................................*/}
+        <Box sx={{ width: "100%" }}>
+          <TableContainer>
+            <Table
+              size="small"
+              sx={{ minWidth: "100%", border: "1px solid grey" }}
+              aria-label="simple table"
+            >
+              <TableHead sx={{ backgroundColor: "#fff1f1" }}>
+                <TableRow>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Skill Name
+                  </TableCell>
+                  <TableCell sx={{ width: "10%" }} align="left">
+                    Type
+                  </TableCell>
+                  <TableCell align="left">Work</TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody >
+                <TableRow>
+                  <TableCell align="left">{primarySkill}</TableCell>
+                  <TableCell align="left">Primary</TableCell>
+                  <TableCell align="left">
+                    <Multiselected
+                      data={primarySkill}
+                      setData={setCuisinesKnown}
+                    />
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell align="left">{secondarySkill}</TableCell>
+                  <TableCell align="left">Secondary</TableCell>
+                  <TableCell align="left">
+                    <Multiselected
+                      data={secondarySkill}
+                      setData={setCuisinesKnown}
+                    />
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell align="left">{tertiarySkill}</TableCell>
+                  <TableCell align="left">Tertiar</TableCell>
+                  <TableCell align="left">
+                    <Multiselected
+                      data={tertiarySkill}
+                      setData={setCuisinesKnown}
+                    />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Can Cook Veg/Non-veg?</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             label="Can Cook Veg/Non-veg?"
-            onChange={handleChange}
+            onChange={(e)=>{setVegNonveg(e.target.value)}}
           >
             <MenuItem value="">
               <em>None</em>
@@ -170,20 +253,19 @@ function SkillExpDetails() {
           )}
         />
 
-        <FormControl sx={{ minWidth: 120, width:"31.5%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "23%" }} size="small">
           <InputLabel id="demo-select-small">Primary Language</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             label="Primary Language"
-            onChange={handleChange}
+            onChange={(e) => {
+              setPrimaryLanguage(e.target.value);
+            }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {Language.map((items) => (
-              <MenuItem value={items.language}>{items.language}</MenuItem>
+            {primarylanguageDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -191,9 +273,9 @@ function SkillExpDetails() {
         <Autocomplete
           multiple
           id="checkboxes-tags-demo"
-          options={Language}
+          options={otherlanguageDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.language}
+          getOptionLabel={(option) => option.key}
           onChange={(event, newValue) => {
             setOtherLanguages([...newValue]);
           }}
@@ -205,10 +287,10 @@ function SkillExpDetails() {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.language}
+              {option.value}
             </li>
           )}
-          style={{ width: "31.5%" }}
+          style={{ width: "100%" }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -219,8 +301,101 @@ function SkillExpDetails() {
           )}
         />
 
+        {/*........................................................ Language Table.............................................*/}
+        <Box sx={{ width: "100%" }}>
+          <TableContainer>
+            <Table
+              size="small"
+              sx={{ minWidth: "100%", border: "1px solid grey" }}
+              aria-label="simple table"
+            >
+              <TableHead sx={{ backgroundColor: "#fff1f1" }}>
+                <TableRow>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Language
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Type
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Read
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Write
+                  </TableCell>
+                  <TableCell sx={{ width: "20%" }} align="left">
+                    Speak
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                <TableRow>
+                  <TableCell align="left">{primaryLanguage}</TableCell>
+                  <TableCell align="left">Primary</TableCell>
+                  <TableCell align="left">
+                    <Checkbox
+                      size="small"
+                      {...label}
+                      color="success"
+                    />
+                  </TableCell>
+                  <TableCell align="left">
+                    <Checkbox
+                      size="small"
+                      {...label}
+                      color="success"
+                   
+                    />
+                  </TableCell>
+                  <TableCell align="left">
+                    <Checkbox
+                      size="small"
+                      {...label}
+                      color="success"
+                    />
+                  </TableCell>
+                </TableRow>
+
+                {otherLanguages.map((item) => (
+                  <TableRow>
+                    <TableCell
+                      align="left"
+                    >
+                      {item.language}
+                    </TableCell>
+                    <TableCell align="left">Secondary</TableCell>
+                    <TableCell align="left">
+                      <Checkbox
+                        size="small"
+                        {...label}
+                        color="success"
+                      />
+                    </TableCell>
+                    <TableCell align="left">
+                      <Checkbox
+                      size="small"
+                        {...label}
+                        color="success"
+                      />
+                    </TableCell>
+                    <TableCell align="left">
+                      <Checkbox
+                        size="small"
+                        {...label}
+                        color="success"
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        {/*........................................................ Language Table.............................................*/}
+
         <TextField
-          sx={{ width: "31.5%" }}
+          sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"
           label="Total Experience"
@@ -230,7 +405,7 @@ function SkillExpDetails() {
           }}
         />
 
-<TextField
+        <TextField
           sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"
@@ -241,12 +416,12 @@ function SkillExpDetails() {
           }}
         />
 
-<Autocomplete
+        <Autocomplete
           multiple
           id="checkboxes-tags-demo"
-          options={JobType}
+          options={jobtypeDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.job}
+          getOptionLabel={(option) => option.key}
           onChange={(event, newValue) => {
             setLastJobType([...newValue]);
           }}
@@ -258,7 +433,7 @@ function SkillExpDetails() {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.job}
+              {option.value}
             </li>
           )}
           style={{ width: "48.5%" }}
@@ -272,8 +447,7 @@ function SkillExpDetails() {
           )}
         />
 
-
-    <TextField
+        <TextField
           sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"
@@ -285,7 +459,7 @@ function SkillExpDetails() {
           }}
         />
 
-           <TextField
+        <TextField
           sx={{ width: "48.5%" }}
           size="small"
           id="outlined-basic"

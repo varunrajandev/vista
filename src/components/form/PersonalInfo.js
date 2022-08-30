@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, TextField, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,55 +7,68 @@ import Select from "@mui/material/Select";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { maritalstatus } from "../../AlllData";
+import { maritalstatus, sourcing } from "../../AlllData";
 import { LoadingButton } from "@mui/lab";
 import SaveIcon from "@mui/icons-material/Save";
 
-function PersonalInfo() {
-  const [walk, setWalk] = React.useState("");
-  const [fname, setFname] = React.useState("");
-  const [mname, setMname] = React.useState("");
-  const [lname, setLname] = React.useState("");
-  const [gender, setGender] = React.useState("");
-  const [phoneNumber, setPhoneNumber] = React.useState();
-  const [alternateNumber, setAlternateNumber] = React.useState();
-  const [whatsappAvailable, setWhatsappAvailable] = React.useState();
-  const [whatsapp, setWhatsapp] = React.useState();
-  const [value, setValue] = React.useState();
-  const [maritalStatus, setMaritalStatus] = React.useState("");
-  const [religion, setReligion] = React.useState("");
-  const [education, setEducation] = React.useState("");
-  const [educationalRemarks, setEducationalRemarks] = React.useState("");
-  const [covidStatus, setCovidStatus] = React.useState("");
-  const [medicalCondition, setMedicalCondition] = React.useState("");
-  const [ submitted, setSubmitted ] = React.useState(false)
+function PersonalInfo(props) {
+  const [sourcingDD, setSourcingDD] = useState([])
+  const [religionDD, setReligionDD] = useState([])
+  const [maritalDD, setMaritalDD] = useState([])
+  const [genderDD, setGenderDD] = useState([])
+  const [covidDD, setCovidDD] = useState([])
+
+
+  const {
+    walk, setWalk,
+    fname, setFname,
+    mname, setMname,
+    lname, setLname,
+    gender, setGender,
+    phoneNumber, setPhoneNumber,
+    alternateNumber, setAlternateNumber,
+    whatsappAvailable, setWhatsappAvailable,
+    whatsapp, setWhatsapp,
+    birthday, setBirthday,
+    maritalStatus, setMaritalStatus,
+    religion, setReligion,
+    education, setEducation,
+    educationalRemarks, setEducationalRemarks,
+    covidStatus, setCovidStatus,
+    medicalCondition, setMedicalCondition,
+    submitted, setSubmitted
+  } = props;
+
+  useEffect(() => {
+    const dataFetch = async () => {
+      let sourceData = await fetch("http://13.126.160.155:8080/user/drop-down/get/sourceChannel?flag=all");
+      let religionData = await fetch("http://13.126.160.155:8080/user/drop-down/get/religion");
+      let maritalData = await fetch("http://13.126.160.155:8080/user/drop-down/get/maritalStatus")
+      let genderData = await fetch("http://13.126.160.155:8080/user/get/gender")
+      let covidData = await fetch("http://13.126.160.155:8080/user/drop-down/get/covidVaccination")
+      let res = await sourceData.json();
+      let res1 = await religionData.json();
+      let res2 = await maritalData.json();
+      let res3 = await genderData.json();
+      let res4 = await covidData.json();
+      setSourcingDD(res.data)
+      setReligionDD(res1.data)
+      setMaritalDD(res2.data)
+      setGenderDD(res3.data)
+      setCovidDD(res4.data)
+    }
+    dataFetch()
+  }, [])
 
   const handleChange = (event) => {
     setWalk(event.target.value);
   };
 
   setTimeout(() => {
-    setSubmitted(false)
+    setSubmitted(false);
   }, 2000);
 
-  console.log({
-    medicalCondition,
-    covidStatus,
-    educationalRemarks,
-    education,
-    religion,
-    maritalStatus,
-    value,
-    whatsapp,
-    whatsappAvailable,
-    alternateNumber,
-    phoneNumber,
-    walk,
-    gender,
-    fname,
-    mname,
-    lname,
-  });
+
   return (
     <form>
       <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
@@ -79,21 +92,9 @@ function PersonalInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Apna"}>Apna</MenuItem>
-            <MenuItem value={"Quikr"}>Quikr</MenuItem>
-            <MenuItem value={"OLX"}>OLX</MenuItem>
-            <MenuItem value={"Newspaper"}>Newspaper</MenuItem>
-            <MenuItem value={"JobHai"}>JobHai</MenuItem>
-            <MenuItem value={"Facebook"}>Facebook</MenuItem>
-            <MenuItem value={"Website"}>Website</MenuItem>
-            <MenuItem value={"Helpers4U"}>Helpers4U</MenuItem>
-            <MenuItem value={"Field Activity"}>Branch Officer</MenuItem>
-            <MenuItem value={"Broker/Agency"}>Broker/Agency</MenuItem>
-            <MenuItem value={"Reference"}>Reference</MenuItem>
-            <MenuItem value={"WorkIndia"}>WorkIndia</MenuItem>
-            <MenuItem value={"Instagram"}>Instagram</MenuItem>
-            <MenuItem value={"Field office"}>Field office</MenuItem>
-            <MenuItem value={"Others"}>Others</MenuItem>
+            {sourcingDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -167,9 +168,9 @@ function PersonalInfo() {
               setGender(event.target.value);
             }}
           >
-            <MenuItem value={"Male"}>Male</MenuItem>
-            <MenuItem value={"Female"}>Female</MenuItem>
-            <MenuItem value={"Transgender"}>Transgender</MenuItem>
+            {genderDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -233,11 +234,12 @@ function PersonalInfo() {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="DOB"
+            value={birthday}
             onChange={(newValue) => {
-              setValue(newValue);
+              setBirthday(newValue);
             }}
             renderInput={(params) => (
-              <TextField {...params} size="small" sx={{ width: "18%" }} />
+              <TextField {...params} size="small" sx={{ width: "18%" }}/>
             )}
           />
         </LocalizationProvider>
@@ -256,8 +258,8 @@ function PersonalInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {maritalstatus.map((item) => (
-              <MenuItem value={item.status}>{item.status}</MenuItem>
+            {maritalDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -276,12 +278,9 @@ function PersonalInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Muslim"}>Muslim</MenuItem>
-            <MenuItem value={"Hindu"}>Hindu</MenuItem>
-            <MenuItem value={"Christian"}>Christian</MenuItem>
-            <MenuItem value={"Sikh"}>Sikh</MenuItem>
-            <MenuItem value={"Jain"}>Jain</MenuItem>
-            <MenuItem value={"Others"}>Others</MenuItem>
+            {religionDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -347,10 +346,9 @@ function PersonalInfo() {
               setCovidStatus(e.target.value);
             }}
           >
-            <MenuItem value={"Unvaccinated"}>Unvaccinated</MenuItem>
-            <MenuItem value={"First Dose"}>First Dose</MenuItem>
-            <MenuItem value={"Both Dose"}>Both Dose</MenuItem>
-            <MenuItem value={"Booster"}>Booster</MenuItem>
+            {covidDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -365,15 +363,15 @@ function PersonalInfo() {
           }}
         />
       </Box>
-      <Box sx={{display:"grid", gap:4, justifyContent:"right", mt:2}}>
+      <Box sx={{ display: "grid", gap: 4, justifyContent: "right", mt: 2 }}>
         <LoadingButton
           loading={submitted}
           loadingPosition="start"
           startIcon={<SaveIcon />}
           variant="outlined"
           size="small"
-          onClick={()=>{
-            setSubmitted(true)
+          onClick={() => {
+            setSubmitted(true);
           }}
         >
           Save

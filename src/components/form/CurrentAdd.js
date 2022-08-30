@@ -1,43 +1,49 @@
 import { Box, TextField } from "@mui/material";
-import React from "react";
+import React,{useEffect, useState} from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { AddressData } from "../../AddressData";
 
-function CurrentAdd() {
-  const [addressL1, setAddressL1] = React.useState("");
-  const [addressL2, setAddressL2] = React.useState("");
-  const [landmark, setLandmark] = React.useState("");
-  const [pinCode, setPinCode] = React.useState("");
-  const [country, setCountry] = React.useState("");
-  const [state, setState] = React.useState("");
-  const [city, setCity] = React.useState("");
-  const [locality, setLocality] = React.useState("");
-  const [addressProofType, setAddressProofType] = React.useState("");
+function CurrentAdd(props) {
+  const [countryDD, setCountryDD] = useState([])
+  const [stateDD, setStateDD] = useState([])
+  const [cityDD, setCityDD] = useState([])
+  const [localityDD, setLocalityDD] = useState([])
+const {
+  addressL1, setAddressL1,
+  addressL2, setAddressL2,
+  landmark, setLandmark,
+  pinCode, setPinCode,
+  country, setCountry,
+  state, setState,
+  city, setCity,
+  locality, setLocality,
+  addressProofType, setAddressProofType,
+  countryID, setCountryID,
+  stateID, setStateID,
+  cityID, setCityID
+} = props
 
-  console.log({
-    addressL1,
-    addressL2,
-    landmark,
-    pinCode,
-    country,
-    state,
-    city,
-    locality,
-    addressProofType,
-  });
+useEffect(() => {
+  async function fetchData() {
+    let countryData = await fetch( "http://13.126.160.155:8081/locationmaster/country/get/all");
+    let stateData = await fetch( `http://13.126.160.155:8081/locationmaster/state/get/states/by/${countryID}`);
+    let cityData = await fetch( `http://13.126.160.155:8081/locationmaster/city/get/cities/by/${stateID}`);
+    let localityData = await fetch( `http://13.126.160.155:8081/locationmaster/micromarket/list/${cityID}`);
+    let res1 = await countryData.json();
+    let res2 = await stateData.json();
+    let res3 = await cityData.json();
+    let res4 = await localityData.json();
+    setCountryDD(res1.data);
+    setStateDD(res2.data || [{name:"please Select Country"}])
+    setCityDD(res3.data || [{name:"please Select State"}])
+    setLocalityDD(res4.data || [{names:"please Select City"}])
+  }
+  fetchData();
+}, [countryID, stateID, cityID]);
 
-  const res = AddressData.filter((word) => word.admin_name === state);
-
-  let arr = [];
-  AddressData.forEach((item) => {
-    let data = item.admin_name;
-    arr.push(data);
-  });
-  var set = new Set(arr);
-  let newArr = [...set];
+console.log("countryID", stateID)
 
   return (
     <Box 
@@ -109,8 +115,9 @@ function CurrentAdd() {
               onChange={(e) => {
                 setCountry(e.target.value);
               }}
-            >
-             <MenuItem value={"India"}>India</MenuItem>
+            >{countryDD.map((item)=>(
+              <MenuItem value={item.countryName} onClick={()=>{setCountryID(item.uuid)}}>{item.countryName}</MenuItem>
+            ))}
             </Select>
           </FormControl>
         </Box>
@@ -133,11 +140,8 @@ function CurrentAdd() {
                 setState(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {newArr.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
+              {stateDD.map((item) => (
+                <MenuItem value={item.label} onClick={()=>{setStateID(item.value)}}>{item.label}{item.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -153,11 +157,8 @@ function CurrentAdd() {
                 setCity(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {res.map((item) => (
-                <MenuItem value={item.city}>{item.city}</MenuItem>
+              {cityDD.map((item) => (
+                <MenuItem value={item.label} onClick={()=>{setCityID(item.value)}}>{item.label}{item.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -173,12 +174,9 @@ function CurrentAdd() {
                 setLocality(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"Phase1"}>Phase1</MenuItem>
-              <MenuItem value={"Phase2"}>Phase2</MenuItem>
-              <MenuItem value={"Phase3"}>Phase3</MenuItem>
+              {localityDD.map((item) => (
+                <MenuItem value={item.name}>{item.name}{item.names}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -193,22 +191,7 @@ function CurrentAdd() {
                 setAddressProofType(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"Aadhaar Card"}>Aadhaar Card</MenuItem>
-              <MenuItem value={"Light Bill"}>Light Bill</MenuItem>
-              <MenuItem value={"Gas Bill"}>Gas Bill</MenuItem>
-              <MenuItem value={"Domicile Certificate"}>Room Agreement</MenuItem>
-              <MenuItem value={"Voter ID"}>Voter ID</MenuItem>
-              <MenuItem value={"Ration Card"}>Ration Card</MenuItem>
-              <MenuItem value={"Driving Licence"}>Driving Licence</MenuItem>
-              <MenuItem value={"Passport"}>Passport</MenuItem>
-              <MenuItem value={"Bank Passbook"}>Bank Passbook</MenuItem>
-              <MenuItem value={"Panchayat Certificate"}>
-                Panchayat Certificate
-              </MenuItem>
-            </Select>
+              <MenuItem value={"AAADHAR_CARD"}>Aadhaar Card</MenuItem></Select>
           </FormControl>
           <div style={{width:"18%"}}></div>
         </Box>

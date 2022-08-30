@@ -17,6 +17,29 @@ function CurrentAddress() {
   const [locality, setLocality] = React.useState("");
   const [addressProofType, setAddressProofType] = React.useState("");
 
+
+  // const {      
+  //   flat, setFlat,
+  //   area, setArea,
+  //   landmark, setLandmark,
+  //   pinCode, setPinCode,
+  //   country, setCountry,
+  //   state, setState,
+  //   city, setCity,
+  //   locality, setLocality,
+  //   addressProofType, setAddressProofType
+  //   } = props;
+
+  // flat={flat} setFlat={setFlat}
+  // area={area} setArea={setArea}
+  // landmark={landmark} setLandmark={setLandmark}
+  // pinCode={pinCode} setPinCode={setPinCode}
+  // country={country} setCountry={setCountry}
+  // state={state} setState={setState}
+  // city={city} setCity={setCity}
+  // locality={locality} setLocality={setLocality}
+  // addressProofType={addressProofType} setAddressProofType={setAddressProofType}
+
   const res = AddressData.filter((word) => word.admin_name === state);
 
   let arr = [];

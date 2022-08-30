@@ -1,33 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   IconButton,
-  Button,
+  // Button,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
   Autocomplete,
+  Checkbox,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
+import { FilterData } from "../../AlllData";
 
-function BankAccount() {
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
+function BankAccount(props) {
   const [checked, setChecked] = useState(true);
+  const [accountTypeDD, setAccountTypeDD] = useState([{}]);
+  const { setInputFields, inputFields } = props;
 
-  const [inputFields, setInputFields] = useState([
-    {
-      AccounType: "",
-      bankName: "",
-      branchName: "",
-      branchAddress: "",
-      accountHoderName: "",
-      accountNumber: "",
-      IfceCode: "",
-      BankAccountProof: "",
-    },
-  ]);
-
+  useEffect(() => {
+    async function fetchData() {
+      let response = await fetch( "http://13.126.160.155:8080/user/drop-down/get/accountType");
+      let data = await response.json();
+      setAccountTypeDD(data.data);
+    }
+    fetchData();
+  }, []);
 
   const handleChangeInput = (index, event) => {
     const values = [...inputFields];
@@ -39,28 +40,23 @@ function BankAccount() {
     setChecked(event.target.checked);
   };
 
-  const handleChangei = (event, value) => setSelectedOptions(value);
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("inputs", inputFields);
-    console.log("selectedOptions is",selectedOptions)
   };
 
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
       {
-        AccounType: "",
+        accountType: "",
         bankName: "",
         branchName: "",
         branchAddress: "",
         accountHoderName: "",
         accountNumber: "",
-        IfceCode: "",
-        BankAccountProof: "",
+        ifscCode: "",
+        bankAccountProof: "",
       },
     ]);
   };
@@ -72,11 +68,13 @@ function BankAccount() {
   };
 
   return (
-    <Box   sx={{
-      marginTop: 7,
-      display: "grid",
-      gap: .3,
-    }}>
+    <Box
+      sx={{
+        marginTop: 7,
+        display: "grid",
+        gap: 0.3,
+      }}
+    >
       <Box
         style={{
           display: "flex",
@@ -106,137 +104,116 @@ function BankAccount() {
           <Box
             sx={{
               display: "flex",
-              flexWrap:"wrap",
-              rowGap:"30px",
-              justifyContent:"space-between",
-              marginBottom:5 
+              flexWrap: "wrap",
+              rowGap: "30px",
+              justifyContent: "space-between",
+              marginBottom: 5,
             }}
           >
-         
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={top100Films}
-                getOptionLabel={(option) => option.label}
-                sx={{ width: "18%" }}
-                onChange={handleChangei}
-                filterSelectedOptions
-                renderInput={(params) => (
-                  <TextField
-                    sx={{ bgcolor: "white", borderRadius: "5px" }}
-                    {...params}
-                    name="AccounType"
-                    label="Type of Account"
-                    size="small"
-                    // value={inputField.AccounType}
-                    
-                  />
-                )}
-              />
+            <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+              <InputLabel id="demo-select-small">Type of Account</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="accountType"
+                value={inputField.accountType}
+                label="Type of Account"
+                onChange={(event) => handleChangeInput(index, event)}
+              >
+                {accountTypeDD.map((item) => (
+                  <MenuItem value={item.key}>{item.value}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-              <TextField
-                style={{ width: "18%" }}
-                name="bankName"
-                label="Name of the the Bank"
-                size="small"
-                value={inputField.bankName}
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="branchName"
-                label="Branch Name"
-                value={inputField.branchName}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
+            <TextField
+              style={{ width: "18%" }}
+              name="bankName"
+              label="Name of the the Bank"
+              size="small"
+              value={inputField.bankName}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="branchName"
+              label="Branch Name"
+              value={inputField.branchName}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
 
-              <TextField
-                style={{ width: "38.5%" }}
-                name="branchAddress"
-                label="Branch Address"
-                value={inputField.branchAddress}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
+            <TextField
+              style={{ width: "38.5%" }}
+              name="branchAddress"
+              label="Branch Address"
+              value={inputField.branchAddress}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
             {/* </div>
 
             <div style={{ display: "flex", justifyContent: "space-between" }}> */}
-              <TextField
-                style={{ width: "18%" }}
-                name="accountHoderName"
-                label="Account Holder Name"
-                value={inputField.accountHoderName}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="accountNumber"
-                label="Account Number"
-                value={inputField.accountNumber}
-                size="small"
-                type={Number}
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="IfceCode"
-                label="IFSC Code"
-                value={inputField.IfceCode}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <TextField
-                style={{ width: "18%" }}
-                name="BankAccountProof"
-                label="Bank Account Proof*"
-                value={inputField.BankAccountProof}
-                size="small"
-                onChange={(event) => handleChangeInput(index, event)}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justfyContent: "space-between",
-                  width: "18%",
-                  alignItems: "center",
-                }}
-              >
-                <IconButton aria-label="delete">
-                  <DeleteIcon onClick={() => handleRemoveFields(index)} />
-                </IconButton>
+            <TextField
+              style={{ width: "18%" }}
+              name="accountHoderName"
+              label="Account Holder Name"
+              value={inputField.accountHoderName}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="accountNumber"
+              label="Account Number"
+              value={inputField.accountNumber}
+              size="small"
+              type={Number}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="IfceCode"
+              label="IFSC Code"
+              value={inputField.IfceCode}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <TextField
+              style={{ width: "18%" }}
+              name="BankAccountProof"
+              label="Bank Account Proof*"
+              value={inputField.BankAccountProof}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            <div
+              style={{
+                display: "flex",
+                justfyContent: "space-between",
+                width: "18%",
+                alignItems: "center",
+              }}
+            >
+              <IconButton aria-label="delete">
+                <DeleteIcon onClick={() => handleRemoveFields(index)} />
+              </IconButton>
 
-                <Switch
-                  checked={checked}
-                  onChange={handleChange}
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-                <span style={{ fontSize: "13px", fontWeight: "bolder" }}>
-                  Default
-                </span>
-              </div>
-            
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ "aria-label": "controlled" }}
+              />
+              <span style={{ fontSize: "13px", fontWeight: "bolder" }}>
+                Default
+              </span>
+            </div>
           </Box>
         ))}
-        {/* <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          onClick={handleSubmit}
-        >
-          send
-        </Button> */}
-
       </form>
     </Box>
   );
 }
-
-const top100Films = [
-  { label: "Saving"},
-  { label: "Current"},
-  { label: "ohter"},
-];
 
 export default BankAccount;

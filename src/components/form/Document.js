@@ -1,7 +1,7 @@
 import {
   Button,
   IconButton,
-  TextField,
+  // TextField,
   FormControl,
   MenuItem,
   Select,
@@ -32,6 +32,7 @@ const StyleBox = styled(Box)({
   flexDirection: "column",
   backgroundColor: "#f4eeff",
   padding: "10px",
+  boxSizing: "border-box",
   borderRadius: "5px",
   width: "22%",
 });
@@ -47,7 +48,14 @@ const Div2 = styled("div")({
 });
 
 function Document() {
+  const [selectedFile, setSelectedFile] = useState();
   const [openPopup, setOpenPopup] = useState(false);
+  console.log("document", selectedFile)
+
+  const changeHandler = (event) => {
+		setSelectedFile(event.target.files[0]);
+		// setIsSelected(true);
+	};
 
   return (
     <Box marginTop={3}>
@@ -157,9 +165,9 @@ function Document() {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 label="Document Type"
-                // onChange={(e) => {
-                //   setCountry(e.target.value);
-                // }}
+              // onChange={(e) => {
+              //   setCountry(e.target.value);
+              // }}
               >
                 {idProof.map((item) => (
                   <MenuItem value={item.source}>{item.source}</MenuItem>
@@ -210,9 +218,9 @@ function Document() {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 label="Document Type"
-                // onChange={(e) => {
-                //   setCountry(e.target.value);
-                // }}
+              // onChange={(e) => {
+              //   setCountry(e.target.value);
+              // }}
               >
                 {addressProof.map((item) => (
                   <MenuItem value={item.source}>{item.source}</MenuItem>
@@ -263,9 +271,9 @@ function Document() {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 label="Document Type"
-                // onChange={(e) => {
-                //   setCountry(e.target.value);
-                // }}
+              // onChange={(e) => {
+              //   setCountry(e.target.value);
+              // }}
               >
                 {addressProof.map((item) => (
                   <MenuItem value={item.source}>{item.source}</MenuItem>
@@ -305,33 +313,15 @@ function Document() {
           }}
         >
           <FormControl sx={{ minWidth: 120 }} size="small">
-            <InputLabel id="demo-select-small">Document Category</InputLabel>
-            <Select
-              sx={{ width: "230px" }}
-              labelId="demo-select-small"
-              id="demo-select-small"
-              label="Document Category"
-              // onChange={(e) => {
-              //   setCountry(e.target.value);
-              // }}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"India"}>India</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl sx={{ minWidth: 120 }} size="small">
             <InputLabel id="demo-select-small">Document Type</InputLabel>
             <Select
               sx={{ width: "230px" }}
               labelId="demo-select-small"
               id="demo-select-small"
               label="Document Type"
-              // onChange={(e) => {
-              //   setCountry(e.target.value);
-              // }}
+            // onChange={(e) => {
+            //   setCountry(e.target.value);
+            // }}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -339,8 +329,7 @@ function Document() {
               <MenuItem value={"India"}>India</MenuItem>
             </Select>
           </FormControl>
-
-          <input hidden accept="image/*" multiple type="file" />
+          <input type="file" name="file" onChange={changeHandler}/>
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "right", mt: 3, gap: 2 }}>
