@@ -183,101 +183,118 @@ function AddNewYcw() {
     try {
       await axios.post("http://13.126.160.155:8080/user/worker/save",
         {
+          "userAndProfileDto": {
+            "status": true,           
+            "isoCode": "string",
+            "mobile": "string",
+            "mobileVerified": true,
+            "email": "string",
+            "emailVerified": true,
+            "userType": "WORKER",
+            "department": "TECH",
+            "departmentName": "string",
+            "firstName": "string",
+            "lastName": "string",
+            "otp": 0,
+            "profession": "BUSINESS_OWNER",
+            "micromarketUuid": "string",
+            "cityUuid": "string",
+            "middleName": "string",
+            "gender": "MALE",
+            "profileStatus": "ACTIVE_AND_NOT_AVAILABLE",
+            "alternateMobileNumber": "string",
+            "birthday": 1661848805777,
+            "maritalStatus": "SINGLE",
+            "whatsappNumber": "string",
+            "secondaryEmail": "string",
+            "nationality": "INDIAN",
+            "sourcingChannel": "APNA",
+            "medium": "PHONE_CALL",
+            "professsion": "BUSINESS_OWNER",
+            "religion": "HINDU",
+            "bloodGroup": "O_POSITIVE",
+            "educationalRemarks": "string",
+            "medicalCondition": "string",
+            "covidStatus": "UNVACCINATED",
+            "nextDestination": "string",
+            "arrivalDate": 1661848805777,
+            "secondaryMobileNumber": "string",
+            "secondaryMobileVerified": true,
+            "formStatus": "DRAFT",
+            "whatsappAvailable": true
+          },
           "addressDtos": [
             {
+              "status": true,
               "addressLine1": "string",
               "addressLine2": "string",
-              "addressProofType": "AAADHAR_CARD",
-              "cityName": "string",
-              "countryName": "string",
-              "landmark": "string",
+              "micromarketUuid": "string",
               "locality": "string",
-              "permanent": true,
+              "cityUuid": "string",
+              "stateUuid": "string",
               "postalCode": "string",
-              "stateName": "string"
+              "countryUuid": "string",
+              "addressProofType": "AAADHAR_CARD",
+              "permanent": true
             }
           ],
-          "bankDetailsDtos": inputFields,
+          "skillsMappingDto": {
+            "primarySkill": "DRIVING",
+            "secondarySkill": "DRIVING",
+            "teritarySkill": "DRIVING",
+            "cookType": "ONLY_VEG",
+            "cuisines": "string",
+            "totalExperience": "string",
+            "skillRemarks": "string"
+          },
+          "userJobExperience": {
+            "jobType": "HOUSEKEEPING",
+            "experienceRemarks": "string",
+            "totalExperience": "string",
+            "lastJobDuration": "string",
+            "reasonForLeavingJob": "string"
+          },
+          "jobRequirementDtos": [
+            {
+              "workingHours": "_0_TO_2_HOURS",
+              "startTime": "string",
+              "endTime": "string",
+              "vehicle": "string",
+              "minSalaryExpected": "string",
+              "maxSalaryExpected": "string",
+              "openToTraining": true,
+              "traningMode": "ONLINE",
+              "jobRemarks": "string"
+            }
+          ],
+          "bankDetailsDtos":inputFields,
 
           "documentRequestDtos": [
             {
-              "approvalStatus": "string",
-              "bucketName": "string",
               "documentContext": "KYC",
-              "documentSideType": "FRONT",
               "documentUploadType": "PASSPORT",
-              "fileName": "string",
+              "documentSideType": "FRONT",
               "filePath": "string",
+              "fileName": "string",
               "fileUrl": "string",
               "metadata": "string",
+              "approvalStatus": "string",
               "rejectedReason": "string",
+              "bucketName": "string",
               "verified": true
             }
           ],
-          "jobRequirementDtos": [
+          "userFamilyMemberDto": [
             {
-              "endTime": "string",
-              "jobRemarks": "string",
-              "maxSalaryExpected": "string",
-              "minSalaryExpected": "string",
-              "openToTraining": true,
-              "startTime": "string",
-              "traningMode": "ONLINE",
-              "vehicle": "string",
-              "workingHours": "_0_TO_2_HOURS"
-            }
-          ],
-          "skillsMappingDto": [
-            {
-              "cookType": "ONLY_VEG",
-              "experienceRemarks": "string",
-              "jobtype": "HOUSEKEEPING",
-              "lastJobDuration": "string",
-              "primaryId": 0,
-              "reasonForLeavingJob": "string",
-              "secondarySkillId": 0,
-              "skillRemarks": "string",
-              "teritarySkillId": 0,
-              "totalExperience": 0,
-            }
-          ],
-          "userAndProfileDto": {
-            "alternateMobileNumber": "string",
-            "arrivalDate": null,
-            "birthday": birthday,
-            "bloodGroup": "O_POSITIVE",
-            "covidStatus": covidStatus,
-            "createdBy": "string",
-            "department": "TECH",
-            "departmentName": "string",
-            "educationalRemarks": educationalRemarks,
-            "email": "string",
-            "emailVerified": true,
-            "firstName": firstname,
-            "formStatus": "DRAFT",
-            "gender": gender,
-            "isSecondaryMobileVerified": "string",
-            "isoCode": "string",
-            "lastName": lastname,
-            "maritalStatus": maritalStatus,
-            "medicalCondition": medicalCondition,
-            "medium": "PHONE_CALL",
-            "middleName": middlename,
-            "mobile": mobile,
-            "mobileVerified": true,
-            "nationality": "INDIAN",
-            "nextDestination": "string",
-            "otp": 0,
-            "professsion": "BUSINESS_OWNER",
-            "religion": religion,
-            "secondaryEmail": "string",
-            "source": source,
-            "status": true,
-            "updatedBy": "string",
-            "userType": "WORKER",
-            "whatsappAvailable": isWhatsappAvailable,
-            "whatsappNumber": whatsappNumber
-          }
+              "status": true,
+              "name": "string",
+              "userId": "string",
+              "jobType": "HOUSEKEEPING",
+              "relationship": "WIFE",
+              "age": 0,
+              "mobileNo": "string",
+              "email": "string"
+            }]
         });
       alert("User Registration successfull")
     } catch (error) {

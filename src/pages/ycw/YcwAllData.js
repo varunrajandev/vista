@@ -7,19 +7,17 @@ import { getData } from '../../Redux/Posts/action';
 
 
 function YcmDataList() {
-
-  let url = `https://nykaalone.herokuapp.com/menData?_page=2&_limit=9`;
+  //url = "http://13.126.160.155:8080/user/worker/get/all/worker?filter=firstName&pageNo=1&pageSize=30&sortby=asc"
+  let url = `http://13.126.160.155:8080/user/worker/get/all/worker`;
   const dispatch = useDispatch()
      useEffect(() => {
          dispatch(getData(url))
       },[ url]);
-
-      const data2 = useSelector((state)=> state.post.data)
-      console.log(data2)
+    
   return (
    
        <>
-       <YcwDataTable data = {data}/>
+       <YcwDataTable/>
        </>
         
 

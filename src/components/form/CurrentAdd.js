@@ -1,13 +1,18 @@
 import { Box, TextField } from "@mui/material";
-import React from "react";
+import React,{useEffect, useState} from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { AddressData } from "../../AddressData";
 
 function CurrentAdd(props) {
-
+  const [countryDD, setCountryDD] = useState([])
+  const [stateDD, setStateDD] = useState([])
+  const [cityDD, setCityDD] = useState([])
+  const [localityDD, setLocalityDD] = useState([])
+  const [countryID, setCountryID] = useState()
+  const [stateID, setStateID] = useState()
+  const [cityID, setCityID] = useState()
 const {
   addressL1, setAddressL1,
   addressL2, setAddressL2,
@@ -20,15 +25,23 @@ const {
   addressProofType, setAddressProofType,
 } = props
 
-  const res = AddressData.filter((word) => word.admin_name === state);
-
-  let arr = [];
-  AddressData.forEach((item) => {
-    let data = item.admin_name;
-    arr.push(data);
-  });
-  var set = new Set(arr);
-  let newArr = [...set];
+useEffect(() => {
+  async function fetchData() {
+    let countryData = await fetch( "http://13.126.160.155:8081/locationmaster/country/get/all");
+    let stateData = await fetch( `http://13.126.160.155:8081/locationmaster/state/get/all/${countryID}`);
+    let cityData = await fetch( `http://13.126.160.155:8081/locationmaster/city/get/all/${stateID}`);
+    let localityData = await fetch( `http://13.126.160.155:8081/locationmaster/micromarket/list/${cityID}`);
+    let res1 = await countryData.json();
+    let res2 = await stateData.json();
+    let res3 = await cityData.json();
+    let res4 = await localityData.json();
+    setCountryDD(res1.data);
+    setStateDD(res2.data || [{name:"please Select Country"}])
+    setCityDD(res3.data || [{name:"please Select State"}])
+    setLocalityDD(res4.data || [{names:"please Select City"}])
+  }
+  fetchData();
+}, [countryID, stateID, cityID]);
 
   return (
     <Box 
@@ -100,8 +113,9 @@ const {
               onChange={(e) => {
                 setCountry(e.target.value);
               }}
-            >
-             <MenuItem value={"India"}>India</MenuItem>
+            >{countryDD.map((item)=>(
+              <MenuItem value={item.countryName} onClick={()=>{setCountryID(item.id)}}>{item.countryName}</MenuItem>
+            ))}
             </Select>
           </FormControl>
         </Box>
@@ -124,11 +138,8 @@ const {
                 setState(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {newArr.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
+              {stateDD.map((item) => (
+                <MenuItem value={item.stateName} onClick={()=>{setStateID(item.id)}}>{item.stateName}{item.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -144,11 +155,8 @@ const {
                 setCity(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {res.map((item) => (
-                <MenuItem value={item.city}>{item.city}</MenuItem>
+              {cityDD.map((item) => (
+                <MenuItem value={item.cityName} onClick={()=>{setCityID(item.uuid)}}>{item.cityName}{item.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -164,12 +172,9 @@ const {
                 setLocality(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"Phase1"}>Phase1</MenuItem>
-              <MenuItem value={"Phase2"}>Phase2</MenuItem>
-              <MenuItem value={"Phase3"}>Phase3</MenuItem>
+              {localityDD.map((item) => (
+                <MenuItem value={item.name}>{item.name}{item.names}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 

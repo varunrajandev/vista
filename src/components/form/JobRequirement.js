@@ -1,5 +1,5 @@
 import { Box, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -17,6 +17,8 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 function JobRequirement(props) {
+  const [jobtypeDD, setJobtypeDD] = useState([])
+  const [trainingDD, setTrainingDD] = useState([])
 const {  
   openToTraining, setOpenToTraining,
   preferJob, setPreferJob,
@@ -28,6 +30,18 @@ const {
   maxSal, setMaxSal,
   traningMode, setTraningMode,
   jobRemarks, setJobRemarks,} = props;
+
+  useEffect(() => {
+    async function fetchData() {
+      let Jobtypedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/jobType");
+      let trainingModeData = await fetch("http://13.126.160.155:8080/user/drop-down/get/traningMode")
+      let res3 = await Jobtypedata.json();
+      let res4 = await trainingModeData.json();
+      setJobtypeDD(res3.data || [{ value: "NO DATA" }]);
+      setTrainingDD(res4.data || [{ value: "NO DATA" }]);
+    }
+    fetchData()
+  }, [])
 
 
   return (
@@ -49,9 +63,9 @@ const {
         <Autocomplete
           multiple
           id="checkboxes-tags-demo"
-          options={JobType}
+          options={jobtypeDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.job}
+          getOptionLabel={(option) => option.key}
           onChange={(event, newValue) => {
             setPreferJob([...newValue]);
           }}
@@ -63,7 +77,7 @@ const {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.job}
+              {option.value}
             </li>
           )}
           style={{ width: "18%" }}
@@ -210,11 +224,10 @@ const {
               setTraningMode(e.target.value)
             }}
           >
-          
-            <MenuItem value={"Online"}>Online</MenuItem>
-            <MenuItem value={"Offline"}>Offline</MenuItem>
-            <MenuItem value={"Both"}>Both</MenuItem>
-          </Select>
+            {trainingDD.map((item)=>(
+            <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
+            </Select>
         </FormControl>
 
       

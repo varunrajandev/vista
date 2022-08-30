@@ -14,6 +14,9 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { NavLink } from "react-router-dom";
 import { FilterData } from "../../AlllData";
+import { useSelector } from "react-redux/es/exports";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -71,8 +74,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function Right({ data }) {
-  return (
+function Right() {
+const [tableData, setTableData] = React.useState([])
+
+useEffect(() => {
+  const fetchData= async()=>{
+    let data = await fetch("http://13.126.160.155:8080/user/worker/get/all/worker?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
+    let res = await data.json();
+    let newData = await res.data;
+    setTableData(newData.data);
+  }
+  fetchData();
+}, [])
+
+ 
+
+return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
       {/* //Add Ycw Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -83,6 +100,8 @@ function Right({ data }) {
           </Button>
         </NavLink>
       </Box>
+
+      {tableData.map((item)=>{})<Box></Box>}
 
       {/* //add Filter and Search Section */}
       <Box
@@ -214,10 +233,12 @@ function Right({ data }) {
               </TableRow>
             </TableHead>
 
+              
+
             <TableBody component={Paper}>
-              {data.map((row) => (
+              {tableData.map((row) => (
                 <StyledTableRow
-                  key={row.id}
+                  key={row.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     zIndex: "999",
@@ -236,34 +257,34 @@ function Right({ data }) {
                         (row.status === "INACTIVE" && "5px solid red"),
                     }}
                   >
-                    {row.id}
+                    {row.userId || "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.name}
+                    {row.name|| "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.phone}
+                    {row.mobileNo|| "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.gender}
+                    {row.gender|| "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.city}
+                    {row.cityName|| "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.skill}
+                    {row.skill|| "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.exp}
+                    {row.totalExperience|| "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.workHour}
+                    {row.workingHours|| "NO DATA"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.jobs}
+                    {row.jobs|| "NO DATA"}
                   </TableCell>
                   <NavLink
-                    to={`/ycw/add/dashboard/${row.id}`}
+                    to={`/ycw/add/dashboard/${row.userId}`}
                     style={{
                       textDecoration: "none",
                       display:"flex",
@@ -283,19 +304,19 @@ function Right({ data }) {
                         }}
                         style={{
                           backgroundColor:
-                            (row.status === "ACTIVE & AVAILABLE" &&
+                            (row.profileStatus === "ACTIVE & AVAILABLE" &&
                               "#cef5ce") ||
-                            (row.status === "ACTIVE & UNAVAILABLE" &&
+                            (row.profileStatus === "ACTIVE & NOT AVAILABLE" &&
                               "#f0edce") ||
-                            (row.status === "INACTIVE" && "#fcb1b8"),
+                            (row.profileStatus === "INACTIVE" && "#fcb1b8"),
                           color:
-                            (row.status === "ACTIVE & AVAILABLE" && "green") ||
-                            (row.status === "ACTIVE & UNAVAILABLE" &&
+                            (row.profileStatus === "ACTIVE & AVAILABLE" && "green") ||
+                            (row.profileStatus === "ACTIVE & NOT AVAILABLE" &&
                               "#f7aa02") ||
-                            (row.status === "INACTIVE" && "red"),
+                            (row.profileStatus === "INACTIVE" && "red"),
                         }}
                       >
-                        {row.status}
+                        {row.profileStatus || "NO DATA"}
                       </Typography>
                     </TableCell>
                   </NavLink>

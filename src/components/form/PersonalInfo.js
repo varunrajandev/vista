@@ -41,11 +41,11 @@ function PersonalInfo(props) {
 
   useEffect(() => {
     const dataFetch = async () => {
-      let sourceData = await fetch("http://13.126.160.155:8080/user/worker/get/sourceChannel");
-      let religionData = await fetch("http://13.126.160.155:8080/user/worker/get/religion");
-      let maritalData = await fetch("http://13.126.160.155:8080/user/worker/get/maritalStatus")
+      let sourceData = await fetch("http://13.126.160.155:8080/user/drop-down/get/sourceChannel?flag=all");
+      let religionData = await fetch("http://13.126.160.155:8080/user/drop-down/get/religion");
+      let maritalData = await fetch("http://13.126.160.155:8080/user/drop-down/get/maritalStatus")
       let genderData = await fetch("http://13.126.160.155:8080/user/get/gender")
-      let covidData = await fetch("http://13.126.160.155:8080/user/worker/get/covidVaccination")
+      let covidData = await fetch("http://13.126.160.155:8080/user/drop-down/get/covidVaccination")
       let res = await sourceData.json();
       let res1 = await religionData.json();
       let res2 = await maritalData.json();
@@ -239,7 +239,7 @@ function PersonalInfo(props) {
               setBirthday(newValue);
             }}
             renderInput={(params) => (
-              <TextField {...params} size="small" sx={{ width: "18%" }} />
+              <TextField {...params} size="small" sx={{ width: "18%" }}/>
             )}
           />
         </LocalizationProvider>

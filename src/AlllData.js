@@ -85,8 +85,6 @@ export const sourcing = [
   {source:"Instagram"},
   {source:"Field office"},
   {source:"Others"},
- 
-
 ]
 
 export const ProfessionData = [

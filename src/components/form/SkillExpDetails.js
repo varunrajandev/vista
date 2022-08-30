@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Box, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -23,8 +23,14 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 function SkillExpDetails(props) {
-
-  const {
+  const [pSkillDD, setPSkillDD] = useState([])
+  const [sSkillDD, setSSkillDD] = useState([])
+  const [tSkillDD, setTSkillDD] = useState([])
+  const [primarylanguageDD, setPrimarylanguageDD] = useState([])
+  const [otherlanguageDD, setOtherlanguageDD] = useState([])
+  const [jobtypeDD, setJobtypeDD] = useState([])
+  
+const {
     primarySkill, setPrimarySkill,
     secondarySkill, setSecondarySkill,
     tertiarySkill, setTertiarySkill,
@@ -39,8 +45,28 @@ function SkillExpDetails(props) {
     lastJobDuration, setLastJobDuration,
     ReasonLeaving, setReasonLeaving,
     // values, setValue,
-
   } = props
+
+  useEffect(() => {
+    async function fetchData() {
+      let primarySkilldata = await fetch("http://13.126.160.155:8080/user/drop-down/get/skills");
+      let primaryLanguagedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/primaryLanguage");
+      let otherLanguagedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/otherLanguages");
+      let Jobtypedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/jobType");
+      let res = await primarySkilldata.json();
+      let res1 = await primaryLanguagedata.json();
+      let res2 = await otherLanguagedata.json();
+      let res3 = await Jobtypedata.json();
+      setPSkillDD(res.data || [{ value: "NO DATA" }]);
+      setSSkillDD(res.data || [{ value: "NO DATA" }]);
+      setTSkillDD(res.data || [{ value: "NO DATA" }]);
+      setPrimarylanguageDD(res1.data || [{ value: "NO DATA" }]);
+      setOtherlanguageDD(res2.data || [{ value: "NO DATA" }]);
+      setJobtypeDD(res3.data || [{ value: "NO DATA" }]);
+    }
+    fetchData()
+  }, [])
+  
 
   return (
     <Box
@@ -70,11 +96,8 @@ function SkillExpDetails(props) {
               setPrimarySkill(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {JobType.map((items) => (
-              <MenuItem value={items.job}>{items.job}</MenuItem>
+            {pSkillDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -90,11 +113,8 @@ function SkillExpDetails(props) {
               setSecondarySkill(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {JobType.map((items) => (
-              <MenuItem value={items.job}>{items.job}</MenuItem>
+            {sSkillDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -110,11 +130,8 @@ function SkillExpDetails(props) {
               setTertiarySkill(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {JobType.map((items) => (
-              <MenuItem value={items.job}>{items.job}</MenuItem>
+            {tSkillDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -247,11 +264,8 @@ function SkillExpDetails(props) {
               setPrimaryLanguage(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {Language.map((items) => (
-              <MenuItem value={items.language}>{items.language}</MenuItem>
+            {primarylanguageDD.map((items) => (
+              <MenuItem value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -259,9 +273,9 @@ function SkillExpDetails(props) {
         <Autocomplete
           multiple
           id="checkboxes-tags-demo"
-          options={Language}
+          options={otherlanguageDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.language}
+          getOptionLabel={(option) => option.key}
           onChange={(event, newValue) => {
             setOtherLanguages([...newValue]);
           }}
@@ -273,7 +287,7 @@ function SkillExpDetails(props) {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.language}
+              {option.value}
             </li>
           )}
           style={{ width: "100%" }}
@@ -405,9 +419,9 @@ function SkillExpDetails(props) {
         <Autocomplete
           multiple
           id="checkboxes-tags-demo"
-          options={JobType}
+          options={jobtypeDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.job}
+          getOptionLabel={(option) => option.key}
           onChange={(event, newValue) => {
             setLastJobType([...newValue]);
           }}
@@ -419,7 +433,7 @@ function SkillExpDetails(props) {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.job}
+              {option.value}
             </li>
           )}
           style={{ width: "48.5%" }}

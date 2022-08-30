@@ -18,14 +18,12 @@ import { FilterData } from "../../AlllData";
 
 function BankAccount(props) {
   const [checked, setChecked] = useState(true);
-  const [accountTypeDD, setAccountTypeDD] = useState([]);
+  const [accountTypeDD, setAccountTypeDD] = useState([{}]);
   const { setInputFields, inputFields } = props;
 
   useEffect(() => {
     async function fetchData() {
-      let response = await fetch(
-        "http://13.126.160.155:8080/user/worker/get/accountType"
-      );
+      let response = await fetch( "http://13.126.160.155:8080/user/drop-down/get/accountType");
       let data = await response.json();
       setAccountTypeDD(data.data);
     }

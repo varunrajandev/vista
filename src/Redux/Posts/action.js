@@ -19,7 +19,7 @@ const getData = (url) => (dispatch)=>{
     dispatch(handleLoading())
     fetch(url)
     .then((res)=>res.json())
-    .then((data)=>dispatch(storeData(data)))
+    .then((data)=>dispatch(storeData(data.data)))
     .catch((err)=>dispatch(handleError()))
 }
 
