@@ -1,42 +1,54 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { Box, TextField, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import {
-  customerSourcing,
-  ProfessionData,
-  customerMedium,
-} from "../../AlllData";
+//import { ProfessionData,} from "../../AlllData";
 
-function PersonalInfo() {
-  const [cxSource, setCxSource] = React.useState("");
-  const [cxMedium, setCxMedium] = React.useState("");
-  const [fname, setFname] = React.useState("");
-  const [mname, setMname] = React.useState("");
-  const [lname, setLname] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phoneNumber, setPhoneNumber] = React.useState();
-  const [alternateNumber, setAlternateNumber] = React.useState();
-  const [whatsappAvailable, setWhatsappAvailable] = React.useState();
-  const [whatsapp, setWhatsapp] = React.useState();
-  const [profession, setProfession] = React.useState("");
 
-  console.log({
-    cxMedium,
-    profession,
-    whatsapp,
-    whatsappAvailable,
-    alternateNumber,
-    phoneNumber,
-    cxSource,
-    fname,
-    mname,
-    lname,
-    email
-  });
+function PersonalInfo(props) {
+
+  const [customerSourcing, setCustomerSourcing] = useState([]);
+  const [customerMedium, setCustomerMedium] = useState([]);
+  const [customerprofession,setCustomerprofession]=useState([]);
+  const {
+    cxSource, setCxSource,
+    cxMedium, setCxMedium,
+    fname, setFname,
+    mname, setMname,
+    lname, setLname,
+    phoneNumber, setPhoneNumber,
+    alternateNumber, setAlternateNumber,
+    whatsappAvailable, setWhatsappAvailable,
+    whatsapp, setWhatsapp,
+    email, setEmail,
+    profession, setProfession,
+    fStatus,setFStatus
+
+  } = props;
+
+  useEffect(() => {
+    async function FetchApi() {
+
+      const customerSourcingApiDropdown = await fetch("http://13.126.160.155:8080/user/drop-down/get/sourceChannel?flag=customer")
+      const customerMediumApiDropdown = await fetch("http://13.126.160.155:8080/user/drop-down/get/medium")
+      const customerprofessionApiDropdown = await fetch("http://13.126.160.155:8080/user/drop-down/get/profession")
+
+      let cxCustomerMedium = await customerMediumApiDropdown.json();
+      let cxCustomerSourcing = await customerSourcingApiDropdown.json();
+      let cxCustomerProfession= await customerprofessionApiDropdown.json();
+
+      setCustomerMedium(cxCustomerMedium.data);
+      setCustomerSourcing(cxCustomerSourcing.data);
+      setCustomerprofession(cxCustomerProfession.data);
+    }
+    FetchApi();
+  }, []);
+
   return (
+
     <Box
       sx={{
         marginTop: 5,
@@ -51,7 +63,7 @@ function PersonalInfo() {
           alignItems: "center",
           flexWrap: "wrap",
           gap: "30px",
-          justifyContent:"space-between"
+          justifyContent: "space-between"
         }}
       >
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
@@ -70,7 +82,7 @@ function PersonalInfo() {
               <em>None</em>
             </MenuItem>
             {customerSourcing.map((item) => (
-              <MenuItem value={item.source}>{item.source}</MenuItem>
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -78,7 +90,7 @@ function PersonalInfo() {
         <Typography
           sx={{
             width: "18%",
-            display: cxSource === "Others" ? "block" : "none",
+            display: cxSource === "Other" ? "block" : "none",
           }}
         >
           <TextField
@@ -88,9 +100,6 @@ function PersonalInfo() {
             label="CX Other Source"
             placeholder="Please Mention..."
             variant="outlined"
-            // onChange={(event) => {
-            //   set(event.target.value);
-            // }}
           />
         </Typography>
 
@@ -110,7 +119,7 @@ function PersonalInfo() {
               <em>None</em>
             </MenuItem>
             {customerMedium.map((item) => (
-              <MenuItem value={item.medium}>{item.medium}</MenuItem>
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -118,7 +127,7 @@ function PersonalInfo() {
         <Typography
           sx={{
             width: "18%",
-            display: cxMedium === "Others" ? "block" : "none",
+            display: cxMedium === "Other" ? "block" : "none",
           }}
         >
           <TextField
@@ -128,9 +137,9 @@ function PersonalInfo() {
             label="CX Other Medium"
             placeholder="Please Mention..."
             variant="outlined"
-            // onChange={(event) => {
-            //   set(event.target.value);
-            // }}
+            onChange={(event) => {
+              setCxMedium(event.target.value);
+            }}
           />
         </Typography>
 
@@ -176,17 +185,6 @@ function PersonalInfo() {
             setPhoneNumber(e.target.value);
           }}
         />
-        {/* </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mt:2
-        }}
-      > */}
-
         <TextField
           sx={{ width: "18%" }}
           size="small"
@@ -246,15 +244,16 @@ function PersonalInfo() {
             labelId="demo-select-small"
             id="demo-select-small"
             label="Profession"
-            onChange={(event) => {
-              setProfession(event.target.value);
+            value={profession}
+            onChange={(e) => {
+              setProfession(e.target.value);
             }}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {ProfessionData.map((item) => (
-              <MenuItem value={item.profession}>{item.profession}</MenuItem>
+            {customerprofession.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
           </Select>
         </FormControl>

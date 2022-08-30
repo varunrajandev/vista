@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useState} from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,6 +14,11 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
 import { FilterData } from "../../AlllData";
+import{useState,useEffect} from "react";
+
+
+
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -73,6 +77,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function JobsDataTable({ data }) {
+
+  const [jobDatatable,setJobDatatable]=useState([]);
+
+  useEffect(() => {
+
+
+    
+
+    async function FetchApi() {
+  
+      const jobDataApi = await fetch("http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=asc")
+      
+  
+      let jobdata = await jobDataApi.json();
+      
+
+      let listjobData = await jobdata.data;
+
+      setJobDatatable(listjobData.data);
+    
+    }
+    FetchApi();
+
+  }, []);
+  console.log("api",jobDatatable)
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
       {/* //Add Ycw Section section */}
@@ -209,9 +238,9 @@ function JobsDataTable({ data }) {
             </TableHead>
 
             <TableBody component={Paper}>
-              {data.map((row) => (
+              {jobDatatable.map((row) => (
                 <StyledTableRow
-                  key={row.id}
+                  key={row.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     zIndex: "999",
@@ -228,10 +257,10 @@ function JobsDataTable({ data }) {
                         (row.status === "INACTIVE" && "5px solid red"),
                     }}
                   >
-                    {row.id}
+                    {row.userId}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.jobType}
+                    {row.jobType.value}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.customerId}
@@ -240,10 +269,10 @@ function JobsDataTable({ data }) {
                     {row.location}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.Duration}
+                    {row.workingHours}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.BudgetRange}
+                    {row.budgetRange}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.startDate}
@@ -264,16 +293,16 @@ function JobsDataTable({ data }) {
                       }}
                       style={{
                         backgroundColor:
-                          (row.status === "ACTIVE" && "#cef5ce") ||
-                          (row.status === "IN PROGRESS" && "#f0edce") ||
-                          (row.status === "INACTIVE" && "#fcb1b8"),
+                          (row.jobStatus.key === "CREATED" && "#cef5ce") ||
+                          (row.jobStatus.key === "IN PROGRESS" && "#f0edce") ||
+                          (row.jobStatus.key === "INACTIVE" && "#fcb1b8"),
                         color:
-                          (row.status === "ACTIVE" && "green") ||
-                          (row.status === "IN PROGRESS" && "#f7aa02") ||
-                          (row.status === "INACTIVE" && "red"),
+                          (row.jobStatus.key === "ACTIVE" && "green") ||
+                          (row.jobStatus.key === "IN PROGRESS" && "#f7aa02") ||
+                          (row.jobStatus.key === "INACTIVE" && "red"),
                       }}
                     >
-                      {row.status}
+                      {row.jobStatus.key}
                     </Typography>
                   </TableCell>
                 </StyledTableRow>

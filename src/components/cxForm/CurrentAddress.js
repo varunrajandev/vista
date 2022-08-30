@@ -1,22 +1,68 @@
-import { Box, TextField } from "@mui/material";
 import React from "react";
+import { Box, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { AddressData } from "../../AddressData";
+import { useState, useEffect } from "react";
 
-function CurrentAddress() {
-  const [flat, setFlat] = React.useState("");
-  const [area, setArea] = React.useState("");
-  const [landmark, setLandmark] = React.useState("");
-  const [pinCode, setPinCode] = React.useState("");
-  const [country, setCountry] = React.useState("");
-  const [state, setState] = React.useState("");
-  const [city, setCity] = React.useState("");
-  const [locality, setLocality] = React.useState("");
-  const [addressProofType, setAddressProofType] = React.useState("");
 
+function CurrentAddress(props) {
+  const [cxcountry, setCXCountry] = useState([]);
+  const [cxstate, setCXState] = useState([]);
+  const [cxcity, setCXCity] = useState([]);
+  const [cxlocality, setCXLocality] = useState([]);
+  const [countryUUID, setCountryUUID] = useState()
+  const [stateUUID, setStateUUID] = useState()
+  const [cityID, setCityID] = useState()
+  const[conuuid,setConuuid]=React.useState();
+  const {
+    flat, setFlat,
+    area, setArea,
+    landmark, setLandmark,
+    pinCode, setPinCode,
+    country, setCountry,
+    state1, setState,
+    city, setCity,
+    locality, setLocality,
+   // countryUUID,setCountryUUID,
+    
+    
+
+  } = props;
+
+
+  useEffect(() => {
+    async function FetchApi() {
+      const countryApidata = await fetch("http://13.126.160.155:8081/locationmaster/country/get/all");
+      const StateApidata = await fetch(`http://13.126.160.155:8081/locationmaster/state/get/states/by/${countryUUID}`);
+      const cityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/city/get/cities/by/${stateUUID}`);
+      const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityID}`);
+
+      let country = await countryApidata.json();
+      let state = await StateApidata.json();
+      let city = await cityApidata.json();
+      let locality = await localityApidata.json();
+
+      setCXCountry(country.data);
+      setCXState(state.data || [{ name: "please Select Country" }]);
+      setCXCity(city.data || [{ name: "please Select State" }]);
+      setCXLocality(locality.data || [{ names: "please Select City" }]);
+
+      // StoreApiData(conuuid);
+  
+      // console.log(conuuid);
+    }
+    FetchApi();
+  }, [countryUUID, stateUUID, cityID]);
+
+  // function StoreApiData(conuuid){
+  //   setConuuid(conuuid)
+
+
+
+
+  // }
 
   // const {      
   //   flat, setFlat,
@@ -30,37 +76,7 @@ function CurrentAddress() {
   //   addressProofType, setAddressProofType
   //   } = props;
 
-  // flat={flat} setFlat={setFlat}
-  // area={area} setArea={setArea}
-  // landmark={landmark} setLandmark={setLandmark}
-  // pinCode={pinCode} setPinCode={setPinCode}
-  // country={country} setCountry={setCountry}
-  // state={state} setState={setState}
-  // city={city} setCity={setCity}
-  // locality={locality} setLocality={setLocality}
-  // addressProofType={addressProofType} setAddressProofType={setAddressProofType}
 
-  const res = AddressData.filter((word) => word.admin_name === state);
-
-  let arr = [];
-  AddressData.forEach((item) => {
-    let data = item.admin_name;
-    arr.push(data);
-  });
-  var set = new Set(arr);
-  let newArr = [...set];
-
-  console.log({
-    flat,
-    area,
-    landmark,
-    pinCode,
-    country,
-    state,
-    city,
-    locality,
-    addressProofType,
-  });
 
   return (
     <Box
@@ -77,7 +93,7 @@ function CurrentAddress() {
           alignItems: "center",
           flexWrap: "wrap",
           gap: "30px",
-          justifyContent:"space-between"
+          justifyContent: "space-between"
         }}
       >
         <TextField
@@ -135,21 +151,12 @@ function CurrentAddress() {
               setCountry(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={"India"}>India</MenuItem>
+            {cxcountry.map((item) => (
+              <MenuItem value={item.uuid} onClick={() => { setCountryUUID(item.uuid)}}>{item.countryName}</MenuItem>
+            ))}
           </Select>
         </FormControl>
-        {/* </Box>
 
-        <Box
-          display={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "15px",
-          }}
-        > */}
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">State</InputLabel>
           <Select
@@ -161,11 +168,8 @@ function CurrentAddress() {
               setState(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {newArr.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+            {cxstate.map((item) => (
+              <MenuItem value={item.value} onClick={() => { setStateUUID(item.value) }}>{item.label} {item.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -181,11 +185,8 @@ function CurrentAddress() {
               setCity(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {res.map((item) => (
-              <MenuItem value={item.city}>{item.city}</MenuItem>
+            {cxcity.map((item) => (
+              <MenuItem value={item.value} onClick={() => { setCityID(item.value) }}>{item.label}{item.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -201,16 +202,13 @@ function CurrentAddress() {
               setLocality(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={"Phase1"}>Phase1</MenuItem>
-            <MenuItem value={"Phase2"}>Phase2</MenuItem>
-            <MenuItem value={"Phase3"}>Phase3</MenuItem>
+            {cxlocality.map((item) => (
+              <MenuItem value={item.id}>{item.name}{item.names}</MenuItem>
+            ))}
           </Select>
         </FormControl>
-        <div style={{width:"18%"}}></div>
-        <div style={{width:"18%"}}></div>
+        <div style={{ width: "18%" }}></div>
+        <div style={{ width: "18%" }}></div>
       </Box>
     </Box>
   );

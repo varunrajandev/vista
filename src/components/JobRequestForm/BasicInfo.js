@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, TextField } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,63 +7,90 @@ import Select from "@mui/material/Select";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { Language } from "../../AlllData";
-import { JobType } from "../../AlllData";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-function BasicInfo() {
-  const [jobTypes, setJobTypes] = React.useState("");
-  const [workDuration, setWorkDuration] = React.useState("");
-  const [dailyStartTime, setDailyStartTime] = React.useState("");
-  const [membersInFamily, setMembersInFamily] = React.useState("");
-  const [languagePreference, setLanguagePreference] = React.useState("");
-  const [trainingPreference, setTrainingPreference] = React.useState("");
-  const [religionPreference, setReligionPreference] = React.useState("");
-  const [value, setValue] = React.useState("");
-  const [agePreference, setAgePreference] = React.useState();
-  const [genderPreference, setGenderPreference] = React.useState();
-  const [budgetMax, setBudgetMax] = React.useState();
-  const [budgetMin, setBudgetMin] = React.useState();
-  const [remarks, setRemarks] = React.useState("");
-  const [sizeOfHouse, setSizeOfHouse] = React.useState();
-  const [pets, setPets] = React.useState();
-  const [noOfPets, setNoOfPets] = React.useState();
+function BasicInfo(props) {
 
-  const [newData, setNewData] = React.useState([]);
+  const [languageDropdown, setLanguageDropdown] = useState([]);
+  const [genderDropdown, setGenderDropdown] = useState([]);
+  const [trainingTypeDropdown, setTrainingTypeDropdown] = useState([]);
+  const [agePreferenceDropdown, setAgePreferenceDropdown] = useState([]);
+  const [religionPreferenceDropdown, setReligionPreferenceDropdown] = useState([]);
+  const [jobTypeDropdown, setJobDropdown] = useState([]);
 
 
-  // useEffect(() => {
-  // const dataFetch = async ()=>{
-  //   let data = await fetch("http://3.111.186.100:8080/user/get/religion");
-  //   let res = await data.json();
-  //  setNewData(res.data);
-  // }
-  //   dataFetch()
-  // }, [])
-  
+  const {
+    houseTypes, setHouseTypes,
+    jobTypes, setJobTypes,
+    workDuration, setWorkDuration,
+    dailyStartTime, setDailyStartTime,
+    membersInFamily, setMembersInFamily,
+    languagePreference, setLanguagePreference,
+    trainingPreference, setTrainingPreference,
+    religionPreference, setReligionPreference,
+    agePreference, setAgePreference,
+    genderPreference, setGenderPreference,
+    value, setValue,
+    budgetMax, setBudgetMax,
+    budgetMin, setBudgetMin,
+    remarks, setRemarks,
+    sizeOfHouse, setSizeOfHouse,
+    pets, setPets,
+    noOfPets, setNoOfPets,
+
+
+  } = props
+
+
+  useEffect(() => {
+    const dataFetch = async () => {
+      const jobTypeApidata = await fetch("http://13.126.160.155:8080/user/drop-down/get/jobType");
+      const languageApi = await fetch("http://13.126.160.155:8080/user/get/language");
+      const genderApidata = await fetch("http://13.126.160.155:8080/user/get/gender");
+      const trainingTypedata = await fetch("http://13.126.160.155:8080/user/get/trainingType");
+      const agePreferenceDropdown = await fetch("http://13.126.160.155:8080/user/get/agePreference");
+      const religionPreferenceDropdown = await fetch("http://13.126.160.155:8080/user/get/religion");
+
+
+      let jobTyperes = await jobTypeApidata.json();
+      let language = await languageApi.json();
+      let gender = await genderApidata.json();
+      let training = await trainingTypedata.json();
+      let agePreference = await agePreferenceDropdown.json();
+      let religionPreference = await religionPreferenceDropdown.json();
+
+
+      setJobDropdown(jobTyperes.data);
+      setLanguageDropdown(language.data);
+      setGenderDropdown(gender.data);
+      setTrainingTypeDropdown(training.data);
+      setAgePreferenceDropdown(agePreference.data);
+      setReligionPreferenceDropdown(religionPreference.data);
+    }
+
+    dataFetch()
+  }, [])
+
+
+  console.log(
+    workDuration,
+    dailyStartTime,
+    membersInFamily,
+    agePreference,
+    genderPreference,
+    budgetMax,
+    budgetMin,
+    remarks,
+    sizeOfHouse,
+    pets,
+    noOfPets,
+    value
+  )
+
 
   const handleChange = (event) => {
     setJobTypes(event.target.value);
   };
-
-  const handleClick = ()=>{
-    console.log({
-      budgetMin,
-      budgetMax,
-      genderPreference,
-      agePreference,
-      religionPreference,
-      trainingPreference,
-      jobTypes,
-      languagePreference,
-      workDuration,
-      dailyStartTime,
-      membersInFamily,
-      value,
-      remarks,
-    });
-
-  }
- 
 
   return (
     <>
@@ -84,13 +111,12 @@ function BasicInfo() {
             value={jobTypes}
             label="Job Type"
             onChange={handleChange}
-            required={true}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {JobType.map((item) => (
-              <MenuItem value={item.job}>{item.job}</MenuItem>
+            {jobTypeDropdown.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -106,16 +132,20 @@ function BasicInfo() {
           }}
         />
 
-        <TextField
-          sx={{ width: "18%" }}
-          size="small"
-          id="outlined-basic"
-          label="Daily Start Time"
-          variant="outlined"
-          onChange={(event) => {
-            setDailyStartTime(event.target.value);
-          }}
-        />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <TimePicker
+
+            label="Preferred Start Time"
+            value={dailyStartTime}
+            disableIgnoringDatePartForTimeValidation={false}
+            onChange={(newValue) => {
+              setDailyStartTime(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField size="small" sx={{ width: "18%" }} {...params} />
+            )}
+          />
+        </LocalizationProvider>
 
         <TextField
           sx={{ width: "18%" }}
@@ -143,8 +173,8 @@ function BasicInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {Language.map((item) => (
-              <MenuItem value={item.language}>{item.language}</MenuItem>
+            {languageDropdown.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -172,9 +202,10 @@ function BasicInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Online"}>Online</MenuItem>
-            <MenuItem value={"Offline"}>Offline</MenuItem>
-            <MenuItem value={"Both"}>Both</MenuItem>
+
+            {trainingTypeDropdown.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -193,10 +224,9 @@ function BasicInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {newData.map((item)=>(
-              <MenuItem value={item.value}>{item.value}</MenuItem>
+            {religionPreferenceDropdown.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
-            
           </Select>
         </FormControl>
 
@@ -214,13 +244,9 @@ function BasicInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"18 to 25 years"}>18 to 25 years</MenuItem>
-            <MenuItem value={"25 to 30 years"}>25 to 30 years</MenuItem>
-            <MenuItem value={"30 to 35 years"}>30 to 35 years</MenuItem>
-            <MenuItem value={"35 to 40 years"}>35 to 40 years</MenuItem>
-            <MenuItem value={"40 to 45 years"}>40 to 45 years</MenuItem>
-            <MenuItem value={"45 to 50 years"}>45 to 50 years</MenuItem>
-            <MenuItem value={"above 50 years"}>above 50 years</MenuItem>
+            {agePreferenceDropdown.map((item) => (
+              <MenuItem value={item.value}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -238,15 +264,16 @@ function BasicInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Male"}>Male</MenuItem>
-            <MenuItem value={"Female"}>Female</MenuItem>
-            <MenuItem value={"Any"}>Any</MenuItem>
+            {genderDropdown.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="Require From Date"
+            value={value}
             onChange={(newValue) => {
               setValue(newValue);
             }}
@@ -270,7 +297,6 @@ function BasicInfo() {
           size="small"
           id="outlined-basic"
           label="Budget [max]"
-          type="number"
           variant="outlined"
           onChange={(e) => {
             setBudgetMax(e.target.value);
@@ -283,7 +309,6 @@ function BasicInfo() {
           id="outlined-basic"
           label="Budget [min]"
           variant="outlined"
-          type="number"
           onChange={(e) => {
             setBudgetMin(e.target.value);
           }}
@@ -302,13 +327,11 @@ function BasicInfo() {
         {/*  */}
       </Box>
 
-
-
       <h5 style={{ marginTop: "50px", marginBottom: "6px" }}>
         Additional Details
       </h5>
 
-      <Box sx={{ display: "flex", justifyContent:"space-between" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <TextField
           sx={{ width: "18%" }}
           size="small"
@@ -319,32 +342,41 @@ function BasicInfo() {
             setSizeOfHouse(e.target.value);
           }}
         />
+
+
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Pets?*</InputLabel>
+          <Select
+            sx={{ width: "100%" }}
+            labelId="demo-select-small"
+            id="demo-select-small"
+            label="Pets? "
+            onChange={(e) => {
+              setPets(e.target.value);
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={true}>Yes</MenuItem>
+            <MenuItem value={false}>No</MenuItem>
+          </Select>
+        </FormControl>
+
         <TextField
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          label="pets?"
-          variant="outlined"
-          onChange={(e) => {
-            setPets(e.target.value);
-          }}
-        />
-        <TextField
-          sx={{ width: "18%" }}
-          size="small"
-          id="outlined-basic"
-          label="No of Pets"
-          variant="outlined"
+          label="No of Pets*"
           onChange={(e) => {
             setNoOfPets(e.target.value);
           }}
+          disabled={!pets}
         />
 
         <div style={{ width: "18%" }}></div>
         <div style={{ width: "18%" }}></div>
       </Box>
-
-      <button onClick={handleClick}>click</button>
     </>
   );
 }

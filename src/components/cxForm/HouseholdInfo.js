@@ -4,33 +4,46 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { houseType } from "../../AlllData";
+import { useState, useEffect } from 'react';
 
-function HouseholdInfo() {
-  const [houseTypes, setHouseTypes] = React.useState("");
-  const [noOfFamilyMembers, setNoOfFamilyMembers] = React.useState("");
-  const [noOfAdults, setNoOfAdults] = React.useState("");
-  const [noOfFemaleAdults, setNoOfFemaleAdults] = React.useState("");
-  const [noOfElders, setNoOfElders] = React.useState("");
-  
 
-  
+function HouseholdInfo(props) {
+ 
+  const [cxTypeOfHouse, setCXTypeOfHouse] = useState([]);
 
-  console.log({houseTypes, noOfAdults, noOfElders, noOfFamilyMembers})
+  const {
+    houseTypes, setHouseTypes,
+    noOfFamilyMembers, setNoOfFamilyMembers,
+    noOfMaleAdults, setNoOfMaleAdults,
+    noOfFemaleAdults, setNoOfFemaleAdults,
+    noOfChilds, setNoOfChilds,
+    noOfPets, setNoOfPets,
+  } = props
 
+  useEffect(() => {
+    async function FetchApi() {
+
+      const typeOfHouseApidata = await fetch("http://13.126.160.155:8080/user/drop-down/get/houseType");
+
+      let typeOfHouse = await typeOfHouseApidata.json();
+
+      setCXTypeOfHouse(typeOfHouse.data);
+
+    }
+    FetchApi();
+  }, []);
 
   return (
     <Box sx={{
       marginTop: 7,
       display: "grid",
       gap: 1,
-    }}>
-
+    }}
+    >
       <h5>Household Members</h5>
-      
-      <Box sx={{display:"flex", flexWrap:"wrap", gap:"30px", justifyContent:"space-between"}}>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: "30px", justifyContent: "space-between" }}>
 
-      <FormControl sx={{minWidth: 120, width:"18%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Type of House</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -44,15 +57,15 @@ function HouseholdInfo() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {houseType.map((item)=>(
-              <MenuItem value={item.house}>{item.house}</MenuItem>
+            {cxTypeOfHouse.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
-           
+
           </Select>
         </FormControl>
 
         <TextField
-          sx={{ width:'18%' }}
+          sx={{ width: '18%' }}
           size="small"
           id="outlined-basic"
           label="No of Family Members"
@@ -60,59 +73,54 @@ function HouseholdInfo() {
           onChange={(e) => {
             setNoOfFamilyMembers(e.target.value);
           }}
-
         />
 
         <TextField
-          sx={{width:'18%' }}
+          sx={{ width: '18%' }}
           size="small"
           id="outlined-basic"
           label="No of male adults in family"
           variant="outlined"
           onChange={(e) => {
-            setNoOfAdults(e.target.value);
+            setNoOfMaleAdults(e.target.value);
           }}
         />
 
-<TextField
-          sx={{width:'18%' }}
+        <TextField
+          sx={{ width: '18%' }}
           size="small"
           id="outlined-basic"
           label="No of female adults in family"
           variant="outlined"
           onChange={(e) => {
-            setNoOfAdults(e.target.value);
+            setNoOfFemaleAdults(e.target.value);
           }}
         />
 
-<TextField
-          sx={{width:'18%' }}
+        <TextField
+          sx={{ width: '18%' }}
           size="small"
           id="outlined-basic"
           label="No of child below 5years"
           variant="outlined"
           onChange={(e) => {
-            setNoOfAdults(e.target.value);
+            setNoOfChilds(e.target.value);
           }}
         />
 
         <TextField
-          sx={{ width:'18%' }}
+          sx={{ width: '18%' }}
           size="small"
           id="outlined-basic"
           label="No pets"
           variant="outlined"
           onChange={(e) => {
-            setNoOfElders(e.target.value);
+            setNoOfPets(e.target.value);
           }}
         />
 
-        </Box>
-
-       
-      
+      </Box>
     </Box>
-   
   );
 }
 
