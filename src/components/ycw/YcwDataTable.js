@@ -87,6 +87,10 @@ useEffect(() => {
   fetchData();
 }, [])
 
+{tableData.map((item)=>(
+  console.log("item",item.gender)
+))}
+
  
 
 return (
@@ -100,8 +104,6 @@ return (
           </Button>
         </NavLink>
       </Box>
-
-      {tableData.map((item)=>{})<Box></Box>}
 
       {/* //add Filter and Search Section */}
       <Box
@@ -233,12 +235,12 @@ return (
               </TableRow>
             </TableHead>
 
-              
+           
 
             <TableBody component={Paper}>
-              {tableData.map((row) => (
+              {tableData.map((item)=>(
                 <StyledTableRow
-                  key={row.userId}
+                  key={item.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     zIndex: "999",
@@ -247,44 +249,51 @@ return (
                   <TableCell
                     sx={{ fontSize: "13px" }}
                     component="th"
-                    scope="row"
+                    scope="item"
                     style={{
                       borderLeft:
-                        (row.status === "ACTIVE & AVAILABLE" &&
+                        (item.profileStatus.value === "ACTIVE & AVAILABLE" &&
                           "5px solid green") ||
-                        (row.status === "ACTIVE & UNAVAILABLE" &&
+                        (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
                           "5px solid #f7aa02") ||
-                        (row.status === "INACTIVE" && "5px solid red"),
+                        (item.profileStatus.value === "INACTIVE" && "5px solid red"),
                     }}
                   >
-                    {row.userId || "NO DATA"}
+                    {item.userId || "NO DATA"}
                   </TableCell>
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.name|| "NO DATA"}
+                   <TableCell sx={{ fontSize: "13px" }} align="left">
+                    {item.name|| "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.mobileNo|| "NO DATA"}
+                    {item.mobileNo|| "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.gender|| "NO DATA"}
+                    {item.gender.value || "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.cityName|| "NO DATA"}
+                    {item.cityName || "NO DATA"}
                   </TableCell>
+                
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.skill|| "NO DATA"}
+                    {item.skill || "NO DATA"}
                   </TableCell>
+                    
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.totalExperience|| "NO DATA"}
+                    {item.totalExperience || "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.workingHours|| "NO DATA"}
+                    {item.workingHours.value || "NO DATA"}
                   </TableCell>
+                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.jobs|| "NO DATA"}
+                    {"NO DATA"}
                   </TableCell>
                   <NavLink
-                    to={`/ycw/add/dashboard/${row.userId}`}
+                    to={`/ycw/add/dashboard/${item.userId}`}
                     style={{
                       textDecoration: "none",
                       display:"flex",
@@ -304,19 +313,19 @@ return (
                         }}
                         style={{
                           backgroundColor:
-                            (row.profileStatus === "ACTIVE & AVAILABLE" &&
+                            (item.profileStatus.value === "ACTIVE & AVAILABLE" &&
                               "#cef5ce") ||
-                            (row.profileStatus === "ACTIVE & NOT AVAILABLE" &&
+                            (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
                               "#f0edce") ||
-                            (row.profileStatus === "INACTIVE" && "#fcb1b8"),
+                            (item.profileStatus.value === "INACTIVE" && "#fcb1b8"),
                           color:
-                            (row.profileStatus === "ACTIVE & AVAILABLE" && "green") ||
-                            (row.profileStatus === "ACTIVE & NOT AVAILABLE" &&
+                            (item.profileStatus.value === "ACTIVE & AVAILABLE" && "green") ||
+                            (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
                               "#f7aa02") ||
-                            (row.profileStatus === "INACTIVE" && "red"),
+                            (item.profileStatus.value === "INACTIVE" && "red"),
                         }}
                       >
-                        {row.profileStatus || "NO DATA"}
+                          {item.profileStatus.value || "NO DATA"}
                       </Typography>
                     </TableCell>
                   </NavLink>

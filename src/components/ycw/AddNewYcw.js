@@ -42,6 +42,9 @@ function AddNewYcw() {
   const [cityName, setCityName] = React.useState("");
   const [locality, setLocality] = React.useState("");
   const [addressProofType, setAddressProofType] = React.useState("");
+  const [countryID, setCountryID] = useState()
+  const [stateID, setStateID] = useState()
+  const [cityID, setCityID] = useState()
 
   //permanent Address
   const [addressL1p, setAddressL1p] = React.useState("");
@@ -103,71 +106,7 @@ function AddNewYcw() {
   const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
   const endTimeFormat = endTime ? endTime.toLocaleTimeString() : '';
 
-
-  //  const handleClick = ()=>{
-  // //   console.log("Current Addrress",{
-  // //     addressLine1,
-  // //     addressLine2,
-  // //     landmark,
-  // //     postalCode,
-  // //     countryName,
-  // //     stateName,
-  // //     cityName,
-  // //     locality,
-  // //     addressProofType,
-  // //   });
-
-  // //   console.log("permanaent",{
-  // //     addressL1p,
-  // //     addressL2p,
-  // //     landmarkp,
-  // //     pinCodep,
-  // //     countryp,
-  // //     statep,
-  // //     cityp,
-  // //     localityp,
-  // //     addressProofTypep,
-  // //   });
-
-  // //   console.log({
-  // //      primarySkill,
-  // //     secondarySkill,
-  // //     tertiarySkill,
-  // //     skillRemarks,
-  // //     cookType,//
-  // //     cuisinesKnown,
-  // //     primaryLanguage,
-  // //     otherLanguages,
-  // //     totalExp,
-  // //     experienceRemarks,
-  // //     lastJobType,
-  // //     lastJobDuration,
-  // //     reasonLeaving,
-  // //   })
-
-  // // console.log({
-  // //   openToTraining,
-  // //   preferJob,
-  // //   workingHour,
-  // //   startTimeFormat,
-  // //   endTimeFormat,
-  // //   vehicle,
-  // //   minSalaryExpected,
-  // //   maxSalaryExpected,
-  // //   traningMode,
-  // //   jobRemarks
-  // // })
-
-  // // console.log("inputFields:", inputFields )
-
-  // }
-
-  // setInterval(() => {
-  //   handleClick()
-  // },2000);
-
-
-  const handleClick = async () => {
+const handleClick = async () => {
     const Current_Addrress={
           addressLine1,
           addressLine2,
@@ -226,16 +165,16 @@ function AddNewYcw() {
           "addressDtos": [
             {
               "status": true,
-              "addressLine1": "string",
-              "addressLine2": "string",
+              "addressLine1":"string",
+              "addressLine2":"string",
               "micromarketUuid": "string",
-              "locality": "string",
-              "cityUuid": "string",
-              "stateUuid": "string",
-              "postalCode": "string",
-              "countryUuid": "string",
-              "addressProofType": "AAADHAR_CARD",
-              "permanent": true
+              "locality":"string",
+              "cityUuid":cityID,
+              "stateUuid":stateID,
+              "postalCode":"string",
+              "countryUuid":countryID,
+              "addressProofType":"AAADHAR_CARD",
+              "permanent":true
             }
           ],
           "skillsMappingDto": {
@@ -310,8 +249,7 @@ function AddNewYcw() {
         <Typography sx={{ display: "flex", gap: 2 }}>
           {/* Buttons */}
           <YcwButtons data={handleClick} />
-
-        </Typography>
+          </Typography>
       </Box>
       {/* //Form */}
       <Box
@@ -353,6 +291,9 @@ function AddNewYcw() {
           city={cityName} setCity={setCityName}
           locality={locality} setLocality={setLocality}
           addressProofType={addressProofType} setAddressProofType={setAddressProofType}
+          countryID={countryID} setCountryID={setCountryID}
+          stateID={stateID} setStateID={setStateID}
+          cityID={cityID} setCityID={setCityID}
         />
 
         <PermanentAdd

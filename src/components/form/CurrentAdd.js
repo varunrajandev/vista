@@ -10,9 +10,6 @@ function CurrentAdd(props) {
   const [stateDD, setStateDD] = useState([])
   const [cityDD, setCityDD] = useState([])
   const [localityDD, setLocalityDD] = useState([])
-  const [countryID, setCountryID] = useState()
-  const [stateID, setStateID] = useState()
-  const [cityID, setCityID] = useState()
 const {
   addressL1, setAddressL1,
   addressL2, setAddressL2,
@@ -23,13 +20,16 @@ const {
   city, setCity,
   locality, setLocality,
   addressProofType, setAddressProofType,
+  countryID, setCountryID,
+  stateID, setStateID,
+  cityID, setCityID
 } = props
 
 useEffect(() => {
   async function fetchData() {
     let countryData = await fetch( "http://13.126.160.155:8081/locationmaster/country/get/all");
-    let stateData = await fetch( `http://13.126.160.155:8081/locationmaster/state/get/all/${countryID}`);
-    let cityData = await fetch( `http://13.126.160.155:8081/locationmaster/city/get/all/${stateID}`);
+    let stateData = await fetch( `http://13.126.160.155:8081/locationmaster/state/get/states/by/${countryID}`);
+    let cityData = await fetch( `http://13.126.160.155:8081/locationmaster/city/get/cities/by/${stateID}`);
     let localityData = await fetch( `http://13.126.160.155:8081/locationmaster/micromarket/list/${cityID}`);
     let res1 = await countryData.json();
     let res2 = await stateData.json();
@@ -42,6 +42,8 @@ useEffect(() => {
   }
   fetchData();
 }, [countryID, stateID, cityID]);
+
+console.log("countryID", stateID)
 
   return (
     <Box 
@@ -114,7 +116,7 @@ useEffect(() => {
                 setCountry(e.target.value);
               }}
             >{countryDD.map((item)=>(
-              <MenuItem value={item.countryName} onClick={()=>{setCountryID(item.id)}}>{item.countryName}</MenuItem>
+              <MenuItem value={item.countryName} onClick={()=>{setCountryID(item.uuid)}}>{item.countryName}</MenuItem>
             ))}
             </Select>
           </FormControl>
@@ -139,7 +141,7 @@ useEffect(() => {
               }}
             >
               {stateDD.map((item) => (
-                <MenuItem value={item.stateName} onClick={()=>{setStateID(item.id)}}>{item.stateName}{item.name}</MenuItem>
+                <MenuItem value={item.label} onClick={()=>{setStateID(item.value)}}>{item.label}{item.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -156,7 +158,7 @@ useEffect(() => {
               }}
             >
               {cityDD.map((item) => (
-                <MenuItem value={item.cityName} onClick={()=>{setCityID(item.uuid)}}>{item.cityName}{item.name}</MenuItem>
+                <MenuItem value={item.label} onClick={()=>{setCityID(item.value)}}>{item.label}{item.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -189,22 +191,7 @@ useEffect(() => {
                 setAddressProofType(e.target.value);
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"Aadhaar Card"}>Aadhaar Card</MenuItem>
-              <MenuItem value={"Light Bill"}>Light Bill</MenuItem>
-              <MenuItem value={"Gas Bill"}>Gas Bill</MenuItem>
-              <MenuItem value={"Domicile Certificate"}>Room Agreement</MenuItem>
-              <MenuItem value={"Voter ID"}>Voter ID</MenuItem>
-              <MenuItem value={"Ration Card"}>Ration Card</MenuItem>
-              <MenuItem value={"Driving Licence"}>Driving Licence</MenuItem>
-              <MenuItem value={"Passport"}>Passport</MenuItem>
-              <MenuItem value={"Bank Passbook"}>Bank Passbook</MenuItem>
-              <MenuItem value={"Panchayat Certificate"}>
-                Panchayat Certificate
-              </MenuItem>
-            </Select>
+              <MenuItem value={"AAADHAR_CARD"}>Aadhaar Card</MenuItem></Select>
           </FormControl>
           <div style={{width:"18%"}}></div>
         </Box>
