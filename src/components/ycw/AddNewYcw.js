@@ -197,7 +197,7 @@ const handleClick = async () => {
             "lastJobDuration": lastJobDuration,
             "reasonForLeavingJob": reasonLeaving
           },
-          "jobRequirementDtos": [
+          "jobRequirementDtos": 
             {
               "workingHours": "_0_TO_2_HOURS",
               "startTime": startTimeFormat,
@@ -208,8 +208,8 @@ const handleClick = async () => {
               "openToTraining": openToTraining,
               "traningMode": traningMode,
               "jobRemarks": jobRemarks
-            }
-          ],
+            },
+          
           "bankDetailsDtos":inputFields,
 
           "documentRequestDtos": [

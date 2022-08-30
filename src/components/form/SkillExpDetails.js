@@ -290,7 +290,7 @@ const {
               {option.value}
             </li>
           )}
-          style={{ width: "100%" }}
+          style={{ width: "23%" }}
           renderInput={(params) => (
             <TextField
               {...params}
