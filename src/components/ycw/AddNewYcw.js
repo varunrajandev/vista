@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Alert } from "@mui/material";
 import PersonalInfo from "../form/PersonalInfo";
 import CurrentAdd from "../form/CurrentAdd";
 import PermanentAdd from "../form/PermanentAdd";
@@ -11,6 +11,7 @@ import HouseHoldMemberInfo from "../form/HouseHoldMemberInfo";
 import YcwButtons from "../buttons/YcwButtons";
 import { useState } from "react";
 import axios from "axios";
+import Popup from "../Popup";
 
 function AddNewYcw() {
   // YCW Personal information useState
@@ -101,109 +102,112 @@ function AddNewYcw() {
   ]);
 
   const [name, setName] = useState("")
+  const [openPopup, setOpenPopup] = useState(false);
   
 
   const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
   const endTimeFormat = endTime ? endTime.toLocaleTimeString() : '';
 
 const handleClick = async () => {
-    const Current_Addrress={
-          addressLine1,
-          addressLine2,
-          landmark,
-          postalCode,
-          countryName,
-          stateName,
-          cityName,
-          locality,
-          addressProofType,
-        }
-
-    try {
-      await axios.post("http://13.126.160.155:8080/user/worker/save",
+  try {
+  let res = await axios.post("http://13.126.160.155:8080/user/worker/save",
         {
           "userAndProfileDto": {
             "status": true,           
             "isoCode": "string",
-            "mobile": "string",
+            "mobile": mobile,
             "mobileVerified": true,
             "email": "string",
             "emailVerified": true,
             "userType": "WORKER",
             "department": "TECH",
             "departmentName": "string",
-            "firstName": "string",
-            "lastName": "string",
+            "firstName": firstname,
+            "lastName": lastname,
             "otp": 0,
             "profession": "BUSINESS_OWNER",
             "micromarketUuid": "string",
             "cityUuid": "string",
-            "middleName": "string",
-            "gender": "MALE",
+            "middleName": middlename,
+            "gender": gender,
             "profileStatus": "ACTIVE_AND_NOT_AVAILABLE",
-            "alternateMobileNumber": "string",
-            "birthday": 1661848805777,
-            "maritalStatus": "SINGLE",
-            "whatsappNumber": "string",
+            "alternateMobileNumber": alternateMobileNumber,
+            "birthday": birthday,
+            "maritalStatus": maritalStatus,
+            "whatsappNumber": whatsappNumber,
             "secondaryEmail": "string",
             "nationality": "INDIAN",
-            "sourcingChannel": "APNA",
+            "sourcingChannel": source,
             "medium": "PHONE_CALL",
             "professsion": "BUSINESS_OWNER",
-            "religion": "HINDU",
+            "religion": religion,
             "bloodGroup": "O_POSITIVE",
-            "educationalRemarks": "string",
-            "medicalCondition": "string",
-            "covidStatus": "UNVACCINATED",
+            "educationalRemarks": educationalRemarks,
+            "medicalCondition": medicalCondition,
+            "covidStatus": covidStatus,
             "nextDestination": "string",
             "arrivalDate": 1661848805777,
             "secondaryMobileNumber": "string",
             "secondaryMobileVerified": true,
             "formStatus": "DRAFT",
-            "whatsappAvailable": true
+            "whatsappAvailable": isWhatsappAvailable
           },
           "addressDtos": [
             {
               "status": true,
-              "addressLine1":"string",
-              "addressLine2":"string",
-              "micromarketUuid": "string",
-              "locality":"string",
+              "addressLine1":addressLine1,
+              "addressLine2":addressLine2,
+              "micromarketUuid": "e2f22236-e96f-43d2-8a8c-b6b60badf932",
+              "locality":landmark,
               "cityUuid":cityID,
               "stateUuid":stateID,
-              "postalCode":"string",
+              "postalCode":postalCode,
               "countryUuid":countryID,
               "addressProofType":"AAADHAR_CARD",
               "permanent":true
+            }, 
+            {
+              "status": true,
+              "addressLine1":addressLine1,
+              "addressLine2":addressLine2,
+              "micromarketUuid": "e2f22236-e96f-43d2-8a8c-b6b60badf932",
+              "locality":landmark,
+              "cityUuid":cityID,
+              "stateUuid":stateID,
+              "postalCode":postalCode,
+              "countryUuid":countryID,
+              "addressProofType":"AAADHAR_CARD",
+              "permanent":false
             }
+
           ],
           "skillsMappingDto": {
-            "primarySkill": "DRIVING",
-            "secondarySkill": "DRIVING",
-            "teritarySkill": "DRIVING",
+            "primarySkill": primarySkill,
+            "secondarySkill": secondarySkill,
+            "teritarySkill": tertiarySkill,
             "cookType": "ONLY_VEG",
-            "cuisines": "string",
-            "totalExperience": "string",
-            "skillRemarks": "string"
+            "cuisines": "ITALIAN",
+            "totalExperience": totalExp,
+            "skillRemarks": skillRemarks
           },
           "userJobExperience": {
             "jobType": "HOUSEKEEPING",
-            "experienceRemarks": "string",
-            "totalExperience": "string",
-            "lastJobDuration": "string",
-            "reasonForLeavingJob": "string"
+            "experienceRemarks": experienceRemarks,
+            "totalExperience": totalExp,
+            "lastJobDuration": lastJobDuration,
+            "reasonForLeavingJob": reasonLeaving
           },
           "jobRequirementDtos": [
             {
               "workingHours": "_0_TO_2_HOURS",
-              "startTime": "string",
-              "endTime": "string",
+              "startTime": startTimeFormat,
+              "endTime": endTimeFormat,
               "vehicle": "string",
-              "minSalaryExpected": "string",
-              "maxSalaryExpected": "string",
-              "openToTraining": true,
-              "traningMode": "ONLINE",
-              "jobRemarks": "string"
+              "minSalaryExpected": minSalaryExpected,
+              "maxSalaryExpected": maxSalaryExpected,
+              "openToTraining": openToTraining,
+              "traningMode": traningMode,
+              "jobRemarks": jobRemarks
             }
           ],
           "bankDetailsDtos":inputFields,
@@ -235,9 +239,9 @@ const handleClick = async () => {
               "email": "string"
             }]
         });
-      alert("User Registration successfull")
+      setOpenPopup(true)
     } catch (error) {
-      alert("User Registration Faild", error)
+      alert(error)
     }
   }
 
@@ -248,7 +252,7 @@ const handleClick = async () => {
         <Typography variant="h6">Add New YCW</Typography>
         <Typography sx={{ display: "flex", gap: 2 }}>
           {/* Buttons */}
-          <YcwButtons data={handleClick} />
+          <YcwButtons data={handleClick}/>
           </Typography>
       </Box>
       {/* //Form */}
@@ -347,6 +351,14 @@ const handleClick = async () => {
           setName={setName}
         />
       </Box>
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="SUCCESS MESSAGE"
+      >
+        <Alert severity="success">This is a success alert — check it out!</Alert>
+      </Popup>
+      
     </Box>
   );
 }

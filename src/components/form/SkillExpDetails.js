@@ -217,7 +217,7 @@ const {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Only Veg"}>Only Veg</MenuItem>
+            <MenuItem value={"ONLY_VEG"}>Only Veg</MenuItem>
             <MenuItem value={"Both Veg & Non-veg"}>Both Veg & Non-Veg</MenuItem>
           </Select>
         </FormControl>
