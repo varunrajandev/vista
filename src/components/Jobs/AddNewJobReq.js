@@ -1,16 +1,142 @@
 import * as React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import BasicInfo from "../JobRequestForm/BasicInfo";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 
 function AddNewJobReq() {
+  const [jobTypes, setJobTypes] = React.useState("");
+  const [workDuration, setWorkDuration] = React.useState("");
+  const [dailyStartTime, setDailyStartTime] = React.useState("");
+  const [membersInFamily, setMembersInFamily] = React.useState("");
+  const [languagePreference, setLanguagePreference] = React.useState("");
+  const [trainingPreference, setTrainingPreference] = React.useState("");
+  const [religionPreference, setReligionPreference] = React.useState("");
+  const [value, setValue] = React.useState("");
+  const [agePreference, setAgePreference] = React.useState();
+  const [genderPreference, setGenderPreference] = React.useState("");
+  const [budgetMax, setBudgetMax] = React.useState("");
+  const [budgetMin, setBudgetMin] = React.useState();
+  const [remarks, setRemarks] = React.useState("");
+  const [sizeOfHouse, setSizeOfHouse] = React.useState();
+  const [pets, setPets] = React.useState();
+  const [noOfPets, setNoOfPets] = React.useState();
+
+  const startTimeFormat = dailyStartTime ? dailyStartTime.toLocaleTimeString() : '';
+  
+
+  console.log("All My data", {
+    jobTypes,
+    workDuration,
+    startTimeFormat,
+    membersInFamily,
+    languagePreference,
+    trainingPreference,
+    religionPreference,
+    value,
+    agePreference,
+    genderPreference,
+    budgetMax,
+    budgetMin,
+    remarks,
+    sizeOfHouse,
+    pets,
+    noOfPets,
+  })
+  //const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
+  const handleClick = async () => {
+    try {
+      await axios.post("http://13.126.160.155:8080/user/job/create",
+        {
+          "agePreference": agePreference,
+          "cityUuid": "string",
+          "customerId": "string",
+          "endDate": value,
+          "endTime": "string",
+          "userId": "string",
+          "locationUuid": "string",
+          "jobStatus": "CREATED",
+          "familyMember": membersInFamily,
+          "gender": genderPreference,
+          "houseSize": sizeOfHouse,
+          "jobDescription": remarks,
+          "jobType": jobTypes,
+          "language": languagePreference,
+          "maxBudget": budgetMax,
+          "minBudget": budgetMin,
+          "pet": true,
+          "petCount": noOfPets,
+          "religion": religionPreference,
+          "startDate": value,
+          "startTime": startTimeFormat,
+          "traingType": trainingPreference,
+          "workingHours": workDuration
+        }
+        
+        // ,
+        
+        // {
+        //   "agePreference": "string",
+        //   "cityUuid": "string",
+        //   "customerId": "string",
+        //   "endDate": "2022-08-30T17:05:01.584Z",
+        //   "endTime": "string",
+        //   "familyMember": 0,
+        //   "gender": "MALE",
+        //   "houseSize": 0,
+        //   "jobCurrentStatus": "INTERVIEW_SCHEDULED",
+        //   "jobDescription": "string",
+        //   "jobStatus": "CREATED",
+        //   "jobType": "HOUSEKEEPING",
+        //   "language": "HINDI",
+        //   "maxBudget": 0,
+        //   "micromarketUuid": "string",
+        //   "minBudget": 0,
+        //   "pet": true,
+        //   "petCount": 0,
+        //   "religion": "HINDU",
+        //   "startDate": "2022-08-30T17:05:01.584Z",
+        //   "startTime": "string",
+        //   "traingType": "ONLINE",
+        //   "userId": "string",
+        //   "workingHours": 0
+        // }
+        
+        
+        );
+
+
+      alert("User Registration successfull")
+      
+    } catch (error) {
+      alert("User Registration Faild", error)
+    }
+  };
+
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
+
       {/* //Add Ycw Section section */}
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Add New Customer</Typography>
-        <Typography sx={{ display: "flex", gap: 2 }}>
-        <Button
-            sx={{ color: "#f52f50", border: "1px solid #f52f50" }}
+
+      <Box sx={{
+        display: "flex",
+        justifyContent: "space-between"
+      }}
+      >
+        <Typography variant="h6">
+          Add New Jobs
+        </Typography>
+        <Typography sx={{
+          display: "flex",
+          gap: 2
+        }}
+        >
+          <Button
+            sx={{
+              color: "#f52f50",
+              border: "1px solid #f52f50"
+            }}
             variant="outlined"
           >
             CLOSE
@@ -29,7 +155,7 @@ function AddNewJobReq() {
           >
             SAVE AS DRAFT
           </Button>
-          <Button color="success" variant="contained">
+          <Button color="success" variant="contained" onClick={handleClick}>
             CONFIRM & CREATE
           </Button>
         </Typography>
@@ -44,11 +170,25 @@ function AddNewJobReq() {
           borderRadius: 3,
         }}
       >
-
         {/* //Components */}
-            <BasicInfo/>
-      
-    
+        <BasicInfo
+          jobTypes={jobTypes} setJobTypes={setJobTypes}
+          workDuration={workDuration} setWorkDuration={setWorkDuration}
+          dailyStartTime={dailyStartTime} setDailyStartTime={setDailyStartTime}
+          membersInFamily={membersInFamily} setMembersInFamily={setMembersInFamily}
+          languagePreference={languagePreference} setLanguagePreference={setLanguagePreference}
+          trainingPreference={trainingPreference} setTrainingPreference={setTrainingPreference}
+          religionPreference={religionPreference} setReligionPreference={setReligionPreference}
+          value={value} setValue={setValue}
+          agePreference={agePreference} setAgePreference={setAgePreference}
+          genderPreference={genderPreference} setGenderPreference={setGenderPreference}
+          budgetMax={budgetMax} setBudgetMax={setBudgetMax}
+          budgetMin={budgetMin} setBudgetMin={setBudgetMin}
+          remarks={remarks} setRemarks={setRemarks}
+          sizeOfHouse={sizeOfHouse} setSizeOfHouse={setSizeOfHouse}
+          pets={pets} setPets={setPets}
+          noOfPets={noOfPets} setNoOfPets={setNoOfPets}
+        />
       </Box>
     </Box>
   );

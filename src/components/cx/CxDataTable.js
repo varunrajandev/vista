@@ -13,7 +13,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
+import { useEffect,useState } from "react";
 import { FilterData } from "../../AlllData";
+
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -71,7 +74,33 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function CxDataTable({ data }) {
+function CxDataTable() {
+  const [datatable,setDatatable]=useState([]);
+
+  useEffect(() => {
+
+
+    
+
+    async function FetchApi() {
+  
+      const customerDataApi = await fetch("http://13.126.160.155:8080/user/customer/get/all/customer?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
+      
+  
+      let cxCustomer = await customerDataApi.json();
+      
+
+      let cxdata= await cxCustomer.data;
+
+      setDatatable(cxdata.data);
+    
+    }
+    FetchApi();
+    
+  }, []);
+  
+ // console.log(datatable);
+
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
       {/* //Add Ycw Section section */}
@@ -138,7 +167,7 @@ function CxDataTable({ data }) {
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Select YCW City"
+              label="Select CX City"
             />
           )}
         />
@@ -148,7 +177,6 @@ function CxDataTable({ data }) {
       <Box marginTop={5}>
         <TableContainer>
           <Table sx={{ minWidth: "100%" }} aria-label="simple table">
-            
             <TableHead bgColor={"#e1e2e3"}>
               <TableRow>
                 <TableCell
@@ -204,7 +232,7 @@ function CxDataTable({ data }) {
             </TableHead>
             
             <TableBody component={Paper}>
-              {data.map((row) => (
+              {datatable.map((row) => (
                 <StyledTableRow
                   key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 }, zIndex:"999", }}
@@ -215,30 +243,30 @@ function CxDataTable({ data }) {
                     scope="row"
                     style={{
                       borderLeft:
-                      (row.status === "ACTIVE" && "5px solid green") ||
-                      (row.status === "WAITING" && "5px solid #f7aa02") ||
-                      (row.status === "INACTIVE" && "5px solid red"),
+                      (row.profileStatus.value === "INACTIVE" && "5px solid green") ||
+                      (row.profileStatus.value === "WAITING" && "5px solid #f7aa02") ||
+                      (row.profileStatus.value === "INACTIVE" && "5px solid red"),
                     }}
                   >
-                    {row.id}
+                    {row.userId}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.name}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.phone}
+                    {row.mobileNo}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.Email}
+                    {row.email}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.location}
+                    {row.microMarketName}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.openJobs}
+                    {row.openJobs }
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.activeJobs}
+                    {row.activeJob}
                   </TableCell>
                  
    
@@ -253,16 +281,16 @@ function CxDataTable({ data }) {
                       }}
                       style={{
                         backgroundColor:
-                          (row.status === "ACTIVE" && "#cef5ce") ||
-                          (row.status === "WAITING" && "#f0edce") ||
-                          (row.status === "INACTIVE" && "#fcb1b8"),
+                          (row.profileStatus.key === "IN_ACTIVE" && "#cef5ce") ||
+                          (row.profileStatus.key === "WAITING" && "#f0edce") ||
+                          (row.profileStatus.key === "INACTIVE" && "#fcb1b8"),
                         color:
-                          (row.status === "ACTIVE" && "green") ||
-                          (row.status === "WAITING" && "#f7aa02") ||
-                          (row.status === "INACTIVE" && "red"),
+                          (row.profileStatus.value === "INACTIVE" && "green") ||
+                          (row.profileStatus.key === "WAITING" && "#f7aa02") ||
+                          (row.profileStatus.key === "INACTIVE" && "red"),
                       }}
                     >
-                      {row.status}
+                      {row.profileStatus.value}
                     </Typography>
                   </TableCell>
                 </StyledTableRow>
