@@ -117,7 +117,7 @@ return (
           marginTop: "30px",
         }}
       >
-        <Search>
+        {/* <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -126,10 +126,10 @@ return (
             inputProps={{ "aria-label": "search" }}
             onChange={(e)=>{setSearchItem(e.target.value)}}
           />
-        </Search>
+        </Search> */}
 
          <Autocomplete
-         sx={{width:"10%"}}
+         sx={{width:"20%", backgroundColor:"white"}}
         freeSolo
         id="free-solo-2-demo"
         disableClearable
@@ -137,9 +137,10 @@ return (
         options={searchDD.map((option) => option.name)}
         renderInput={(params) => (
           <TextField
+          placeholder="Search by name or phone number..."
           onChange={(e)=>{setSearchItem(e.target.value)}}
             {...params}
-            label="Search input"
+            label="Search by name"
             InputProps={{
               ...params.InputProps,
               type: 'search',
