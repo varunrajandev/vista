@@ -1,10 +1,12 @@
 import * as React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button ,Alert} from "@mui/material";
 import PersonalInfo from "../cxForm/PersonalInfo";
 import CurrentAddress from "../cxForm/CurrentAddress";
 import HouseholdInfo from "../cxForm/HouseholdInfo";
 import { useState } from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
+import Popup from "../Popup";
 
 function AddNewCustomer() {
   const [cxSource, setCxSource] = React.useState("");
@@ -36,7 +38,7 @@ function AddNewCustomer() {
   const [formStatus,setFormStatus]=React.useState("");
  const [countryUUID,setCountryUUID]=React.useState("")
 const [idProofType, setIdProofType] = React.useState("");
-
+const [openPopup, setOpenPopup] = useState(false);
 
   console.log("All My data", {
 
@@ -115,7 +117,8 @@ const [idProofType, setIdProofType] = React.useState("");
             "noOfPets": noOfPets,
           },
         });
-      alert("User Registration successfull")
+     // alert("User Registration successfull")
+     setOpenPopup(true)
     
     } catch (error) {
       alert("User Registration Faild", error)
@@ -128,12 +131,15 @@ const [idProofType, setIdProofType] = React.useState("");
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6">Add New Customer</Typography>
         <Typography sx={{ display: "flex", gap: 2 }}>
+
+        <Link to="/cx" style={{textDecoration:"none"}}>
           <Button
             sx={{ color: "#f52f50", border: "1px solid #f52f50" }}
             variant="outlined"
           >
             CLOSE
           </Button>
+          </Link>
 
           <Button
             sx={{ background: "#e3b944" }}
@@ -193,6 +199,15 @@ const [idProofType, setIdProofType] = React.useState("");
             ADD JOB REQUEST
           </Button>
         </Box>
+
+        <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="SUCCESS MESSAGE"
+      >
+        <Alert severity="success">This is a success alert — check it out!</Alert>
+      </Popup>
+
       </Box>
     </Box>
   );

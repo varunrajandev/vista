@@ -76,35 +76,38 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function JobsDataTable({ data }) {
+function JobsDataTable() {
 
   const [jobDatatable,setJobDatatable]=useState([]);
+  const [selectCityDropdown, setSelectCityDropdown]=useState([]);
+  const[statusDropdownApi,setStatusDropdownApi]=useState([]);
 
   useEffect(() => {
 
-
-    
-
-    async function FetchApi() {
-  
+      async function FetchApi() {
+      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all")
+      const statusDropdownApi= await fetch("http://13.126.160.155:8080/user/get/jobStatus");
       const jobDataApi = await fetch("http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=asc")
       
-  
+      let CityDropdown= await selectCityDropdownApi.json()
+      let statusDropdown= await statusDropdownApi.json();
       let jobdata = await jobDataApi.json();
       
-
+      let statusApi= await statusDropdown.data;
+      let selectCity= await CityDropdown.data;
       let listjobData = await jobdata.data;
 
+      setSelectCityDropdown(selectCity);
       setJobDatatable(listjobData.data);
-    
+      setStatusDropdownApi(statusApi);
     }
     FetchApi();
 
   }, []);
-  console.log("api",jobDatatable)
+
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
-      {/* //Add Ycw Section section */}
+      {/* //Add  job  section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6">Jobs Master</Typography>
         <Link style={{ textDecoration: "none" }} to="/jobs/new">
@@ -135,15 +138,16 @@ function JobsDataTable({ data }) {
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
+          options={selectCityDropdown}
           sx={{ width: 250 }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Search YCW Work Type"
+              label="Select City"
             />
           )}
+          getOptionLabel={(item)=>`${item.cityName}`}
         />
         <Autocomplete
           disablePortal
@@ -154,22 +158,23 @@ function JobsDataTable({ data }) {
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Select YCW Status"
+              label="Select Locality"
             />
           )}
         />
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
+          options={statusDropdownApi}
           sx={{ width: 250 }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Select YCW City"
+              label="Select Highest Active Stage"
             />
           )}
+          getOptionLabel={(item)=>`${item.value}`}
         />
       </Box>
 
@@ -257,13 +262,13 @@ function JobsDataTable({ data }) {
                         (row.status === "INACTIVE" && "5px solid red"),
                     }}
                   >
-                    {row.userId}
+                    {row.jobId}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.jobType.value}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.customerId}
+                    {row.userId}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.location}
@@ -278,7 +283,7 @@ function JobsDataTable({ data }) {
                     {row.startDate}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.highestActiveStage}
+                    {row.jobCurrentStatus.value}
                   </TableCell>
                  
 

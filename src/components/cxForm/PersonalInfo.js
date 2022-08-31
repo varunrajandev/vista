@@ -158,7 +158,7 @@ function PersonalInfo(props) {
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          label="Middle Name*"
+          label="Middle Name"
           variant="outlined"
           onChange={(event) => {
             setMname(event.target.value);

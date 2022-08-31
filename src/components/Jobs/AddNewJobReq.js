@@ -3,7 +3,7 @@ import { Box, Typography, Button } from "@mui/material";
 import BasicInfo from "../JobRequestForm/BasicInfo";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import {Link} from "react-router-dom";
 
 function AddNewJobReq() {
   const [jobTypes, setJobTypes] = React.useState("");
@@ -25,6 +25,9 @@ function AddNewJobReq() {
 
   const startTimeFormat = dailyStartTime ? dailyStartTime.toLocaleTimeString() : '';
   
+  function refreshPage() {
+  window.location.reload(false);
+  }
 
   console.log("All My data", {
     jobTypes,
@@ -51,10 +54,9 @@ function AddNewJobReq() {
         {
           "agePreference": agePreference,
           "cityUuid": "string",
-          "customerId": "string",
           "endDate": value,
           "endTime": "string",
-          "userId": "string",
+          "userId": "CX000013",
           "locationUuid": "string",
           "jobStatus": "CREATED",
           "familyMember": membersInFamily,
@@ -112,6 +114,7 @@ function AddNewJobReq() {
     } catch (error) {
       alert("User Registration Faild", error)
     }
+    
   };
 
   return (
@@ -132,6 +135,7 @@ function AddNewJobReq() {
           gap: 2
         }}
         >
+           <Link to="/jobs" style={{textDecoration:"none"}}>
           <Button
             sx={{
               color: "#f52f50",
@@ -141,10 +145,12 @@ function AddNewJobReq() {
           >
             CLOSE
           </Button>
+          </Link>
           <Button
             sx={{ background: "#e3445f" }}
             variant="contained"
             color="secondary"
+            onClick={refreshPage}
           >
             CANCEL CREATION
           </Button>

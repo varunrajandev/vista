@@ -13,9 +13,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 import { FilterData } from "../../AlllData";
-
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
 
 
 const Search = styled("div")(({ theme }) => ({
@@ -75,44 +78,62 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function CxDataTable() {
-  const [datatable,setDatatable]=useState([]);
+  const [datatable, setDatatable] = useState([]);
+  const [selectCityDropdown, setSelectCityDropdown]=useState([]);
+  const[statusDropdownApi,setStatusDropdownApi]=useState([]);
+  //const [cxlocality, setCXLocality] = useState([]);
+ // const[cityid,setCityid]=React.useState();
+  const [setCity1,setSetCity1]=React.useState();
+
 
   useEffect(() => {
-
-
-    
-
     async function FetchApi() {
-  
+      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all");
+     // const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityid}`);
+      const statusDropdownApi= await fetch("http://13.126.160.155:8080/user/get/jobStatus");
+
       const customerDataApi = await fetch("http://13.126.160.155:8080/user/customer/get/all/customer?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
-      
+
+   
+      let statusDropdown= await statusDropdownApi.json();
+      let CityDropdown= await selectCityDropdownApi.json()
+     // let LocalityDropdown =await localityApidata.json();
   
       let cxCustomer = await customerDataApi.json();
-      
 
-      let cxdata= await cxCustomer.data;
+      let statusApi= await statusDropdown.data;
+     // let localitydata= await localityApidata.data;
+      let selectCity= await CityDropdown.data;
+
+      let cxdata = await cxCustomer.data;
+
+      setSelectCityDropdown(selectCity);
+     // setCXLocality(localitydata);
+      setStatusDropdownApi(statusApi);
 
       setDatatable(cxdata.data);
-    
     }
     FetchApi();
-    
+    //console.log(selectCityDropdown);
+   // console.log("hiii",cityid);
   }, []);
   
- // console.log(datatable);
+
 
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
-      {/* //Add Ycw Section section */}
+      {/* //Add cx Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6">Customer Master</Typography>
-       <Link  style={{textDecoration:"none"}} to="/cx/new">
-        <Button variant="contained" color="success">
-          ADD NEW CUSTOMERS
-        </Button>
+        <Link style={{ textDecoration: "none" }} to="/cx/new">
+          <Button variant="contained" color="success">
+            ADD NEW CUSTOMERS
+          </Button>
         </Link>
       </Box>
-      
+      {/* {selectCityDropdown.map((item)=>{
+            {item.value}
+          })} */}
 
       {/* //add Filter and Search Section */}
       <Box
@@ -135,15 +156,17 @@ function CxDataTable() {
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
+          options={selectCityDropdown}
           sx={{ width: "20%" }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Search YCW Work Type"
+              label="Select City"
+              // onClick={() => { setCityid("hii") }}
             />
           )}
+          getOptionLabel={(item)=>`${item.cityName}`}
         />
         <Autocomplete
           disablePortal
@@ -154,22 +177,25 @@ function CxDataTable() {
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Select YCW Status"
+              label="Select Locality"
             />
           )}
+          // getOptionLabel={(item)=>`${item.name}`}
         />
+
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
+          options={statusDropdownApi}
           sx={{ width: "20%" }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Select CX City"
+              label="Select Request Status"
             />
           )}
+          getOptionLabel={(item)=>`${item.value}`}
         />
       </Box>
 
@@ -215,7 +241,7 @@ function CxDataTable() {
                 >
                   OPEN JOBS
                 </TableCell>
-             
+
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
@@ -228,14 +254,14 @@ function CxDataTable() {
                 >
                   STATUS
                 </TableCell>
-             </TableRow>
+              </TableRow>
             </TableHead>
-            
+
             <TableBody component={Paper}>
               {datatable.map((row) => (
                 <StyledTableRow
                   key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 }, zIndex:"999", }}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 }, zIndex: "999", }}
                 >
                   <TableCell
                     sx={{ fontSize: "13px" }}
@@ -243,9 +269,9 @@ function CxDataTable() {
                     scope="row"
                     style={{
                       borderLeft:
-                      (row.profileStatus.value === "INACTIVE" && "5px solid green") ||
-                      (row.profileStatus.value === "WAITING" && "5px solid #f7aa02") ||
-                      (row.profileStatus.value === "INACTIVE" && "5px solid red"),
+                        (row.profileStatus.value === "INACTIVE" && "5px solid green") ||
+                        (row.profileStatus.value === "WAITING" && "5px solid #f7aa02") ||
+                        (row.profileStatus.value === "INACTIVE" && "5px solid red"),
                     }}
                   >
                     {row.userId}
@@ -263,21 +289,21 @@ function CxDataTable() {
                     {row.microMarketName}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.openJobs }
+                    {row.openJobs}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.activeJob}
                   </TableCell>
-                 
-   
+
+
                   <TableCell sx={{ fontSize: "8px" }} align="left">
                     <Typography
                       sx={{
                         padding: "5px",
                         borderRadius: "10px",
                         fontSize: "10px",
-                        textAlign:"center",
-                        fontWeight:"900"
+                        textAlign: "center",
+                        fontWeight: "900"
                       }}
                       style={{
                         backgroundColor:
