@@ -14,8 +14,11 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 import { FilterData } from "../../AlllData";
-
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
 
 
 const Search = styled("div")(({ theme }) => ({
@@ -77,29 +80,49 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function CxDataTable() {
   const [datatable, setDatatable] = useState([]);
   const [selectCityDropdown, setSelectCityDropdown]=useState([]);
+  const[statusDropdownApi,setStatusDropdownApi]=useState([]);
+  //const [cxlocality, setCXLocality] = useState([]);
+ // const[cityid,setCityid]=React.useState();
+  const [setCity1,setSetCity1]=React.useState();
+
+
   useEffect(() => {
     async function FetchApi() {
-      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all")
+      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all");
+     // const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityid}`);
+      const statusDropdownApi= await fetch("http://13.126.160.155:8080/user/get/jobStatus");
+
       const customerDataApi = await fetch("http://13.126.160.155:8080/user/customer/get/all/customer?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
 
+   
+      let statusDropdown= await statusDropdownApi.json();
       let CityDropdown= await selectCityDropdownApi.json()
+     // let LocalityDropdown =await localityApidata.json();
+  
       let cxCustomer = await customerDataApi.json();
-      
-      let cxdata = await cxCustomer.data;
+
+      let statusApi= await statusDropdown.data;
+     // let localitydata= await localityApidata.data;
       let selectCity= await CityDropdown.data;
 
-      setSelectCityDropdown(cxCustomer.data);
+      let cxdata = await cxCustomer.data;
+
+      setSelectCityDropdown(selectCity);
+     // setCXLocality(localitydata);
+      setStatusDropdownApi(statusApi);
+
       setDatatable(cxdata.data);
     }
     FetchApi();
-    console.log(selectCityDropdown.data);
+    //console.log(selectCityDropdown);
+   // console.log("hiii",cityid);
   }, []);
-
+  
 
 
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
-      {/* //Add Ycw Section section */}
+      {/* //Add cx Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h6">Customer Master</Typography>
         <Link style={{ textDecoration: "none" }} to="/cx/new">
@@ -108,7 +131,9 @@ function CxDataTable() {
           </Button>
         </Link>
       </Box>
-
+      {/* {selectCityDropdown.map((item)=>{
+            {item.value}
+          })} */}
 
       {/* //add Filter and Search Section */}
       <Box
@@ -131,41 +156,46 @@ function CxDataTable() {
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
-          sx={{ width: "20%" }}
-          renderInput={(params) => (
-            <TextField
-              sx={{ bgcolor: "white", borderRadius: "5px" }}
-              {...params}
-              label="Search YCW Work Type"
-            />
-          )}
-        />
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={FilterData}
-          sx={{ width: "20%" }}
-          renderInput={(params) => (
-            <TextField
-              sx={{ bgcolor: "white", borderRadius: "5px" }}
-              {...params}
-              label="Select YCW Status"
-            />
-          )}
-        />
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
           options={selectCityDropdown}
           sx={{ width: "20%" }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
-              label="Select CX City"
+              label="Select City"
+              // onClick={() => { setCityid("hii") }}
             />
           )}
+          getOptionLabel={(item)=>`${item.cityName}`}
+        />
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={FilterData}
+          sx={{ width: "20%" }}
+          renderInput={(params) => (
+            <TextField
+              sx={{ bgcolor: "white", borderRadius: "5px" }}
+              {...params}
+              label="Select Locality"
+            />
+          )}
+          // getOptionLabel={(item)=>`${item.name}`}
+        />
+
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={statusDropdownApi}
+          sx={{ width: "20%" }}
+          renderInput={(params) => (
+            <TextField
+              sx={{ bgcolor: "white", borderRadius: "5px" }}
+              {...params}
+              label="Select Request Status"
+            />
+          )}
+          getOptionLabel={(item)=>`${item.value}`}
         />
       </Box>
 
