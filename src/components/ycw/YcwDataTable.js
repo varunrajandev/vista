@@ -76,20 +76,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function Right() {
 const [tableData, setTableData] = React.useState([])
+const [searchItem, setSearchItem] = React.useState("")
+const [searchDD, setSearchDD] = React.useState([])
+console.log(searchItem)
+
 
 useEffect(() => {
   const fetchData= async()=>{
     let data = await fetch("http://13.126.160.155:8080/user/worker/get/all/worker?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
+    let searchData = await fetch(`http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`)
     let res = await data.json();
     let newData = await res.data;
+    let responseSearch = await searchData.json();
     setTableData(newData.data);
+    setSearchDD(responseSearch.data || [{name:"No Data"}])
   }
   fetchData();
-}, [])
-
-{tableData.map((item)=>(
-  console.log("item",item.gender)
-))}
+}, [searchItem])
 
  
 
@@ -121,8 +124,30 @@ return (
           <StyledInputBase
             placeholder="Search by name or phone number..."
             inputProps={{ "aria-label": "search" }}
+            onChange={(e)=>{setSearchItem(e.target.value)}}
           />
         </Search>
+
+         <Autocomplete
+         sx={{width:"10%"}}
+        freeSolo
+        id="free-solo-2-demo"
+        disableClearable
+        
+        options={searchDD.map((option) => option.name)}
+        renderInput={(params) => (
+          <TextField
+          onChange={(e)=>{setSearchItem(e.target.value)}}
+            {...params}
+            label="Search input"
+            InputProps={{
+              ...params.InputProps,
+              type: 'search',
+            }}
+          />
+        )}
+      />
+
         <Autocomplete
           disablePortal
           id="combo-box-demo"
