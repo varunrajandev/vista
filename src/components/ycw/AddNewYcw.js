@@ -249,7 +249,7 @@ const handleClick = async () => {
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
       {/* //Add Ycw Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Add New YCW</Typography>
+        <Typography variant="h6" >Add New YCW</Typography>
         <Typography sx={{ display: "flex", gap: 2 }}>
           {/* Buttons */}
           <YcwButtons data={handleClick}/>

@@ -67,7 +67,7 @@ function AddNewJobReq() {
           "language": languagePreference,
           "maxBudget": budgetMax,
           "minBudget": budgetMin,
-          "pet": true,
+          "pet": pets,
           "petCount": noOfPets,
           "religion": religionPreference,
           "startDate": value,
@@ -76,43 +76,15 @@ function AddNewJobReq() {
           "workingHours": workDuration
         }
         
-        // ,
-        
-        // {
-        //   "agePreference": "string",
-        //   "cityUuid": "string",
-        //   "customerId": "string",
-        //   "endDate": "2022-08-30T17:05:01.584Z",
-        //   "endTime": "string",
-        //   "familyMember": 0,
-        //   "gender": "MALE",
-        //   "houseSize": 0,
-        //   "jobCurrentStatus": "INTERVIEW_SCHEDULED",
-        //   "jobDescription": "string",
-        //   "jobStatus": "CREATED",
-        //   "jobType": "HOUSEKEEPING",
-        //   "language": "HINDI",
-        //   "maxBudget": 0,
-        //   "micromarketUuid": "string",
-        //   "minBudget": 0,
-        //   "pet": true,
-        //   "petCount": 0,
-        //   "religion": "HINDU",
-        //   "startDate": "2022-08-30T17:05:01.584Z",
-        //   "startTime": "string",
-        //   "traingType": "ONLINE",
-        //   "userId": "string",
-        //   "workingHours": 0
-        // }
-        
-        
         );
 
 
       alert("User Registration successfull")
+      console.log()
       
     } catch (error) {
       alert("User Registration Faild", error)
+      console.log()
     }
     
   };

@@ -13,11 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
-import { FilterData } from "../../AlllData";
-import{useState,useEffect} from "react";
-
-
-
+import { useState, useEffect } from "react";
 
 
 const Search = styled("div")(({ theme }) => ({
@@ -78,32 +74,38 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function JobsDataTable() {
 
-  const [jobDatatable,setJobDatatable]=useState([]);
-  const [selectCityDropdown, setSelectCityDropdown]=useState([]);
-  const[statusDropdownApi,setStatusDropdownApi]=useState([]);
+  const [jobDatatable, setJobDatatable] = useState([]);
+  const [selectCityDropdown, setSelectCityDropdown] = useState([]);
+  const [statusDropdownApi, setStatusDropdownApi] = useState([]);
+  const [jobLocality, setJobLocality] = useState([]);
+  const [cxcityId, setCXCityId] = useState("");
 
   useEffect(() => {
 
-      async function FetchApi() {
-      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all")
-      const statusDropdownApi= await fetch("http://13.126.160.155:8080/user/get/jobStatus");
+    async function FetchApi() {
+      const selectCityDropdownApi = await fetch("http://13.126.160.155:8081/locationmaster/city/get/all")
+      const statusDropdownApi = await fetch("http://13.126.160.155:8080/user/get/jobStatus");
+      const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/get/all/${cxcityId}`);
       const jobDataApi = await fetch("http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=asc")
-      
-      let CityDropdown= await selectCityDropdownApi.json()
-      let statusDropdown= await statusDropdownApi.json();
+
+      let CityDropdown = await selectCityDropdownApi.json()
+      let statusDropdown = await statusDropdownApi.json();
       let jobdata = await jobDataApi.json();
-      
-      let statusApi= await statusDropdown.data;
-      let selectCity= await CityDropdown.data;
+      let LocalityDropdown = await localityApidata.json();
+
+      let statusApi = await statusDropdown.data;
+      let selectCity = await CityDropdown.data;
       let listjobData = await jobdata.data;
+      let localitydata = await LocalityDropdown.data;
 
       setSelectCityDropdown(selectCity);
       setJobDatatable(listjobData.data);
       setStatusDropdownApi(statusApi);
+      setJobLocality(localitydata || [{ names: "please Select City" }]);
     }
     FetchApi();
 
-  }, []);
+  }, [cxcityId]);
 
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
@@ -140,6 +142,10 @@ function JobsDataTable() {
           id="combo-box-demo"
           options={selectCityDropdown}
           sx={{ width: 250 }}
+          value={cxcityId.id}
+          onChange={(event, newValue) => {
+            setCXCityId(newValue.id);
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
@@ -147,12 +153,12 @@ function JobsDataTable() {
               label="Select City"
             />
           )}
-          getOptionLabel={(item)=>`${item.cityName}`}
+          getOptionLabel={(item) => `${item.cityName}`}
         />
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
+          options={jobLocality}
           sx={{ width: 250 }}
           renderInput={(params) => (
             <TextField
@@ -161,6 +167,7 @@ function JobsDataTable() {
               label="Select Locality"
             />
           )}
+          getOptionLabel={(item) => `${item.microMarketName} `}
         />
         <Autocomplete
           disablePortal
@@ -174,7 +181,7 @@ function JobsDataTable() {
               label="Select Highest Active Stage"
             />
           )}
-          getOptionLabel={(item)=>`${item.value}`}
+          getOptionLabel={(item) => `${item.value}`}
         />
       </Box>
 
@@ -285,7 +292,7 @@ function JobsDataTable() {
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.jobCurrentStatus.value}
                   </TableCell>
-                 
+
 
                   <TableCell sx={{ fontSize: "8px" }} align="left">
                     <Typography

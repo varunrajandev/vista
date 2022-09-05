@@ -8,7 +8,7 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 import Popup from "../Popup";
 
-function AddNewCustomer() {
+function AddNewCustomer(props) {
   const [cxSource, setCxSource] = React.useState("");
   const [cxMedium, setCxMedium] = React.useState("");
   const [fname, setFname] = React.useState("");
@@ -39,6 +39,16 @@ function AddNewCustomer() {
  const [countryUUID,setCountryUUID]=React.useState("")
 const [idProofType, setIdProofType] = React.useState("");
 const [openPopup, setOpenPopup] = useState(false);
+const[responseData,setResponseData]=useState([]);
+//const [userid ,setuserid]=useState();
+
+console.log("new data",responseData)
+
+// const {
+//   cxid,setCxid,
+//   cxloaction,setCxlocation,
+
+// } = props;
 
   console.log("All My data", {
 
@@ -75,20 +85,20 @@ const [openPopup, setOpenPopup] = useState(false);
   const handleClick = async () => {
   
     try {
-      await axios.post("http://13.126.160.155:8080/user/customer/save",
+     let response= await axios.post("http://13.126.160.155:8080/user/customer/save",
         {
             "addressDtos": 
           {
-            "addressLine1": flat,
-            "addressLine2": area,
-            "cityUuid": city,
-            "countryUuid":  country,
-            "createdAt": "2022-08-30T09:09:17.173Z",
-            "locality": landmark,
-            "micromarketUuid":locality,
-            "permanent": true,
-            "postalCode": pinCode,
-            "stateUuid": state1,
+            // "addressLine1": flat,
+            // "addressLine2": area,
+            // "cityUuid": city,
+            // "countryUuid":  country,
+            // "createdAt": "2022-08-30T09:09:17.173Z",
+            // "locality": landmark,
+            // "micromarketUuid":locality,
+            // "permanent": true,
+            // "postalCode": pinCode,
+            // "stateUuid": state1,
           },
           "userAndProfileDto": {
             "alternateMobileNumber": alternateNumber,
@@ -119,10 +129,18 @@ const [openPopup, setOpenPopup] = useState(false);
         });
      // alert("User Registration successfull")
      setOpenPopup(true)
-    
+     setResponseData(response.data.data)
+    //  setuserid(responseData.userId);
+
+        // getCXdetail()
     } catch (error) {
       alert("User Registration Faild", error)
     }
+
+
+    // function getCXdetail(){
+
+    // }
   }
 
   return (
@@ -193,19 +211,21 @@ const [openPopup, setOpenPopup] = useState(false);
           noOfChilds={noOfChilds} setNoOfChilds={setNoOfChilds}
           noOfPets={noOfPets} setNoOfPets={setNoOfPets}
         />
+
+      {/* <Link to="/jobs/new" style={{textDecoration:"none"}}> */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Button variant="contained" sx={{ mt: 4 }} onClick={handleClick}>
             {" "}
             ADD JOB REQUEST
           </Button>
         </Box>
-
+       {/* // </Link> */}
         <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
         title="SUCCESS MESSAGE"
       >
-        <Alert severity="success">This is a success alert — check it out!</Alert>
+        <Alert severity="success">Thank You Customer id Is:-{responseData.userId}</Alert>
       </Popup>
 
       </Box>

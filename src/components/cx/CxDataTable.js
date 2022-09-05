@@ -14,11 +14,9 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import { FilterData } from "../../AlllData";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
+import { data } from "../../Data";
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 
 const Search = styled("div")(({ theme }) => ({
@@ -79,47 +77,40 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function CxDataTable() {
   const [datatable, setDatatable] = useState([]);
-  const [selectCityDropdown, setSelectCityDropdown]=useState([]);
-  const[statusDropdownApi,setStatusDropdownApi]=useState([]);
-  //const [cxlocality, setCXLocality] = useState([]);
- // const[cityid,setCityid]=React.useState();
-  const [setCity1,setSetCity1]=React.useState();
+  const [selectCityDropdown, setSelectCityDropdown] = useState([]);
+  const [statusDropdownApi, setStatusDropdownApi] = useState([]);
+  const [cxlocality, setCXLocality] = useState([]);
+  const [cxcityId, setCXCityId] = useState("");
 
 
   useEffect(() => {
     async function FetchApi() {
-      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all");
-     // const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityid}`);
-      const statusDropdownApi= await fetch("http://13.126.160.155:8080/user/get/jobStatus");
-
+      // const selectCityDropdownApi = await fetch("http://13.126.160.155:8081/locationmaster/city/get/all");
+      // const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/get/all/${cxcityId}`);
+      // const statusDropdownApi = await fetch("http://13.126.160.155:8080/user/get/jobStatus");
       const customerDataApi = await fetch("http://13.126.160.155:8080/user/customer/get/all/customer?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
 
-   
-      let statusDropdown= await statusDropdownApi.json();
-      let CityDropdown= await selectCityDropdownApi.json()
-     // let LocalityDropdown =await localityApidata.json();
-  
+      // let statusDropdown = await statusDropdownApi.json();
+      // let CityDropdown = await selectCityDropdownApi.json()
+      // let LocalityDropdown = await localityApidata.json();
+
       let cxCustomer = await customerDataApi.json();
 
-      let statusApi= await statusDropdown.data;
-     // let localitydata= await localityApidata.data;
-      let selectCity= await CityDropdown.data;
-
+      // let statusApi = await statusDropdown.data;
+      // let localitydata = await LocalityDropdown.data;
+      // let selectCity = await CityDropdown.data;
       let cxdata = await cxCustomer.data;
 
-      setSelectCityDropdown(selectCity);
-     // setCXLocality(localitydata);
-      setStatusDropdownApi(statusApi);
-
+      // setSelectCityDropdown(selectCity);
+      // setCXLocality(localitydata || [{ names: "please Select City" }]);
+      // setStatusDropdownApi(statusApi);
       setDatatable(cxdata.data);
     }
     FetchApi();
-    //console.log(selectCityDropdown);
-   // console.log("hiii",cityid);
+
   }, []);
-  
 
-
+  console.log(datatable)
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
       {/* //Add cx Section section */}
@@ -127,13 +118,10 @@ function CxDataTable() {
         <Typography variant="h6">Customer Master</Typography>
         <Link style={{ textDecoration: "none" }} to="/cx/new">
           <Button variant="contained" color="success">
-            ADD NEW CUSTOMERS
+            ADD NEW CUSTOMER
           </Button>
         </Link>
       </Box>
-      {/* {selectCityDropdown.map((item)=>{
-            {item.value}
-          })} */}
 
       {/* //add Filter and Search Section */}
       <Box
@@ -158,20 +146,23 @@ function CxDataTable() {
           id="combo-box-demo"
           options={selectCityDropdown}
           sx={{ width: "20%" }}
+          value={cxcityId.id}
+          onChange={(event, newValue) => {
+            setCXCityId(newValue.id);
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
               label="Select City"
-              // onClick={() => { setCityid("hii") }}
             />
           )}
-          getOptionLabel={(item)=>`${item.cityName}`}
+          // getOptionLabel={(item) => `${item.cityName}`}
         />
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
+          options={cxlocality}
           sx={{ width: "20%" }}
           renderInput={(params) => (
             <TextField
@@ -180,7 +171,7 @@ function CxDataTable() {
               label="Select Locality"
             />
           )}
-          // getOptionLabel={(item)=>`${item.name}`}
+          // getOptionLabel={(item) => `${item.microMarketName}`}
         />
 
         <Autocomplete
@@ -195,7 +186,7 @@ function CxDataTable() {
               label="Select Request Status"
             />
           )}
-          getOptionLabel={(item)=>`${item.value}`}
+          // getOptionLabel={(item) => `${item.value}`}
         />
       </Box>
 
@@ -203,56 +194,101 @@ function CxDataTable() {
       <Box marginTop={5}>
         <TableContainer>
           <Table sx={{ minWidth: "100%" }} aria-label="simple table">
-            <TableHead bgColor={"#e1e2e3"}>
+            <TableHead bgColor={"#e1e2e3"} sx={{}}>
               <TableRow>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "950" }}
+                
+                  sx={{ display:"flex", }}
                   align="left"
                 >
+                  <Box sx={{fontSize: "10px", fontWeight: "950"}}>
                   CUSTOMER ID
+                  </Box>
+    
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box>
+                  */}
+                </TableCell>
+                <TableCell
+               
+                  sx={{ fontSize: "10px", fontWeight: "900", }}
+                  align="left"
+                >
+               <Box> NAME</Box>
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box> */}
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  NAME
+                 <Box> PHONE#</Box>
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box> */}
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", }}
                   align="left"
                 >
-                  PHONE#
+                  <Box> Email</Box>
+                 
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box> */}
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", }}
                   align="left"
                 >
-                  Email
-                </TableCell>
-                <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900" }}
-                  align="left"
-                >
+                  <Box>
                   Location
+                  </Box>
+                 
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box> */}
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  OPEN JOBS
+                 <Box> OPEN JOBS</Box>
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box> */}
                 </TableCell>
 
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
+                  <Box>
                   ACTIVE JOBS
+                  </Box>
+                 
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box> */}
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  STATUS
+                 <Box> STATUS</Box>
+                  {/* <Box sx={{ display:"flex", flexDirection:"column", }}>
+                  <ArrowDropUpIcon sx={{marginTop:"-6px"}}/>
+                  <ArrowDropDownIcon sx={{marginTop:"-16px"}}/>
+                  </Box> */}
                 </TableCell>
               </TableRow>
             </TableHead>
