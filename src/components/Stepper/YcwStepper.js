@@ -9,13 +9,13 @@ import AddressInformation from "../ycw/StepperFormComponent.js/AddressInformatio
 
 
 const steps = [
-  "PERSONAL DATA",
-  "ADDRESS DATA",
-  "SKILL DATA",
-  "JOB DATA",
-  "BANK DATA",
-  "HOUSEHOLD DATA",
-  "DOCUMENT DATA",
+  "PERSONAL",
+  "ADDRESS",
+  "SKILL",
+  "JOB",
+  "BANK",
+  "HOUSEHOLD",
+  "DOCUMENT",
 ];
 
 function YcwStepper() {

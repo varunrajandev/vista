@@ -205,7 +205,7 @@ export const childCareAge = [
 ]
 
 export const childCare = [
-  {childCare:"Scope of work candidate has done in Childcare"},
+  // {childCare:"Scope of work candidate has done in Childcare"},
   {childCare:"Massaging"},
   {childCare:"Bathing"},
   {childCare:"Changing diapers"},

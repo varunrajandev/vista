@@ -27,45 +27,49 @@ function PersonalInformationData() {
 
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
+  console.log(personalData)
+  
   const handleSubmit = async () => {
     try {
         let response = await axios.post("http://13.126.160.155:8080/user/worker/profile",
         {
-            "birthday": "2022-09-07T07:54:57.130Z",
+            birthday,
             "bloodGroup": "O_POSITIVE",
-            "covidStatus": "UNVACCINATED",
-            "educationalRemarks": "string",
+            covidStatus,
+            educationalRemarks,
             "email": "string",
-            "firstName": "string",
+             firstName:firstname,
             "formStatus": "DRAFT",
-            "gender": "MALE",
+            gender,
             "isoCode": "string",
-            "lastName": "string",
-            "maritalStatus": "SINGLE",
-            "medicalCondition": "string",
+            lastName:lastname,
+            maritalStatus,
+            "medicalCondition": medicalCondition,
             "medium": "PHONE_CALL",
-            "middleName": "string",
-            "mobile": "string",
+            middleName:middlename,
+            mobile,
             "nationality": "INDIAN",
             "professsion": "BUSINESS_OWNER",
-            "profileStatus": "ACTIVE_AND_NOT_AVAILABLE",
-            "religion": "HINDU",
+            "profileStatus": "IN_ACTIVE",
+            religion,
             "secondaryEmail": "string",
-            "secondaryMobileNumber": "string",
+            "secondaryMobileNumber": alternateMobileNumber,
             "secondaryMobileVerified": true,
-            "sourcingChannel": "APNA",
+            "sourcingChannel": source,
             "userType": "WORKER",
-            "whatsappAvailable": true,
-            "whatsappNumber": "string"
+            "whatsappAvailable":isWhatsappAvailable,
+            "whatsappNumber": whatsappNumber
           });
           alert(response.data.message)
           setPersonalData(response.data)
           setCurrentSteps(2)
         
     } catch (error) {
-        
+       console.log(error); 
     }
  }
+
+
 
   return (
   <>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, TextField, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,6 +8,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { maritalstatus, sourcing } from "../../AlllData";
+import { multiStepContext } from "../../ContextApi/StepContext";
 
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
@@ -37,8 +38,8 @@ function PersonalInfo(props) {
     submitted, setSubmitted
   } = props;
 
-  const min = -10;
-  const max = 10;
+
+  const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -86,9 +87,9 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            value={walk}
             label="Sourcing Channel"
             onChange={handleChange}
+            value={personalData.status?personalData.data.sourcingChannel:walk}
           >
             <MenuItem value="">
               <em>None</em>
@@ -115,6 +116,7 @@ function PersonalInfo(props) {
         <TextField
           sx={{ width: "18%" }}
           size="small"
+          value={personalData.status?personalData.data.firstName:fname}
           id="outlined-basic"
           label="First Name*"
           variant="outlined"
@@ -126,6 +128,7 @@ function PersonalInfo(props) {
         <TextField
           sx={{ width: "18%" }}
           size="small"
+          value={personalData.status?personalData.data.middleName:mname}
           id="outlined-basic"
           label="Middle Name"
           variant="outlined"
@@ -140,6 +143,7 @@ function PersonalInfo(props) {
           id="outlined-basic"
           label="Last Name*"
           variant="outlined"
+          value={personalData.status?personalData.data.lastName:lname}
           onChange={(e) => {
             setLname(e.target.value);
           }}
@@ -184,8 +188,6 @@ function PersonalInfo(props) {
           onChange={(e) => {
             setPhoneNumber(e.target.value);
           }}
-          error={true}
-          errorText={"please filled"}
         />
 
        
