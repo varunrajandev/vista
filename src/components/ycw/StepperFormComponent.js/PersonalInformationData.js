@@ -25,7 +25,7 @@ function PersonalInformationData() {
   const [medicalCondition, setMedicalCondition] = React.useState("");
   const [submitted, setSubmitted] = React.useState(false)
 
-  const {setCurrentSteps} = useContext(multiStepContext)
+  const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
   const handleSubmit = async () => {
     try {
@@ -59,6 +59,8 @@ function PersonalInformationData() {
             "whatsappNumber": "string"
           });
           alert(response.data.message)
+          setPersonalData(response.data)
+          setCurrentSteps(2)
         
     } catch (error) {
         
@@ -97,8 +99,9 @@ function PersonalInformationData() {
                 submitted={submitted} setSubmitted={setSubmitted}
                 />
 
-                <Box>
-                    <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+                <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right"}}>
+                    <Button sx={{display:(personalData.status?"none":"block")}}  variant='contained' onClick={handleSubmit}>NEXT</Button>
+                    <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={()=>{setCurrentSteps(2)}}>UPDATE & NEXT</Button>
                 </Box>
 
       </Box>

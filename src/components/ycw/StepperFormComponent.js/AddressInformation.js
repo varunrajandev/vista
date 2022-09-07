@@ -1,6 +1,8 @@
-import { Box, Checkbox } from "@mui/material";
+import { Box, Button, Checkbox } from "@mui/material";
+import axios from "axios";
 import is from "date-fns/esm/locale/is/index.js";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { multiStepContext } from "../../../ContextApi/StepContext";
 import CurrentAdd from "../../form/CurrentAdd";
 
 
@@ -22,7 +24,7 @@ function AddressInformation() {
     const [cityID, setCityID] = useState()
 
     // isPermanent or not
-    const [isPermanent, setIsPermanent] = useState();
+    const [isPermanent, setIsPermanent] = useState(false);
 
     // YCW Permanent Adddress
     const [addressLine1p, setAddressLine1p] = React.useState("");
@@ -38,18 +40,50 @@ function AddressInformation() {
     const [stateIDp, setStateIDp] = useState()
     const [cityIDp, setCityIDp] = useState()
 
-    console.log("Permanent address is",{
-        addressLine1p,
-        addressLine2p,
-        landmarkp,
-        postalCodep,
-        countryNamep,
-        stateNamep,
-        localityp,
-        addressProofTypep,
-        stateIDp,
-        cityIDp
-    })
+    const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+
+
+
+    const handleSubmit = async () =>{
+       try {
+        let response = await axios.post("http://13.126.160.155:8080/user/address/save",
+        [
+            {
+              "addressLine1": addressLine1,
+              "addressLine2": addressLine2,
+              "addressProofType": "AAADHAR_CARD",
+              "cityName": cityName,
+              "countryName": countryName,
+              "landmark": landmark,
+              "locality": locality,
+              "micromarketName": locality,
+              "permanent": !isPermanent,
+              "postalCode": postalCode,
+              "stateName": stateName,
+              "userId": personalData.data.userId
+            },
+            {
+                "addressLine1": isPermanent?addressLine1:addressLine1p,
+                "addressLine2": isPermanent?addressLine2:addressLine2p,
+                "addressProofType": "AAADHAR_CARD",
+                "cityName": isPermanent?cityName:cityNamep,
+                "countryName": isPermanent?countryName:countryNamep,
+                "landmark": isPermanent?landmark:landmarkp,
+                "locality": isPermanent?locality:localityp,
+                "micromarketName": isPermanent?locality:localityp,
+                "permanent": isPermanent,
+                "postalCode": isPermanent?postalCode:postalCodep,
+                "stateName": isPermanent?stateName:stateNamep,
+                "userId": personalData.data.userId
+              }])
+              alert(response.data.message)
+
+        
+       } catch (error) {
+        console.log(error)
+       }
+
+    }
 
 
 
@@ -101,6 +135,11 @@ function AddressInformation() {
                         stateID={isPermanent?stateID:stateIDp} setStateID={setStateIDp}
                         cityID={isPermanent?cityID:cityIDp} setCityID={setCityIDp}
                     />
+
+            <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
+                    <Button variant='contained' onClick={(()=>{setCurrentSteps(1)})}>back</Button>
+                    <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+                </Box>
                 </Box>
             </Box>
         </>

@@ -114,6 +114,7 @@ function CurrentAdd(props) {
         <TextField
           sx={{ width: "18%" }}
           size="small"
+          type="number"
           value={pinCode}
           id="outlined-basic"
           label="Pin Code"

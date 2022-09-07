@@ -37,6 +37,9 @@ function PersonalInfo(props) {
     submitted, setSubmitted
   } = props;
 
+  const min = -10;
+  const max = 10;
+
   useEffect(() => {
     const dataFetch = async () => {
       let sourceData = await fetch("http://13.126.160.155:8080/user/drop-down/get/sourceChannel?flag=all");
@@ -173,6 +176,7 @@ function PersonalInfo(props) {
         </FormControl>
 
         <TextField
+          type="number"
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
@@ -180,7 +184,12 @@ function PersonalInfo(props) {
           onChange={(e) => {
             setPhoneNumber(e.target.value);
           }}
+          error={true}
+          errorText={"please filled"}
         />
+
+       
+
         <TextField
           sx={{ width: "18%" }}
           size="small"
