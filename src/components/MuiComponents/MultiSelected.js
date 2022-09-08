@@ -1,48 +1,50 @@
-import React from "react";
-import { Autocomplete, Checkbox, TextField } from "@mui/material";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import { Autocomplete, Checkbox, TextField } from '@mui/material';
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { Cuisines } from "../../AlllData";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import React from 'react'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />
+const label = { inputProps: { "aria-label": "Checkbox demo" } };;
 
-function Multiselected(props) {
-    const {data, setData} = props
+function MultiSelected(props) {
+  const {labelData, dataDD, setData, size} = props
   return (
     <>
-         <Autocomplete
+      <Autocomplete
           multiple
+          size='small'
           id="checkboxes-tags-demo"
-          options={Cuisines}
+          options={dataDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.dish}
+          getOptionLabel={(option) => option.key}
           onChange={(event, newValue) => {
             setData([...newValue]);
           }}
           renderOption={(props, option, { selected }) => (
             <li {...props}>
               <Checkbox
+                size='small'
                 icon={icon}
                 checkedIcon={checkedIcon}
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.dish}
+              {option.value}
             </li>
           )}
-          style={{ width: "100%" }}
+          style={{ width: size }}
           renderInput={(params) => (
             <TextField
               {...params}
-              label={data}
+              label={labelData}
               placeholder="Favorites"
               size="small"
             />
           )}
         />
     </>
-  );
+  )
 }
 
-export default Multiselected;
+export default MultiSelected

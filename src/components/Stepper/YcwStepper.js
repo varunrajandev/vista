@@ -6,6 +6,7 @@ import StepLabel from "@mui/material/StepLabel";
 import { multiStepContext } from "../../ContextApi/StepContext";
 import PersonalInformationData from "../ycw/StepperFormComponent.js/PersonalInformationData";
 import AddressInformation from "../ycw/StepperFormComponent.js/AddressInformation";
+import SkillInformationData from "../ycw/StepperFormComponent.js/SkillInformationData"
 
 
 const steps = [
@@ -25,6 +26,7 @@ function YcwStepper() {
         switch(steps){
             case 1 : return <PersonalInformationData/>
             case 2 : return <AddressInformation/>
+            case 3 : return <SkillInformationData/>
         }
         
     }
