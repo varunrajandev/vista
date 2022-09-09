@@ -249,7 +249,8 @@ function PersonalInfo(props) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label="DOB"
-            // defaultValue={personalData.status?personalData.data.birthday:birthday}
+            value={birthday}
+            defaultValue={personalData.status?personalData.data.birthday:birthday}
             onChange={(newValue) => {
               setBirthday(newValue);
             }}

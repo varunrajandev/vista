@@ -7,6 +7,9 @@ import { multiStepContext } from "../../ContextApi/StepContext";
 import PersonalInformationData from "../ycw/StepperFormComponent.js/PersonalInformationData";
 import AddressInformation from "../ycw/StepperFormComponent.js/AddressInformation";
 import SkillInformationData from "../ycw/StepperFormComponent.js/SkillInformationData"
+import JobRequirementData from "../ycw/StepperFormComponent.js/JobRequirementData";
+import BankInformation from "../ycw/StepperFormComponent.js/BankInformation";
+import HouseHoldMemberData from "../ycw/StepperFormComponent.js/HouseHoldMemberData";
 
 
 const steps = [
@@ -27,6 +30,9 @@ function YcwStepper() {
             case 1 : return <PersonalInformationData/>
             case 2 : return <AddressInformation/>
             case 3 : return <SkillInformationData/>
+            case 4 : return <JobRequirementData/>
+            case 5 : return <BankInformation/>
+            case 6 : return <HouseHoldMemberData/>
         }
         
     }
