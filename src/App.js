@@ -18,7 +18,7 @@ import BasicInformation from "./pages/YcwDetailsPage/JobDetails/BasicInformation
 
 
 function App() {
-  const status = true;
+  
   return (
     <>
  

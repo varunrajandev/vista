@@ -90,99 +90,57 @@ function Right() {
   const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
   const [filterName, setFilterName] = React.useState("userId");
-  // const[dorder,setDOrder]=React.useState("asc")
+
 
   useEffect(() => {
     const fetchData = async () => {
-      // let jobType = await fetch(
-      //   "http://13.126.160.155:8080/user/skill/get/skills"
-      // );
+      let jobType = await fetch(
+        "http://13.126.160.155:8080/user/skill/get/skills"
+      );
       let data = await fetch(
-// `http://13.126.160.155:8080/user/worker/get/all/worker?filter=firstName&pageNo=1&pageSize=30&sortby=asc
-// `
+
        `http://13.126.160.155:8080/user/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
       );
-      // let ycwStatusApidrop = await fetch(
-      //   "http://13.126.160.155:8081/locationmaster/city/get/all"
-      //   // "http://13.126.160.155:8080/user/drop-down/get/profileStatus?flag=all"
-      // );
-      // // let searchData = await fetch(
-      // //  // `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
-      // // );
-      // let ycwCityDD = await fetch(
-      //   "http://13.126.160.155:8081/locationmaster/city/get/all"
-      // );
+      let ycwStatusApidrop = await fetch(
+       // "http://13.126.160.155:8081/locationmaster/city/get/all"
+         "http://13.126.160.155:8080/user/drop-down/get/profileStatus?flag=all"
+      );
+      let searchData = await fetch(
+        `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
+      );
+      let ycwCityDD = await fetch(
+        "http://13.126.160.155:8081/locationmaster/city/get/all"
+      );
 
-    //   let jobtypeApi = await jobType.json();
+      let jobtypeApi = await jobType.json();
       let res = await data.json();
-    //   let StatusApi = await ycwStatusApidrop.json();
-    // //  let responseSearch = await searchData.json();
-    //   let cityDD = await ycwCityDD.json();
+      let StatusApi = await ycwStatusApidrop.json();
+      let responseSearch = await searchData.json();
+        let cityDD = await ycwCityDD.json();
 
-      let newData = await res.data;
-      // let JobTypeApi = await jobtypeApi.data;
-      // let ycwStatusApi = await StatusApi.data;
-      // let cityDropDown = await cityDD.data;
+       let newData = await res.data;
+       let JobTypeApi = await jobtypeApi.data;
+       let ycwStatusApi = await StatusApi.data;
+       let cityDropDown = await cityDD.data;
+       let responseSearchData= await responseSearch.data;
 
-     // setSearchDD(responseSearch.data || [{ name: "No Data" }]);
-      // console.log("table data is",newData.data);
-      // setJobTypeApi(JobTypeApi);
-      // setYcwStatus(ycwStatusApi);
-      // setCityDD(cityDropDown);
-     setTableData(newData.data);
+       setSearchDD(responseSearchData || [{ name: "No Data" }]);
+       setJobTypeApi(JobTypeApi);
+       setYcwStatus(ycwStatusApi);
+       setCityDD(cityDropDown);
+       setTableData(newData.data);
     };
 
     fetchData();
     
-  }, [ycwidorder, worktype, statusycw, ycwCity,tableData ]);
+  }, [ycwidorder, worktype, statusycw, ycwCity ,searchItem ]);
 
-// useEffect(() => {
-//   async function fetchData(){
-
- 
-//   let allData = await fetch(`http://13.126.160.155:8080/user/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`)
-//   let response = await allData.json();
-//   console.log(response)
-//   }
-//   fetchData()
-// }, [ycwidorder, worktype, statusycw, ycwCity,tableData ])
-
-
-  console.log("filter",tableData)
+  //  console.log("searchItem",searchItem)
   function handleSort() {
-
     ycwidorder === "asc" ? setycwIdOrder("desc") : setycwIdOrder("asc");
-    // console.log("hiii");
   }
 
-  console.log("filter",tableData)
-  // console.log("hii", ycwSearchUserId);
-  // const ordersort=(col)=>{
-  //   if(dorder==="asc") {
-  //     const sorteddata= [...tableData].sort((a,b)=>
-  //   a[col].toLowerCase() > b[col].toLowerCase()? 1:-1
-  //   );
-  //   setTableData(sorteddata)
-  //   setDOrder("desc")
-  //   }
-
-  //   if(dorder==="desc") {
-  //     const sorteddata= [...tableData].sort((a,b)=>
-  //   a[col].toLowerCase() < b[col].toLowerCase()? 1:-1
-  //   );
-  //   setTableData(sorteddata)
-  //   setDOrder("asc")
-  //   }
-  // };
-  //console.log("hii", statusycw)
-  // console.log("updatedi", searchItem);
-
-  // console.log("userid", worktype);
-  // {tableData.map((item)=>(
-
-  // console.log(item)
-
-  // ))}
+ 
 
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
@@ -193,7 +151,7 @@ function Right() {
           <Button
             variant="contained"
             color="success"
-            sx={{ backgroundColor: "#0A9475" }}
+            sx={{ backgroundColor: "#0A9475",marginTop:"10px" }}
           >
             ADD NEW YCW
           </Button>
@@ -201,32 +159,21 @@ function Right() {
       </Box>
 
       {/* //add Filter and Search Section */}
-      {/* <Box
+      <Box
         sx={{
           display: "flex",
           gap: "20px",
           alignItems: "center",
           marginTop: "30px",
         }}
-      > */}
-        {/* <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search by name or phone number..."
-            inputProps={{ "aria-label": "search" }}
-            onChange={(e) => {
-              setSearchByName(e.target.value);
-            }}
-          />
-        </Search> */}
+      >
+       
 
-        {/* <Autocomplete
+        <Autocomplete
           sx={{ width: "25%", backgroundColor: "white" }}
           freeSolo
           id="free-solo-2-demo"
-          // value={searchDD}
+          //  value={searchDD}
           onChange={(event, newValue) => {
             setYcwSearchUserId(newValue.userId);
           }}
@@ -234,22 +181,28 @@ function Right() {
           size="small"
           options={searchDD}
           renderInput={(params) => (
+         <Box sx= {{display:"flex"}}>
+         
+            {/* <SearchIcon /> */}
+         
             <TextField
+           
               placeholder="Search by name or phone number..."
               onChange={(e) => {
                 setSearchItem(e.target.value);
               }}
               {...params}
-              label="Search by name"
+              // label="Search by name"
               InputProps={{
                 ...params.InputProps,
                 type: "search",
               }}
             />
+            </Box>
           )}
           getOptionLabel={(item) => `${item.name}`}
-        /> */}
-        {/* <Autocomplete
+        />
+         <Autocomplete
           disablePortal
           size="small"
           id="combo-box-demo"
@@ -294,7 +247,7 @@ function Right() {
           options={cityDD}
           sx={{ width: "20%" }}
           onChange={(event, newValue) => {
-            setYcwCity(newValue.cityName);
+            setYcwCity(newValue.uuid);
           }}
           renderInput={(params) => (
             <TextField
@@ -305,13 +258,14 @@ function Right() {
           )}
           getOptionLabel={(item) => `${item.cityName}`}
         />
-      </Box> */}
+       
+      </Box> 
 
       {/* DataTableList */}
       <Box marginTop={5}>
        <h4> All YCWS ({tableData.length})</h4> 
-        <TableContainer>
-          <Table sx={{ minWidth: "100%" }} aria-label="simple table">
+        <TableContainer >
+          <Table sx={{ minWidth: "100%", marginTop:"10px" }} aria-label="simple table">
             <TableHead bgColor={"#e1e2e3"}>
               <TableRow>
                 <TableCell
@@ -321,8 +275,7 @@ function Right() {
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px"}}>YCW ID</Box>
                     <Box
-                      onClick={() => { handleSort(); }}
-                        //{ setFilterName("userId") } }}
+                      onClick={() => { handleSort(); { setFilterName("userId") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -343,9 +296,7 @@ function Right() {
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px"}}>NAME</Box>
                     <Box
-                      onClick={() => { handleSort();}}
-                        
-                       // { setFilterName("firstName") } }}
+                      onClick={() => { handleSort(); { setFilterName("firstName") } }}
                       //  onClick={()=>ordersort("name")}
                       style={{
                         alignItem: "",
@@ -367,8 +318,7 @@ function Right() {
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px"}}>PHONE#</Box>
                     <Box
-                      onClick={() => { handleSort()}}
-                        //; {setFilterName("mobileNo") } }}
+                      onClick={() => { handleSort(); {setFilterName("mobileNo") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -389,8 +339,7 @@ function Right() {
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px"}}>GENDER</Box>
                     <Box
-                      onClick={() => { handleSort();}}
-                      // { setFilterName("gender") } }}
+                      onClick={() => { handleSort();{ setFilterName("gender") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -411,8 +360,7 @@ function Right() {
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px"}}>CITY</Box>
                     <Box
-                      onClick={() => { handleSort(); }}
-                      //{ setFilterName("cityName") } }}
+                      onClick={() => { handleSort();{ setFilterName("cityName") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -453,10 +401,9 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1.5px"}}>EXP.(YRS.)</Box>
+                    <Box sx={{ letterSpacing: "1px"}}>EXP.(YRS.)</Box>
                     <Box
-                      onClick={() => { handleSort();}}
-                        // { setFilterName("profileStatus") } }}
+                      onClick={() => { handleSort(); { setFilterName("totalExperience") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -475,7 +422,7 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1.5px"}}>WORK HOURS</Box>
+                    <Box sx={{ letterSpacing: "1px"}}>WORK HOURS</Box>
                     <Box
                       onClick={() => { handleSort(); }}
                       //{ setFilterName("profileStatus") } }}
@@ -521,8 +468,7 @@ function Right() {
                   <Box sx={{ display: "flex" }}>
                     <Box>STATUS</Box>
                     <Box
-                      onClick={() => { handleSort();}}
-                      // { setFilterName("profileStatus") } }}
+                      onClick={() => { handleSort(); { setFilterName("profileStatus") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -541,7 +487,7 @@ function Right() {
 
             <TableBody component={Paper}>
               {tableData.map((item) => (
-               // console.log(item),
+              
 
                 <StyledTableRow
                   key={item.userId}
@@ -550,6 +496,7 @@ function Right() {
                     zIndex: "999",
                     border: "1px solid #E0E0E0",
                     // borderLeft:"100px"
+                    fontSize: "13px"
                   }}
                 >
                   <TableCell
@@ -613,10 +560,7 @@ function Right() {
                       <Typography
                         sx={{
                           width: "150px",
-                          // paddingLeft: "20px",
-                          // paddingRight: "20px",
-                          // paddingBottom: "10px",
-                          // paddingTop: "10px",
+                      
                           padding: "8px",
                           borderRadius: "5px",
                           fontSize: "11px",

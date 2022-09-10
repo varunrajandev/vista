@@ -30,6 +30,7 @@ function Login() {
     const [displayopt,setDisplayOtp]=React.useState("none");
 const [displayalert,setDisplayAlert]=React.useState("none")
     const [openPopup, setOpenPopup] = React.useState(false);
+    const[helpertext,setHelpertext]=React.useState("");
     // const handleClickOpen = () => {
     //   setOpen(true);
     //   handleClick();
@@ -42,6 +43,9 @@ const [displayalert,setDisplayAlert]=React.useState("none")
     const toll=()=>{
       setIsError(true)
     }
+
+
+ 
     const handleClick2 = async () => {
 
        
@@ -99,7 +103,7 @@ const [displayalert,setDisplayAlert]=React.useState("none")
            console.log(response)
            console.log(mobileNumber);
            handleClose();
-           window.location.href="/cx";
+           window.location.href="/ycw";
         } catch (error) {
           alert("User Registration Faild", error)
           handleClose();
@@ -150,6 +154,7 @@ const [displayalert,setDisplayAlert]=React.useState("none")
           // axios.defaults.headers.common['Authorization'] = data.token;
           // alert("User Registration successfull")
           setDisplayOtp("visible")
+          // handleClick2()
         //   console.log("res",response)
         //   console.log("login success",response.message)
         // //   setGivenMobileNumver(mobileNumber)
@@ -230,17 +235,18 @@ const [displayalert,setDisplayAlert]=React.useState("none")
         // TextFieldLength={4}
         // onfocusout={myfo()}
         variant="standard"
-        helperText="Phone your correct Number."
+        helperText={helpertext}
         onInput = {(e) =>{
           setMobileNumber( e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10))
 
           if ( e.target.value.length <1||e.target.value.length ===10) {
             setIsError(false);
-          
+            setHelpertext("")
                 }
                 else{
                       setIsError(true);
                       setDisplayOtp("none")
+                      setHelpertext("Please Enter your correct Number")
                 }
         }}
         // onInput={(event) => {
@@ -276,7 +282,7 @@ const [displayalert,setDisplayAlert]=React.useState("none")
         <DialogTitle sx={{padding:"30px"}}>Enter OTP</DialogTitle>
         <DialogContent> */}
         <Box sx={{display:`${displayopt}`}}>
-<OTPInput autoFocus OTPLength={4} value={otp} otpType="number"  
+<OTPInput  autoFocus OTPLength={4} value={otp} otpType="number"  
         //  onChange={(event) => {
         //         setOtp(event.target.value);
         //       }}
@@ -287,7 +293,13 @@ const [displayalert,setDisplayAlert]=React.useState("none")
         {/* </DialogContent> */}
         {/* <DialogActions> */}
        <Box sx={{display :"flex", marginTop:"20px", justifyContent:"space-between"}}>
-   <ResendOTP  onClick={handleClick2} maxTime={60} style={{color:"red" ,gap:"10px", backgroundColor:"white",border:"none"}}/>
+   <ResendOTP   
+  
+   
+  onClick={handleClick2}
+    maxTime={60} 
+   //style={{color:"red" ,gap:"10px", backgroundColor:"white",border:"none"}}
+   />
           {/* <Button onClick={handleClick2}>Resend OTP</Button> */}
           <button onClick={handleClick1} variant="sucess">Submit</button>
           </Box>
