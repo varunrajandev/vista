@@ -13,12 +13,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
-import { FilterData } from "../../AlllData";
-import{useState,useEffect} from "react";
-
-
-
-
+import { useState, useEffect } from "react";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -77,41 +74,69 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function JobsDataTable() {
-
-  const [jobDatatable,setJobDatatable]=useState([]);
-  const [selectCityDropdown, setSelectCityDropdown]=useState([]);
-  const[statusDropdownApi,setStatusDropdownApi]=useState([]);
+  const [jobDatatable, setJobDatatable] = useState([]);
+  const [selectCityDropdown, setSelectCityDropdown] = useState([]);
+  const [statusDropdownApi, setStatusDropdownApi] = useState([]);
+  const [jobLocality, setJobLocality] = useState([]);
+  const [cxcityId, setCXCityId] = useState("");
+  const [jobsOrder,setJobsOrder]=React.useState("asc");
+  const [statusjobs, setStatusJobs] = React.useState("");
+   const [searchItem, setSearchItem] = React.useState("");
+  const [searchDD, setSearchDD] = React.useState([]);
 
   useEffect(() => {
+    async function FetchApi() {
+      const selectCityDropdownApi = await fetch(
+        "http://13.126.160.155:8081/locationmaster/city/get/all"
+      );
+      const statusDropdownApi = await fetch(
+        "http://13.126.160.155:8080/user/get/jobStatus"
+      );
+      const localityApidata = await fetch(
+        "http://13.126.160.155:8081/locationmaster/internal/micromarkets/all"
 
-      async function FetchApi() {
-      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all")
-      const statusDropdownApi= await fetch("http://13.126.160.155:8080/user/get/jobStatus");
-      const jobDataApi = await fetch("http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=asc")
-      
-      let CityDropdown= await selectCityDropdownApi.json()
-      let statusDropdown= await statusDropdownApi.json();
+        // `http://13.126.160.155:8081/locationmaster/micromarket/get/all/${cxcityId}`
+      );
+      const jobDataApi = await fetch(
+        `http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=${jobsOrder}&status=${statusjobs}`
+      );
+      let searchData = await fetch(
+        `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
+      );
+      let CityDropdown = await selectCityDropdownApi.json();
+      let statusDropdown = await statusDropdownApi.json();
       let jobdata = await jobDataApi.json();
-      
-      let statusApi= await statusDropdown.data;
-      let selectCity= await CityDropdown.data;
+      let LocalityDropdown = await localityApidata.json();
+      let responseSearch = await searchData.json();
+      let statusApi = await statusDropdown.data;
+      let selectCity = await CityDropdown.data;
       let listjobData = await jobdata.data;
-
+      let localitydata = await LocalityDropdown.data;
+      setSearchDD(responseSearch.data || [{ name: "No Data" }]);
       setSelectCityDropdown(selectCity);
       setJobDatatable(listjobData.data);
       setStatusDropdownApi(statusApi);
+      setJobLocality(localitydata || [{ names: "please Select City" }]);
     }
     FetchApi();
+  }, [jobsOrder,statusjobs,searchItem]);
 
-  }, []);
+  function handleSort() {
+    jobsOrder === "asc" ? setJobsOrder("desc") : setJobsOrder("asc")
+    console.log("hiii",jobsOrder);
+  }
 
   return (
-    <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
+    <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{paddingLeft:"30px"}}>
       {/* //Add  job  section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Jobs Master</Typography>
+        <Typography variant="h5"  sx={{fontWeight:"900", paddingTop:"20px"}}>Jobs Master</Typography>
         <Link style={{ textDecoration: "none" }} to="/jobs/new">
-          <Button variant="contained" color="success">
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ backgroundColor: "#0A9475" }}
+          >
             ADD NEW JOB REQUEST
           </Button>
         </Link>
@@ -126,7 +151,7 @@ function JobsDataTable() {
           marginTop: "30px",
         }}
       >
-        <Search>
+        {/* <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -134,12 +159,47 @@ function JobsDataTable() {
             placeholder="Search by name or phone number..."
             inputProps={{ "aria-label": "search" }}
           />
-        </Search>
+        </Search> */}
+
+        <Autocomplete
+          sx={{ width: "28%", backgroundColor: "white" }}
+          freeSolo
+          size="small"
+          id="free-solo-2-demo"
+          // value={searchDD}
+          // onChange={(event, newValue) => {
+          //   setYcwSearchUserId(newValue.userId);
+          // }}
+          disableClearable
+          options={searchDD}
+          renderInput={(params) => (
+            <TextField
+              placeholder="Search by name or phone number..."
+              onChange={(e) => {
+                setSearchItem(e.target.value);
+              }}
+              {...params}
+              label="Search by name or phone number..."
+              InputProps={{
+                ...params.InputProps,
+                type: "search",
+              }}
+            />
+          )}
+          getOptionLabel={(item) => `${item.name}`}
+        />
+
+
         <Autocomplete
           disablePortal
+          size="small"
           id="combo-box-demo"
           options={selectCityDropdown}
-          sx={{ width: 250 }}
+          sx={{ width: 260 }}
+          value={cxcityId.id}
+          onChange={(event, newValue) => {
+            setCXCityId(newValue.id);
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
@@ -147,13 +207,14 @@ function JobsDataTable() {
               label="Select City"
             />
           )}
-          getOptionLabel={(item)=>`${item.cityName}`}
+          getOptionLabel={(item) => `${item.cityName}`}
         />
         <Autocomplete
           disablePortal
+          size="small"
           id="combo-box-demo"
-          options={FilterData}
-          sx={{ width: 250 }}
+          options={jobLocality}
+          sx={{ width: 260 }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
@@ -161,11 +222,16 @@ function JobsDataTable() {
               label="Select Locality"
             />
           )}
+          getOptionLabel={(item) => `${item.microMarketName} `}
         />
         <Autocomplete
           disablePortal
+          size="small"
           id="combo-box-demo"
           options={statusDropdownApi}
+          onChange={(event, newValue) => {
+            setStatusJobs(newValue.key);
+          }}
           sx={{ width: 250 }}
           renderInput={(params) => (
             <TextField
@@ -174,7 +240,7 @@ function JobsDataTable() {
               label="Select Highest Active Stage"
             />
           )}
-          getOptionLabel={(item)=>`${item.value}`}
+          getOptionLabel={(item) => `${item.value}`}
         />
       </Box>
 
@@ -188,63 +254,200 @@ function JobsDataTable() {
                   sx={{ fontSize: "10px", fontWeight: "950" }}
                   align="left"
                 >
-                  JOB ID
+                  <Box sx={{ display: "flex" }}>
+                    <Box>
+                      JOB ID
+                    </Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  JOB TYPE
+                  <Box sx={{ display: "flex" }}>
+                    <Box>JOB TYPE</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-16px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  CUSTOMER ID
+                  <Box sx={{ display: "flex" }}>
+                    <Box>CUSTOMER ID</Box>
+                    <Box
+                     onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  LOCATION
+                  <Box sx={{ display: "flex" }}>
+                    <Box>LOCATION</Box>
+                    <Box
+                     onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  DURATION
+                  <Box sx={{ display: "flex" }}>
+                    <Box>DURATION</Box>
+                    <Box
+                     onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  BUDGET RANGE
+                  <Box sx={{ display: "flex" }}>
+                    <Box>BUDGET RANGE</Box>
+                    <Box
+                     onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
 
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  START DATE
+                  <Box sx={{ display: "flex" }}>
+                    <Box>START DATE</Box>
+                    <Box
+                     onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  HIGHEST ACTIVE STAGE
+                  <Box sx={{ display: "flex" }}>
+                    <Box>HIGHEST ACTIVE STAGE</Box>
+                    <Box
+                     onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  STATUS
+                  <Box sx={{ display: "flex" }}>
+                    <Box>STATUS</Box>
+                    <Box
+                     onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
               </TableRow>
             </TableHead>
 
-            <TableBody component={Paper}>
+            <TableBody component={Paper} >
               {jobDatatable.map((row) => (
-                <StyledTableRow
+                <StyledTableRow 
                   key={row.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
@@ -277,7 +480,7 @@ function JobsDataTable() {
                     {row.workingHours}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.budgetRange}
+                  &#x20b9; {row.budgetRange}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.startDate}
@@ -285,29 +488,31 @@ function JobsDataTable() {
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.jobCurrentStatus.value}
                   </TableCell>
-                 
 
                   <TableCell sx={{ fontSize: "8px" }} align="left">
                     <Typography
                       sx={{
-                        padding: "5px",
-                        borderRadius: "10px",
-                        fontSize: "10px",
+                        padding: "8px",
+                        borderRadius: "8px",
+                        fontSize: "13px",
                         textAlign: "center",
                         fontWeight: "900",
+                        cursor:"pointer"
                       }}
                       style={{
                         backgroundColor:
-                          (row.jobStatus.key === "CREATED" && "#cef5ce") ||
-                          (row.jobStatus.key === "IN PROGRESS" && "#f0edce") ||
-                          (row.jobStatus.key === "INACTIVE" && "#fcb1b8"),
+                          (row.jobStatus.value === "CREATED" && "#E6F4F1") ||
+                          (row.jobStatus.value === "IN PROGRESS" &&
+                            "#FFF7E5") ||
+                          (row.jobStatus.value === "IN ACTIVE" && "#FEEFF0"),
                         color:
-                          (row.jobStatus.key === "ACTIVE" && "green") ||
-                          (row.jobStatus.key === "IN PROGRESS" && "#f7aa02") ||
-                          (row.jobStatus.key === "INACTIVE" && "red"),
+                          (row.jobStatus.value === "CREATED" && "#0A9475") ||
+                          (row.jobStatus.value === "IN PROGRESS" &&
+                            "#FFB701") ||
+                          (row.jobStatus.value === "IN ACTIVE" && "#F55F71"),
                       }}
                     >
-                      {row.jobStatus.key}
+                      {row.jobStatus.value}
                     </Typography>
                   </TableCell>
                 </StyledTableRow>

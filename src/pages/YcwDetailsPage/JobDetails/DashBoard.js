@@ -5,7 +5,7 @@ import AppsIcon from "@mui/icons-material/Apps";
 import styled from "@emotion/styled";
 import Status from "../../../components/Details/JOBS/JobBoard/Status";
 import Description from "../../../components/Details/JOBS/JobBoard/Description";
-// import { useParams } from 'react-router-dom';
+
 
 const BOX = styled(Box)({
   display: "flex",
@@ -25,7 +25,7 @@ const DIV = styled("div")({
 
 function DashBoard() {
   // const { id } = useParams();
-  return (
+  return ( <>
     <Box bgcolor="#fafbfb" flex={7}>
       <YcwNav />
       <BOX
@@ -72,6 +72,8 @@ function DashBoard() {
         </BOX>
       </Box>
     </Box>
+    
+    </>
   );
 }
 

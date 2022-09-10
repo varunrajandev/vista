@@ -17,7 +17,7 @@ function BasicInfo(props) {
   const [agePreferenceDropdown, setAgePreferenceDropdown] = useState([]);
   const [religionPreferenceDropdown, setReligionPreferenceDropdown] = useState([]);
   const [jobTypeDropdown, setJobDropdown] = useState([]);
-
+  const [cxid,setCxid]=useState("");
 
   const {
     houseTypes, setHouseTypes,

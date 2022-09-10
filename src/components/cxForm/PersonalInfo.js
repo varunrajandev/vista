@@ -153,7 +153,6 @@ function PersonalInfo(props) {
             setFname(event.target.value);
           }}
         />
-
         <TextField
           sx={{ width: "18%" }}
           size="small"

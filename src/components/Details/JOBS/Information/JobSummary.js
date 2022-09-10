@@ -5,11 +5,15 @@ function JobSummary() {
     <>
       <Box
         bgcolor="#EDF4FF"
-        p={1}
+        p={2}
+        pr={3}
         mt={1}
         sx={{
           borderRadius: "8px",
-          fontSize: "13px",
+          fontSize: "10px",
+          fontWeight: "500",
+          lineHeight: "25px",
+          letterSpacing: "1px"
         }}
       >
         <Box
@@ -19,11 +23,11 @@ function JobSummary() {
           }}
         >
           <Box>
-            <Box>
+            <Box align="left">
               <p>START DATE (EXPECTED)</p>
               <p>date</p>
             </Box>
-            <Box
+            <Box align="left"
               sx={{
                 marginTop: "2rem",
               }}
@@ -31,7 +35,7 @@ function JobSummary() {
               <p>END DATE (CONTRACTUAL)</p>
               <p>DATE</p>
             </Box>
-            <Box
+            <Box align="left"
               sx={{
                 marginTop: "2rem",
               }}
@@ -41,11 +45,11 @@ function JobSummary() {
             </Box>
           </Box>
           <Box>
-            <Box>
+            <Box align="left">
               <p>START DATE (ACTUAL)</p>
               <p>DATE</p>
             </Box>
-            <Box
+            <Box align="left"
               sx={{
                 marginTop: "2rem",
               }}
@@ -54,12 +58,14 @@ function JobSummary() {
               <p
                 style={{
                   color: "red",
+                  fontSize: "13px",
+                  fontWeight: "900",
                 }}
               >
                 Mark End Date
               </p>
             </Box>
-            <Box
+            <Box align="left"
               sx={{
                 marginTop: "2rem",
               }}

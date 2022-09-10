@@ -14,49 +14,50 @@ function Ledger() {
     <>
       <Box mt={1} sx={{ width: "100%" }}>
         <TableContainer>
-          <Table size="small" sx={{ minWidth: "100%" }}>
+          <Table size="small" sx={{ minWidth: "100%"  }}>
             <TableHead sx={{ backgroundColor: "#FFF1F1" }}>
               <TableRow>
-                <TableCell align="left" sx={{ width: "11%" }}>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "800", width: "5%" }}>
                   DATE & TIME
                 </TableCell>
-                <TableCell align="left" sx={{ width: "11%" }}>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "800", width: "20%" }}>
                   INVOICE TYPE
                 </TableCell>
-                <TableCell align="left" sx={{ width: "11%" }}>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "800", width: "20%" }}>
                   INVOICE DURATION
                 </TableCell>
-                <TableCell align="left" sx={{ width: "11%" }}>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "800", width: "5%" }}>
                   AMOUNT
                 </TableCell>
-                <TableCell align="left" sx={{ width: "11%" }}>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "800", width: "25%" }}>
                   PAYMENT STATUS
                 </TableCell>
-                <TableCell align="left" sx={{ width: "11%" }}>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "800", width: "20%" }}>
                   PAID AMOUNT
                 </TableCell>
-                <TableCell align="left" sx={{ width: "11%" }}>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "900", width: "5%" }}>
                   PENDING
                 </TableCell>
-                <TableCell align="left" sx={{ width: "11%" }}></TableCell>
+                <TableCell align="left" sx={{ fontSize: "10px", fontWeight: "900", width: "8%" }}></TableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell align="left">12/12/2022</TableCell>
-                <TableCell align="left">
+              <TableRow  sx={{border:"1px solid #E0E0E0"}}>
+                <TableCell align="left" sx={{ fontSize: "13px" }}>12/12/2022</TableCell>
+                <TableCell align="left" sx={{ fontSize: "13px" }}>
                   12/12/2022
                   <p>YCW Invoice</p>
                 </TableCell>
-                <TableCell align="left">12/12/2022</TableCell>
-                <TableCell align="left">2300</TableCell>
-                <TableCell align="left">Partially Paid</TableCell>
-                <TableCell align="left">2000</TableCell>
-                <TableCell align="left">10000</TableCell>
-                <TableCell sx={{ color: "#7A7D7E" }}>
-                  <FileCopyIcon />
-                  <IosShareIcon />
-                  <SettingsIcon />
+                <TableCell align="left" sx={{ fontSize: "13px" }}>12/12/2022</TableCell>
+                <TableCell align="left" sx={{ fontSize: "13px" }}>2300</TableCell>
+                <TableCell align="left" sx={{ fontSize: "13px" }}>Partially Paid</TableCell>
+                <TableCell align="left" sx={{ fontSize: "13px" }}>2000</TableCell>
+                <TableCell align="left" sx={{ fontSize: "13px" }}>10000</TableCell>
+                <TableCell sx={{ color: "#7A7D7E", display: "flex", border: "none", justifyContent: "space-between", gap: "10px" }}>
+                  <FileCopyIcon sx={{ fontSize: "19px" }} />
+                  <IosShareIcon sx={{ fontSize: "19px" }} />
+                  <SettingsIcon sx={{ fontSize: "19px" }} />
                 </TableCell>
               </TableRow>
             </TableBody>

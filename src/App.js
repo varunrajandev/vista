@@ -12,18 +12,28 @@ import AddNewCustomer from "./pages/CX/AddNewCustomer";
 import AddNewRequest from "./pages/Jobs/AddNewRequest";
 import DashBoard from "./pages/YcwDetailsPage/JobDetails/DashBoard";
 import BasicInformation from "./pages/YcwDetailsPage/JobDetails/BasicInformation";
+ import Login from "./pages/Login/Login";
 
 
 
 
 function App() {
+  
   return (
+    <>
+ 
     <BrowserRouter>
+     <Routes>
+      <Route path="/login" element={<Login/>} />
+      </Routes>
+     
     <Box>
-      <Header />
+     <Header />
       <Stack direction="row">
         <SideHeader />
         <Routes>
+
+      
         <Route path="/" element={<YcwAllData/>}/>
         <Route path="/ycw" element={<YcwAllData/>}/>
         
@@ -46,7 +56,7 @@ function App() {
       </Stack>
     </Box>
     </BrowserRouter>
-
+   </>
   );
 }
 

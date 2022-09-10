@@ -17,6 +17,8 @@ import { FilterData } from "../../AlllData";
 import { useSelector } from "react-redux/es/exports";
 import { useEffect } from "react";
 import { useState } from "react";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,34 +77,82 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function Right() {
-const [tableData, setTableData] = React.useState([])
-const [searchItem, setSearchItem] = React.useState("")
-const [searchDD, setSearchDD] = React.useState([])
-console.log(searchItem)
+  const [tableData, setTableData] = React.useState([]);
+  const [jobTypeApi, setJobTypeApi] = React.useState([]);
+  const [ycwStatus, setYcwStatus] = React.useState([]);
+  const [worktype, setWorkType] = React.useState("");
+  const [statusycw, setStatusycw] = React.useState("");
+  const [ycwidorder, setycwIdOrder] = React.useState("asc");
+  const [ycwCity, setYcwCity] = React.useState("");
+  const [searchItem, setSearchItem] = React.useState("");
+  const [searchDD, setSearchDD] = React.useState([]);
+  const [cityDD, setCityDD] = React.useState([]);
+  const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
+  const [SearchByName, setSearchByName] = React.useState("");
+  const [filterName, setFilterName] = React.useState("userId");
 
 
-useEffect(() => {
-  const fetchData= async()=>{
-    let data = await fetch("http://13.126.160.155:8080/user/worker/get/all/worker?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
-    let searchData = await fetch(`http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`)
-    let res = await data.json();
-    let newData = await res.data;
-    let responseSearch = await searchData.json();
-    setTableData(newData.data);
-    setSearchDD(responseSearch.data || [{name:"No Data"}])
+  useEffect(() => {
+    const fetchData = async () => {
+      let jobType = await fetch(
+        "http://13.126.160.155:8080/user/skill/get/skills"
+      );
+      let data = await fetch(
+
+       `http://13.126.160.155:8080/user/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+      );
+      let ycwStatusApidrop = await fetch(
+       // "http://13.126.160.155:8081/locationmaster/city/get/all"
+         "http://13.126.160.155:8080/user/drop-down/get/profileStatus?flag=all"
+      );
+      let searchData = await fetch(
+        `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
+      );
+      let ycwCityDD = await fetch(
+        "http://13.126.160.155:8081/locationmaster/city/get/all"
+      );
+
+      let jobtypeApi = await jobType.json();
+      let res = await data.json();
+      let StatusApi = await ycwStatusApidrop.json();
+      let responseSearch = await searchData.json();
+        let cityDD = await ycwCityDD.json();
+
+       let newData = await res.data;
+       let JobTypeApi = await jobtypeApi.data;
+       let ycwStatusApi = await StatusApi.data;
+       let cityDropDown = await cityDD.data;
+       let responseSearchData= await responseSearch.data;
+
+       setSearchDD(responseSearchData || [{ name: "No Data" }]);
+       setJobTypeApi(JobTypeApi);
+       setYcwStatus(ycwStatusApi);
+       setCityDD(cityDropDown);
+       setTableData(newData.data);
+    };
+
+    fetchData();
+    
+  }, [ycwidorder, worktype, statusycw, ycwCity ,searchItem ]);
+
+  //  console.log("searchItem",searchItem)
+  function handleSort() {
+    ycwidorder === "asc" ? setycwIdOrder("desc") : setycwIdOrder("asc");
   }
-  fetchData();
-}, [searchItem])
 
  
 
-return (
-    <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
+  return (
+    <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
       {/* //Add Ycw Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Yellow Collar Workers (YCW)</Typography>
+        <Typography variant="h5" sx={{ fontWeight: "900", paddingTop: "20px" }}>Yellow Collar Workers (YCW)</Typography>
         <NavLink style={{ textDecoration: "none" }} to="/ycw/add">
-          <Button variant="contained" color="success">
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ backgroundColor: "#0A9475",marginTop:"10px" }}
+          >
             ADD NEW YCW
           </Button>
         </NavLink>
@@ -117,43 +167,50 @@ return (
           marginTop: "30px",
         }}
       >
-        {/* <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search by name or phone number..."
-            inputProps={{ "aria-label": "search" }}
-            onChange={(e)=>{setSearchItem(e.target.value)}}
-          />
-        </Search> */}
-
-         <Autocomplete
-         sx={{width:"20%", backgroundColor:"white"}}
-        freeSolo
-        id="free-solo-2-demo"
-        disableClearable
-        
-        options={searchDD.map((option) => option.name)}
-        renderInput={(params) => (
-          <TextField
-          placeholder="Search by name or phone number..."
-          onChange={(e)=>{setSearchItem(e.target.value)}}
-            {...params}
-            label="Search by name"
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-            }}
-          />
-        )}
-      />
+       
 
         <Autocomplete
+          sx={{ width: "25%", backgroundColor: "white" }}
+          freeSolo
+          id="free-solo-2-demo"
+          //  value={searchDD}
+          onChange={(event, newValue) => {
+            setYcwSearchUserId(newValue.userId);
+          }}
+          disableClearable
+          size="small"
+          options={searchDD}
+          renderInput={(params) => (
+         <Box sx= {{display:"flex"}}>
+         
+            {/* <SearchIcon /> */}
+         
+            <TextField
+           
+              placeholder="Search by name or phone number..."
+              onChange={(e) => {
+                setSearchItem(e.target.value);
+              }}
+              {...params}
+              // label="Search by name"
+              InputProps={{
+                ...params.InputProps,
+                type: "search",
+              }}
+            />
+            </Box>
+          )}
+          getOptionLabel={(item) => `${item.name}`}
+        />
+         <Autocomplete
           disablePortal
+          size="small"
           id="combo-box-demo"
-          options={FilterData}
+          options={jobTypeApi}
           sx={{ width: "20%" }}
+          onChange={(event, newValue) => {
+            setWorkType(newValue.uuid);
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
@@ -161,11 +218,17 @@ return (
               label="Search YCW Work Type"
             />
           )}
+          getOptionLabel={(item) => `${item.name}`}
         />
+
         <Autocomplete
           disablePortal
+          size="small"
           id="combo-box-demo"
-          options={FilterData}
+          options={ycwStatus}
+          onChange={(event, newValue) => {
+            setStatusycw(newValue.key);
+          }}
           sx={{ width: "20%" }}
           renderInput={(params) => (
             <TextField
@@ -174,12 +237,18 @@ return (
               label="Select YCW Status"
             />
           )}
+          getOptionLabel={(item) => `${item.value}`}
         />
+
         <Autocomplete
           disablePortal
+          size="small"
           id="combo-box-demo"
-          options={FilterData}
+          options={cityDD}
           sx={{ width: "20%" }}
+          onChange={(event, newValue) => {
+            setYcwCity(newValue.uuid);
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
@@ -187,89 +256,247 @@ return (
               label="Select YCW City"
             />
           )}
+          getOptionLabel={(item) => `${item.cityName}`}
         />
-      </Box>
+       
+      </Box> 
 
       {/* DataTableList */}
       <Box marginTop={5}>
-        <TableContainer>
-          <Table 
-          sx={{ minWidth: "100%" }} 
-          aria-label="simple table">
+       <h4> All YCWS ({tableData.length})</h4> 
+        <TableContainer >
+          <Table sx={{ minWidth: "100%", marginTop:"10px" }} aria-label="simple table">
             <TableHead bgColor={"#e1e2e3"}>
               <TableRow>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "950", width:"7%" }}
+                  sx={{ fontSize: "10px", fontWeight: "950", width: "10%" }}
                   align="left"
                 >
-                  YCW ID
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1px"}}>YCW ID</Box>
+                    <Box
+                      onClick={() => { handleSort(); { setFilterName("userId") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"13%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "13%" }}
                   align="left"
                 >
-                  NAME
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1px"}}>NAME</Box>
+                    <Box
+                      onClick={() => { handleSort(); { setFilterName("firstName") } }}
+                      //  onClick={()=>ordersort("name")}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-16px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"10%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "10%" }}
                   align="left"
                 >
-                  PHONE#
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1px"}}>PHONE#</Box>
+                    <Box
+                      onClick={() => { handleSort(); {setFilterName("mobileNo") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"5%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "5%" }}
                   align="left"
                 >
-                  GENDER
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1px"}}>GENDER</Box>
+                    <Box
+                      onClick={() => { handleSort();{ setFilterName("gender") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"5%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "5%" }}
                   align="left"
                 >
-                  CITY
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1px"}}>CITY</Box>
+                    <Box
+                      onClick={() => { handleSort();{ setFilterName("cityName") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"18%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "18%" }}
                   align="left"
                 >
-                  SKILLS
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1.5px"}}>SKILLS</Box>
+                    <Box
+                      onClick={() => { handleSort();}}
+                        // { setFilterName("profileStatus") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"8%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "10%" }}
                   align="left"
                 >
-                  EXP.(YRS.)
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1px"}}>EXP.(YRS.)</Box>
+                    <Box
+                      onClick={() => { handleSort(); { setFilterName("totalExperience") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"8%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "12%" }}
                   align="left"
                 >
-                  WORK HOURS
+                  <Box sx={{ display: "flex" }}>
+                    <Box sx={{ letterSpacing: "1px"}}>WORK HOURS</Box>
+                    <Box
+                      onClick={() => { handleSort(); }}
+                      //{ setFilterName("profileStatus") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width:"8%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "8%" }}
                   align="left"
                 >
-                  #JOBS
+                  <Box sx={{ display: "flex" }}>
+                    <Box>#JOBS</Box>
+                    <Box
+                      onClick={() => { handleSort();}}
+                        // { setFilterName("profileStatus") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="center"
                 >
-                  STATUS
+                  <Box sx={{ display: "flex" }}>
+                    <Box>STATUS</Box>
+                    <Box
+                      onClick={() => { handleSort(); { setFilterName("profileStatus") } }}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
               </TableRow>
             </TableHead>
 
-           
-
             <TableBody component={Paper}>
-              {tableData.map((item)=>(
+              {tableData.map((item) => (
+              
+
                 <StyledTableRow
                   key={item.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     zIndex: "999",
+                    border: "1px solid #E0E0E0",
+                    // borderLeft:"100px"
+                    fontSize: "13px"
                   }}
                 >
                   <TableCell
@@ -280,78 +507,89 @@ return (
                       borderLeft:
                         (item.profileStatus.value === "ACTIVE & AVAILABLE" &&
                           "5px solid green") ||
-                        (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
+                        (item.profileStatus.value ===
+                          "ACTIVE & NOT AVAILABLE" &&
                           "5px solid #f7aa02") ||
-                        (item.profileStatus.value === "INACTIVE" && "5px solid red"),
+                        (item.profileStatus.value === "INACTIVE" &&
+                          "5px solid red"),
                     }}
                   >
-                    {item.userId || "NO DATA"}
+                    {item.userId || "--"}
                   </TableCell>
-                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.name|| "NO DATA"}
-                  </TableCell>
-                  
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.mobileNo|| "NO DATA"}
+                    {item.name || "--"}
                   </TableCell>
-                  
+
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.gender.value || "NO DATA"}
+                    {item.mobileNo || "--"}
                   </TableCell>
-                  
+
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.cityName || "NO DATA"}
+                    {item.gender.value || "--"}
                   </TableCell>
-                
+
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.skill || "NO DATA"}
+                    {item.cityName || "--"}
                   </TableCell>
-                    
+
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.totalExperience || "NO DATA"}
+                    {item.skill || "--"}
                   </TableCell>
-                  
+
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.workingHours.value || "NO DATA"}
+                    {item.totalExperience || "--"}
                   </TableCell>
-                  
+
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {"NO DATA"}
+                    {item.workingHours || "--"}
+                  </TableCell>
+
+                  <TableCell sx={{ fontSize: "13px" }} align="left">
+                    {"--"}
                   </TableCell>
                   <NavLink
                     to={`/ycw/add/dashboard/${item.userId}`}
                     style={{
                       textDecoration: "none",
-                      display:"flex",
-                      justifyContent:"center"
-                      
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    <TableCell align="left">
+                    <TableCell align="left" sx={{ border: "none" }}>
                       <Typography
                         sx={{
-                          width:"150px",
-                          padding: "5px",
-                          borderRadius: "10px",
-                          fontSize: "12px",
+                          width: "150px",
+                      
+                          padding: "8px",
+                          borderRadius: "5px",
+                          fontSize: "11px",
                           textAlign: "center",
-                          fontWeight: "900",
+                          fontWeight: "950",
+                          boxSizing: "border-box",
                         }}
                         style={{
                           backgroundColor:
-                            (item.profileStatus.value === "ACTIVE & AVAILABLE" &&
-                              "#cef5ce") ||
-                            (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
-                              "#f0edce") ||
-                            (item.profileStatus.value === "INACTIVE" && "#fcb1b8"),
+                            (item.profileStatus.value ===
+                              "ACTIVE & AVAILABLE" &&
+                              "#E6F4F1") ||
+                            (item.profileStatus.value ===
+                              "ACTIVE & NOT AVAILABLE" &&
+                              "#FFF7E5") ||
+                            (item.profileStatus.value === "INACTIVE" &&
+                              "#FEEFF0"),
                           color:
-                            (item.profileStatus.value === "ACTIVE & AVAILABLE" && "green") ||
-                            (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
-                              "#f7aa02") ||
-                            (item.profileStatus.value === "INACTIVE" && "red"),
+                            (item.profileStatus.value ===
+                              "ACTIVE & AVAILABLE" &&
+                              "0A9475") ||
+                            (item.profileStatus.value ===
+                              "ACTIVE & NOT AVAILABLE" &&
+                              "#FFB701") ||
+                            (item.profileStatus.value === "INACTIVE" &&
+                              "#F55F71"),
                         }}
                       >
-                          {item.profileStatus.value || "NO DATA"}
+                        {item.profileStatus.value || "--"}
                       </Typography>
                     </TableCell>
                   </NavLink>

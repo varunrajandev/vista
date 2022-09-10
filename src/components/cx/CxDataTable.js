@@ -14,12 +14,9 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import { FilterData } from "../../AlllData";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-
+import { data } from "../../Data";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -79,61 +76,72 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function CxDataTable() {
   const [datatable, setDatatable] = useState([]);
-  const [selectCityDropdown, setSelectCityDropdown]=useState([]);
-  const[statusDropdownApi,setStatusDropdownApi]=useState([]);
-  //const [cxlocality, setCXLocality] = useState([]);
- // const[cityid,setCityid]=React.useState();
-  const [setCity1,setSetCity1]=React.useState();
-
-
+  const [selectCityDropdown, setSelectCityDropdown] = useState([]);
+  const [statusDropdownApi, setStatusDropdownApi] = useState([]);
+  const [cxlocality, setCXLocality] = useState([]);
+  const [cxcityId, setCXCityId] = useState("");
+  const [cxOrderSort, setCxOrderSort] = React.useState("asc");
+  const [cxstatus, setCXStatus] = React.useState("");
+  const [searchItem, setSearchItem] = React.useState("");
+  const [searchDD, setSearchDD] = React.useState([]);
   useEffect(() => {
     async function FetchApi() {
-      const selectCityDropdownApi= await fetch("http://13.126.160.155:8081/locationmaster/city/get/all");
-     // const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityid}`);
-      const statusDropdownApi= await fetch("http://13.126.160.155:8080/user/get/jobStatus");
-
-      const customerDataApi = await fetch("http://13.126.160.155:8080/user/customer/get/all/customer?filter=firstName&pageNo=1&pageSize=30&sortby=asc")
-
-   
-      let statusDropdown= await statusDropdownApi.json();
-      let CityDropdown= await selectCityDropdownApi.json()
-     // let LocalityDropdown =await localityApidata.json();
-  
+      const selectCityDropdownApi = await fetch(
+        "http://13.126.160.155:8081/locationmaster/city/get/all"
+      );
+      const localityApidata = await fetch(
+        "http://13.126.160.155:8081/locationmaster/internal/micromarkets/all"
+        // `http://13.126.160.155:8081/locationmaster/micromarket/get/all/${cxcityId}`
+      );
+      const statusDropdownApi = await fetch(
+        "http://13.126.160.155:8080/user/get/jobStatus"
+      );
+      const customerDataApi = await fetch(
+        `http://13.126.160.155:8080/user/customer/get/all/customer?filter=firstName&pageNo=1&pageSize=30&sortby=${cxOrderSort}&status=${cxstatus}`
+      );
+      let searchData = await fetch(
+        `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
+      );
+      let statusDropdown = await statusDropdownApi.json();
+      let CityDropdown = await selectCityDropdownApi.json();
+      let LocalityDropdown = await localityApidata.json();
       let cxCustomer = await customerDataApi.json();
+      let responseSearch = await searchData.json();
 
-      let statusApi= await statusDropdown.data;
-     // let localitydata= await localityApidata.data;
-      let selectCity= await CityDropdown.data;
-
+      let statusApi = await statusDropdown.data;
+      let localitydata = await LocalityDropdown.data;
+      let selectCity = await CityDropdown.data;
       let cxdata = await cxCustomer.data;
 
+      setSearchDD(responseSearch.data || [{ name: "No Data" }]);
       setSelectCityDropdown(selectCity);
-     // setCXLocality(localitydata);
+      setCXLocality(localitydata || [{ names: "please Select City" }]);
       setStatusDropdownApi(statusApi);
-
       setDatatable(cxdata.data);
     }
     FetchApi();
-    //console.log(selectCityDropdown);
-   // console.log("hiii",cityid);
-  }, []);
-  
+  }, [cxcityId, cxOrderSort, cxstatus,searchItem]);
 
-
+  function handleSort() {
+    cxOrderSort === "asc" ? setCxOrderSort("desc") : setCxOrderSort("asc");
+    console.log("hiii");
+  }
+  console.log(datatable);
   return (
-    <Box bgcolor="#e1e2e3" padding="20px" flex={7}>
+    <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{paddingLeft:"30px"}}>
       {/* //Add cx Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Customer Master</Typography>
+        <Typography variant="h5"  sx={{fontWeight:"900", paddingTop:"20px"}}>Customer Master</Typography>
         <Link style={{ textDecoration: "none" }} to="/cx/new">
-          <Button variant="contained" color="success">
-            ADD NEW CUSTOMERS
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ backgroundColor: "#0A9475" }}
+          >
+            ADD NEW CUSTOMER
           </Button>
         </Link>
       </Box>
-      {/* {selectCityDropdown.map((item)=>{
-            {item.value}
-          })} */}
 
       {/* //add Filter and Search Section */}
       <Box
@@ -144,7 +152,7 @@ function CxDataTable() {
           marginTop: "30px",
         }}
       >
-        <Search>
+        {/* <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -152,26 +160,59 @@ function CxDataTable() {
             placeholder="Search by name or phone number..."
             inputProps={{ "aria-label": "search" }}
           />
-        </Search>
+        </Search> */}
+
+<Autocomplete
+          sx={{ width: "28%", backgroundColor: "white" }}
+          freeSolo
+          size="small"
+          id="free-solo-2-demo"
+          // value={searchDD}
+          // onChange={(event, newValue) => {
+          //   setYcwSearchUserId(newValue.userId);
+          // }}
+          disableClearable
+          options={searchDD}
+          renderInput={(params) => (
+            <TextField
+              placeholder="Search by name or phone number..."
+              onChange={(e) => {
+                setSearchItem(e.target.value);
+              }}
+              {...params}
+              label="Search by name or phone number..."
+              InputProps={{
+                ...params.InputProps,
+                type: "search",
+              }}
+            />
+          )}
+          getOptionLabel={(item) => `${item.name}`}
+        />
         <Autocomplete
+          size="small"
           disablePortal
           id="combo-box-demo"
           options={selectCityDropdown}
           sx={{ width: "20%" }}
+          value={cxcityId.id}
+          onChange={(event, newValue) => {
+            setCXCityId(newValue.id);
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
               label="Select City"
-              // onClick={() => { setCityid("hii") }}
             />
           )}
-          getOptionLabel={(item)=>`${item.cityName}`}
+          getOptionLabel={(item) => `${item.cityName}`}
         />
         <Autocomplete
+          size="small"
           disablePortal
           id="combo-box-demo"
-          options={FilterData}
+          options={cxlocality}
           sx={{ width: "20%" }}
           renderInput={(params) => (
             <TextField
@@ -180,13 +221,17 @@ function CxDataTable() {
               label="Select Locality"
             />
           )}
-          // getOptionLabel={(item)=>`${item.name}`}
+          getOptionLabel={(item) => `${item.microMarketName}`}
         />
 
         <Autocomplete
+          size="small"
           disablePortal
           id="combo-box-demo"
           options={statusDropdownApi}
+          onChange={(event, newValue) => {
+            setCXStatus(newValue.key);
+          }}
           sx={{ width: "20%" }}
           renderInput={(params) => (
             <TextField
@@ -195,7 +240,7 @@ function CxDataTable() {
               label="Select Request Status"
             />
           )}
-          getOptionLabel={(item)=>`${item.value}`}
+          getOptionLabel={(item) => `${item.value}`}
         />
       </Box>
 
@@ -203,56 +248,176 @@ function CxDataTable() {
       <Box marginTop={5}>
         <TableContainer>
           <Table sx={{ minWidth: "100%" }} aria-label="simple table">
-            <TableHead bgColor={"#e1e2e3"}>
+            <TableHead bgColor={"#e1e2e3"} sx={{}}>
               <TableRow>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "950" }}
+                  sx={{ display: "flex", fontSize: "10px", fontWeight: "950" }}
                   align="left"
                 >
-                  CUSTOMER ID
+                  <Box sx={{ display: "flex" }}>
+                    <Box>CUSTOMER ID</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  NAME
+                  <Box sx={{ display: "flex" }}>
+                    <Box>NAME</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  PHONE#
+                  <Box sx={{ display: "flex" }}>
+                    <Box>PHONE#</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  Email
+                  <Box sx={{ display: "flex" }}>
+                    <Box>Email</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  Location
+                  <Box sx={{ display: "flex" }}>
+                    <Box>Location</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  OPEN JOBS
+                  <Box sx={{ display: "flex" }}>
+                    <Box>OPEN JOBS</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
 
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  ACTIVE JOBS
+                  <Box sx={{ display: "flex" }}>
+                    <Box>ACTIVE JOBS</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: "10px", fontWeight: "900" }}
                   align="left"
                 >
-                  STATUS
+                  <Box sx={{ display: "flex" }}>
+                    <Box>STATUS</Box>
+                    <Box
+                      onClick={handleSort}
+                      style={{
+                        alignItem: "",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "-5px",
+                        cursor:"pointer"
+                      }}
+                    >
+                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
+                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                    </Box>
+                  </Box>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -261,17 +426,25 @@ function CxDataTable() {
               {datatable.map((row) => (
                 <StyledTableRow
                   key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 }, zIndex: "999", }}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    zIndex: "999",
+                  }}
                 >
                   <TableCell
-                    sx={{ fontSize: "13px" }}
+                    sx={{ fontSize: "13px" ,
+                         cursor:"pointer"
+                        }}
                     component="th"
                     scope="row"
                     style={{
                       borderLeft:
-                        (row.profileStatus.value === "INACTIVE" && "5px solid green") ||
-                        (row.profileStatus.value === "WAITING" && "5px solid #f7aa02") ||
-                        (row.profileStatus.value === "INACTIVE" && "5px solid red"),
+                        (row.profileStatus.value === "INACTIVE" &&
+                          "5px solid green") ||
+                        (row.profileStatus.value === "WAITING" &&
+                          "5px solid #f7aa02") ||
+                        (row.profileStatus.value === "INACTIVE" &&
+                          "5px solid red"),
                     }}
                   >
                     {row.userId}
@@ -295,25 +468,26 @@ function CxDataTable() {
                     {row.activeJob}
                   </TableCell>
 
-
                   <TableCell sx={{ fontSize: "8px" }} align="left">
                     <Typography
                       sx={{
                         padding: "5px",
                         borderRadius: "10px",
-                        fontSize: "10px",
+                        fontSize: "13px",
                         textAlign: "center",
-                        fontWeight: "900"
+                        fontWeight: "900",
                       }}
                       style={{
                         backgroundColor:
-                          (row.profileStatus.key === "IN_ACTIVE" && "#cef5ce") ||
-                          (row.profileStatus.key === "WAITING" && "#f0edce") ||
-                          (row.profileStatus.key === "INACTIVE" && "#fcb1b8"),
+                          (row.profileStatus.key === "IN_ACTIVE" &&
+                            "#E6F4F1") ||
+                          (row.profileStatus.key === "WAITING" && "#FFF7E5") ||
+                          (row.profileStatus.key === "INACTIVE" && "#FEEFF0"),
                         color:
-                          (row.profileStatus.value === "INACTIVE" && "green") ||
-                          (row.profileStatus.key === "WAITING" && "#f7aa02") ||
-                          (row.profileStatus.key === "INACTIVE" && "red"),
+                          (row.profileStatus.value === "INACTIVE" &&
+                            "#0A9475") ||
+                          (row.profileStatus.key === "WAITING" && "#FFB701") ||
+                          (row.profileStatus.key === "INACTIVE" && "#F55F71"),
                       }}
                     >
                       {row.profileStatus.value}
@@ -328,6 +502,5 @@ function CxDataTable() {
     </Box>
   );
 }
-
 
 export default CxDataTable;

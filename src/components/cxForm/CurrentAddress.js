@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useState, useEffect } from "react";
-
+import { data } from "../../Data";
 
 function CurrentAddress(props) {
   const [cxcountry, setCXCountry] = useState([]);
@@ -16,11 +16,19 @@ function CurrentAddress(props) {
   const [stateUUID, setStateUUID] = useState()
   const [cityID, setCityID] = useState()
   const[conuuid,setConuuid]=React.useState();
+  var [pcode,setPcode]=React.useState();
+  const [pincode1,setPincode1]=React.useState([]);
+  const[conty,setcountry]=React.useState();
+  const[xm,setxm]=React.useState();
+  const[xx,setxx]=React.useState();
+  
+
   const {
     flat, setFlat,
     area, setArea,
     landmark, setLandmark,
     pinCode, setPinCode,
+     pinCode1, setPinCode1,
     country, setCountry,
     state1, setState,
     city, setCity,
@@ -34,31 +42,36 @@ function CurrentAddress(props) {
 
   useEffect(() => {
     async function FetchApi() {
-      const countryApidata = await fetch("http://13.126.160.155:8081/locationmaster/country/get/all");
-      const StateApidata = await fetch(`http://13.126.160.155:8081/locationmaster/state/get/states/by/${countryUUID}`);
-      const cityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/city/get/cities/by/${stateUUID}`);
-      const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityID}`);
+      // const countryApidata = await fetch("http://13.126.160.155:8081/locationmaster/country/get/all");
+      // const StateApidata = await fetch(`http://13.126.160.155:8081/locationmaster/state/get/states/by/${countryUUID}`);
+      // const cityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/city/get/cities/by/${stateUUID}`);
+      // const localityApidata = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityID}`);
+      const pincodeApi = await fetch(`http://13.126.160.155:8080/user/address/get/address/${pcode}`)
 
-      let country = await countryApidata.json();
-      let state = await StateApidata.json();
-      let city = await cityApidata.json();
-      let locality = await localityApidata.json();
+      // let country = await countryApidata.json();
+      // let state = await StateApidata.json();
+      // let city = await cityApidata.json();
+      // let locality = await localityApidata.json();
+      let pcodel = await pincodeApi.json();
+      
+      // let kk= await pcode1.country;
+      // let xx1= await pcode1.State;
+      // let yy= await pcode1.District;
 
-      setCXCountry(country.data);
-      setCXState(state.data || [{ name: "please Select Country" }]);
-      setCXCity(city.data || [{ name: "please Select State" }]);
-      setCXLocality(locality.data || [{ names: "please Select City" }]);
 
-      // StoreApiData(conuuid);
-  
-      // console.log(conuuid);
+      setPincode1(pcodel.data)
+      // setCXCountry(country.data);
+      // setCXState(state.data || [{ name: "please Select Country" }]);
+      // setCXCity(city.data || [{ name: "please Select State" }]);
+      // setCXLocality(locality.data || [{ names: "please Select City" }]);
+      setcountry (pincode1.country);
+      setxm( pincode1||[{ name: "please Select Country" }]);
+      setxx( pincode1||[{ name: "please Select Country" }]);   
     }
+    console.log("NOo",pincode1)
     FetchApi();
-  }, [countryUUID, stateUUID, cityID]);
-
-  // function StoreApiData(conuuid){
-  //   setConuuid(conuuid)
-
+  }, [pcode]);
+  console.log("yes",pincode1)
 
 
 
@@ -140,7 +153,54 @@ function CurrentAddress(props) {
           }}
         />
 
-        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+        <TextField
+          sx={{ width: "18%" }}
+          size="small"
+          id="outlined-basic"
+          label="Pin Code2.0"
+          variant="outlined"
+          onInput={(e) => {
+            setPcode(e.target.value);
+          }}
+        />
+
+      
+          <TextField
+          sx={{ width: "18%" }}
+          size="small"
+          id="outlined-basic"
+          variant="outlined"
+          // label="Country"
+          value={conty||"conty"}
+          // onChange={(e) => {
+          //   setCountry();
+          // }}
+        />
+       
+<TextField
+          sx={{ width: "18%" }}
+          size="small"
+          id="outlined-basic"
+          value={pincode1.state||"state"}
+          variant="outlined"
+        //  label="State"
+        
+        />
+
+<TextField
+          sx={{ width: "18%" }}
+          size="small"
+          id="outlined-basic"
+          label="City"
+          variant="outlined"
+          // value={pincode1.city||"City"}
+          // onInput={(e) => {
+          //   setPcode(e.target.value);
+          // }}
+        />
+   
+
+        {/* <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Country</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -206,7 +266,7 @@ function CurrentAddress(props) {
               <MenuItem value={item.id}>{item.name}{item.names}</MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
         <div style={{ width: "18%" }}></div>
         <div style={{ width: "18%" }}></div>
       </Box>

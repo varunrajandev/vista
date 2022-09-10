@@ -2,6 +2,7 @@ import React from "react";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
+import {Typography} from '@mui/material'
 
 const StyleLi = styled("li")({
   listStyle: "none",
@@ -23,7 +24,34 @@ function YcwNav() {
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <p style={{ fontWeight: "400", fontSize: "20px" }}>YCW#</p>
           <p style={{ fontWeight: "800", fontSize: "20px" }}>Y1234567</p>
-          <Box sx={{}}>STATUS</Box>
+          <Typography
+                        sx={{
+                          width:"130px",
+                          padding: "9px",
+                          borderRadius: "8px",
+                          fontSize: "12px",
+                          textAlign: "center",
+                          fontWeight: "900",
+                        }}
+                        style={{
+                          backgroundColor:
+                            ("ACTIVE & AVILABLE" === "ACTIVE & AVILABLE" &&
+                              "#DDF2F5") 
+                              //||
+                            // (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
+                            //   "#f0edce") ||
+                            // (item.profileStatus.value === "INACTIVE" && "#fcb1b8"),
+                         , color:"#60C3AD"
+                          //  ("ACTIVE" === "ACTIVE & AVAILABLE" && "green") 
+                            // ||
+                            // (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
+                            //   "#f7aa02") ||
+                            // (item.profileStatus.value === "INACTIVE" && "red")
+                            ,
+                        }}
+                      >
+                          {"ACTIVE & AVILABLE" || "NO DATA"}
+                      </Typography>
         </div>
 
         <Button
