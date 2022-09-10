@@ -65,7 +65,7 @@ function PersonalInformationData() {
           setCurrentSteps(2)
         
     } catch (error) {
-       console.log(error); 
+      alert("Please fill All the details"); 
     }
  }
 
@@ -107,8 +107,7 @@ function PersonalInformationData() {
                     <Button sx={{display:(personalData.status?"none":"block")}}  variant='contained' onClick={handleSubmit}>NEXT</Button>
                     <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={()=>{setCurrentSteps(2)}}>UPDATE & NEXT</Button>
                 </Box>
-
-      </Box>
+                </Box>
 
 
     </Box>

@@ -134,46 +134,7 @@ function SkillExpDetails(props) {
 
          </Box>
 
-        {/* <MultiSelected
-          labelData="Secondary Skill"
-          dataDD={sSkillDD}
-          setData={setSecondarySkill}
-          size="23%"
-        />
-
-        <MultiSelected
-          labelData="Tertiary Skill"
-          dataDD={tSkillDD}
-          setData={setTertiarySkill}
-          size="23%"
-        />
-
-        <TextFieldComponent
-          labelData="Skill Remarks"
-          setData={setSkillRemarks}
-          size="23%"
-        />
-
-        <FormControlSingleSelect
-          labelData="Can Cook Veg/Non-veg?"
-          dataDD={[{ key: "No Data", value: "NO Data" }]}
-          setData={setVegNonveg}
-          size="23%"
-        />
-
-        <MultiSelected
-          labelData="Cuisines"
-          dataDD={Cuisines}
-          setData={setCuisinesKnown}
-          size="23%"
-        />
-
-        <FormControlSingleSelect
-          labelData="Primary Language"
-          dataDD={primarylanguageDD}
-          setData={setPrimaryLanguage}
-          size="23%"
-        /> */}
+       
         
       </Box>
   );

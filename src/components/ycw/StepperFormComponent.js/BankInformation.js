@@ -53,10 +53,11 @@ function BankInformation() {
       )
 
       alert(response.data.message)
-      console.log(response.data)
+      setCurrentSteps(6)
+
       
     } catch (error) {
-      
+      alert(error)
     }
   }
   return (
@@ -77,9 +78,8 @@ function BankInformation() {
           />
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
-                <Button variant='contained' onClick={(()=>{setCurrentSteps(2)})}>back</Button>
+                <Button variant='contained' onClick={(()=>{setCurrentSteps(4)})}>back</Button>
                 <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
-
             </Box>
 
         </Box>

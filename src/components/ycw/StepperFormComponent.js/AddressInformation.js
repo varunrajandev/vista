@@ -2,12 +2,18 @@ import { Box, Button, Checkbox } from "@mui/material";
 import axios from "axios";
 import is from "date-fns/esm/locale/is/index.js";
 import React, { useContext, useState } from "react";
+import { useEffect } from "react";
+import { masterApi } from "../../../AlllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import CurrentAdd from "../../form/CurrentAdd";
 
 
 
 function AddressInformation() {
+        // isPermanent or not
+        const [isPermanent, setIsPermanent] = useState(false);
+        const [primaryAddress, setPrimaryAddress] = useState([]);
+        const [secondaryAddress, setSecondaryAddress] = useState([])
 
     //YCW  current Address information useState
     const [addressLine1, setAddressLine1] = React.useState("");
@@ -22,11 +28,9 @@ function AddressInformation() {
     const [countryID, setCountryID] = useState()
     const [stateID, setStateID] = useState()
     const [cityID, setCityID] = useState()
+    const [localityDD, setLocalityDD] = useState([])
 
-    // isPermanent or not
-    const [isPermanent, setIsPermanent] = useState(false);
-
-    // YCW Permanent Adddress
+// YCW Permanent Adddress
     const [addressLine1p, setAddressLine1p] = React.useState("");
     const [addressLine2p, setAddressLine2p] = React.useState("");
     const [landmarkp, setLandmarkp] = React.useState("");
@@ -42,11 +46,30 @@ function AddressInformation() {
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
 
+    useEffect(() => {
+       const  AddressFetchByPincode = async (pincode, num)=>{
+            let AddressByPincode = await fetch(masterApi+`/address/get/address/${pincode}`)
+            let AddressResponse = await AddressByPincode.json()
+            num===1?setPrimaryAddress(AddressResponse.data):setSecondaryAddress(AddressResponse.data)
+            
+        }
+        if(postalCode.length==6){
+            AddressFetchByPincode(postalCode, 1)
+        }
+        if(postalCodep.length==6){
+            AddressFetchByPincode(postalCodep, 2)
+        }
+        
+    }, [postalCode , postalCodep])
+
+
+    
+
 
 
     const handleSubmit = async () =>{
        try {
-        let response = await axios.post("http://13.126.160.155:8080/user/address/save",
+        let response = await axios.post(masterApi+"/address/save",
         [
             {
               "addressLine1": addressLine1,
@@ -77,6 +100,9 @@ function AddressInformation() {
                 "userId": personalData.data.userId
               }])
               alert(response.data.message)
+              setCurrentSteps(3)
+              setAddressData(response.data)
+
 
         
        } catch (error) {
@@ -84,11 +110,7 @@ function AddressInformation() {
        }
 
     }
-
-
-
-
-
+    
     return (
         <>
             <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
@@ -114,6 +136,8 @@ function AddressInformation() {
                         countryID={countryID} setCountryID={setCountryID}
                         stateID={stateID} setStateID={setStateID}
                         cityID={cityID} setCityID={setCityID}
+                        localityDD={localityDD} setLocalityDD={setLocalityDD}
+                        addressData={primaryAddress}
                     />
 
                     
@@ -134,6 +158,8 @@ function AddressInformation() {
                         countryID={isPermanent?countryID:countryIDp} setCountryID={setCountryIDp}
                         stateID={isPermanent?stateID:stateIDp} setStateID={setStateIDp}
                         cityID={isPermanent?cityID:cityIDp} setCityID={setCityIDp}
+                        localityDD={localityDD} setLocalityDD={setLocalityDD}
+                        addressData={secondaryAddress}
                     />
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>

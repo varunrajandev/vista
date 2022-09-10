@@ -27,7 +27,7 @@ function JobRequirementData() {
       let response = await axios.post(masterApi+"/worker/jobRequirement", {
         "endTime": endTimeFormat,
         "jobRemarks": jobRemarks,
-        "jobType": preferJob,
+        "jobType": "COOKING",
         "maxSalaryExpected": maxSalaryExpected,
         "minSalaryExpected": minSalaryExpected,
         "openToTiming": true,
@@ -41,9 +41,10 @@ function JobRequirementData() {
       })
 
       alert(response.data.message)
+      setCurrentSteps(5)
       
     } catch (error) {
-      
+      alert(error)
     }
   }
   
@@ -72,7 +73,7 @@ function JobRequirementData() {
               jobRemarks={jobRemarks} setJobRemarks={setJobRemarks}
               />
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
-                <Button variant='contained' onClick={(()=>{setCurrentSteps(2)})}>back</Button>
+                <Button variant='contained' onClick={(()=>{setCurrentSteps(3)})}>back</Button>
                 <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
 
             </Box>

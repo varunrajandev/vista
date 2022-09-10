@@ -64,7 +64,7 @@ const { setInputFields, inputFields } = props;
           alignItems: "center",
         }}
       >
-        <h5>Bank Account information</h5>
+        <h5>Household Members</h5>
         <div>
           <IconButton aria-label="delete">
             <AddIcon
@@ -77,7 +77,7 @@ const { setInputFields, inputFields } = props;
             />
           </IconButton>
           <span style={{ fontSize: "13px", fontWeight: "bolder" }}>
-            &nbsp; Add a new bank account
+            &nbsp; Add Household Members
           </span>
         </div>
       </Box>

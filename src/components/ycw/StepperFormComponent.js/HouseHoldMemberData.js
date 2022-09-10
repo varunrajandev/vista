@@ -15,7 +15,7 @@ function HouseHoldMemberData() {
             mobileNo: "",
             name: "",
             relationship: "", 
-            userId:"hfaklhdlfhkjafhklfah" 
+            userId:""
         }
     ])
 
@@ -39,9 +39,10 @@ function HouseHoldMemberData() {
           )
     
           alert(response.data.message)
+          setCurrentSteps()
           
         } catch (error) {
-          
+          alert(error)
         }
       }
   return (

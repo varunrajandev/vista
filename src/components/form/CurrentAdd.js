@@ -27,8 +27,11 @@ function CurrentAdd(props) {
     addressProofType, setAddressProofType,
     countryID, setCountryID,
     stateID, setStateID,
-    cityID, setCityID
+    cityID, setCityID,
+    addressData
   } = props
+
+  console.log(addressData.country)
 
   useEffect(() => {
     async function fetchData() {
@@ -47,8 +50,6 @@ function CurrentAdd(props) {
     }
     fetchData();
   }, [countryID, stateID, cityID]);
-
-  console.log("countryID", stateID)
 
   return (
     <Box
@@ -79,7 +80,7 @@ function CurrentAdd(props) {
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          label="Address Line 1"
+          label="Flat/Building"
           value={addressL1}
           variant="outlined"
           onChange={(e) => {
@@ -92,7 +93,7 @@ function CurrentAdd(props) {
           size="small"
           value={addressL2}
           id="outlined-basic"
-          label="Address Line 2"
+          label="Society/Colony/Area"
           variant="outlined"
           onChange={(e) => {
             setAddressL2(e.target.value);
@@ -119,6 +120,9 @@ function CurrentAdd(props) {
           id="outlined-basic"
           label="Pin Code"
           variant="outlined"
+          onInput = {(e) =>{
+            e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,6)
+          }}
           onChange={(e) => {
             setPinCode(e.target.value);
           }}
