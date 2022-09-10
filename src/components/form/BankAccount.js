@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   TextField,
   IconButton,
-  // Button,
   MenuItem,
   FormControl,
   InputLabel,
@@ -14,18 +13,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
-import { FilterData } from "../../AlllData";
+import { FilterData, masterApi } from "../../AlllData";
 
 function BankAccount(props) {
   const [checked, setChecked] = useState(true);
   const [accountTypeDD, setAccountTypeDD] = useState([{}]);
-  const { setInputFields, inputFields } = props;
+  const { setInputFields, inputFields, ifscCodeData } = props;
 
   useEffect(() => {
     async function fetchData() {
-      let response = await fetch( "http://13.126.160.155:8080/user/drop-down/get/accountType");
-      let data = await response.json();
-      setAccountTypeDD(data.data);
+      let AccountType = await fetch( masterApi+"/drop-down/get/accountType");
+      let AccountTypedata = await AccountType.json();
+      setAccountTypeDD(AccountTypedata.data);
     }
     fetchData();
   }, []);
@@ -129,26 +128,32 @@ function BankAccount(props) {
 
             <TextField
               style={{ width: "18%" }}
-              name="bankName"
-              label="Name of the the Bank"
+              // name="bankName"
+              placeholder="bankName"
+              // label="Name of the the Bank"
               size="small"
-              value={inputField.bankName}
+              // value={inputField.bankName}
+              value={ifscCodeData?ifscCodeData.bankName:""}
               onChange={(event) => handleChangeInput(index, event)}
             />
             <TextField
               style={{ width: "18%" }}
               name="branchName"
-              label="Branch Name"
-              value={inputField.branchName}
+              // label="Branch Name"
+              placeholder="Branch Name"
+              // value={inputField.branchName}
+              value={ifscCodeData?ifscCodeData.branchName:""}
               size="small"
               onChange={(event) => handleChangeInput(index, event)}
             />
 
             <TextField
               style={{ width: "38.5%" }}
-              name="branchAddress"
-              label="Branch Address"
-              value={inputField.branchAddress}
+              // name="branchAddress"
+              //  label="Branch Address"
+              placeholder="Branch Address"
+              // value={inputField.branchAddress}
+              value={ifscCodeData?ifscCodeData.branchAddress:""}
               size="small"
               onChange={(event) => handleChangeInput(index, event)}
             />
@@ -174,9 +179,9 @@ function BankAccount(props) {
             />
             <TextField
               style={{ width: "18%" }}
-              name="IfceCode"
+              name="ifscCode"
               label="IFSC Code"
-              value={inputField.IfceCode}
+              value={inputField.ifscCode}
               size="small"
               onChange={(event) => handleChangeInput(index, event)}
             />

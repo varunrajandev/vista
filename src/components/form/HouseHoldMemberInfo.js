@@ -1,67 +1,70 @@
+import React, { useState, useEffect } from "react";
 import {
-  Button,
+  TextField,
   IconButton,
-  InputLabel,
   MenuItem,
+  FormControl,
+  InputLabel,
   Select,
+  Autocomplete,
+  Checkbox,
 } from "@mui/material";
-import { Box } from "@mui/system";
-import React from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import LongMenu from "./LongMenu";
-import styled from "@emotion/styled";
-import PersonIcon from "@mui/icons-material/Person";
-import { TextField } from "@mui/material";
-import Popup from "../Popup";
-import { useState } from "react";
-import { FormControl } from "@mui/material";
-import GroupIcon from "@mui/icons-material/Group";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import EmailIcon from "@mui/icons-material/Email";
-
-const BOX = styled(Box)({
-  display: "flex",
-  gap: "15px",
-  flexWrap: "wrap",
-});
-
-const StyleBox = styled(Box)({
-  display: "flex",
-  flexDirection: "column",
-  backgroundColor: "#f4eeff",
-  padding: "5px 20px 20px 20px",
-  borderRadius: "5px",
-  width: "22%",
-  gap: "5px",
-});
-
-// const Div1 = styled("div")({
-//   display: "flex",
-//   justifyContent: "space-between",
-//   alignItems: "center",
-//   margin: "5px",
-// });
-
-const Div2 = styled("div")({
-  display: "flex",
-  justifyContent: "space-between",
-  marginBottom: "-25px",
-});
+import { Box } from "@mui/system";
+import Switch from "@mui/material/Switch";
+import { FilterData, masterApi } from "../../AlllData";
 
 function HouseHoldMemberInfo(props) {
-  const [openPopup, setOpenPopup] = useState(false);
-  const { name, setName } = props;
+const { setInputFields, inputFields } = props;
+
+  const handleChangeInput = (index, event) => {
+    const values = [...inputFields];
+    values[index][event.target.name] = event.target.value;
+    setInputFields(values);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("inputs", inputFields);
+  };
+
+  const handleAddFields = () => {
+    setInputFields([
+      ...inputFields,
+      {
+        age: "",
+        email: "",
+        jobType: "",
+        mobileNo: "",
+        name: "",
+        relationship: "",
+      },
+    ]);
+  };
+
+  const handleRemoveFields = (index) => {
+    const values = [...inputFields];
+    values.splice(index, 1);
+    setInputFields(values);
+  };
+
   return (
-    <Box marginTop={3}>
+    <Box
+      sx={{
+        marginTop: 7,
+        display: "grid",
+        gap: 0.3,
+      }}
+    >
       <Box
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "10px",
         }}
       >
-        <h5>Household Members Information</h5>
+        <h5>Household Members</h5>
         <div>
           <IconButton aria-label="delete">
             <AddIcon
@@ -70,122 +73,105 @@ function HouseHoldMemberInfo(props) {
                 color: "white",
                 borderRadius: "50%",
               }}
-              onClick={() => {
-                setOpenPopup(true);
-              }}
+              onClick={() => handleAddFields()}
             />
           </IconButton>
           <span style={{ fontSize: "13px", fontWeight: "bolder" }}>
-            &nbsp; Add a new Member
+            &nbsp; Add Household Members
           </span>
         </div>
       </Box>
-
-      <BOX>
-        <StyleBox>
-          <Div2>
-            <div></div>
-            <LongMenu />
-          </Div2>
-
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <PersonIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-            <TextField
-              id="input-with-sx"
-              label="Name of the family member"
-              variant="standard"
-              onChange={(e)=>{
-                setName(e.target.value)
-              }}
-              sx={{ width: "90%" }}
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <GroupIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-            <TextField
-              id="input-with-sx"
-              label="Relationship"
-              variant="standard"
-              sx={{ width: "90%" }}
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <LocalPhoneIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-            <TextField
-              id="input-with-sx"
-              label="Phone_no"
-              variant="standard"
-              sx={{ width: "90%" }}
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <EmailIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-            <TextField
-              id="input-with-sx"
-              label="Email"
-              variant="standard"
-              sx={{ width: "90%" }}
-            />
-          </Box>
-        </StyleBox>
-      </BOX>
-      <Popup
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-        title="Add a new Member"
-      >
-        <Box
-          sx={{
-            display: "flex",
-            gap: "40px",
-            flexWrap: "wrap",
-            alignItem: "center",
-          }}
-        >
-          <TextField label="Member Name" sx={{ width: "230px" }} size="small" />
-
-          <FormControl sx={{ minWidth: 120 }} size="small">
-            <InputLabel id="demo-select-small">Relationship</InputLabel>
-            <Select
-              sx={{ width: "230px" }}
-              labelId="demo-select-small"
-              id="demo-select-small"
-              label="Relationship"
-              // onChange={(e) => {
-              //   setCountry(e.target.value);
-              // }}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"India"}>India</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            label="Phone Number"
-            sx={{ width: "230px" }}
-            size="small"
-          />
-          <TextField label="Age" sx={{ width: "230px" }} size="small" />
-          <TextField label="Occupation" sx={{ width: "230px" }} size="small" />
-        </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "right" }}>
-          <Button
-            sx={{ color: "#f52f50", border: "1px solid #f52f50", margin: 2 }}
-            variant="outlined"
+      <form onSubmit={handleSubmit}>
+        {inputFields.map((inputField, index) => (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "30px",
+              marginBottom: 5,
+            }}
           >
-            CLOSE
-          </Button>
+            <TextField
+              style={{ width: "18%" }}
+              name="name"
+              label="Name"
+              size="small"
+              value={inputField.name}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
 
-          <Button variant="contained" color="primary" sx={{ m: 2 }}>
-            ADD MEMBER
-          </Button>
-        </Box>
-      </Popup>
+            <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+              <InputLabel id="demo-select-small">Relationship</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="relationship"
+                value={inputField.relationship}
+                label="Relationship"
+                onChange={(event) => handleChangeInput(index, event)}
+              >
+                <MenuItem value={"WIFE"}>Wife</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              style={{ width: "18%" }}
+              name="mobileNo"
+              label="Mobile Number"
+              type="number"
+              value={inputField.mobileNo}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+
+            <TextField
+              style={{ width: "38.5%" }}
+              name="email"
+              label="Email"
+              value={inputField.email}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+ 
+            <TextField
+              style={{ width: "18%" }}
+              name="age"
+              label="Age"
+              value={inputField.age}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+
+            <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+              <InputLabel id="demo-select-small">Occupation</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="jobType"
+                value={inputField.jobType}
+                label="Occupation"
+                onChange={(event) => handleChangeInput(index, event)}
+              >
+                <MenuItem value={"DRIVER"}>Driver</MenuItem>
+              </Select>
+            </FormControl>
+            <div
+              style={{
+                display: "flex",
+                justfyContent: "space-between",
+                width: "18%",
+                alignItems: "center",
+              }}
+            >
+              <IconButton aria-label="delete">
+                <DeleteIcon  onClick={() => handleRemoveFields(index)} />
+              </IconButton>
+            </div>
+          </Box>
+        ))}
+      </form>
     </Box>
   );
 }
