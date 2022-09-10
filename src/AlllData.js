@@ -1,3 +1,82 @@
+
+export const JobRequirementApis = "http://13.126.160.155:8080/user/worker/jobRequirement"
+export const BankApi = "http://13.126.160.155:8080/user/bank/"
+export const masterApi = "http://13.126.160.155:8080/user"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const FilterData = [
     { label: "The Shawshank Redemption", year: 1994 },
     { label: "The Godfather", year: 1972 },
@@ -205,7 +284,7 @@ export const childCareAge = [
 ]
 
 export const childCare = [
-  {childCare:"Scope of work candidate has done in Childcare"},
+  // {childCare:"Scope of work candidate has done in Childcare"},
   {childCare:"Massaging"},
   {childCare:"Bathing"},
   {childCare:"Changing diapers"},
