@@ -99,9 +99,9 @@ const [displayalert,setDisplayAlert]=React.useState("none")
 
          
           // alert("User Registration successfull")
-          console.log("res",response.data.message)
-           console.log(response)
-           console.log(mobileNumber);
+          // console.log("res",response.data.message)
+          //  console.log(response)
+          //  console.log(mobileNumber);
            handleClose();
            window.location.href="/ycw";
         } catch (error) {
@@ -160,10 +160,10 @@ const [displayalert,setDisplayAlert]=React.useState("none")
         // //   setGivenMobileNumver(mobileNumber)
         //   console.log(mobileNumber);
         // setOpen(true);
-        
+       
         // {<Link to="/ycw"></Link> }
         } catch (error) {
-          alert("Please Fill Currect Mobile Number", error)
+          alert("Please Fill correct Mobile Number", error)
         }
       
     
@@ -246,7 +246,7 @@ const [displayalert,setDisplayAlert]=React.useState("none")
                 else{
                       setIsError(true);
                       setDisplayOtp("none")
-                      setHelpertext("Please Enter your correct Number")
+                      setHelpertext("Please Enter correct Number")
                 }
         }}
         // onInput={(event) => {

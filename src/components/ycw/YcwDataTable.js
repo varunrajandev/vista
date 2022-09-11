@@ -20,46 +20,46 @@ import { useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  height: "55px",
-  display: "flex",
-  border: "1px solid #c2c4c3",
-  alignItems: "center",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.95),
-  "&:hover": {
-    border: "1px solid black",
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-  },
-}));
+// const Search = styled("div")(({ theme }) => ({
+//   position: "relative",
+//   height: "55px",
+//   display: "flex",
+//   border: "1px solid #c2c4c3",
+//   alignItems: "center",
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: alpha(theme.palette.common.white, 0.95),
+//   "&:hover": {
+//     border: "1px solid black",
+//   },
+//   marginRight: theme.spacing(2),
+//   marginLeft: 0,
+//   [theme.breakpoints.up("sm")]: {
+//     marginLeft: theme.spacing(3),
+//   },
+// }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
+// const SearchIconWrapper = styled("div")(({ theme }) => ({
+//   padding: theme.spacing(0, 2),
+//   height: "100%",
+//   position: "absolute",
+//   pointerEvents: "none",
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "center",
+// }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "30ch",
-    },
-  },
-}));
+// const StyledInputBase = styled(InputBase)(({ theme }) => ({
+//   color: "inherit",
+//   "& .MuiInputBase-input": {
+//     padding: theme.spacing(1, 1, 1, 0),
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create("width"),
+//     width: "100%",
+//     [theme.breakpoints.up("md")]: {
+//       width: "30ch",
+//     },
+//   },
+// }));
 
 //table style
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
