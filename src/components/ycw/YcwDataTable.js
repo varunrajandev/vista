@@ -20,46 +20,6 @@ import { useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  height: "55px",
-  display: "flex",
-  border: "1px solid #c2c4c3",
-  alignItems: "center",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.95),
-  "&:hover": {
-    border: "1px solid black",
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "30ch",
-    },
-  },
-}));
 
 //table style
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -99,11 +59,11 @@ function Right() {
       );
       let data = await fetch(
 
-       `http://13.126.160.155:8080/user/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+        `http://13.126.160.155:8080/user/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
       );
       let ycwStatusApidrop = await fetch(
-       // "http://13.126.160.155:8081/locationmaster/city/get/all"
-         "http://13.126.160.155:8080/user/drop-down/get/profileStatus?flag=all"
+        // "http://13.126.160.155:8081/locationmaster/city/get/all"
+        "http://13.126.160.155:8080/user/drop-down/get/profileStatus?flag=all"
       );
       let searchData = await fetch(
         `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
@@ -116,31 +76,31 @@ function Right() {
       let res = await data.json();
       let StatusApi = await ycwStatusApidrop.json();
       let responseSearch = await searchData.json();
-        let cityDD = await ycwCityDD.json();
+      let cityDD = await ycwCityDD.json();
 
-       let newData = await res.data;
-       let JobTypeApi = await jobtypeApi.data;
-       let ycwStatusApi = await StatusApi.data;
-       let cityDropDown = await cityDD.data;
-       let responseSearchData= await responseSearch.data;
+      let newData = await res.data;
+      let JobTypeApi = await jobtypeApi.data;
+      let ycwStatusApi = await StatusApi.data;
+      let cityDropDown = await cityDD.data;
+      let responseSearchData = await responseSearch.data;
 
-       setSearchDD(responseSearchData || [{ name: "No Data" }]);
-       setJobTypeApi(JobTypeApi);
-       setYcwStatus(ycwStatusApi);
-       setCityDD(cityDropDown);
-       setTableData(newData.data);
+      setSearchDD(responseSearchData || [{ name: "No Data" }]);
+      setJobTypeApi(JobTypeApi);
+      setYcwStatus(ycwStatusApi);
+      setCityDD(cityDropDown);
+      setTableData(newData.data);
     };
 
     fetchData();
-    
-  }, [ycwidorder, worktype, statusycw, ycwCity ,searchItem ]);
+
+  }, [ycwidorder, worktype, statusycw, ycwCity, searchItem]);
 
   //  console.log("searchItem",searchItem)
   function handleSort() {
     ycwidorder === "asc" ? setycwIdOrder("desc") : setycwIdOrder("asc");
   }
 
- 
+
 
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
@@ -151,7 +111,7 @@ function Right() {
           <Button
             variant="contained"
             color="success"
-            sx={{ backgroundColor: "#0A9475",marginTop:"10px" }}
+            sx={{ backgroundColor: "#0A9475", marginTop: "10px" }}
           >
             ADD NEW YCW
           </Button>
@@ -167,7 +127,7 @@ function Right() {
           marginTop: "30px",
         }}
       >
-       
+
 
         <Autocomplete
           sx={{ width: "25%", backgroundColor: "white" }}
@@ -181,28 +141,28 @@ function Right() {
           size="small"
           options={searchDD}
           renderInput={(params) => (
-         <Box sx= {{display:"flex"}}>
-         
-            {/* <SearchIcon /> */}
-         
-            <TextField
-           
-              placeholder="Search by name or phone number..."
-              onChange={(e) => {
-                setSearchItem(e.target.value);
-              }}
-              {...params}
-              // label="Search by name"
-              InputProps={{
-                ...params.InputProps,
-                type: "search",
-              }}
-            />
+            <Box sx={{ display: "flex" }}>
+
+              {/* <SearchIcon /> */}
+
+              <TextField
+
+                placeholder="Search by name or phone number..."
+                onChange={(e) => {
+                  setSearchItem(e.target.value);
+                }}
+                {...params}
+                // label="Search by name"
+                InputProps={{
+                  ...params.InputProps,
+                  type: "search",
+                }}
+              />
             </Box>
           )}
           getOptionLabel={(item) => `${item.name}`}
         />
-         <Autocomplete
+        <Autocomplete
           disablePortal
           size="small"
           id="combo-box-demo"
@@ -258,14 +218,14 @@ function Right() {
           )}
           getOptionLabel={(item) => `${item.cityName}`}
         />
-       
-      </Box> 
+
+      </Box>
 
       {/* DataTableList */}
       <Box marginTop={5}>
-       <h4> All YCWS ({tableData.length})</h4> 
+        <h4> All YCWS ({tableData.length})</h4>
         <TableContainer >
-          <Table sx={{ minWidth: "100%", marginTop:"10px" }} aria-label="simple table">
+          <Table sx={{ minWidth: "100%", marginTop: "10px" }} aria-label="simple table">
             <TableHead bgColor={"#e1e2e3"}>
               <TableRow>
                 <TableCell
@@ -273,7 +233,7 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1px"}}>YCW ID</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>YCW ID</Box>
                     <Box
                       onClick={() => { handleSort(); { setFilterName("userId") } }}
                       style={{
@@ -294,7 +254,7 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1px"}}>NAME</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>NAME</Box>
                     <Box
                       onClick={() => { handleSort(); { setFilterName("firstName") } }}
                       //  onClick={()=>ordersort("name")}
@@ -316,9 +276,9 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1px"}}>PHONE#</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>PHONE#</Box>
                     <Box
-                      onClick={() => { handleSort(); {setFilterName("mobileNo") } }}
+                      onClick={() => { handleSort(); { setFilterName("mobileNo") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -337,9 +297,9 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1px"}}>GENDER</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>GENDER</Box>
                     <Box
-                      onClick={() => { handleSort();{ setFilterName("gender") } }}
+                      onClick={() => { handleSort(); { setFilterName("gender") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -358,9 +318,9 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1px"}}>CITY</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>CITY</Box>
                     <Box
-                      onClick={() => { handleSort();{ setFilterName("cityName") } }}
+                      onClick={() => { handleSort(); { setFilterName("cityName") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -379,10 +339,10 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1.5px"}}>SKILLS</Box>
+                    <Box sx={{ letterSpacing: "1.5px" }}>SKILLS</Box>
                     <Box
-                      onClick={() => { handleSort();}}
-                        // { setFilterName("profileStatus") } }}
+                      onClick={() => { handleSort(); }}
+                      // { setFilterName("profileStatus") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -401,7 +361,7 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1px"}}>EXP.(YRS.)</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>EXP.(YRS.)</Box>
                     <Box
                       onClick={() => { handleSort(); { setFilterName("totalExperience") } }}
                       style={{
@@ -422,7 +382,7 @@ function Right() {
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box sx={{ letterSpacing: "1px"}}>WORK HOURS</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>WORK HOURS</Box>
                     <Box
                       onClick={() => { handleSort(); }}
                       //{ setFilterName("profileStatus") } }}
@@ -446,8 +406,8 @@ function Right() {
                   <Box sx={{ display: "flex" }}>
                     <Box>#JOBS</Box>
                     <Box
-                      onClick={() => { handleSort();}}
-                        // { setFilterName("profileStatus") } }}
+                      onClick={() => { handleSort(); }}
+                      // { setFilterName("profileStatus") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -487,7 +447,7 @@ function Right() {
 
             <TableBody component={Paper}>
               {tableData.map((item) => (
-              
+
 
                 <StyledTableRow
                   key={item.userId}
@@ -560,7 +520,7 @@ function Right() {
                       <Typography
                         sx={{
                           width: "150px",
-                      
+
                           padding: "8px",
                           borderRadius: "5px",
                           fontSize: "11px",
@@ -596,7 +556,7 @@ function Right() {
                 </StyledTableRow>
               ))}
             </TableBody>
-          </Table>
+           </Table>
         </TableContainer>
       </Box>
     </Box>
