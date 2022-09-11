@@ -33,7 +33,7 @@ const {
 
   useEffect(() => {
     async function fetchData() {
-      let Jobtypedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/jobType");
+      let Jobtypedata = await fetch("http://13.126.160.155:8080/user/skill/get/skills");
       let trainingModeData = await fetch("http://13.126.160.155:8080/user/drop-down/get/traningMode")
       let res3 = await Jobtypedata.json();
       let res4 = await trainingModeData.json();
@@ -65,7 +65,7 @@ const {
           id="checkboxes-tags-demo"
           options={jobtypeDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.key}
+          getOptionLabel={(option) => option.name}
           onChange={(event, newValue) => {
             setPreferJob([...newValue]);
           }}
@@ -77,7 +77,7 @@ const {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.value}
+              {option.name}
             </li>
           )}
           style={{ width: "18%" }}

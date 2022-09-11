@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, TextField, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,6 +8,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { maritalstatus, sourcing } from "../../AlllData";
+import { multiStepContext } from "../../ContextApi/StepContext";
 
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
@@ -36,6 +37,9 @@ function PersonalInfo(props) {
     medicalCondition, setMedicalCondition,
     submitted, setSubmitted
   } = props;
+
+
+  const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -83,9 +87,10 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            value={walk}
             label="Sourcing Channel"
             onChange={handleChange}
+            defaultValue={personalData.status?personalData.data.sourcingChannel:walk}
+            
           >
             <MenuItem value="">
               <em>None</em>
@@ -107,6 +112,7 @@ function PersonalInfo(props) {
           onChange={(event) => {
             setFname(event.target.value);
           }}
+          
         />
 
         <TextField
@@ -114,6 +120,7 @@ function PersonalInfo(props) {
           size="small"
           id="outlined-basic"
           label="First Name*"
+          defaultValue={personalData.status?personalData.data.firstName:fname}
           variant="outlined"
           onChange={(event) => {
             setFname(event.target.value);
@@ -123,6 +130,7 @@ function PersonalInfo(props) {
         <TextField
           sx={{ width: "18%" }}
           size="small"
+          defaultValue={personalData.status?personalData.data.middleName:mname}
           id="outlined-basic"
           label="Middle Name"
           variant="outlined"
@@ -137,6 +145,7 @@ function PersonalInfo(props) {
           id="outlined-basic"
           label="Last Name*"
           variant="outlined"
+          defaultValue={personalData.status?personalData.data.lastName:lname}
           onChange={(e) => {
             setLname(e.target.value);
           }}
@@ -160,7 +169,7 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            value={gender}
+            defaultValue={personalData.status?personalData.data.gender:gender}
             label="gender"
             onChange={(event) => {
               setGender(event.target.value);
@@ -173,19 +182,25 @@ function PersonalInfo(props) {
         </FormControl>
 
         <TextField
+          type="number"
           sx={{ width: "18%" }}
           size="small"
+          defaultValue={personalData.status?personalData.data.mobile:phoneNumber}
           id="outlined-basic"
           label="Phone Number*"
           onChange={(e) => {
             setPhoneNumber(e.target.value);
           }}
         />
+
+       
+
         <TextField
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
           label="Alternate Phone Number*"
+          defaultValue={personalData.status?personalData.data.secondaryMobileNumber:alternateNumber}
           onChange={(e) => {
             setAlternateNumber(e.target.value);
           }}
@@ -196,6 +211,7 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
+            defaultValue={personalData.status?personalData.data.whatsappAvailable:whatsappAvailable}
             label="Whatsapp Available "
             onChange={(e) => {
               setWhatsappAvailable(e.target.value);
@@ -214,6 +230,7 @@ function PersonalInfo(props) {
           size="small"
           id="outlined-basic"
           label="Whatsapp Number*"
+          defaultValue={personalData.status?personalData.data.whatsappNumber:whatsapp}
           onChange={(e) => {
             setWhatsapp(e.target.value);
           }}
@@ -233,6 +250,7 @@ function PersonalInfo(props) {
           <DesktopDatePicker
             label="DOB"
             value={birthday}
+            defaultValue={personalData.status?personalData.data.birthday:birthday}
             onChange={(newValue) => {
               setBirthday(newValue);
             }}
@@ -247,6 +265,7 @@ function PersonalInfo(props) {
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
+            defaultValue={personalData.status?personalData.data.maritalStatus:maritalStatus}
             id="demo-select-small"
             label="Marital Status*"
             onChange={(e) => {
@@ -267,6 +286,7 @@ function PersonalInfo(props) {
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
+            defaultValue={personalData.status?personalData.data.religion:religion}
             id="demo-select-small"
             label="Religion"
             onChange={(e) => {
@@ -304,9 +324,7 @@ function PersonalInfo(props) {
             <MenuItem value={"8th"}>8th</MenuItem>
             <MenuItem value={"10th"}>10th</MenuItem>
             <MenuItem value={"12th"}>12th</MenuItem>
-            <MenuItem value={"Pursuing Graduation"}>
-              Pursuing Graduation
-            </MenuItem>
+            <MenuItem value={"Pursuing Graduation"}> Pursuing Graduation</MenuItem>
             <MenuItem value={"Graduate"}>Graduate</MenuItem>
             <MenuItem value={"Post Graduate"}>Post Graduation</MenuItem>
           </Select>
@@ -316,6 +334,7 @@ function PersonalInfo(props) {
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
+          defaultValue={personalData.status?personalData.data.educationalRemarks:educationalRemarks}
           label="Educational Remarks"
           variant="outlined"
           onChange={(e) => {
@@ -339,6 +358,7 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
+            defaultValue={personalData.status?personalData.data.covidStatus:covidStatus}
             label="COVID Vaccination Status*"
             onChange={(e) => {
               setCovidStatus(e.target.value);
@@ -354,6 +374,7 @@ function PersonalInfo(props) {
           sx={{ width: "79.5%" }}
           size="small"
           id="outlined-basic"
+          defaultValue={personalData.status?personalData.data.medicalCondition:medicalCondition}
           label="Medical Condition(if any)"
           variant="outlined"
           onChange={(e) => {
