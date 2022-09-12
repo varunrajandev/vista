@@ -13,7 +13,7 @@ import AddNewRequest from "./pages/Jobs/AddNewRequest";
 import DashBoard from "./pages/YcwDetailsPage/JobDetails/DashBoard";
 import BasicInformation from "./pages/YcwDetailsPage/JobDetails/BasicInformation";
  import Login from "./pages/Login/Login";
-
+import Profile from "./components/ycw/Profilepage/Profile";
 
 
 
@@ -28,7 +28,7 @@ function App() {
       </Routes>
      
     <Box>
-     <Header />
+     <Header/>
       <Stack direction="row">
         <SideHeader />
         <Routes>
@@ -39,6 +39,7 @@ function App() {
         
         
         <Route path="/ycw/add" element={<AddNewData/>}/>
+        <Route path="/ycw/profile/:id" element={<Profile/>}/>
         <Route path="/ycw/add/dashboard/:id" element={<DashBoard/>}/>
         <Route path="/ycw/add/dashboard/basicinfo/:id" element={<BasicInformation/>}/>
 

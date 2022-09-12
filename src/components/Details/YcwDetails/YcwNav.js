@@ -3,7 +3,8 @@ import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
 import {Typography} from '@mui/material'
-
+import { useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 const StyleLi = styled("li")({
   listStyle: "none",
   fontSize: "20px",
@@ -12,6 +13,7 @@ const StyleLi = styled("li")({
 });
 
 function YcwNav() {
+  const { id } = useParams();
   return (
     <>
       <Box
@@ -22,9 +24,8 @@ function YcwNav() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <p style={{ fontWeight: "400", fontSize: "20px" }}>YCW#</p>
-          <p style={{ fontWeight: "800", fontSize: "20px" }}>Y1234567</p>
-          <Typography
+          <p style={{ fontWeight: "800", fontSize: "20px" }}>{id}</p>
+          {/* <Typography
                         sx={{
                           width:"130px",
                           padding: "9px",
@@ -51,15 +52,28 @@ function YcwNav() {
                         }}
                       >
                           {"ACTIVE & AVILABLE" || "NO DATA"}
-                      </Typography>
+                      </Typography> */}
         </div>
 
+      
         <Button
           sx={{ color: "#f52f50", border: "1px solid #f52f50" }}
           variant="outlined"
         >
+              <NavLink
+                    to={`/ycw`}
+                    style={{
+                      color: "#f52f50",
+                      textDecoration: "none",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
           CLOSE
+          </NavLink>
         </Button>
+       
       </Box>
 
       {/*NavBar */}
@@ -76,7 +90,7 @@ function YcwNav() {
           borderBottomRightRadius:"15px"
         }}
       >
-        <StyleLi>PROFILE</StyleLi>
+        <StyleLi >PROFILE</StyleLi>
         <StyleLi>JOBS</StyleLi>
         <StyleLi>LEDGER</StyleLi>
         <StyleLi>SUPPORT</StyleLi>

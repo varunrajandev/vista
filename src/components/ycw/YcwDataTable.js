@@ -176,6 +176,7 @@ function Right() {
           //  value={searchDD}
           onChange={(event, newValue) => {
             setYcwSearchUserId(newValue.userId);
+            window.location.href=`/ycw/profile/${newValue.userId}`
           }}
           disableClearable
           size="small"
@@ -216,6 +217,9 @@ function Right() {
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
               label="Search YCW Work Type"
+              onChange={(event, newValue) => {
+                setWorkType("");
+              }}
             />
           )}
           getOptionLabel={(item) => `${item.name}`}
@@ -235,6 +239,9 @@ function Right() {
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
               label="Select YCW Status"
+              onChange={(event, newValue) => {
+                setStatusycw("");
+              }}
             />
           )}
           getOptionLabel={(item) => `${item.value}`}
@@ -254,6 +261,9 @@ function Right() {
               sx={{ bgcolor: "white", borderRadius: "5px" }}
               {...params}
               label="Select YCW City"
+              onChange={(event, newValue) => {
+                setYcwCity("");
+              }}
             />
           )}
           getOptionLabel={(item) => `${item.cityName}`}

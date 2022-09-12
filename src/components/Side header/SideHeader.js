@@ -17,7 +17,6 @@ const DIV = styled("div")({
 
 const SideHeader = () => {
 
-
   return (
     <Box
       position="sticky"
