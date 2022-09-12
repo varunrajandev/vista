@@ -12,7 +12,7 @@ function PersonalInformationData() {
   const [middlename, setMiddlename] = React.useState("");
   const [lastname, setLastname] = React.useState("");
   const [gender, setGender] = React.useState("");
-  const [mobile, setMobile] = React.useState();
+  const [mobile, setMobile] = React.useState("");
   const [alternateMobileNumber, setAlternateMobileNumber] = React.useState("");
   const [isWhatsappAvailable, setIsWhatsappAvailable] = React.useState();
   const [whatsappNumber, setWhatsappNumber] = React.useState("");
@@ -58,7 +58,7 @@ function PersonalInformationData() {
             "sourcingChannel": source,
             "userType": "WORKER",
             "whatsappAvailable":isWhatsappAvailable,
-            "whatsappNumber": whatsappNumber
+            "whatsappNumber": whatsappNumber,
           });
           alert(response.data.message)
           setPersonalData(response.data)
@@ -68,6 +68,49 @@ function PersonalInformationData() {
       alert("Please fill All the details"); 
     }
  }
+
+ const updataData = async () => {
+  try {
+      let response = await axios.post("http://13.126.160.155:8080/user/worker/profile",
+      {
+          "birthday":birthday?birthday:personalData.data.birthday,
+          "bloodGroup": "O_POSITIVE",
+          "covidStatus":covidStatus?covidStatus:personalData.data.covidStatus,
+          "educationalRemarks":educationalRemarks?educationalRemarks:personalData.data.educationalRemarks,
+          "email": "string",
+           firstName:firstname?firstname:personalData.data.firstName,
+          "formStatus": "DRAFT",
+          "gender":gender?gender:personalData.data.gender,
+          "isoCode": "string",
+          lastName:lastname?lastname:personalData.data.lastName,
+          "maritalStatus":maritalStatus?maritalStatus:personalData.data.maritalStatus,
+          "medicalCondition": medicalCondition?medicalCondition:personalData.data.medicalCondition,
+          "medium": "PHONE_CALL",
+          middleName:middlename?middlename:personalData.data.middleName,
+          "mobile":mobile?mobile:personalData.data.mobile,
+          "nationality": "INDIAN",
+          "professsion": "BUSINESS_OWNER",
+          "profileStatus": "IN_ACTIVE",
+          "religion":religion?religion:personalData.data.religion,
+          "secondaryEmail": "string",
+          "secondaryMobileNumber": alternateMobileNumber?alternateMobileNumber:personalData.data.secondaryMobileNumber,
+          "secondaryMobileVerified": true,
+          "sourcingChannel": source?source:personalData.data.sourcingChannel,
+          "userType": "WORKER",
+          "whatsappAvailable":isWhatsappAvailable?isWhatsappAvailable:personalData.data.whatsappAvailable,
+          "whatsappNumber": whatsappNumber?whatsappNumber:personalData.data.whatsappNumber,
+          userId:personalData.data.userId
+        });
+        alert("Updated",response.data.message)
+        setPersonalData(response.data)
+        setCurrentSteps(2)
+      
+  } catch (error) {
+    alert("Please fill All the details"); 
+  }
+}
+
+ 
 
 
 
@@ -105,7 +148,7 @@ function PersonalInformationData() {
 
                 <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right"}}>
                     <Button sx={{display:(personalData.status?"none":"block")}}  variant='contained' onClick={handleSubmit}>NEXT</Button>
-                    <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={()=>{setCurrentSteps(2)}}>UPDATE & NEXT</Button>
+                    <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={updataData}>UPDATE & NEXT</Button>
                 </Box>
                 </Box>
 

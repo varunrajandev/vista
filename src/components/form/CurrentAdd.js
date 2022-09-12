@@ -1,9 +1,10 @@
 import { Box, Checkbox, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { multiStepContext } from "../../ContextApi/StepContext";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -28,10 +29,12 @@ function CurrentAdd(props) {
     countryID, setCountryID,
     stateID, setStateID,
     cityID, setCityID,
-    addressData
+    addressData,
+    AllAddress
   } = props
 
-  console.log(addressData.country)
+  const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+
 
   useEffect(() => {
     async function fetchData() {
@@ -81,7 +84,8 @@ function CurrentAdd(props) {
           size="small"
           id="outlined-basic"
           label="Flat/Building"
-          value={addressL1}
+          // value={addressL1}
+          defaultValue={AllAddress?AllAddress.addressLine1:addressL1}
           variant="outlined"
           onChange={(e) => {
             setAddressL1(e.target.value);
@@ -91,7 +95,8 @@ function CurrentAdd(props) {
         <TextField
           sx={{ width: "18%" }}
           size="small"
-          value={addressL2}
+          //value={addressL2}
+          defaultValue={AllAddress?AllAddress.addressLine2:addressL2}
           id="outlined-basic"
           label="Society/Colony/Area"
           variant="outlined"
@@ -102,7 +107,8 @@ function CurrentAdd(props) {
 
         <TextField
           sx={{ width: "18%" }}
-          value={landmark}
+         // value={landmark}
+          defaultValue={AllAddress?AllAddress.landmark:landmark}
           size="small"
           id="outlined-basic"
           label="Landmark"
@@ -116,7 +122,8 @@ function CurrentAdd(props) {
           sx={{ width: "18%" }}
           size="small"
           type="number"
-          value={pinCode}
+          //value={pinCode}
+          defaultValue={AllAddress?AllAddress.postalCode:pinCode}
           id="outlined-basic"
           label="Pin Code"
           variant="outlined"
@@ -134,7 +141,8 @@ function CurrentAdd(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            value={country}
+            defaultValue={AllAddress?AllAddress.countryName:country}
+            //value={country}
             label="Country"
             onChange={(e) => {
               setCountry(e.target.value);
@@ -159,8 +167,9 @@ function CurrentAdd(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
+            defaultValue={AllAddress?AllAddress.stateName:state}
             label="State"
-            value={state}
+            // value={state}
             onChange={(e) => {
               setState(e.target.value);
             }}
@@ -178,7 +187,8 @@ function CurrentAdd(props) {
             labelId="demo-select-small"
             id="demo-select-small"
             label="City"
-            value={city}
+            //value={city}
+            defaultValue={AllAddress?AllAddress.cityName:city}
             onChange={(e) => {
               setCity(e.target.value);
             }}
@@ -196,7 +206,8 @@ function CurrentAdd(props) {
             labelId="demo-select-small"
             id="demo-select-small"
             label="Locality"
-            value={locality}
+            //value={locality}
+            defaultValue={AllAddress?AllAddress.micromarketName:locality}
             onChange={(e) => {
               setLocality(e.target.value);
             }}
@@ -213,7 +224,8 @@ function CurrentAdd(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            value={addressProofType}
+            //value={addressProofType}
+            defaultValue={AllAddress?AllAddress.addressProofType:addressProofType}
             label="Address Proof Type"
             onChange={(e) => {
               setAddressProofType(e.target.value);

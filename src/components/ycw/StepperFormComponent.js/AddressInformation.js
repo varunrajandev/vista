@@ -1,6 +1,5 @@
 import { Box, Button, Checkbox } from "@mui/material";
 import axios from "axios";
-import is from "date-fns/esm/locale/is/index.js";
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { masterApi } from "../../../AlllData";
@@ -30,6 +29,7 @@ function AddressInformation() {
     const [cityID, setCityID] = useState()
     const [localityDD, setLocalityDD] = useState([])
 
+
 // YCW Permanent Adddress
     const [addressLine1p, setAddressLine1p] = React.useState("");
     const [addressLine2p, setAddressLine2p] = React.useState("");
@@ -44,7 +44,7 @@ function AddressInformation() {
     const [stateIDp, setStateIDp] = useState()
     const [cityIDp, setCityIDp] = useState()
 
-    const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+    const {currentSteps, setCurrentSteps, personalData, setAddressData, addressDatas} = useContext(multiStepContext)
 
     useEffect(() => {
        const  AddressFetchByPincode = async (pincode, num)=>{
@@ -62,14 +62,15 @@ function AddressInformation() {
         
     }, [postalCode , postalCodep])
 
-
+console.log(addressDatas[0])
     
 
 
 
-    const handleSubmit = async () =>{
+    const handleSubmit = async () => {
+        console.log("clicked")
        try {
-        let response = await axios.post(masterApi+"/address/save",
+        let response = await axios.post("http://13.126.160.155:8080/user/address/save",
         [
             {
               "addressLine1": addressLine1,
@@ -101,7 +102,7 @@ function AddressInformation() {
               }])
               alert(response.data.message)
               setCurrentSteps(3)
-              setAddressData(response.data)
+              setAddressData(response.data.data)
 
 
         
@@ -137,7 +138,7 @@ function AddressInformation() {
                         stateID={stateID} setStateID={setStateID}
                         cityID={cityID} setCityID={setCityID}
                         localityDD={localityDD} setLocalityDD={setLocalityDD}
-                        addressData={primaryAddress}
+                        AllAddress = {addressDatas[0]}
                     />
 
                     
@@ -159,7 +160,7 @@ function AddressInformation() {
                         stateID={isPermanent?stateID:stateIDp} setStateID={setStateIDp}
                         cityID={isPermanent?cityID:cityIDp} setCityID={setCityIDp}
                         localityDD={localityDD} setLocalityDD={setLocalityDD}
-                        addressData={secondaryAddress}
+                        AllAddress = {addressDatas[1]}
                     />
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>

@@ -7,8 +7,11 @@ import Select from "@mui/material/Select";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { maritalstatus, sourcing } from "../../AlllData";
+import { maritalstatus, masterApi, sourcing } from "../../AlllData";
 import { multiStepContext } from "../../ContextApi/StepContext";
+
+let NumberVelidation;
+let text = ""
 
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
@@ -41,18 +44,30 @@ function PersonalInfo(props) {
 
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
+  
+  //  if(phoneNumber.length<10){
+  //   NumberVelidation = true
+  //   text = "Please Enter valid details"
+  // }
+  // if(phoneNumber.length==""){
+  //   NumberVelidation=false
+  //   text = ""
+  // }
+  
+
   useEffect(() => {
     const dataFetch = async () => {
-      let sourceData = await fetch("http://13.126.160.155:8080/user/drop-down/get/sourceChannel?flag=all");
-      let religionData = await fetch("http://13.126.160.155:8080/user/drop-down/get/religion");
-      let maritalData = await fetch("http://13.126.160.155:8080/user/drop-down/get/maritalStatus")
-      let genderData = await fetch("http://13.126.160.155:8080/user/get/gender")
-      let covidData = await fetch("http://13.126.160.155:8080/user/drop-down/get/covidVaccination")
+      let sourceData = await fetch(masterApi+"/drop-down/get/sourceChannel?flag=all");
+      let religionData = await fetch(masterApi+"/drop-down/get/religion");
+      let maritalData = await fetch(masterApi+"/drop-down/get/maritalStatus")
+      let genderData = await fetch(masterApi+"/get/gender")
+      let covidData = await fetch(masterApi+"/drop-down/get/covidVaccination")
       let res = await sourceData.json();
       let res1 = await religionData.json();
       let res2 = await maritalData.json();
       let res3 = await genderData.json();
       let res4 = await covidData.json();
+      //setSourcingDD(res.data)
       setSourcingDD(res.data)
       setReligionDD(res1.data)
       setMaritalDD(res2.data)
@@ -65,12 +80,7 @@ function PersonalInfo(props) {
   const handleChange = (event) => {
     setWalk(event.target.value);
   };
-
-  setTimeout(() => {
-    setSubmitted(false);
-  }, 2000);
-
-
+  
   return (
     <form>
       <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
@@ -185,22 +195,30 @@ function PersonalInfo(props) {
           type="number"
           sx={{ width: "18%" }}
           size="small"
+          // error ={NumberVelidation}
+          // helperText={text}
+          // required={true}
           defaultValue={personalData.status?personalData.data.mobile:phoneNumber}
           id="outlined-basic"
-          label="Phone Number*"
+          label="Phone Number"
+          onInput = {(e) =>{
+            e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+          }}
           onChange={(e) => {
             setPhoneNumber(e.target.value);
           }}
         />
-
-       
-
+        
         <TextField
           sx={{ width: "18%" }}
           size="small"
+          type="number"
           id="outlined-basic"
           label="Alternate Phone Number*"
           defaultValue={personalData.status?personalData.data.secondaryMobileNumber:alternateNumber}
+          onInput = {(e) =>{
+            e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+          }}
           onChange={(e) => {
             setAlternateNumber(e.target.value);
           }}
@@ -229,8 +247,12 @@ function PersonalInfo(props) {
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
+          type="number"
           label="Whatsapp Number*"
           defaultValue={personalData.status?personalData.data.whatsappNumber:whatsapp}
+          onInput = {(e) =>{
+            e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+          }}
           onChange={(e) => {
             setWhatsapp(e.target.value);
           }}
@@ -318,7 +340,6 @@ function PersonalInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-
             <MenuItem value={"No Education"}>No Education</MenuItem>
             <MenuItem value={"5th"}>5th</MenuItem>
             <MenuItem value={"8th"}>8th</MenuItem>

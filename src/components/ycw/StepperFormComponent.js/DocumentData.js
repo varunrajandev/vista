@@ -1,19 +1,28 @@
-import { Button, Box, Typography, InputLabel, FormControl, Select, MenuItem } from "@mui/material";
+import {
+  Button, Box, Typography, InputLabel,FormControl,Select,MenuItem, gridClasses,
+} from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { addressProof, masterApi } from "../../../AlllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import FormControlSingleSelect from "../../MuiComponents/FormControlSingleSelect";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
+import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
+import styled from "@emotion/styled";
+
+const Div2 = styled("div")({
+  display: "flex",
+  alignItems: "center",
+});
 
 function DocumentData() {
   const [selectedFile, setSelectedFile] = useState();
   const [document, setDocument] = useState("");
   const [isFilePicked, setIsFilePicked] = useState(false);
-  console.log(selectedFile)
+  console.log(selectedFile);
 
-  const { setCurrentSteps } = useContext(multiStepContext)
-
+  const { setCurrentSteps, personalData } = useContext(multiStepContext);
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -27,25 +36,25 @@ function DocumentData() {
 
   const handleSubmission = async () => {
     try {
-      let response = await axios.post(masterApi + "/document/upload?UserId=1234&documentContext=KYC&documentSide=FRONT&documentType=PASSPORT&isActive=true&isReuploaded=false", formData)
-      alert(response.data.message)
+      let response = await axios.post(
+        masterApi +
+          `/document/upload?UserId=${personalData.data.userId}&documentContext=KYC&documentSide=FRONT&documentType=PASSPORT&isActive=true&isReuploaded=false`,
+        formData
+      );
+      alert(response.data.message);
     } catch (error) {
-      alert(error)
+      alert(error);
     }
-
   };
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
-      <Box
-        marginTop={5}
-        sx={{
-
-          padding: 3,
-          bgcolor: "white",
-          borderRadius: 3,
-        }}
-      ><Box sx={{width:"400px", display:"flex", flexDirection:"column", gap:"40px", backgroundColor:"#e7c6f7", padding:"30px"}}>
-        <Typography sx={{ display: "flex", alignItems: "center", gap: "1px" }}>
+      <Box marginTop={5} sx={{ padding: 3, bgcolor: "white", borderRadius: 3, }} >
+        <Box sx={{width: "300px", display:"grid", gap: "20px", backgroundColor: "#e7c6f7", padding: "30px", }} >
+        <Div2>
+              <TextSnippetOutlinedIcon />
+              <p style={{ fontSize: "13px", fontWeight: "bolder" }}>  DOCUMENT UPLOAD </p>
+        </Div2>
+          <Typography sx={{ display: "flex", alignItems: "center", gap: "1px"}} >
             <BookmarkBorderRoundedIcon />
             <FormControl
               sx={{ minWidth: "80%", mt: -2 }}
@@ -58,9 +67,9 @@ function DocumentData() {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 label="Document Type"
-              onChange={(e) => {
-                setDocument(e.target.value);
-              }}
+                onChange={(e) => {
+                  setDocument(e.target.value);
+                }}
               >
                 {addressProof.map((item) => (
                   <MenuItem value={item.source}>{item.source}</MenuItem>
@@ -69,19 +78,42 @@ function DocumentData() {
             </FormControl>
           </Typography>
 
-        <Box display={"flex"} gap={"10px"} alignItems={"center"}>
-          <Button variant="contained" component="label" color="secondary" size="small" sx={{width:"80%", marginLeft:"20px"}}>
-            Upload
-            <input hidden type="file" name="file" onChange={changeHandler} />
-          </Button>
-          <h5>{isFilePicked && selectedFile.name}</h5>
+          <Box display={"flex"} gap={"10px"} alignItems={"center"}>
+          <Typography>
+            <Button
+              upload
+              component="label"
+              startIcon={<AttachFileOutlinedIcon />} 
+              color="secondary"
+            >
+              Upload Document
+              <input hidden type="file" name="file" onChange={changeHandler}/>
+            </Button>
+          </Typography>
+            <h5>{isFilePicked && selectedFile.name}</h5>
+          </Box>
         </Box>
-      </Box>
 
-
-        <Box sx={{ display: "flex", alignItems: "end", height: "100px", justifyContent: "right", gap: "20px" }}>
-          <Button variant='contained' onClick={(() => { setCurrentSteps(2) })}>back</Button>
-          <Button variant='contained' onClick={handleSubmission}>Done</Button>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "end",
+            height: "100px",
+            justifyContent: "right",
+            gap: "20px",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => {
+              setCurrentSteps(2);
+            }}
+          >
+            back
+          </Button>
+          <Button variant="contained" onClick={handleSubmission}>
+            Done
+          </Button>
         </Box>
       </Box>
     </Box>

@@ -33,13 +33,13 @@ function HouseHoldMemberData() {
               "mobileNo": inputFields[0].mobileNo,
               "name": inputFields[0].name,
               "relationship": inputFields[0].relationship,
-              "userId": "string"
+              "userId": personalData.data.userId
             }
           ]
           )
     
           alert(response.data.message)
-          setCurrentSteps()
+          
           
         } catch (error) {
           alert(error)
