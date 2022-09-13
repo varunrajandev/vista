@@ -49,22 +49,3 @@ function MultiSelected(props) {
 
 export default MultiSelected
 
-//  "skillsMappingDto": [
-//   {
-//     "skillDto": [
-//       {
-//         "question": [
-//           {
-//             "answer": [
-//               "string"
-//             ],
-//             "question": "string"
-//           }
-//         ],
-//         "skillName": "string",
-//         "skillUuid": "string"
-//       }
-//     ],
-//     "skillLevel": "PRIMARY"
-//   }
-// ]

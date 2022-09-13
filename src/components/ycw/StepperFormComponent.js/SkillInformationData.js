@@ -24,16 +24,22 @@ function SkillInformationData() {
     //const [values, setValues] = React.useState(false);
     // newSkill data
     // const [secondarySkillArray, setSecondarySkillArray] = React.useState([]);
-    let PrimarySkillArray = [];
+    let SecondarySkillArray = [];
+    let TertiarySkillArray = [];
 
 
     if(secondarySkill){
       secondarySkill.map((item)=>{
-          PrimarySkillArray.push(item.name)
+          SecondarySkillArray.push(item.uuid)
+      })
+    }
+    if(TertiarySkillArray){
+      tertiarySkill.map((item)=>{
+        TertiarySkillArray.push(item.uuid)
       })
     }
 
-    console.log(PrimarySkillArray)
+    console.log(TertiarySkillArray)
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
     
@@ -57,15 +63,11 @@ function SkillInformationData() {
             },
             {
               "skillLevel": "SECONDARY",
-              "skillUuid": [
-                "string"
-              ]
+              "skillUuid": SecondarySkillArray
             },
             {
               "skillLevel": "TERTIARY",
-              "skillUuid": [
-                "string"
-              ]
+              "skillUuid":TertiarySkillArray
             }
           ],
           "userExperienceRequestDto": {
@@ -80,7 +82,7 @@ function SkillInformationData() {
         )
   
         alert(response.data.message)
-        setCurrentSteps("")
+        // setCurrentSteps("")
         
         
       } catch (error) {
