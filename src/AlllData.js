@@ -1,7 +1,7 @@
 
 export const JobRequirementApis = "http://13.126.160.155:8080/user/worker/jobRequirement"
 export const BankApi = "http://13.126.160.155:8080/user/bank/"
-export const masterApi = "http://13.126.160.155:8080/user"
+export const masterApi = `http://13.126.160.155:8080/user`
 
 
 
@@ -48,18 +48,59 @@ export const masterApi = "http://13.126.160.155:8080/user"
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+// "skillsMappingDto": [
+//   {
+//     "skillDto": [
+//       {
+//         "question": [
+//           {
+//             "answer": [
+//               "string"
+//             ],
+//             "question": "string"
+//           }
+//         ],
+//         "skillName": "string",
+//         "skillUuid": "string"
+//       }
+//     ],
+//     "skillLevel": "PRIMARY"
+//   },
+//   {
+//     "skillDto": [
+//       {
+//         "question": [
+//           {
+//             "answer": [
+//               "string"
+//             ],
+//             "question": "string"
+//           }
+//         ],
+//         "skillName": "string",
+//         "skillUuid": "string"
+//       }
+//     ],
+//     "skillLevel": "SECONDARY"
+//   },
+//   {
+//     "skillDto": [
+//       {
+//         "question": [
+//           {
+//             "answer": [
+//               "string"
+//             ],
+//             "question": "string"
+//           }
+//         ],
+//         "skillName": "string",
+//         "skillUuid": "string"
+//       }
+//     ],
+//     "skillLevel": "TERTIARY"
+//   }
+// ]
 
 
 

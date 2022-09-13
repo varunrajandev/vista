@@ -16,13 +16,29 @@ const Div2 = styled("div")({
   alignItems: "center",
 });
 
+
 function DocumentData() {
   const [selectedFile, setSelectedFile] = useState();
   const [document, setDocument] = useState("");
+  const [kycDocument, setKycDocument] = useState("")
   const [isFilePicked, setIsFilePicked] = useState(false);
-  console.log(selectedFile);
+  const [documnetTypeDD, setDocumnetTypeDD] = useState([]);
+  const [kycTypeDD, setKycTypeDD] = useState([]);
 
   const { setCurrentSteps, personalData } = useContext(multiStepContext);
+
+  useEffect(() => {
+   async function fetchDorpDown(){
+      let documentType = await fetch(masterApi+"/drop-down/get/documentUploadType")
+      let KycType = await fetch(masterApi+"/drop-down/get/documentContext")
+      let responseType = await documentType.json();
+      let responseKycType = await KycType.json();
+      setDocumnetTypeDD(responseType.data)
+      setKycTypeDD(responseKycType.data)
+    }
+    fetchDorpDown()
+  }, [])
+  
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -30,15 +46,13 @@ function DocumentData() {
   };
 
   const formData = new FormData();
-
   formData.append("document", selectedFile);
-  console.log(formData.name);
 
   const handleSubmission = async () => {
     try {
       let response = await axios.post(
         masterApi +
-          `/document/upload?UserId=${personalData.data.userId}&documentContext=KYC&documentSide=FRONT&documentType=PASSPORT&isActive=true&isReuploaded=false`,
+          `/document/upload?UserId=${personalData.data.userId}&documentContext=${kycDocument}&documentSide=FRONT&documentType=${document}&isActive=true&isReuploaded=false`,
         formData
       );
       alert(response.data.message);
@@ -56,26 +70,26 @@ function DocumentData() {
         </Div2>
           <Typography sx={{ display: "flex", alignItems: "center", gap: "1px"}} >
             <BookmarkBorderRoundedIcon />
-            <FormControl
-              sx={{ minWidth: "80%", mt: -2 }}
-              size="small"
-              variant="standard"
-            >
-              <InputLabel id="demo-select-small">Document Type</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                label="Document Type"
-                onChange={(e) => {
-                  setDocument(e.target.value);
-                }}
-              >
-                {addressProof.map((item) => (
-                  <MenuItem value={item.source}>{item.source}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <FormControlSingleSelect
+            labelData="KYC Type"
+            dataDD = {kycTypeDD}
+            setData = {setKycDocument}
+            variantData = "standard"
+            size = "80%"
+            mtop={-2}
+            />
+          </Typography>
+
+          <Typography sx={{ display: "flex", alignItems: "center", gap: "1px"}} >
+            <BookmarkBorderRoundedIcon />
+            <FormControlSingleSelect
+            labelData="Document Type"
+            dataDD = {documnetTypeDD}
+            setData = {setDocument}
+            variantData = "standard"
+            size = "80%"
+            mtop={-2}
+            />
           </Typography>
 
           <Box display={"flex"} gap={"10px"} alignItems={"center"}>

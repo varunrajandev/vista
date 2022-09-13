@@ -8,7 +8,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 const label = { inputProps: { "aria-label": "Checkbox demo" } };;
 
 function MultiSelected(props) {
-  const {labelData, dataDD, setData, size} = props
+  const {labelData, dataDD, setData, size, values} = props
   return (
     <>
       <Autocomplete
@@ -17,7 +17,7 @@ function MultiSelected(props) {
           id="checkboxes-tags-demo"
           options={dataDD}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.key}
+          getOptionLabel={(option) =>values?option.name:option.key}
           onChange={(event, newValue) => {
             setData([...newValue]);
           }}
@@ -30,11 +30,11 @@ function MultiSelected(props) {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.value}
+              {values?option.name:option.value}
             </li>
           )}
-          style={{ width: size }}
-          renderInput={(params) => (
+           style={{ width: size }}
+           renderInput={(params) => (
             <TextField
               {...params}
               label={labelData}

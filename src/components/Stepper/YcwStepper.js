@@ -19,8 +19,8 @@ const steps = [
   "SKILL",
   "JOB",
   "BANK",
-  "HOUSEHOLD",
   "DOCUMENT",
+  "HOUSEHOLD",
 ];
 
 function YcwStepper() {
@@ -33,8 +33,9 @@ function YcwStepper() {
             case 3 : return <SkillInformationData/>
             case 4 : return <JobRequirementData/>
             case 5 : return <BankInformation/>
-            case 6 : return <HouseHoldMemberData/>
-            case 7 : return <DocumentData/>
+            case 6 : return <DocumentData/>
+            case 7 : return <HouseHoldMemberData/>
+            
         }
         
     }

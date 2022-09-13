@@ -15,12 +15,12 @@ function HouseHoldMemberData() {
             mobileNo: "",
             name: "",
             relationship: "", 
-            userId:""
         }
     ])
 
     console.log(inputFields)
     const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+    
     async function handleSubmit(){
     
         try {
@@ -39,6 +39,7 @@ function HouseHoldMemberData() {
           )
     
           alert(response.data.message)
+          setCurrentSteps(7)
           
           
         } catch (error) {
@@ -62,7 +63,7 @@ function HouseHoldMemberData() {
             />
             
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
-                <Button variant='contained' onClick={(()=>{setCurrentSteps(2)})}>back</Button>
+                <Button variant='contained' onClick={(()=>{setCurrentSteps(5)})}>back</Button>
                 <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
 
             </Box>

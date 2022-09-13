@@ -160,7 +160,7 @@ console.log(addressDatas[0])
                         stateID={isPermanent?stateID:stateIDp} setStateID={setStateIDp}
                         cityID={isPermanent?cityID:cityIDp} setCityID={setCityIDp}
                         localityDD={localityDD} setLocalityDD={setLocalityDD}
-                        AllAddress = {addressDatas[1]}
+                        AllAddress = {isPermanent?addressDatas[0]:addressDatas[1]}
                     />
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
