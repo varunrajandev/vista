@@ -25,7 +25,8 @@ function UserRegistration() {
   
         try {
          let response= await axios.post("http://13.126.160.155:8080/user/internal/add",
-            {    "anniversaryDate": null,
+            {  
+            "anniversaryDate": null,
             "birthday": null,
             "bloodGroup": "O_POSITIVE",
             "covidStatus": "UNVACCINATED",
@@ -61,8 +62,7 @@ function UserRegistration() {
                     
             });
       alert("Candidate Registration successfully" )
-        
-        
+
         } catch (error) {
           alert("Please Fill correct Mobile Number", error)
           
