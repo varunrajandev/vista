@@ -18,7 +18,7 @@ import { data } from "../../Data";
 import { Link } from "react-router-dom";
 // import Popup from "../../Popup";
 import Tooltip from '@mui/material/Tooltip';
-
+import {useNavigate} from 'react-router-dom';
 
 function Login() {
 
@@ -31,6 +31,7 @@ function Login() {
 const [displayalert,setDisplayAlert]=React.useState("none")
     const [openPopup, setOpenPopup] = React.useState(false);
     const[helpertext,setHelpertext]=React.useState("");
+    let navigate=useNavigate();
     // const handleClickOpen = () => {
     //   setOpen(true);
     //   handleClick();
@@ -103,7 +104,7 @@ const [displayalert,setDisplayAlert]=React.useState("none")
           //  console.log(response)
           //  console.log(mobileNumber);
            handleClose();
-           window.location.href="/ycw";
+           navigate("/ycw");
         } catch (error) {
           alert("User Registration Faild", error)
           handleClose();
@@ -299,6 +300,10 @@ const [displayalert,setDisplayAlert]=React.useState("none")
    
   onClick={handleClick2}
     maxTime={60} 
+    style={{
+      color:"green"
+    }}
+    // textStyle={style}
    //style={{color:"red" ,gap:"10px", backgroundColor:"white",border:"none"}}
    />
           {/* <Button onClick={handleClick2}>Resend OTP</Button> */}
