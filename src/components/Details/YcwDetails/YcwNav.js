@@ -3,7 +3,9 @@ import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
 import {Typography} from '@mui/material'
-
+import { useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useEffect } from 'react'
 const StyleLi = styled("li")({
   listStyle: "none",
   fontSize: "20px",
@@ -11,7 +13,36 @@ const StyleLi = styled("li")({
   color:"gray"
 });
 
+
+const DIV = styled("div")({
+  display: "flex",
+  textAlign: "center",
+  alignItems: "center",
+  flexDirection: "column",
+  marginTop: "20px",
+  
+});
+
 function YcwNav() {
+  const { id } = useParams();
+
+  const [userData, setUserData] = React.useState([])
+  const[userid,setuserId]=React.useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+
+      let ycwprofiledata = await fetch(
+        `http://13.126.160.155:8080/user/worker/get/details/${id}`
+      )
+      let profiletadata = await ycwprofiledata.json();
+      let useprofiledata = await profiletadata.data;
+      setUserData(useprofiledata.userProfile)
+      setuserId(userData.userId)
+    };
+    fetchData();
+  }, []);
+
+  
   return (
     <>
       <Box
@@ -19,12 +50,12 @@ function YcwNav() {
           display: "flex",
           justifyContent: "space-between",
           padding: "20px",
+          mt:2
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <p style={{ fontWeight: "400", fontSize: "20px" }}>YCW#</p>
-          <p style={{ fontWeight: "800", fontSize: "20px" }}>Y1234567</p>
-          <Typography
+          <p style={{ fontWeight: "800", fontSize: "25px" }}>{id}</p>
+          {/* <Typography
                         sx={{
                           width:"130px",
                           padding: "9px",
@@ -35,31 +66,44 @@ function YcwNav() {
                         }}
                         style={{
                           backgroundColor:
-                            ("ACTIVE & AVILABLE" === "ACTIVE & AVILABLE" &&
+                            (userData === "ACTIVE_AND_NOT_AVAILABLE" &&
                               "#DDF2F5") 
-                              //||
-                            // (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
-                            //   "#f0edce") ||
-                            // (item.profileStatus.value === "INACTIVE" && "#fcb1b8"),
+                              ||
+                            (userData === "ACTIVE_AND_AVAILABLE" &&
+                              "#f0edce") ||
+                            (userData === "INACTIVE" && "#fcb1b8")
                          , color:"#60C3AD"
-                          //  ("ACTIVE" === "ACTIVE & AVAILABLE" && "green") 
-                            // ||
-                            // (item.profileStatus.value === "ACTIVE & NOT AVAILABLE" &&
-                            //   "#f7aa02") ||
-                            // (item.profileStatus.value === "INACTIVE" && "red")
+                           ("ACTIVE" === "ACTIVE & AVAILABLE" && "green") 
+                            ||
+                            (userData === "ACTIVE & NOT AVAILABLE" &&
+                              "#f7aa02") ||
+                            (userData === "INACTIVE" && "red")
                             ,
                         }}
                       >
                           {"ACTIVE & AVILABLE" || "NO DATA"}
-                      </Typography>
+                      </Typography> */}
         </div>
 
+      
         <Button
           sx={{ color: "#f52f50", border: "1px solid #f52f50" }}
           variant="outlined"
         >
+              <NavLink
+                    to={`/ycw`}
+                    style={{
+                      color: "#f52f50",
+                      textDecoration: "none",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
           CLOSE
+          </NavLink>
         </Button>
+       
       </Box>
 
       {/*NavBar */}
@@ -76,10 +120,27 @@ function YcwNav() {
           borderBottomRightRadius:"15px"
         }}
       >
-        <StyleLi>PROFILE</StyleLi>
+
+        <DIV>
+        {/* <NavLink
+            to={`/ycw/profile/${userid}`}
+            style={({ isActive }) => {
+              return { borderBottom: isActive ? "5px solid red" : "5px solid white", textDecoration: 'none', color:"black", width:"40px" };
+            }}
+          > */}
+        <StyleLi >PROFILE</StyleLi>
+        {/* </NavLink> */}
+        </DIV>
+        <DIV>
         <StyleLi>JOBS</StyleLi>
+        </DIV>
+        <DIV>
         <StyleLi>LEDGER</StyleLi>
+        </DIV>
+        <DIV>
         <StyleLi>SUPPORT</StyleLi>
+        </DIV>
+
       </Box>
     </>
   );

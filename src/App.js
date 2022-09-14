@@ -13,8 +13,8 @@ import AddNewRequest from "./pages/Jobs/AddNewRequest";
 import DashBoard from "./pages/YcwDetailsPage/JobDetails/DashBoard";
 import BasicInformation from "./pages/YcwDetailsPage/JobDetails/BasicInformation";
  import Login from "./pages/Login/Login";
-
-
+import Profile from "./components/ycw/Profilepage/Profile";
+import UserRegistration from "./pages/UserRegistration/UserRegistration";
 
 
 function App() {
@@ -25,20 +25,21 @@ function App() {
     <BrowserRouter>
      {/* <Routes>
       <Route path="/login" element={<Login/>} />
-      </Routes> */}
-     
-    <Box>
-     <Header />
+      <Route path="/registration" element={<UserRegistration/>} />
+      </Routes>
+        <Box>
+     <Header/>
       <Stack direction="row">
         <SideHeader />
         <Routes>
-
-      
+       
+        {/* <Route path="/login" element={<Login/>} /> */}
         <Route path="/" element={<YcwAllData/>}/>
         <Route path="/ycw" element={<YcwAllData/>}/>
         
         
         <Route path="/ycw/add" element={<AddNewData/>}/>
+        <Route path="/ycw/profile/:id" element={<Profile/>}/>
         <Route path="/ycw/add/dashboard/:id" element={<DashBoard/>}/>
         <Route path="/ycw/add/dashboard/basicinfo/:id" element={<BasicInformation/>}/>
 
