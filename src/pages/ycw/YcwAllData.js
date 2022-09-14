@@ -11,7 +11,8 @@ import SideHeader from '../../components/Side header/SideHeader';
 // import SideHeader from "./components/Side header/SideHeader";
 
 
-function YcwDataList() {    
+
+function YcwDataList() { 
   return ( 
        <>
       {/* <Box>

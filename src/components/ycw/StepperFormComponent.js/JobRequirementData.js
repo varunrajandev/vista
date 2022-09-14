@@ -35,7 +35,7 @@ function JobRequirementData() {
         "startTime": startTimeFormat,
         "totalSimultaneousJob": 0,
         "traningMode": traningMode,
-        "userId": "string",
+        "userId": personalData.data.userId,
         "vehicle": "string",
         "workingHours": "_0_TO_2_HOURS"
       })

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-import { Cuisines } from "../../AlllData";
+import { Cuisines, masterApi } from "../../AlllData";
 import FormControlSingleSelect from "../MuiComponents/FormControlSingleSelect";
 import MultiSelected from "../MuiComponents/MultiSelected";
 import TextFieldComponent from "../MuiComponents/TextFieldComponent";
@@ -31,25 +31,37 @@ function SkillExpDetails(props) {
     // values, setValue,
   } = props
 
+
+
+
+
   useEffect(() => {
     async function fetchData() {
-      let primarySkilldata = await fetch("http://13.126.160.155:8080/user/drop-down/get/skills");
-      let primaryLanguagedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/primaryLanguage");
-      let otherLanguagedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/otherLanguages");
-      let Jobtypedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/jobType");
-      let res = await primarySkilldata.json();
+      let primarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
+      let secondarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill=${primarySkill}`);
+      let tertiarySkillData = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
+      let primaryLanguagedata = await fetch(masterApi + "/drop-down/get/language?language");
+      let otherLanguagedata = await fetch(masterApi + `/drop-down/get/language?language=${primaryLanguage}`);
+      let Jobtypedata = await fetch(masterApi + "/drop-down/get/jobType?jobType=HOUSEKEEPING");
+      let Pres = await primarySkilldata.json();
+      let Sres = await secondarySkilldata.json();
+      let Tres = await tertiarySkillData.json()
+
       let res1 = await primaryLanguagedata.json();
       let res2 = await otherLanguagedata.json();
       let res3 = await Jobtypedata.json();
-      setPSkillDD(res.data || [{ value: "NO DATA" }]);
-      setSSkillDD(res.data || [{ value: "NO DATA" }]);
-      setTSkillDD(res.data || [{ value: "NO DATA" }]);
+      setPSkillDD(Pres.data || [{ value: "NO DATA" }]);
+      setSSkillDD(Sres.data || [{ value: "NO DATA" }]);
+      setTSkillDD(Tres.data || [{ value: "NO DATA" }]);
       setPrimarylanguageDD(res1.data || [{ value: "NO DATA" }]);
       setOtherlanguageDD(res2.data || [{ value: "NO DATA" }]);
       setJobtypeDD(res3.data || [{ value: "NO DATA" }]);
     }
     fetchData()
-  }, [])
+  }, [primarySkill, primaryLanguage, secondarySkill])
+
+  console.log(tertiarySkill)
+  
 
 
   return (
@@ -57,7 +69,7 @@ function SkillExpDetails(props) {
       marginTop={1}
       sx={{
         display: "flex",
-        flexDirection:"column",
+        flexDirection: "column",
         gap: 1,
       }}
     >
@@ -109,34 +121,37 @@ function SkillExpDetails(props) {
           size="25%"
         />
 
-       <TextFieldComponent
+        <TextFieldComponent
           labelData="Reason For Leaving Last Job"
           setData={setReasonLeaving}
-          size="50%"
+          size="60%"
         />
-        </Box>
 
-        {/* Skill */}
-        <Box mt={7}>
         <FormControlSingleSelect
           labelData="Primary Skill"
           dataDD={pSkillDD}
           setData={setPrimarySkill}
-          size="60%"
+          values={"name"}
+          size="37.5%"
         />
-        <Box>
-          <SkillSection
-            labelData="Primary Skill"
-            dataDD={pSkillDD}
-            setData={setPrimarySkill}
-          />
-        </Box>
 
-         </Box>
+        <MultiSelected
+          labelData="Secondary Skill"
+          dataDD={sSkillDD}
+          setData={setSecondarySkill}
+          values={"name"}
+          size="48.7%"
+        />
 
-       
-        
+        <MultiSelected
+          labelData="Tertiary Skill"
+          dataDD={tSkillDD}
+          setData={setTertiarySkill}
+          values={"name"}
+          size="48.7%"
+        />
       </Box>
+    </Box>
   );
 }
 export default SkillExpDetails;

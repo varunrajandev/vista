@@ -23,12 +23,11 @@ function App() {
     <>
  
     <BrowserRouter>
-     <Routes>
+     {/* <Routes>
       <Route path="/login" element={<Login/>} />
       <Route path="/registration" element={<UserRegistration/>} />
       </Routes>
-    
-    <Box>
+        <Box>
      <Header/>
       <Stack direction="row">
         <SideHeader />

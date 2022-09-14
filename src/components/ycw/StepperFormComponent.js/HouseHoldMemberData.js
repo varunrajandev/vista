@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { masterApi } from '../../../AlllData'
 import { multiStepContext } from '../../../ContextApi/StepContext'
 import HouseHoldMemberInfo from '../../form/HouseHoldMemberInfo'
+import { Navigate } from "react-router-dom";
 
 function HouseHoldMemberData() {
     const [inputFields, setInputFields] = useState([
@@ -15,12 +16,12 @@ function HouseHoldMemberData() {
             mobileNo: "",
             name: "",
             relationship: "", 
-            userId:""
         }
     ])
 
     console.log(inputFields)
-    const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+    const {currentSteps, setCurrentSteps, personalData, setAddressData, householdData, setHouseholdData} = useContext(multiStepContext)
+    
     async function handleSubmit(){
     
         try {
@@ -33,13 +34,15 @@ function HouseHoldMemberData() {
               "mobileNo": inputFields[0].mobileNo,
               "name": inputFields[0].name,
               "relationship": inputFields[0].relationship,
-              "userId": "string"
+              "userId": personalData.data.userId
             }
           ]
           )
     
           alert(response.data.message)
-          setCurrentSteps()
+          setHouseholdData(response.data)
+          setCurrentSteps(7)
+          
           
         } catch (error) {
           alert(error)
@@ -62,13 +65,14 @@ function HouseHoldMemberData() {
             />
             
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
-                <Button variant='contained' onClick={(()=>{setCurrentSteps(2)})}>back</Button>
+                <Button variant='contained' onClick={(()=>{setCurrentSteps(5)})}>back</Button>
                 <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
 
             </Box>
 
         </Box>
       </Box>
+      {householdData.status && <Navigate to="/ycw" />}
     </>
   )
 }

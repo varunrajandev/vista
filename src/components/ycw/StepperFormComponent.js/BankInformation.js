@@ -31,7 +31,7 @@ function BankInformation() {
 
   console.log("first",inputFields[0].ifscCode)
 
-  const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+  const {currentSteps, setCurrentSteps, personalData, setAddressData, } = useContext(multiStepContext)
    
   async function handleSubmit(){
     
@@ -47,13 +47,14 @@ function BankInformation() {
             "branchName": ifscCodeData.branchName,
             "ifscCode": inputFields[0].ifscCode,
             "primary": true,
-            "userId": "string"
+            "userId": personalData.data.userId
           }
         ]
       )
 
       alert(response.data.message)
       setCurrentSteps(6)
+      
 
       
     } catch (error) {

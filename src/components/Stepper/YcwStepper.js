@@ -11,6 +11,7 @@ import JobRequirementData from "../ycw/StepperFormComponent.js/JobRequirementDat
 import BankInformation from "../ycw/StepperFormComponent.js/BankInformation";
 import HouseHoldMemberData from "../ycw/StepperFormComponent.js/HouseHoldMemberData";
 import DocumentData from "../ycw/StepperFormComponent.js/DocumentData";
+import SkillQuestion from "../ycw/StepperFormComponent.js/SkillQuestion";
 
 
 const steps = [
@@ -19,8 +20,8 @@ const steps = [
   "SKILL",
   "JOB",
   "BANK",
-  "HOUSEHOLD",
   "DOCUMENT",
+  "HOUSEHOLD",
 ];
 
 function YcwStepper() {
@@ -33,8 +34,9 @@ function YcwStepper() {
             case 3 : return <SkillInformationData/>
             case 4 : return <JobRequirementData/>
             case 5 : return <BankInformation/>
-            case 6 : return <HouseHoldMemberData/>
-            case 7 : return <DocumentData/>
+            case 6 : return <DocumentData/>
+            case 7 : return <HouseHoldMemberData/>
+            
         }
         
     }
