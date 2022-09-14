@@ -41,6 +41,7 @@ function App() {
         <Route path="/ycw/add" element={<AddNewData/>}/>
         <Route path="/ycw/profile/:id" element={<Profile/>}/>
         <Route path="/ycw/add/dashboard/:id" element={<DashBoard/>}/>
+        <Route path="/ycw/add/:id" element={<AddNewData/>}/>
         <Route path="/ycw/add/dashboard/basicinfo/:id" element={<BasicInformation/>}/>
 
 

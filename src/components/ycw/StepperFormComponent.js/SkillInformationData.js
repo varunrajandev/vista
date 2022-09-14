@@ -78,7 +78,8 @@ function SkillInformationData() {
             "reasonForLeavingJob": "string",
             "totalExperience": "string"
           },
-          "userId": personalData.data.userId
+            "userId": personalData.data.userId
+          // "userId": "YCW0000001"
         }
         )
   
@@ -129,7 +130,7 @@ function SkillInformationData() {
         
       </Box>
 
-      <Box sx={{display:(skillData.status?"block":"none")}}><SkillQuestion/></Box>
+      <Box ><SkillQuestion/></Box>
 
     </Box>
     </>

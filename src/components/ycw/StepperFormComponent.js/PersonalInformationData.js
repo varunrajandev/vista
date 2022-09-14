@@ -4,6 +4,8 @@ import axios from 'axios';
 import PersonalInfo from '../../form/PersonalInfo'
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 
 function PersonalInformationData() {
   // YCW Personal information useState
@@ -26,9 +28,10 @@ function PersonalInformationData() {
   const [submitted, setSubmitted] = React.useState(false)
   const [availableNumberResponse, setAvailableNumberResponse] = useState()
 
+  const {id} = useParams()
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
-  console.log(personalData)
+  console.log(id)
   
   useEffect(() => {
    async function checkMobilenumber(){
