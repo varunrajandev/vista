@@ -1,12 +1,12 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import { Box, Button } from '@mui/material'
 import axios from 'axios';
 import PersonalInfo from '../../form/PersonalInfo'
 import { multiStepContext } from '../../../ContextApi/StepContext';
+import { useState } from 'react';
 
 function PersonalInformationData() {
-
-      // YCW Personal information useState
+  // YCW Personal information useState
   const [source, setSource] = React.useState("");
   const [firstname, setFirstname] = React.useState("");
   const [middlename, setMiddlename] = React.useState("");
@@ -24,10 +24,26 @@ function PersonalInformationData() {
   const [covidStatus, setCovidStatus] = React.useState("");
   const [medicalCondition, setMedicalCondition] = React.useState("");
   const [submitted, setSubmitted] = React.useState(false)
+  const [availableNumberResponse, setAvailableNumberResponse] = useState()
 
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
   console.log(personalData)
+  
+  useEffect(() => {
+   async function checkMobilenumber(){
+    let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${mobile}`)
+    let response = await checkNumber.json();
+    setAvailableNumberResponse(response.data)
+   }
+  checkMobilenumber()
+  }, [mobile])
+
+  if(availableNumberResponse){
+    alert("Already Available")
+  }
+  
+  console.log(availableNumberResponse)
   
   const handleSubmit = async () => {
     try {

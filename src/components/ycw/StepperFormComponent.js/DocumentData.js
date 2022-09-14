@@ -11,6 +11,7 @@ import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import styled from "@emotion/styled";
 
+
 const Div2 = styled("div")({
   display: "flex",
   alignItems: "center",
@@ -25,19 +26,19 @@ function DocumentData() {
   const [documnetTypeDD, setDocumnetTypeDD] = useState([]);
   const [kycTypeDD, setKycTypeDD] = useState([]);
 
-  const { setCurrentSteps, personalData } = useContext(multiStepContext);
+  const { setCurrentSteps, personalData, setDocumentData, documentData } = useContext(multiStepContext);
 
   useEffect(() => {
    async function fetchDorpDown(){
-      let documentType = await fetch(masterApi+"/drop-down/get/documentUploadType")
-      let KycType = await fetch(masterApi+"/drop-down/get/documentContext")
+      let documentType = await fetch(`http://13.126.160.155:8080/user/drop-down/get/documentUploadType?flag`)
+      let KycType = await fetch("http://13.126.160.155:8080/user/drop-down/get/documentContext")
       let responseType = await documentType.json();
       let responseKycType = await KycType.json();
       setDocumnetTypeDD(responseType.data)
       setKycTypeDD(responseKycType.data)
     }
     fetchDorpDown()
-  }, [])
+  }, [kycTypeDD])
   
 
   const changeHandler = (event) => {
@@ -56,7 +57,10 @@ function DocumentData() {
         formData
       );
       alert(response.data.message);
-    } catch (error) {
+      setDocumentData(response.data)
+      setCurrentSteps(7)
+    } 
+        catch (error) {
       alert(error);
     }
   };
@@ -120,7 +124,7 @@ function DocumentData() {
           <Button
             variant="contained"
             onClick={() => {
-              setCurrentSteps(2);
+              setCurrentSteps(5);
             }}
           >
             back
@@ -130,6 +134,7 @@ function DocumentData() {
           </Button>
         </Box>
       </Box>
+      
     </Box>
   );
 }

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { masterApi } from '../../../AlllData'
 import { multiStepContext } from '../../../ContextApi/StepContext'
 import HouseHoldMemberInfo from '../../form/HouseHoldMemberInfo'
+import { Navigate } from "react-router-dom";
 
 function HouseHoldMemberData() {
     const [inputFields, setInputFields] = useState([
@@ -19,7 +20,7 @@ function HouseHoldMemberData() {
     ])
 
     console.log(inputFields)
-    const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+    const {currentSteps, setCurrentSteps, personalData, setAddressData, householdData, setHouseholdData} = useContext(multiStepContext)
     
     async function handleSubmit(){
     
@@ -39,6 +40,7 @@ function HouseHoldMemberData() {
           )
     
           alert(response.data.message)
+          setHouseholdData(response.data)
           setCurrentSteps(7)
           
           
@@ -70,6 +72,7 @@ function HouseHoldMemberData() {
 
         </Box>
       </Box>
+      {householdData.status && <Navigate to="/ycw" />}
     </>
   )
 }

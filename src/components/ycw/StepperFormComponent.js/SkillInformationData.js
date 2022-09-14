@@ -4,6 +4,7 @@ import React, { useContext } from 'react'
 import { masterApi } from '../../../AlllData';
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import SkillExpDetails from '../../form/SkillExpDetails'
+import SkillQuestion from './SkillQuestion';
 
 function SkillInformationData() {
     //Skill and Experience Deatails
@@ -41,7 +42,7 @@ function SkillInformationData() {
 
     console.log(TertiarySkillArray)
 
-    const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+    const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
     
 
     async function handleSubmit(){
@@ -77,14 +78,12 @@ function SkillInformationData() {
             "reasonForLeavingJob": "string",
             "totalExperience": "string"
           },
-          "userId": "YCW0000001"
+          "userId": personalData.data.userId
         }
         )
   
         alert(response.data.message)
-        // setCurrentSteps("")
-        
-        
+        setSkillData(response.data)
       } catch (error) {
         alert(error)
       }
@@ -120,6 +119,8 @@ function SkillInformationData() {
           ReasonLeaving={reasonLeaving} setReasonLeaving={setReasonLeaving}
         // values={values} setValue={setValue}
         />
+       
+
           <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
               <Button variant='contained' onClick={(()=>{setCurrentSteps(2)})}>back</Button>
               <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
@@ -127,6 +128,8 @@ function SkillInformationData() {
           </Box>
         
       </Box>
+
+      <Box sx={{display:(skillData.status?"block":"none")}}><SkillQuestion/></Box>
 
     </Box>
     </>

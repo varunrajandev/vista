@@ -5,7 +5,7 @@ function FormControlSingleSelect(props) {
     const {labelData, dataDD, setData, size, variantData, mtop, values} = props
   return (
     <>
-        <FormControl sx={{ minWidth: 120, width: size, mt:mtop }} size="small" variant={variantData}>
+        <FormControl sx={{ minWidth: 120, width: size, mt:mtop?mtop:0 }} size="small" variant={variantData}>
           <InputLabel id="demo-select-small">{labelData}</InputLabel>
           <Select
             sx={{ width: "100%" }}
@@ -16,8 +16,8 @@ function FormControlSingleSelect(props) {
                 setData(e.target.value);
             }}
           >
-            {dataDD.map((items) => (
-              <MenuItem value={values?items.uuid:items.key}>{values?items.name:items.key}</MenuItem>
+            {dataDD.map((items, index) => (
+              <MenuItem key={index} value={values?items.uuid:items.key}>{values?items.name:items.key}</MenuItem>
             ))}
           </Select>
         </FormControl>

@@ -8,7 +8,7 @@ import SkillExpDetails from "../../form/SkillExpDetails";
 import { Cuisines } from "../../../AlllData";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
-let Data = ["a", "b", "c"]
+let Array = []
 
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -16,34 +16,76 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 
 function SkillQuestion() {
     const [allQuestion, setAllQuestion] = useState([])
+  //const [storeQuestion, setStoreQuestion] = useState([])
+    const [storeQuestion, setStoreQuestion] = useState([
+
+      ])
+
   const { currentSteps,setCurrentSteps,personalData,setAddressData} = useContext(multiStepContext);
+
+  useEffect(() => {
+    allQuestion.map((item)=>{
+      setStoreQuestion([
+        ...storeQuestion,
+        {
+          "question": [
+            {
+              "answer": [
+                "string"
+              ],
+              "question": item.question
+            }
+          ],
+          "skillName": item.skillNmae,
+          "skillUuid": item.skillUuid
+        }
+      ])
+  })
+  }, [allQuestion])
+  
+
   
   useEffect(() => {
      const fetchSkillData = async ()=>{
-        let QuestionData = await fetch("http://13.126.160.155:8080/user/skill/get/all/question?userId=YCW0000025")
+        let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${personalData.data.userId}`)
         let responseQuestion = await QuestionData.json();
         setAllQuestion(responseQuestion.data)
      }
-     fetchSkillData()
+     {personalData.status&&fetchSkillData()}
   }, [])
 
-  console.log(allQuestion)
+  
+  // var uniqueSet = new Set(storeQuestion)
+  // console.log(uniqueSet)
+  console.log(storeQuestion)
+ 
   
 
-  async function handleSubmit(props) {
-    try {
-      let response = await axios.post(masterApi + "/skill/save");
+  async function handleSubmit() {
+    // try {
+    //   let response = await axios.post(masterApi + "/skill/save");
 
-      alert(response.data.message);
-      // setCurrentSteps("")
-    } catch (error) {
-      alert(error);
-    }
+    //   alert(response.data.message);
+    //   // setCurrentSteps("")
+    // } catch (error) {
+    //   alert(error);
+    // }
+    setCurrentSteps(4)
+  }
+
+  const handleChangeInput = (event, newValue, questions, index) =>{
+    //console.log("questions",questions)
+    const values = [...storeQuestion]
+    values[index]["data"] = [...newValue];
+    values[index] = [questions] 
+     
+    
+    setStoreQuestion(values)
   }
 
   return (
     <>
-      <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
+      <Box>
         <Box
           marginTop={5}
           sx={{
@@ -64,9 +106,7 @@ function SkillQuestion() {
                         options={item.questionOption}
                         disableCloseOnSelect
                         getOptionLabel={(option) => (option)}
-                        // onChange={(event, newValue) => {
-                        //   setData([...newValue]);
-                        // }}
+                        onChange={(event, newValue)=>handleChangeInput(event, newValue, item.question, index)}
                         renderOption={(props, option, { selected }) => (
                           <li {...props}>
                             <Checkbox
@@ -83,6 +123,7 @@ function SkillQuestion() {
                         renderInput={(params) => (
                           <TextField
                             {...params}
+                            
                             label={item.skillNmae}
                             placeholder="Favorites"
                             size="small"
@@ -90,23 +131,10 @@ function SkillQuestion() {
                         )}
                       />
                       </Box>
-                    </Box>
+              </Box>
             ))}
             </Box>
-     
-       
-            {/* "skillUuid": "1cd8ed78-245a-4316-8d58`-dfd1c2f8111b",
-"skillNmae": "Cooking",
-"question": "Cooking Question 1",
-"selectionType": "MULTI",
-"questionOption": [
-"A",
-"B",
-"C"
-],
-"questionType": "DROPDOWN",
-"maindatory": true */}
-
+            
             <Box
             sx={{
               display: "flex",
