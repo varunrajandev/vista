@@ -12,7 +12,7 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import { FilterData } from "../../AlllData";
 import { useSelector } from "react-redux/es/exports";
 import { useEffect } from "react";
@@ -29,46 +29,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 const label = { inputProps: { "aria-label": "Checkbox demo" } };;
 
-// const Search = styled("div")(({ theme }) => ({
-//   position: "relative",
-//   height: "55px",
-//   display: "flex",
-//   border: "1px solid #c2c4c3",
-//   alignItems: "center",
-//   borderRadius: theme.shape.borderRadius,
-//   backgroundColor: alpha(theme.palette.common.white, 0.95),
-//   "&:hover": {
-//     border: "1px solid black",
-//   },
-//   marginRight: theme.spacing(2),
-//   marginLeft: 0,
-//   [theme.breakpoints.up("sm")]: {
-//     marginLeft: theme.spacing(3),
-//   },
-// }));
 
-// const SearchIconWrapper = styled("div")(({ theme }) => ({
-//   padding: theme.spacing(0, 2),
-//   height: "100%",
-//   position: "absolute",
-//   pointerEvents: "none",
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "center",
-// }));
-
-// const StyledInputBase = styled(InputBase)(({ theme }) => ({
-//   color: "inherit",
-//   "& .MuiInputBase-input": {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-//     transition: theme.transitions.create("width"),
-//     width: "100%",
-//     [theme.breakpoints.up("md")]: {
-//       width: "30ch",
-//     },
-//   },
-// }));
 
 //table style
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -99,6 +60,15 @@ function Right() {
   const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
   const [filterName, setFilterName] = React.useState("userId");
+
+///onclick status
+const [statusData, setStatusData] = useState("")
+const [id, setId] = useState("")
+
+console.log("id",id)
+console.log("statusData",statusData)
+
+
   
   let navigate=useNavigate();
 
@@ -143,13 +113,14 @@ function Right() {
 
     fetchData();
 
-  }, [ycwidorder, worktype, statusycw, ycwCity, searchItem]);
-  console.log("ycwCity",ycwCity)
-  //  console.log("searchItem",searchItem)
+  }, [ycwidorder, worktype, statusycw, searchItem]);
   function handleSort() {
     ycwidorder === "asc" ? setycwIdOrder("desc") : setycwIdOrder("asc");
   }
 
+  // const handleStatus = ()=>{
+  //   console.log("click")
+  // }
 
 
   return (
@@ -282,61 +253,6 @@ function Right() {
           getOptionLabel={(item) => `${item.cityName}`}
         />
 
-    {/* ================================================ multiselect data*/}
-
-
-
-{/* 
-
-
-
-    <Autocomplete
-          sx={{width:"300px"}}
-          multiple
-          size='small'
-          id="checkboxes-tags-demo"
-          options={cityDD}
-          disableCloseOnSelect
-          getOptionLabel={(option) => option.cityName}
-          onChange={(event, newValue) => {
-            setYcwCity([...newValue]);
-          }}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                size='small'
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.cityName}
-            </li>
-          )}
-          // style={{ width: size }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label={"City Name"}
-              placeholder="Favorites"
-              size="small"
-            />
-          )}
-        />
-
-
-
-
-
-
-
- */}
-
-
-
-
-
-    {/* ===================================================== */}
 
       </Box>
 
@@ -565,9 +481,17 @@ function Right() {
             </TableHead>
             
 
+
+
+
+{/* ///ghjkl;dfghjkl;dfghkl;dfghjkl;'sdfhjl;sdfghkl;sdfhkl;'sdfhjl; */}
+
+
+
             <TableBody component={Paper}>
               {tableData.map((item) => (
                 <StyledTableRow
+                  onClick={()=>{setId(item.userId); {setStatusData(item.profileStatus.value)}}}
                   key={item.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
@@ -625,16 +549,8 @@ function Right() {
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {"--"}
                   </TableCell>
-                  <NavLink
-                    to={`/ycw/profile/${item.userId}`}
-                    style={{
-                      textDecoration: "none",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
                     <TableCell align="left" sx={{ border: "none" }}>
+
                       <Typography
                         sx={{
                           width: "150px",
@@ -669,13 +585,14 @@ function Right() {
                         {item.profileStatus.value || "--"}
                       </Typography>
                     </TableCell>
-                  </NavLink>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+      {statusData=="INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
+      {statusData=="ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
     </Box>
   );
 }
