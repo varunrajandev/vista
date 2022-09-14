@@ -2,29 +2,30 @@ import React from 'react'
 import YcwDataTable from "../../components/ycw/YcwDataTable";
 import {data} from '../../Data';
 import { useEffect } from 'react';
+import {Box} from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { getData } from '../../Redux/Posts/action';
+import Header from '../../components/Header/Header';
+import SideHeader from '../../components/Side header/SideHeader';
+// import Header from "./components/Header/Header";
+// import SideHeader from "./components/Side header/SideHeader";
 
 
-
-function YcmDataList() {
-  //url = "http://13.126.160.155:8080/user/worker/get/all/worker?filter=firstName&pageNo=1&pageSize=30&sortby=asc"
-  let url = `http://13.126.160.155:8080/user/worker/get/all/worker`;
-  const dispatch = useDispatch()
-     useEffect(() => {
-         dispatch(getData(url))
-      },[ url]);
-    
-  return (
-   
+function YcwDataList() {    
+  return ( 
        <>
-       <YcwDataTable/>
-     
-       </>
-        
+      {/* <Box>
 
- 
+      <Header/> */}
+      <YcwDataTable/>
+      
+      {/* </Box> */}
+       {/* <SideHeader/> */}
+       
+      
+       
+       </>
   )
 }
 
-export default YcmDataList
+export default YcwDataList
