@@ -23,7 +23,7 @@ function App() {
     <>
  
     <BrowserRouter>
-     {/* <Routes>
+     <Routes>
       <Route path="/login" element={<Login/>} />
       <Route path="/registration" element={<UserRegistration/>} />
       </Routes>
@@ -33,7 +33,7 @@ function App() {
         <SideHeader />
         <Routes>
        
-        {/* <Route path="/login" element={<Login/>} /> */}
+         {/* <Route path="/login" element={<Login/>} /> */}
         <Route path="/" element={<YcwAllData/>}/>
         <Route path="/ycw" element={<YcwAllData/>}/>
         
