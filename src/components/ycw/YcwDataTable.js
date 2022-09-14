@@ -610,7 +610,7 @@ function Right() {
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.skill || "--"}
+                    {item.primarySkill || "--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
@@ -637,7 +637,6 @@ function Right() {
                       <Typography
                         sx={{
                           width: "150px",
-
                           padding: "8px",
                           borderRadius: "5px",
                           fontSize: "11px",
