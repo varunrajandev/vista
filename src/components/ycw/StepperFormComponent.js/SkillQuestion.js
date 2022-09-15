@@ -2,86 +2,76 @@ import { Box, Button, TextField, Autocomplete, Checkbox } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { masterApi } from "../../../AlllData";
-import CheckBoxIcon from "@mui/icons-material/CheckBox"
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import SkillExpDetails from "../../form/SkillExpDetails";
 import { Cuisines } from "../../../AlllData";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import { useParams } from "react-router-dom";
 
-let Array = []
+let Array = [];
 
 
-const checkedIcon = <CheckBoxIcon fontSize="small" />
+
+
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 
 function SkillQuestion() {
-    const [allQuestion, setAllQuestion] = useState([])
+
+  const [allQuestion, setAllQuestion] = useState([]);
   //const [storeQuestion, setStoreQuestion] = useState([])
-    const [storeQuestion, setStoreQuestion] = useState([
+  const [storeQuestion, setStoreQuestion] = useState([]);
 
-      ])
+  const {id} = useParams()
 
-  const { currentSteps,setCurrentSteps,personalData,setAddressData} = useContext(multiStepContext);
+  const { currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext);
+
+
 
   useEffect(() => {
-    allQuestion.map((item)=>{
-      setStoreQuestion([
-        ...storeQuestion,
-        {
-          "question": [
-            {
-              "answer": [
-                "string"
-              ],
-              "question": item.question
-            }
-          ],
-          "skillName": item.skillNmae,
-          "skillUuid": item.skillUuid
-        }
-      ])
-  })
-  }, [allQuestion])
-  
+    const fetchSkillData = async () => {
+      let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${id}`)
+     
+      let responseQuestion = await QuestionData.json();
+      setAllQuestion(responseQuestion.data);
+    };
+    fetchSkillData();
+  }, [id]);
 
-  
-  useEffect(() => {
-     const fetchSkillData = async ()=>{
-        let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${personalData.data.userId}`)
-        let responseQuestion = await QuestionData.json();
-        setAllQuestion(responseQuestion.data)
-     }
-     {personalData.status&&fetchSkillData()}
-  }, [])
-
-  
-  // var uniqueSet = new Set(storeQuestion)
-  // console.log(uniqueSet)
-  console.log(storeQuestion)
- 
-  
+  console.log(storeQuestion);
 
   async function handleSubmit() {
-    // try {
-    //   let response = await axios.post(masterApi + "/skill/save");
+     try {
+    let response = await axios.post("http://13.126.160.155:8080/user/skill/save/userResponse",{
+      skillDto:storeQuestion,
+      userId:id
+    });
 
-    //   alert(response.data.message);
-    //   // setCurrentSteps("")
-    // } catch (error) {
-    //   alert(error);
-    // }
-    setCurrentSteps(4)
+       alert(response.data.message);
+       setCurrentSteps(4)
+     } catch (error) {
+       alert(error);
+     }
   }
 
-  const handleChangeInput = (event, newValue, questions, index) =>{
-    //console.log("questions",questions)
-    const values = [...storeQuestion]
-    values[index]["data"] = [...newValue];
-    values[index] = [questions] 
-     
+  const handleChangeInput = (event, newValue, questions, uuid, index) => {
     
-    setStoreQuestion(values)
-  }
+    const values = [...storeQuestion];
+    values[index] = {
+      "question": [
+        {
+          "answer": [
+            ...newValue
+          ],
+          "question": questions
+        }
+      ],
+      "skillUuid": uuid
+    }
+
+    setStoreQuestion(values);
+  };
 
   return (
     <>
@@ -94,48 +84,60 @@ function SkillQuestion() {
             borderRadius: 3,
           }}
         >
-          <Box width={"100%"} sx={{display:"flex", rowGap:"40px", flexWrap:"wrap",  justifyContent:"space-between"}}>
-            {allQuestion.map((item, index)=>(
-                      <Box sx={{display:"grid", gap:"8px", width:"48%"}} key={index}>
-                        <h5>{item.question}</h5>
-                    <Box width={"100%"}> 
-                      <Autocomplete
-                        multiple
+          <Box
+            width={"100%"}
+            sx={{
+              display: "flex",
+              rowGap: "40px",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            {allQuestion.map((item, index) => (
+              <Box
+                sx={{ display: "grid", gap: "8px", width: "48%" }}
+                key={index}
+              >
+                <h5>{item.question}</h5>
+                <Box width={"100%"}>
+                  <Autocomplete
+                    multiple
+                    size="small"
+                    id="checkboxes-tags-demo"
+                    options={item.questionOption}
+                    disableCloseOnSelect
+                    getOptionLabel={(option) => option}
+                    onChange={(event, newValue) =>
+                      handleChangeInput(event, newValue, item.question, item.skillUuid, index)
+                    }
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          size="small"
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option}
+                      </li>
+                    )}
+                    style={{ width: "100%" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={item.skillNmae}
+                        placeholder="Favorites"
                         size="small"
-                        id="checkboxes-tags-demo"    
-                        options={item.questionOption}
-                        disableCloseOnSelect
-                        getOptionLabel={(option) => (option)}
-                        onChange={(event, newValue)=>handleChangeInput(event, newValue, item.question, index)}
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              size="small"
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                            />
-                            {option}
-                          </li>
-                        )}
-                        style={{ width: "100%" }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            
-                            label={item.skillNmae}
-                            placeholder="Favorites"
-                            size="small"
-                          />
-                        )}
                       />
-                      </Box>
+                    )}
+                  />
+                </Box>
               </Box>
             ))}
-            </Box>
-            
-            <Box
+          </Box>
+
+          <Box
             sx={{
               display: "flex",
               alignItems: "end",
@@ -156,7 +158,6 @@ function SkillQuestion() {
               NEXT
             </Button>
             {/* (()=>{setCurrentSteps(4)}) */}
-           
           </Box>
         </Box>
       </Box>

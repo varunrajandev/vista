@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material'
 import axios from 'axios';
 import React, { useContext } from 'react'
+import { useParams } from 'react-router-dom';
 import { masterApi } from '../../../AlllData';
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import SkillExpDetails from '../../form/SkillExpDetails'
@@ -22,6 +23,7 @@ function SkillInformationData() {
     const [lastJobDuration, setLastJobDuration] = React.useState();
     const [reasonLeaving, setReasonLeaving] = React.useState();
     
+    const {id} = useParams()
     //const [values, setValues] = React.useState(false);
     // newSkill data
     // const [secondarySkillArray, setSecondarySkillArray] = React.useState([]);
@@ -51,7 +53,7 @@ function SkillInformationData() {
         let response = await axios.post(masterApi+"/skill/save",
         {
           "otherLanguage": [
-            "HINDI"
+            "ENGLISH"
           ],
           "primaryLanguage": "HINDI",
           "skillRemarks": "string",
@@ -78,8 +80,8 @@ function SkillInformationData() {
             "reasonForLeavingJob": "string",
             "totalExperience": "string"
           },
-            "userId": personalData.data.userId
-          // "userId": "YCW0000001"
+            // "userId": personalData.data.userId
+            "userId":id
         }
         )
   

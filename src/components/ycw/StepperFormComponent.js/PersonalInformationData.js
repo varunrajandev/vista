@@ -27,20 +27,24 @@ function PersonalInformationData() {
   const [medicalCondition, setMedicalCondition] = React.useState("");
   const [submitted, setSubmitted] = React.useState(false)
   const [availableNumberResponse, setAvailableNumberResponse] = useState()
+  const [userProfile, setUserProfile] = useState([])
 
   const {id} = useParams()
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
-  console.log(id)
+ 
   
   useEffect(() => {
    async function checkMobilenumber(){
     let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${mobile}`)
+    let allUserDetails = await fetch(`http://13.126.160.155:8080/user/worker/profile/${id}`)
     let response = await checkNumber.json();
+    let allDataResponse = await allUserDetails.json();
     setAvailableNumberResponse(response.data)
+    setUserProfile(allDataResponse.data)
    }
   checkMobilenumber()
-  }, [mobile])
+  }, [mobile, id])
 
   if(availableNumberResponse){
     alert("Already Available")
@@ -163,6 +167,7 @@ function PersonalInformationData() {
                 covidStatus={covidStatus} setCovidStatus={setCovidStatus}
                 medicalCondition={medicalCondition} setMedicalCondition={setMedicalCondition}
                 submitted={submitted} setSubmitted={setSubmitted}
+                userProfile={userProfile}
                 />
 
                 <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right"}}>

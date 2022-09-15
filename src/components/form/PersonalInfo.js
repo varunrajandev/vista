@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, createTheme, TextField, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -10,8 +10,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { maritalstatus, masterApi, sourcing } from "../../AlllData";
 import { multiStepContext } from "../../ContextApi/StepContext";
 
-let NumberVelidation;
-let text = ""
+
+
 
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
@@ -38,21 +38,13 @@ function PersonalInfo(props) {
     educationalRemarks, setEducationalRemarks,
     covidStatus, setCovidStatus,
     medicalCondition, setMedicalCondition,
-    submitted, setSubmitted
+    submitted, setSubmitted,
+    userProfile
   } = props;
-
 
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
-  
-  //  if(phoneNumber.length<10){
-  //   NumberVelidation = true
-  //   text = "Please Enter valid details"
-  // }
-  // if(phoneNumber.length==""){
-  //   NumberVelidation=false
-  //   text = ""
-  // }
+
   
 
   useEffect(() => {
@@ -81,8 +73,11 @@ function PersonalInfo(props) {
     setWalk(event.target.value);
   };
   
+  
   return (
+    
     <form>
+      
       <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
       <Box
         sx={{
@@ -91,6 +86,7 @@ function PersonalInfo(props) {
           alignItems: "center",
         }}
       >
+        
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Sourcing Channel</InputLabel>
           <Select
@@ -99,7 +95,8 @@ function PersonalInfo(props) {
             id="demo-select-small"
             label="Sourcing Channel"
             onChange={handleChange}
-            defaultValue={personalData.status?personalData.data.sourcingChannel:walk}
+            // defaultValue={personalData.status?personalData.data.sourcingChannel:walk}
+            defaultValue={userProfile.sourcingChannel}
             
           >
             <MenuItem value="">
@@ -124,18 +121,20 @@ function PersonalInfo(props) {
           }}
           
         />
-
-        <TextField
+       
+        <TextField required
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          label="First Name*"
-          defaultValue={personalData.status?personalData.data.firstName:fname}
+          label="First Name"
+          //defaultValue={personalData.status?personalData.data.firstName:fname}
+          defaultValue={userProfile.firstName}
           variant="outlined"
           onChange={(event) => {
             setFname(event.target.value);
           }}
         />
+        
 
         <TextField
           sx={{ width: "18%" }}
@@ -149,17 +148,18 @@ function PersonalInfo(props) {
           }}
         />
 
-        <TextField
+        <TextField required
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          label="Last Name*"
+          label="Last Name"
           variant="outlined"
           defaultValue={personalData.status?personalData.data.lastName:lname}
           onChange={(e) => {
             setLname(e.target.value);
           }}
         />
+        
       </Box>
 
       <Box
