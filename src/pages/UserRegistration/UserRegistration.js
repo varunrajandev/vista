@@ -13,6 +13,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect } from "react";
+import Stack from '@mui/material/Stack';
+
+
 function UserRegistration() {
     const[ candidatemobileNumber,setCandidateMobileNumber]=React.useState("");
     const[ candidateFirstName,setCandidateFirstName]=React.useState("");
@@ -24,22 +27,54 @@ function UserRegistration() {
     const[birthday,setBirthday]=React.useState("");
     const[education,setEducation]=React.useState("");
     const[educationDD,setEducationDD]=React.useState([]);
+    const [availableNumberResponse, setAvailableNumberResponse] = React.useState();
+    const[maritalStatusDD,setMaritalStatusDD]=React.useState([]);
+    const[genderDD,setGenderDD]=React.useState([])
+    const[gender,setGender]=React.useState([])
+    const[maritalStatus,setMaritalStatus]=React.useState("");
+    const[helpertext,setHelpertext]=React.useState("");
     console.log("hi",birthday)
     console.log("no",education)
+
+    useEffect(() => {
+        async function checkMobilenumber(){
+         let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${candidatemobileNumber}`)
+         let response = await checkNumber.json();
+         setAvailableNumberResponse(response.data)
+        }
+       checkMobilenumber()
+       }, [candidatemobileNumber])
+     
+       if(availableNumberResponse){
+         alert("Already Available")
+   
+       }
+
 
     useEffect(() => {
         const fetchData = async () => {
           let educationdataDD = await fetch(
            "http://13.126.160.155:8080/user/drop-down/get/education"
           );
+          let genderDD = await fetch(
+            "http://13.126.160.155:8080/user/get/gender"
+           );
 
-          let dropdowneducation = await educationdataDD.json();
+           let maritalDD = await fetch(
+            "http://13.126.160.155:8080/user/drop-down/get/maritalStatus"
+           );
 
-          let DDeducationList= await dropdowneducation.data
+           let genderDropdown= await genderDD.json();
+           let maritalDropdown= await maritalDD.json();
+           let dropdowneducation = await educationdataDD.json();
+
+           let DDgender = await genderDropdown.data;
+          let DDeducationList= await dropdowneducation.data;
+          let maritalDDList = await maritalDropdown.data;
        
           setEducationDD(DDeducationList);
-    
-    
+          setGenderDD(DDgender);
+          setMaritalStatusDD(maritalDDList);
        
         };
     
@@ -56,10 +91,10 @@ console.log("educationDD",educationDD)
             "department": "WORKER",
             "educationalRemarks": education,
             "firstName": candidateFirstName,
-            "gender": "MALE",
+            "gender": gender,
             "isoCode": "IN",
             "lastName": candidateLastName,
-            "maritalStatus": "SINGLE",
+            "maritalStatus": maritalStatus,
             "middleName": candidateMiddleName,
             "mobile": candidatemobileNumber,
             "nationality": "INDIAN",
@@ -140,8 +175,10 @@ console.log("educationDD",educationDD)
          type="number"
         placeholder="Phone Number"
         variant="standard"
+        helperText={helpertext}
         onInput = {(e) =>{
             setCandidateMobileNumber( e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10))
+          
         }}
       />
       </Grid>
@@ -191,6 +228,85 @@ console.log("educationDD",educationDD)
       />
       </Grid>
 
+
+
+      <Grid lg={6} sm={6} sx={12}   item>
+       {/* <TextField
+    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
+        required
+        size="small"
+         id="standard-size-small"
+         type="text"
+        placeholder="Type"
+        variant="standard"
+        onInput = {(e) =>{
+            setCandidateType( e.target.value)
+        }}
+      /> */}
+
+
+
+     <Autocomplete
+          disablePortal
+          size="small"
+          id="combo-box-demo"
+          options={genderDD}
+          onChange={(event, newValue) => {
+            setGender(newValue.key);
+          }}
+          renderInput={(params) => (
+            <TextField
+            sx={{width:"176px"}}
+            variant="standard"
+              {...params}
+              placeholder="Gender"
+              onChange={(event, newValue) => {
+                setGender("");
+              }}
+            />
+          )}
+          getOptionLabel={(item) => `${item.value}`}
+        />
+      </Grid>
+      
+      <Grid lg={6} sm={6} sx={12}   item>
+       {/* <TextField
+    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
+        required
+        size="small"
+         id="standard-size-small"
+         type="text"
+        placeholder="Type"
+        variant="standard"
+        onInput = {(e) =>{
+            setCandidateType( e.target.value)
+        }}
+      /> */}
+
+
+
+     <Autocomplete
+          disablePortal
+          size="small"
+          id="combo-box-demo"
+          options={maritalStatusDD}
+          onChange={(event, newValue) => {
+            setMaritalStatus(newValue.key);
+          }}
+          renderInput={(params) => (
+            <TextField
+            sx={{width:"176px"}}
+            variant="standard"
+              {...params}
+              placeholder="maritalStatus"
+              onChange={(event, newValue) => {
+                setMaritalStatus("");
+              }}
+            />
+          )}
+          getOptionLabel={(item) => `${item.value}`}
+        />
+      </Grid>
       <Grid lg={6} sm={6} sx={12}   item>
        {/* <TextField
     //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
@@ -281,6 +397,9 @@ console.log("educationDD",educationDD)
      </CardContent>
     </Card>
     </Grid>
+    <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="success">This is a success alert — check it out!</Alert>
+    </Stack>
     </>
   )
 }

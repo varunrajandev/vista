@@ -48,6 +48,7 @@ function PersonalInformationData() {
 
   if(availableNumberResponse){
     alert("Already Available")
+    
   }
   
   console.log(availableNumberResponse)
