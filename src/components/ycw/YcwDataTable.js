@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Button, Typography,Checkbox } from "@mui/material";
+import { Box, Button, Typography, Checkbox } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,11 +19,18 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { masterApi } from "../../AlllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-
+import {
+  IconButton,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+ 
+} from "@mui/material";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -60,33 +67,56 @@ function Right() {
   const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
   const [filterName, setFilterName] = React.useState("userId");
-
-///onclick status
-const [statusData, setStatusData] = useState("")
-const [id, setId] = useState("")
-
-console.log("id",id)
-console.log("statusData",statusData)
-
-
+  const [btnColor, setBtnColor] = useState("black");
+  const [btnColor1, setBtnColor1] = useState("black");
+  const [btnColorUserID, setBtnColorUserId] = useState("black");
+  const [btnColor1UserId, setBtnColor1UserId] = useState("black");
+  const [btnColorName, setBtnColorName] = useState("black");
+  const [btnColor1Name, setBtnColor1Name] = useState("black");
+  const [btnColorPhone, setBtnColorNamePhone] = useState("black");
+  const [btnColor1Phone, setBtnColor1Phone] = useState("black");
+  const [btnColorGender, setBtnColorGender] = useState("black");
+  const [btnColor1Gender, setBtnColor1Gender] = useState("black");
+  const [btnColorCity, setBtnColorCity] = useState("black");
+  const [btnColor1City, setBtnColor1City] = useState("black");
+  const [btnColorSkills, setBtnColorSkills] = useState("black");
+  const [btnColor1Skills, setBtnColor1Skills] = useState("black");
+  const [btnColorExp, setBtnColorExp] = useState("black");
+  const [btnColor1Exp, setBtnColor1Exp] = useState("black");
+  const [btnColorStatus, setBtnColorStatus] = useState("black");
+  const [btnColor1Status, setBtnColor1Status] = useState("black");
+  const [btnColorWorkHr, setBtnColorWorkHr] = useState("black");
+  const [btnColor1WorkHr, setBtnColor1WorkHr] = useState("black");
+  const [btnColorJobs, setBtnColorJobs] = useState("black");
+  const [btnColor1Jobs, setBtnColor1Jobs] = useState("black");
   
-  let navigate=useNavigate();
+
+  ///onclick status
+  const [statusData, setStatusData] = useState("")
+  const [id, setId] = useState("")
+
+  // console.log("id", id)
+  console.log("statusData", tableData)
+
+
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       let jobType = await fetch(
-        masterApi+"/skill/get/skills"
+        masterApi + "/skill/get/skills"
       );
       let data = await fetch(
 
-        masterApi+`/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+        masterApi + `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
       );
       let ycwStatusApidrop = await fetch(
-     
-        masterApi+"/drop-down/get/profileStatus?flag=all"
+
+        masterApi + "/drop-down/get/profileStatus?flag=all"
       );
       let searchData = await fetch(
-        masterApi+`/worker/search/user?searchTerm=${searchItem}`
+        masterApi + `/worker/search/user?searchTerm=${searchItem}`
       );
       let ycwCityDD = await fetch(
         "http://13.126.160.155:8081/locationmaster/city/get/all"
@@ -95,16 +125,13 @@ console.log("statusData",statusData)
       let jobtypeApi = await jobType.json();
       let res = await data.json();
       let StatusApi = await ycwStatusApidrop.json();
-      let responseSearch = await searchData.json();
       let cityDD = await ycwCityDD.json();
 
       let newData = await res.data;
       let JobTypeApi = await jobtypeApi.data;
       let ycwStatusApi = await StatusApi.data;
       let cityDropDown = await cityDD.data;
-      let responseSearchData = await responseSearch.data;
-
-      setSearchDD(responseSearchData || [{ name: "No Data" }]);
+  
       setJobTypeApi(JobTypeApi);
       setYcwStatus(ycwStatusApi);
       setCityDD(cityDropDown);
@@ -113,15 +140,24 @@ console.log("statusData",statusData)
 
     fetchData();
 
-  }, [ycwidorder, worktype, statusycw, searchItem]);
-  function handleSort() {
-    ycwidorder === "asc" ? setycwIdOrder("desc") : setycwIdOrder("asc");
-  }
+  }, [ycwidorder, worktype, statusycw, ycwCity]);
 
-  // const handleStatus = ()=>{
-  //   console.log("click")
-  // }
+  useEffect(() => {
 
+    const fetchSearchData = async () => {
+      let searchData = await fetch(
+        masterApi + `/worker/search/user?searchTerm=${searchItem}`
+      );
+      let responseSearch = await searchData.json();
+      let responseSearchData = await responseSearch.data;
+      setSearchDD(responseSearchData || [{ name: "No Data" }]);
+    };
+    if (searchItem.length > 3) {
+      fetchSearchData()
+    }
+  }, [searchItem])
+console.log("giiiii",statusycw)
+console.log("moo",ycwStatus)
 
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
@@ -228,6 +264,27 @@ console.log("statusData",statusData)
           getOptionLabel={(item) => `${item.value}`}
         />
 
+        {/* <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+              <InputLabel id="demo-select-small">Select YCW Status</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="Select YCW Status"
+               value={statusycw}
+                label="Select YCW Status"
+                onChange={(event, newValue) => {
+                  setStatusycw(newValue.profileStatus.key);
+                }}
+              >
+                {ycwStatus.map((item)=>(
+                  <MenuItem value={item.key}>{item.value}</MenuItem>
+                ))}
+              </Select>
+            </FormControl> */}
+
+      
+
         <Autocomplete
           disablePortal
           size="small"
@@ -237,9 +294,6 @@ console.log("statusData",statusData)
           onChange={(event, newValue) => {
             setYcwCity(newValue.uuid);
           }}
-          // SelectProps={{
-          //   multiple:true,
-          // }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
@@ -270,7 +324,7 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>YCW ID</Box>
                     <Box
-                      onClick={() => { handleSort(); { setFilterName("userId") } }}
+                      // onClick={() => { handleSort(); { setFilterName("userId") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -279,8 +333,67 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                          { setFilterName("userId") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorUserId("blue")
+                              setBtnColor1UserId("black")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorUserID }}
+                      />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("userId") }; { setycwIdOrder("desc") } 
+                          {
+                            {
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("blue")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-17px", color: btnColor1UserId }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -291,8 +404,6 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>NAME</Box>
                     <Box
-                      onClick={() => { handleSort(); { setFilterName("firstName") } }}
-                      //  onClick={()=>ordersort("name")}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -301,8 +412,64 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-16px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                          { setFilterName("firstName") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorName("blue")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorName }} />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("firstName") }; { setycwIdOrder("desc") } 
+                          {
+                            {
+                              setBtnColorName("black")
+                              setBtnColor1Name("blue")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-16px", color: btnColor1Name }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -313,7 +480,6 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>PHONE#</Box>
                     <Box
-                      onClick={() => { handleSort(); { setFilterName("mobileNo") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -322,8 +488,66 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                        { setFilterName("mobileNo") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorNamePhone("blue")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorPhone }} />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("mobileNo") }; { setycwIdOrder("desc") } 
+                          {
+                            { setBtnColorNamePhone("black")
+                              setBtnColor1Phone("blue")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-17px", color: btnColor1Phone }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -334,7 +558,6 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>GENDER</Box>
                     <Box
-                      onClick={() => { handleSort(); { setFilterName("gender") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -343,8 +566,66 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                        { setFilterName("gender") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorGender("blue")
+                              setBtnColor1Gender("black")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorGender }} />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("gender") }; { setycwIdOrder("desc") } 
+                          {
+                            {
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("blue")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-17px", color: btnColor1Gender }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -355,7 +636,6 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>CITY</Box>
                     <Box
-                      onClick={() => { handleSort(); { setFilterName("cityName") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -364,8 +644,64 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                          { setFilterName("cityName") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorCity("blue")
+                              setBtnColor1City("black")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorCity }} />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("cityName") }; { setycwIdOrder("desc") } 
+                          {
+                            {setBtnColorCity("black")
+                              setBtnColor1City("blue")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-17px", color: btnColor1City }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -376,8 +712,6 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1.5px" }}>SKILLS</Box>
                     <Box
-                      onClick={() => { handleSort(); }}
-                      // { setFilterName("profileStatus") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -386,8 +720,64 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                        { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorSkills("blue")
+                              setBtnColor1Skills("black")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorSkills }} />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("primarySkill") }; { setycwIdOrder("desc") } 
+                          {
+                            {setBtnColorSkills("black")
+                              setBtnColor1Skills("blue")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-17px", color: btnColor1Skills }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -398,7 +788,6 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>EXP.(YRS.)</Box>
                     <Box
-                      onClick={() => { handleSort(); { setFilterName("totalExperience") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -407,20 +796,74 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+        onClick={() => {
+                 { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
+    {
+     { setBtnColorExp("blue")
+      setBtnColor1Exp("black")
+      setBtnColorSkills("black")
+      setBtnColor1Skills("black")
+      setBtnColorName("black")
+      setBtnColor1Name("black")
+      setBtnColorUserId("black")
+      setBtnColor1UserId("black")
+      setBtnColor1Phone("black")
+      setBtnColorNamePhone("black")
+      setBtnColorGender("black")
+      setBtnColor1Gender("black")
+      setBtnColorCity("black")
+      setBtnColor1City("black")
+      setBtnColorWorkHr("black")
+      setBtnColor1WorkHr("black")
+      setBtnColorJobs("black")
+      setBtnColor1Jobs("black")
+      setBtnColorStatus("black")
+      setBtnColor1Status("black")
+
+       }
+           }
+             }}
+                     sx={{ marginTop: "-5px" , color: btnColorExp}} />
+                      <ArrowDropDownIcon
+                      onClick={() => {
+                        { setFilterName("primarySkill") }; { setycwIdOrder("desc") } 
+                        {
+                          {
+                          setBtnColorExp("black")
+                          setBtnColor1Exp("blue")
+                           setBtnColorSkills("black")
+                            setBtnColor1Skills("black")
+                            setBtnColorName("black")
+                            setBtnColor1Name("black")
+                            setBtnColorUserId("black")
+                            setBtnColor1UserId("black")
+                            setBtnColor1Phone("black")
+                            setBtnColorNamePhone("black")
+                            setBtnColorGender("black")
+                            setBtnColor1Gender("black")
+                            setBtnColorCity("black")
+                            setBtnColor1City("black")
+                            setBtnColorWorkHr("black")
+                            setBtnColor1WorkHr("black")
+                            setBtnColorJobs("black")
+                            setBtnColor1Jobs("black")
+                            setBtnColorStatus("black")
+                            setBtnColor1Status("black")
+                          }
+                        }
+                      }}
+                      sx={{ marginTop: "-17px" ,color: btnColor1Exp}} />
                     </Box>
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "12%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "13%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>WORK HOURS</Box>
                     <Box
-                      onClick={() => { handleSort(); }}
-                      //{ setFilterName("profileStatus") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -429,8 +872,64 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                          { setFilterName("firstName") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("blue")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                      sx={{ marginTop: "-5px",color: btnColorWorkHr }} />
+                      <ArrowDropDownIcon 
+                        onClick={() => {
+                          { setFilterName("firstName") }; { setycwIdOrder("desc") } 
+                          {
+                            {
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("blue")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                      sx={{ marginTop: "-17px",color: btnColor1WorkHr }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -441,8 +940,6 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box>#JOBS</Box>
                     <Box
-                      onClick={() => { handleSort(); }}
-                      // { setFilterName("profileStatus") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -451,8 +948,65 @@ console.log("statusData",statusData)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon 
+                       onClick={() => {
+                        { setFilterName("firstName") }; { setycwIdOrder("asc") }
+                        {
+                          {
+                            setBtnColorName("black")
+                            setBtnColor1Name("black")
+                            setBtnColorUserId("black")
+                            setBtnColor1UserId("black")
+                            setBtnColor1Phone("black")
+                            setBtnColorNamePhone("black")
+                            setBtnColorGender("black")
+                            setBtnColor1Gender("black")
+                            setBtnColorCity("black")
+                            setBtnColor1City("black")
+                            setBtnColorSkills("black")
+                            setBtnColor1Skills("black")
+                            setBtnColorExp("black")
+                            setBtnColor1Exp("black")
+                            setBtnColorWorkHr("black")
+                            setBtnColor1WorkHr("black")
+                            setBtnColorJobs("blue")
+                            setBtnColor1Jobs("black")
+                            setBtnColorStatus("black")
+                            setBtnColor1Status("black")
+                          }
+                        }
+                      }}
+                      
+                      sx={{ marginTop: "-5px" ,color: btnColorJobs}} />
+                      <ArrowDropDownIcon
+                         onClick={() => {
+                          { setFilterName("firstName") }; { setycwIdOrder("desc") } 
+                          {
+                            {
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("blue")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                      sx={{ marginTop: "-17px",color: btnColor1Jobs }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -463,35 +1017,88 @@ console.log("statusData",statusData)
                   <Box sx={{ display: "flex" }}>
                     <Box>STATUS</Box>
                     <Box
-                      onClick={() => { handleSort(); { setFilterName("profileStatus") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
                         flexDirection: "column",
                         gap: "-5px",
                         cursor: "pointer",
+
                       }}
                     >
-                      <ArrowDropUpIcon sx={{ marginTop: "-5px" }} />
-                      <ArrowDropDownIcon sx={{ marginTop: "-17px" }} />
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                         { setFilterName("profileStatus") }; { setycwIdOrder("asc") }
+                          {
+                            {
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("blue")
+                              setBtnColor1Status("black")
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorStatus }} />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("profileStatus") }; { setycwIdOrder("desc") } { { setBtnColorStatus("black") } }
+                          {
+                            {
+                              setBtnColor1Status("blue")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-17px", color: btnColor1Status }} />
                     </Box>
                   </Box>
                 </TableCell>
               </TableRow>
             </TableHead>
-            
 
 
 
 
-{/* ///ghjkl;dfghjkl;dfghkl;dfghjkl;'sdfhjl;sdfghkl;sdfhkl;'sdfhjl; */}
+
+            {/* ///ghjkl;dfghjkl;dfghkl;dfghjkl;'sdfhjl;sdfghkl;sdfhkl;'sdfhjl; */}
 
 
 
             <TableBody component={Paper}>
               {tableData.map((item) => (
                 <StyledTableRow
-                  onClick={()=>{setId(item.userId); {setStatusData(item.profileStatus.value)}}}
+                  onClick={() => { setId(item.userId); { setStatusData(item.profileStatus.value) } }}
                   key={item.userId}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
@@ -507,13 +1114,13 @@ console.log("statusData",statusData)
                     scope="item"
                     style={{
                       borderLeft:
-                        (item.profileStatus.value === "ACTIVE & AVAILABLE" &&
-                          "5px solid green") ||
+                        (item.profileStatus.value === "ACTIVE" &&
+                          "5px solid #0A9475") ||
                         (item.profileStatus.value ===
                           "ACTIVE & NOT AVAILABLE" &&
                           "5px solid #f7aa02") ||
                         (item.profileStatus.value === "INACTIVE" &&
-                          "5px solid red"),
+                          "5px solid #F55F71"),
                     }}
                   >
                     {item.userId || "--"}
@@ -549,50 +1156,50 @@ console.log("statusData",statusData)
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {"--"}
                   </TableCell>
-                    <TableCell align="left" sx={{ border: "none" }}>
+                  <TableCell align="left" sx={{ border: "none" }}>
 
-                      <Typography
-                        sx={{
-                          width: "150px",
-                          padding: "8px",
-                          borderRadius: "5px",
-                          fontSize: "11px",
-                          textAlign: "center",
-                          fontWeight: "950",
-                          boxSizing: "border-box",
-                        }}
-                        style={{
-                          backgroundColor:
-                            (item.profileStatus.value ===
-                              "ACTIVE & AVAILABLE" &&
-                              "#E6F4F1") ||
-                            (item.profileStatus.value ===
-                              "ACTIVE & NOT AVAILABLE" &&
-                              "#FFF7E5") ||
-                            (item.profileStatus.value === "INACTIVE" &&
-                              "#FEEFF0"),
-                          color:
-                            (item.profileStatus.value ===
-                              "ACTIVE & AVAILABLE" &&
-                              "0A9475") ||
-                            (item.profileStatus.value ===
-                              "ACTIVE & NOT AVAILABLE" &&
-                              "#FFB701") ||
-                            (item.profileStatus.value === "INACTIVE" &&
-                              "#F55F71"),
-                        }}
-                      >
-                        {item.profileStatus.value || "--"}
-                      </Typography>
-                    </TableCell>
+                    <Typography
+                      sx={{
+                        width: "150px",
+                        padding: "8px",
+                        borderRadius: "5px",
+                        fontSize: "11px",
+                        textAlign: "center",
+                        fontWeight: "950",
+                        boxSizing: "border-box",
+                      }}
+                      style={{
+                        backgroundColor:
+                          (item.profileStatus.value ===
+                            "ACTIVE" &&
+                            "#E6F4F1") ||
+                          (item.profileStatus.value ===
+                            "ACTIVE & NOT AVAILABLE" &&
+                            "#FFF7E5") ||
+                          (item.profileStatus.value === "INACTIVE" &&
+                            "#FEEFF0"),
+                        color:
+                          (item.profileStatus.value ===
+                            "ACTIVE" &&
+                            "#0A9475") ||
+                          (item.profileStatus.value ===
+                            "ACTIVE & NOT AVAILABLE" &&
+                            "#FFB701") ||
+                          (item.profileStatus.value === "INACTIVE" &&
+                            "#F55F71"),
+                      }}
+                    >
+                      {item.profileStatus.value || "--"}
+                    </Typography>
+                  </TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
-      {statusData=="INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
-      {statusData=="ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
+      {statusData == "INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
+      {statusData == "ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
     </Box>
   );
 }

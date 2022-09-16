@@ -308,7 +308,6 @@ export const houseKeeping = [
   {houseKeeping:"Ironing & Folding clothes"},
   {houseKeeping:"Cleaning Utensils"},
   {houseKeeping:"Watering of plants"},
-
 ]
 
 export const childCareAge = [
