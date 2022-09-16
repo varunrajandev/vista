@@ -1090,8 +1090,12 @@ console.log("moo",ycwStatus)
 
 
 
+<<<<<<< Updated upstream
 
             {/* ///ghjkl;dfghjkl;dfghkl;dfghjkl;'sdfhjl;sdfghkl;sdfhkl;'sdfhjl; */}
+=======
+{/*...........................Table Body.............................. */}
+>>>>>>> Stashed changes
 
 
 

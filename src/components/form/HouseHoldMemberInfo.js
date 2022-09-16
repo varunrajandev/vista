@@ -72,7 +72,7 @@ function HouseHoldMemberInfo(props) {
   return (
     <Box
       sx={{
-        marginTop: 7,
+        marginTop: 1,
         display: "grid",
         gap: 0.3,
       }}

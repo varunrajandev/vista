@@ -18,17 +18,15 @@ function SkillInformationData() {
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
     const [totalExp, setTotalExp] = React.useState();
-    const [experienceRemarks, setExperienceRemarks] = React.useState();
+    const [experienceRemarks, setExperienceRemarks] = React.useState("");
     const [lastJobType, setLastJobType] = React.useState([]);
     const [lastJobDuration, setLastJobDuration] = React.useState();
     const [reasonLeaving, setReasonLeaving] = React.useState();
     
     const {id} = useParams()
-    //const [values, setValues] = React.useState(false);
-    // newSkill data
-    // const [secondarySkillArray, setSecondarySkillArray] = React.useState([]);
     let SecondarySkillArray = [];
     let TertiarySkillArray = [];
+    let otherLanguageArray = []
 
 
     if(secondarySkill){
@@ -36,13 +34,20 @@ function SkillInformationData() {
           SecondarySkillArray.push(item.uuid)
       })
     }
+
     if(TertiarySkillArray){
       tertiarySkill.map((item)=>{
         TertiarySkillArray.push(item.uuid)
       })
     }
 
-    console.log(TertiarySkillArray)
+       if(otherLanguages){
+        otherLanguages.map((item)=>{
+          otherLanguageArray.push(item.key)
+      })
+    }
+
+    console.log(primaryLanguage)
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
     
@@ -52,11 +57,9 @@ function SkillInformationData() {
       try {
         let response = await axios.post(masterApi+"/skill/save",
         {
-          "otherLanguage": [
-            "ENGLISH"
-          ],
-          "primaryLanguage": "HINDI",
-          "skillRemarks": "string",
+          "otherLanguage": otherLanguageArray, 
+          "primaryLanguage": primaryLanguage,
+          "skillRemarks": skillRemarks,
           "skillRequestDtos": [
             {
               "skillLevel": "PRIMARY",
@@ -74,14 +77,13 @@ function SkillInformationData() {
             }
           ],
           "userExperienceRequestDto": {
-            "experienceRemarks": "string",
-            "jobDuration": "string",
+            "experienceRemarks": experienceRemarks,
+            "jobDuration": lastJobDuration,
             "jobTypeUuid": "string",
             "reasonForLeavingJob": "string",
             "totalExperience": "string"
           },
-            // "userId": personalData.data.userId
-            "userId":id
+            "userId": personalData.data.userId
         }
         )
   

@@ -38,7 +38,7 @@ function DocumentData() {
       setKycTypeDD(responseKycType.data)
     }
     fetchDorpDown()
-  }, [kycTypeDD])
+  }, [])
   
 
   const changeHandler = (event) => {

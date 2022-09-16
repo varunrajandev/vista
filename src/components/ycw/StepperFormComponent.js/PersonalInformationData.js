@@ -41,14 +41,13 @@ function PersonalInformationData() {
     let response = await checkNumber.json();
     let allDataResponse = await allUserDetails.json();
     setAvailableNumberResponse(response.data)
-    setUserProfile(allDataResponse.data)
+    setPersonalData(allDataResponse)
    }
   checkMobilenumber()
-  }, [mobile, id])
+  }, [mobile.length===10?mobile:"", id])
 
   if(availableNumberResponse){
     alert("Already Available")
-    
   }
   
   console.log(availableNumberResponse)
@@ -71,7 +70,7 @@ function PersonalInformationData() {
             "medicalCondition": medicalCondition,
             "medium": "PHONE_CALL",
             middleName:middlename,
-            mobile,
+            "mobile":mobile,
             "nationality": "INDIAN",
             "professsion": "BUSINESS_OWNER",
             "profileStatus": "IN_ACTIVE",
