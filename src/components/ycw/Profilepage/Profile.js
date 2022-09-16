@@ -17,6 +17,11 @@ function Profile() {
   const[currentaddressData,setCurrentAddressData] = React.useState([])
   const[permanentAddressData,setPermanentAddressData]=React.useState([])
   const [name, setname] = React.useState("");
+  const[bankDetails,setbankDetails]=React.useState([]);
+  const[jobRequirement,setJobRequirement]=React.useState([]);
+  const[householdMembersInformation,setHouseholdMembersInformation]=React.useState([]);
+  const[documents,setDocuments]=React.useState([]);
+  const[skills,setSkills]=React.useState([]);
   const { id } = useParams();
   console.log(userData, id)
 
@@ -31,6 +36,11 @@ function Profile() {
       setUserData(useprofiledata.userProfile)
       setCurrentAddressData(useprofiledata.addressDtos[0])
       setPermanentAddressData(useprofiledata.addressDtos[1])
+      setbankDetails(useprofiledata.bankDetailsDtos[0])
+      setJobRequirement(useprofiledata.jobRequirementResponseDto)
+      setHouseholdMembersInformation(useprofiledata.familyMemberResponseDto[0])
+      setDocuments(useprofiledata.documentResponseDtos[0])
+      setSkills(useprofiledata.skillResponseDto)
       setname(userData.firstName)
     };
     fetchData();
@@ -55,7 +65,6 @@ function Profile() {
           borderRadius: 3,
            }}
              >
-        
           <Box>
             <h3 style={{ marginBottom: "6px" }}>Personal Information</h3>
             <Box
@@ -278,7 +287,7 @@ function Profile() {
                 InputLabelProps={{ shrink: true }}
                 focused
               />
-</Box>
+       </Box>
          <Box mt={6}>
             <h3 style={{ marginBottom: "6px" }}>Current Address</h3>
             <Box
@@ -534,9 +543,545 @@ function Profile() {
             </Box>
             </Box>
 
+            
+            <Box mt={6}>
+            <h3 style={{ marginBottom: "6px" }}>Skill and Experience Details</h3>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.primaryLanguage}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Primary Language"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.otherLanguage}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Other Language"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.jobDuration }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Job Duration"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.totalExperience}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Total Experience"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.reasonForLeavingJob}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Reason For Leaving Job"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          
+            </Box>
+
+            {/* <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.stateName}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="State"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.cityName}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="City"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={skills.locality }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Locality"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+              
+              <Box  sx={{ width: "18%" }}></Box>
+              
+             <Box  sx={{ width: "18%" }}></Box>
+               
+          
+             
+          
+  
+          
+            </Box> */}
+            </Box>
+
+            
+            <Box mt={6}>
+            <h3 style={{ marginBottom: "6px" }}>Job Requirement</h3>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.jobTypeUuid}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Job Type"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.workingHoursUuid}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Working Hours"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.startTime }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Start Time"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.endTime}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="End Time"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.totalSimultaneousJob}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Total Simultaneous Job"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.minSalaryExpected}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Min Salary Expected"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.maxSalaryExpected}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Max Salary Expected"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.openToTraining }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Open To Training"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+                     <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={jobRequirement.traningMode }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Traning Mode"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />    
+                 <TextField
+              sx={{ width: "18%" }}
+              size="small"
+              value={jobRequirement.jobRemarks }
+              id="outlined-basic"
+              variant='filled'
+              color="secondary" 
+              label="Job Remarks"
+              InputLabelProps={{ shrink: true }}
+              focused
+            />
+             
+          
+             
+          
+  
+          
+            </Box>
+            </Box>
+
+            <Box mt={6}>
+            <h3 style={{ marginBottom: "6px" }}>Bank Details</h3>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={bankDetails.accountType}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Account Type"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={bankDetails.bankName}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Bank Name"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={bankDetails.branchName }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Branch Name"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "39%" }}
+                size="small"
+                value={bankDetails.branchAddress}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Branch Address"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+         
+          
+          
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+<TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={bankDetails.accountHolderName}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Account Holder Name"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={bankDetails.accountNumber}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Account Number"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               
+          
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={bankDetails.ifscCode}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="IFSC Code"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={bankDetails.primary }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Primary"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+              
+              <Box  sx={{ width: "18%" }}></Box>
+              
+          
+            </Box>
+            </Box>
 
 
-   {/* <PersonalInfo  fname={name}/> */}
+            <Box mt={6}>
+            <h3 style={{ marginBottom: "6px" }}>Documents</h3>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={documents.documentContext}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Document Context"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={documents.fileName}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="File Name"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={documents.documentUploadType }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Document Upload Type"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+        
+          
+          
+          
+          <Box  sx={{ width: "18%" }}></Box>
+           <Box  sx={{ width: "18%" }}></Box>
+            </Box>
+
+           
+            </Box>
+
+
+            <Box mt={6}>
+            <h3 style={{ marginBottom: "6px" }}>Household Members Information</h3>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+
+             <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={householdMembersInformation.name}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Name"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={householdMembersInformation.relationship}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Relationship"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={householdMembersInformation.age }
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Age"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={householdMembersInformation.mobileNo}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Mobile Number"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={householdMembersInformation.email}
+                id="outlined-basic"
+                variant='filled'
+                color="secondary" 
+                label="Email"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+          
+          
+            </Box>
+
+           
+            </Box>
+
 
           </Box>
           </Box>

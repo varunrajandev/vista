@@ -108,11 +108,19 @@ function SkillExpDetails(props) {
           size="25%"
         />
 
-        <MultiSelected
+        {/* <MultiSelected
           labelData="Last Job Type"
-          dataDD={jobtypeDD}
+          dataDD={pSkillDD}
           setData={setLastJobType}
           size="45%"
+        /> */}
+
+      <FormControlSingleSelect
+          labelData="Last Job Type"
+          dataDD={pSkillDD}
+          setData={setLastJobType}
+          values={"name"}
+          size="37.5%"
         />
 
         <TextFieldComponent

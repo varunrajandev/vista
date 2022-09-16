@@ -16,7 +16,13 @@ import Switch from "@mui/material/Switch";
 import { FilterData, masterApi } from "../../AlllData";
 
 function HouseHoldMemberInfo(props) {
-const { setInputFields, inputFields } = props;
+  
+  const [occupationDD, setOccupationDD] = React.useState([]);
+  const [relationshipDD, setRelationshipDD] = React.useState([]);
+  const [occupation, setOccupation] = React.useState("");
+  const [relation, setRelation] = React.useState("");
+  const { setInputFields, inputFields} = props;
+  console.log("first", inputFields)
 
   const handleChangeInput = (index, event) => {
     const values = [...inputFields];
@@ -43,6 +49,20 @@ const { setInputFields, inputFields } = props;
     ]);
   };
 
+  useEffect(() => {
+    async function fetchDD() {
+      let relationShipDropdown = await fetch(`http://13.126.160.155:8080/user/drop-down/get/relation`)
+      let occupationDropdown = await fetch(`http://13.126.160.155:8080/user/skill/get/skills`)
+      let relationshipData = await relationShipDropdown.json();
+      let occupationDD = await occupationDropdown.json();
+      setRelationshipDD(relationshipData.data);
+      setOccupationDD(occupationDD.data);
+    }
+    fetchDD()
+  }, [])
+
+  console.log("relation", relation)
+  // console.log("occupation",occupation)
   const handleRemoveFields = (index) => {
     const values = [...inputFields];
     values.splice(index, 1);
@@ -100,18 +120,22 @@ const { setInputFields, inputFields } = props;
               onChange={(event) => handleChangeInput(index, event)}
             />
 
+           
+
             <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
               <InputLabel id="demo-select-small">Relationship</InputLabel>
               <Select
                 sx={{ width: "100%" }}
                 labelId="demo-select-small"
                 id="demo-select-small"
-                name="relationship"
-                value={inputField.relationship}
-                label="Relationship"
+                name="Relationship"
+                value={inputField.Relationship}
+                label="Occupation"
                 onChange={(event) => handleChangeInput(index, event)}
               >
-                <MenuItem value={"WIFE"}>Wife</MenuItem>
+                {relationshipDD.map((item)=>(
+                  <MenuItem value={item.key}>{item.value}</MenuItem>
+                ))}
               </Select>
             </FormControl>
 
@@ -133,7 +157,7 @@ const { setInputFields, inputFields } = props;
               size="small"
               onChange={(event) => handleChangeInput(index, event)}
             />
- 
+
             <TextField
               style={{ width: "18%" }}
               name="age"
@@ -154,9 +178,12 @@ const { setInputFields, inputFields } = props;
                 label="Occupation"
                 onChange={(event) => handleChangeInput(index, event)}
               >
-                <MenuItem value={"DRIVER"}>Driver</MenuItem>
+                {occupationDD.map((item)=>(
+                  <MenuItem value={item.uuid}>{item.name}</MenuItem>
+                ))}
               </Select>
             </FormControl>
+
             <div
               style={{
                 display: "flex",
@@ -166,7 +193,7 @@ const { setInputFields, inputFields } = props;
               }}
             >
               <IconButton aria-label="delete">
-                <DeleteIcon  onClick={() => handleRemoveFields(index)} />
+                <DeleteIcon onClick={() => handleRemoveFields(index)} />
               </IconButton>
             </div>
           </Box>

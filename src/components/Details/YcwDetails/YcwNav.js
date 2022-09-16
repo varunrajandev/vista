@@ -12,6 +12,12 @@ const StyleLi = styled("li")({
   fontWeight: "600",
   color:"gray"
 });
+const ActiveStyleLi = styled("li")({
+  listStyle: "none",
+  fontSize: "20px",
+  fontWeight: "600",
+  color:"blue"
+});
 
 
 const DIV = styled("div")({
@@ -55,9 +61,9 @@ function YcwNav() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <p style={{ fontWeight: "800", fontSize: "25px" }}>{id}</p>
-          {/* <Typography
+          <Typography
                         sx={{
-                          width:"130px",
+                          width:"100px",
                           padding: "9px",
                           borderRadius: "8px",
                           fontSize: "12px",
@@ -65,24 +71,24 @@ function YcwNav() {
                           fontWeight: "900",
                         }}
                         style={{
-                          backgroundColor:
-                            (userData === "ACTIVE_AND_NOT_AVAILABLE" &&
-                              "#DDF2F5") 
-                              ||
-                            (userData === "ACTIVE_AND_AVAILABLE" &&
-                              "#f0edce") ||
-                            (userData === "INACTIVE" && "#fcb1b8")
-                         , color:"#60C3AD"
-                           ("ACTIVE" === "ACTIVE & AVAILABLE" && "green") 
-                            ||
-                            (userData === "ACTIVE & NOT AVAILABLE" &&
-                              "#f7aa02") ||
-                            (userData === "INACTIVE" && "red")
-                            ,
+                          backgroundColor:"#DDF2F5"
+                            // ("ACTIVE" === "ACTIVE_AND_NOT_AVAILABLE" &&
+                            //   "#DDF2F5") 
+                            //   ||
+                            // (userData === "ACTIVE_AND_AVAILABLE" &&
+                            //   "#f0edce") ||
+                            // (userData === "INACTIVE" && "#fcb1b8")
+                          , color:"#60C3AD"
+                          //  ("ACTIVE" === "ACTIVE & AVAILABLE" && "green") 
+                          //   // ||
+                          //   // (userData === "ACTIVE & NOT AVAILABLE" &&
+                          //   //   "#f7aa02") ||
+                          //   // (userData === "INACTIVE" && "red")
+                          //   ,
                         }}
                       >
-                          {"ACTIVE & AVILABLE" || "NO DATA"}
-                      </Typography> */}
+                          {"ACTIVE" || "NO DATA"}
+                      </Typography>
         </div>
 
       
@@ -121,18 +127,18 @@ function YcwNav() {
         }}
       >
 
-        <DIV>
+        <DIV >
         {/* <NavLink
             to={`/ycw/profile/${userid}`}
             style={({ isActive }) => {
               return { borderBottom: isActive ? "5px solid red" : "5px solid white", textDecoration: 'none', color:"black", width:"40px" };
             }}
           > */}
-        <StyleLi >PROFILE</StyleLi>
+        <ActiveStyleLi >PROFILE</ActiveStyleLi>
         {/* </NavLink> */}
         </DIV>
         <DIV>
-        <StyleLi>JOBS</StyleLi>
+        <StyleLi >JOBS</StyleLi>
         </DIV>
         <DIV>
         <StyleLi>LEDGER</StyleLi>
