@@ -1,18 +1,24 @@
-import React from "react";
+import React,{useContext} from "react";
 import { AppBar, Toolbar, Avatar } from "@mui/material";
 import styled from "@emotion/styled";
 import image from "../../images/careCrew1.png";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
-
+import { multiStepContext } from "../../ContextApi/StepContext";
+import { useNavigate } from 'react-router-dom';
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
   boxSizing: "border-box",
-  // minWidth:"100%"
 });
 
-export default function Header() {
+export default function Header(){
+  // const loginLocalStorageData=localStorage.getItem("Response")
+  // console.log("localresponce",JSON.parse(loginLocalStorageData));
+ const{loginData,setLoginData}=useContext(multiStepContext); 
+ let navigate=useNavigate();
+// console.log(loginLocalStorageData.data)
+// setLoginUserName(loginData.data.firstName)
   return (
     <AppBar
       position="sticky"
@@ -31,7 +37,7 @@ export default function Header() {
           <StyledToolbar>
             <Avatar alt="Abhi" src="/static/images/avatar/1.jpg" />
             <h4 style={{ marginLeft: "2%" }}>
-              Abhishek<h6 style={{ "margin-top": "5px" }}>manager</h6>
+        Sam<h6 style={{ "margin-top": "5px" }}>manager</h6>
             </h4>
           </StyledToolbar>
           <PowerSettingsNewIcon
@@ -39,6 +45,12 @@ export default function Header() {
               background: "#faf7f5",
               padding: "20px",
               marginRight: "-40px !important",
+              cursor:"pointer"
+            }}
+            onClick={()=>{
+              localStorage.clear();
+              navigate("/login");
+            window.location.reload(false);
             }}
           />
         </StyledToolbar>

@@ -3,6 +3,7 @@ import App from "../App"
 
 export const multiStepContext = React.createContext();
 
+
 function StepContext() {
   const [currentSteps, setCurrentSteps] = useState(6);
   const [personalData, setPersonalData] = useState([]);
@@ -12,18 +13,21 @@ function StepContext() {
   const [bankData, setBankData] = useState([])
   const [householdData, setHouseholdData] = useState([])
   const [documentData, setDocumentData] = useState([])
+  const [loginData, setLoginData] = useState([])
+  
   return (
     <div>
       <multiStepContext.Provider
         value={{
           currentSteps,setCurrentSteps,
+          loginData, setLoginData,
           personalData,setPersonalData,
           addressDatas,setAddressData,
           skillData,setSkillData,
           jobData, setJobData,
           bankData,setBankData,
           householdData,setHouseholdData,
-          documentData,setDocumentData
+          documentData,setDocumentData,
         }}
       >
         <App/>

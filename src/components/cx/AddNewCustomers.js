@@ -6,7 +6,7 @@ import HouseholdInfo from "../cxForm/HouseholdInfo";
 import { useState } from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
-import Popup from "../Popup";
+
 
 function AddNewCustomer(props) {
   const [cxSource, setCxSource] = React.useState("");
@@ -220,13 +220,13 @@ console.log("new data",responseData)
           </Button>
         </Box>
        {/* // </Link> */}
-        <Popup
+        {/* <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
         title="SUCCESS MESSAGE"
       >
         <Alert severity="success">Thank You Customer id Is:-{responseData.userId}</Alert>
-      </Popup>
+      </Popup> */}
 
       </Box>
     </Box>

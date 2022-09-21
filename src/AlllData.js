@@ -2,8 +2,9 @@
 export const JobRequirementApis = "http://13.126.160.155:8080/user/worker/jobRequirement"
 export const BankApi = "http://13.126.160.155:8080/user/bank/"
 export const masterApi = `http://13.126.160.155:8080/user`
+export const masterApiforAll = "http://13.126.160.155:8080/"
 
-
+export const MasterApiForLocation ="http://13.126.160.155:8081"
 
 
 

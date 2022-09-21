@@ -1,10 +1,10 @@
 import React from 'react'
 import TextField from "@mui/material/TextField";
-import { Box, Button ,Alert,MenuItem,FormControl,Select,InputLabel} from "@mui/material";
+import { Box, Button, Alert, MenuItem, FormControl, Select, InputLabel } from "@mui/material";
 import axios from "axios";
- import image from "../../images/careCrew1.png";
- import india from "../../images/india.png";
- import CardContent from '@mui/material/CardContent';
+import image from "../../images/careCrew1.png";
+import india from "../../images/india.png";
+import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
@@ -13,392 +13,344 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect } from "react";
-import Stack from '@mui/material/Stack';
-
-
+import { masterApiforAll } from "../../AlllData";
+import {MasterApiForLocation} from "../../AlllData"
 function UserRegistration() {
-    const[ candidatemobileNumber,setCandidateMobileNumber]=React.useState("");
-    const[ candidateFirstName,setCandidateFirstName]=React.useState("");
-    const[ candidateMiddleName,setCandidateMiddleName]=React.useState("");
-    const[ candidateLastName,setCandidateLastName]=React.useState("");
-    const[ candidatetype,setCandidateType]=React.useState("");
-    const[isoCode,setIsoCode]=React.useState("");
-    const[department,setDepartment]=React.useState("");
-    const[birthday,setBirthday]=React.useState("");
-    const[education,setEducation]=React.useState("");
-    const[educationDD,setEducationDD]=React.useState([]);
-    const [availableNumberResponse, setAvailableNumberResponse] = React.useState();
-    const[maritalStatusDD,setMaritalStatusDD]=React.useState([]);
-    const[genderDD,setGenderDD]=React.useState([])
-    const[gender,setGender]=React.useState([])
-    const[maritalStatus,setMaritalStatus]=React.useState("");
-    const[helpertext,setHelpertext]=React.useState("");
-    console.log("hi",birthday)
-    console.log("no",education)
-
-    useEffect(() => {
-        async function checkMobilenumber(){
-         let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${candidatemobileNumber}`)
-         let response = await checkNumber.json();
-         setAvailableNumberResponse(response.data)
-        }
-       checkMobilenumber()
-       }, [candidatemobileNumber])
-     
-       if(availableNumberResponse){
-         alert("Already Available")
-   
-       }
+  const [genderDD, setGenderDD] = React.useState([])
+  const [localityDD, setLocalityDD] = React.useState([])
+  const [religionDD, setReligionDD] = React.useState([])
+  const[skillsDD, setSkillsDD] = React.useState([])
+  const [workingHrDD,setWorkingHrDD]=React.useState([])
 
 
-    useEffect(() => {
-        const fetchData = async () => {
-          let educationdataDD = await fetch(
-           "http://13.126.160.155:8080/user/drop-down/get/education"
-          );
-          let genderDD = await fetch(
-            "http://13.126.160.155:8080/user/get/gender"
-           );
+  const [candidatemobileNumber, setCandidateMobileNumber] = React.useState("");
+  const [candidateFirstName, setCandidateFirstName] = React.useState("");
+  const [candidateLastName, setCandidateLastName] = React.useState("");
+  const [candidategender, setCandidateGender] = React.useState("")
+  const [candidateage, setCandidateAge] = React.useState("");
+  const [candidateworkingHr, setCandidateWorkingHr] = React.useState("");
+  const [candidateprimarySkills, setCandidatePrimarySkills] = React.useState("");
+  const [candidatelocality, setCandidateLocality] = React.useState("");
+  const [candidatereligion, setCandidateReligion] = React.useState("");
+  const [candidatePartnerPhoneNumber, setCandidatePartnerPhoneNumber] = React.useState("");
+  const [availableNumberResponse, setAvailableNumberResponse] = React.useState();
+  const [helpertext, setHelpertext] = React.useState("");
 
-           let maritalDD = await fetch(
-            "http://13.126.160.155:8080/user/drop-down/get/maritalStatus"
-           );
 
-           let genderDropdown= await genderDD.json();
-           let maritalDropdown= await maritalDD.json();
-           let dropdowneducation = await educationdataDD.json();
 
-           let DDgender = await genderDropdown.data;
-          let DDeducationList= await dropdowneducation.data;
-          let maritalDDList = await maritalDropdown.data;
-       
-          setEducationDD(DDeducationList);
-          setGenderDD(DDgender);
-          setMaritalStatusDD(maritalDDList);
-       
-        };
-    
-        fetchData();
-    
-      }, []);
-console.log("educationDD",educationDD)
-    const handleClick = async () => {
-  
-        try {
-         let response= await axios.post("http://13.126.160.155:8080/user/internal/add",
-            {   
-            "birthday": birthday,
-            "department": "WORKER",
-            "educationalRemarks": education,
-            "firstName": candidateFirstName,
-            "gender": gender,
-            "isoCode": "IN",
-            "lastName": candidateLastName,
-            "maritalStatus": maritalStatus,
-            "middleName": candidateMiddleName,
-            "mobile": candidatemobileNumber,
-            "nationality": "INDIAN",
-            "userType": "WORKER",        
-            });
-      alert("Candidate Registration successfully" )
-      setCandidateFirstName("");
-      setCandidateMobileNumber("");
-      setCandidateMiddleName("");
-      setCandidateLastName("");
-      setEducation("");
-      setBirthday("");
 
-        } catch (error) {
-          alert("Please Fill correct Mobile Number", error)
-          
-        }
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      let genderDD = await fetch(masterApiforAll+"user/get/gender");
+      let localityDataDD = await fetch(MasterApiForLocation+"/locationmaster/internal/micromarkets/all")
+      let ReligionDataDD = await fetch(masterApiforAll+"user/drop-down/get/religion")
+      let skillsDataDD =await fetch(masterApiforAll+"user/skill/get/skills")
+      let workingHrDataDD =await fetch(masterApiforAll+"user/drop-down/get/workingHours")
+
+      let skillsDropDown =await skillsDataDD.json()
+      let localityDropDown = await localityDataDD.json();
+      let ReligionDropDown = await ReligionDataDD.json();
+      let genderDropdown = await genderDD.json();
+      let workingHrDropDown = await workingHrDataDD.json();
+
+      let localityDropDownList = await localityDropDown.data
+      let ReligionDropDownList = await ReligionDropDown.data
+      let DDgender = await genderDropdown.data;
+      let skillsDropDownList= await skillsDropDown.data;
+      let workingHrDropDownList = await workingHrDropDown.data;
+
+      setGenderDD(DDgender);
+      setLocalityDD(localityDropDownList);
+      setReligionDD(ReligionDropDownList);
+      setSkillsDD(skillsDropDownList);
+      setWorkingHrDD(workingHrDropDownList)
+    };
+
+    fetchData();
+
+  }, []);
+
+  const handleClick = async () => {
+
+    try {
+      let response = await axios.post(masterApiforAll+"user/internal/add",
+        {
+
+          "department": "WORKER",
+          "mobileNo": candidatemobileNumber,
+          "userType": "WORKER",
+          "isoCode": "IN",
+          "firstName": candidateFirstName,
+          "gender": candidategender,
+          "lastName": candidateLastName,
+          "religion": candidatereligion,
+          "micromarketUuid": candidatelocality,
+          "workingHours": candidateworkingHr,
+          "skillUuid": candidateprimarySkills,
+          "age": candidateage,
+          "partnerMobileNo": candidatePartnerPhoneNumber,
+         
+        });
+      alert("Candidate Registration successfully")
+      // window.location.reload(false);
+    } catch (error) {
+      alert("Please Fill correct Mobile Number", error)
     }
+  }
 
   return (
     <>
-         <Grid 
-          mt={10}
-          mb={100}
-           justifyContent="center"
-           alignItems="center"
-           sx={{display:"flex"}}
-      >
-      <Card 
-       sx={{ maxWidth: 400,padding:"25px" , justifyContent:"center" }}
-      >
-         <Grid  sx={{ display:"flex",justifyContent:"center"}}>
-      <CardMedia
-         image={image}
-        component="img"
-       sx={{width:"150px", marginTop:"20px", }}
-        alt="CARE CREW"
-      />
-      </Grid>
-      <CardContent
-      >
-        <Box sx={{fontSize:"22px", fontWeight:"900", textAlign:"center",color:"#BDBDBD"}}>Candidate Registration</Box>
-     <Grid 
-      mt={2}
-     justifyContent="center"
-     container spacing={3}
-     //</CardContent>sx={{display:"flex",gap:"10px" , marginTop:"20px"}}
-     >
-        {/* <Grid sx={12} sm={6} item>
-      <TextField 
-       sx={{width:"60px"}}
-        required
-        size="small"
-        id="standard-size-small"
-            InputProps={{
-           startAdornment: (
-            <InputAdornment position="start">
-            <img  src={india} style={{width:"13px",height:"12px"}}></img> 
-   
-           </InputAdornment>
-          ),
-        }}
-        value="+91"
-        variant="standard"
-        />
-</Grid> */}
- <Grid 
- 
- lg={6} sm={6} sx={12}  item
- 
- >
-     <TextField
-     
-    //  sx={{textDecoration:"none",counterText: ""}}
-        required
-        // size="small"
-        //  id="standard-size-small"
-         type="number"
-        placeholder="Phone Number"
-        variant="standard"
-        helperText={helpertext}
-        onInput = {(e) =>{
-            setCandidateMobileNumber( e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10))
-          
-        }}
-      />
-      </Grid>
-         
-
-      <Grid lg={6} sm={6} sx={3}  item>
-     <TextField
- 
-    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
-        required
-        // size="small"
-        //  id="standard-size-small"
-         type="text"
-        placeholder="First Name"
-        variant="standard"
-        onInput = {(e) =>{
-            setCandidateFirstName(e.target.value)
-        }}
-      />
-      </Grid>
-      <Grid lg={6} sm={6} sx={12}  item>
-     <TextField
-    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
-        required
-        size="small"
-         id="standard-size-small"
-         type="text"
-        placeholder="Middle Name"
-        variant="standard"
-        onInput = {(e) =>{
-            setCandidateMiddleName(e.target.value)
-        }}
-      />
-      </Grid>
-      <Grid lg={6} sm={6} sx={12}  item>
-     <TextField
-    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
-        required
-        size="small"
-         id="standard-size-small"
-         type="text"
-        placeholder="Last Name"
-        variant="standard"
-        onInput = {(e) =>{
-            setCandidateLastName(e.target.value)
-        }}
-      />
-      </Grid>
-
-
-
-      <Grid lg={6} sm={6} sx={12}   item>
-       {/* <TextField
-    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
-        required
-        size="small"
-         id="standard-size-small"
-         type="text"
-        placeholder="Type"
-        variant="standard"
-        onInput = {(e) =>{
-            setCandidateType( e.target.value)
-        }}
-      /> */}
-
-
-
-     <Autocomplete
-          disablePortal
-          size="small"
-          id="combo-box-demo"
-          options={genderDD}
-          onChange={(event, newValue) => {
-            setGender(newValue.key);
-          }}
-          renderInput={(params) => (
-            <TextField
-            sx={{width:"176px"}}
-            variant="standard"
-              {...params}
-              placeholder="Gender"
-              onChange={(event, newValue) => {
-                setGender("");
-              }}
-            />
-          )}
-          getOptionLabel={(item) => `${item.value}`}
-        />
-      </Grid>
-      
-      <Grid lg={6} sm={6} sx={12}   item>
-       {/* <TextField
-    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
-        required
-        size="small"
-         id="standard-size-small"
-         type="text"
-        placeholder="Type"
-        variant="standard"
-        onInput = {(e) =>{
-            setCandidateType( e.target.value)
-        }}
-      /> */}
-
-
-
-     <Autocomplete
-          disablePortal
-          size="small"
-          id="combo-box-demo"
-          options={maritalStatusDD}
-          onChange={(event, newValue) => {
-            setMaritalStatus(newValue.key);
-          }}
-          renderInput={(params) => (
-            <TextField
-            sx={{width:"176px"}}
-            variant="standard"
-              {...params}
-              placeholder="maritalStatus"
-              onChange={(event, newValue) => {
-                setMaritalStatus("");
-              }}
-            />
-          )}
-          getOptionLabel={(item) => `${item.value}`}
-        />
-      </Grid>
-      <Grid lg={6} sm={6} sx={12}   item>
-       {/* <TextField
-    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
-        required
-        size="small"
-         id="standard-size-small"
-         type="text"
-        placeholder="Type"
-        variant="standard"
-        onInput = {(e) =>{
-            setCandidateType( e.target.value)
-        }}
-      /> */}
-
-
-
-     <Autocomplete
-          disablePortal
-          size="small"
-          id="combo-box-demo"
-          options={educationDD}
-          onChange={(event, newValue) => {
-            setEducation(newValue.key);
-          }}
-          renderInput={(params) => (
-            <TextField
-            sx={{width:"176px"}}
-            variant="standard"
-              {...params}
-              placeholder="Education Qulification"
-              onChange={(event, newValue) => {
-                setEducation("");
-              }}
-            />
-          )}
-          getOptionLabel={(item) => `${item.value}`}
-        />
-      </Grid>
-      <Grid  sm={6} sx={12} item>
-      {/* <TextField
-    //  sx={{textDecoration:"none",counterText: "",marginTop:"10px"}}
-        required
-        size="small"
-         id="standard-size-small"
-         type="text"
-        placeholder="department"
-        variant="standard"
-        onInput = {(e) =>{
-            setDepartment(e.target.value )
-        }}
-
-      /> */}
-
-         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DesktopDatePicker
-            // label="DOB"
-            value={birthday}
-            onChange={(newValue) => {
-              setBirthday(newValue);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} 
-              type="text"
-              sx={{width:"176px"}}
-              error={false}
-              size="small" 
-              placeholder="DOB"
-              variant="standard"
-              id="standard-size-small"
-              />
-            )}
+    
+      <Grid  sx={{textAlign:"center",justifyContent:"center",margin:"auto" ,marginTop:"0px"}}>
+        {/* <Card  sx={{ padding: "10px",}} > */}
+        <Grid sx={{ display: "flex" }}>
+          <CardMedia
+            image={image}
+            component="img"
+            sx={{ width: "150px", paddingLeft: "10px",textAlign:"center",justifyContent:"center",margin:"auto", marginTop: "20px", }}
+            alt="CARE CREW"
           />
-        </LocalizationProvider>
+        </Grid>
+        <CardContent >
+          <Box sx={{fontSize: "22px", fontWeight: "900", color: "#BDBDBD",marginLeft:"4%" }}>Candidate Registration</Box>
+          <Grid mt={2} container spacing={3} sx={{textAlign:"center",justifyContent:"center",margin:"auto" }} >
+
+            <Grid lg={12} sm={12} sx={12} item>
+              <TextField
+                required
+                type="number"
+                placeholder="Phone Number"
+                variant="standard"
+                helperText={helpertext}
+                onInput={(e) => {
+                  setCandidateMobileNumber(e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10))
+                }}
+              />
+            </Grid>
+
+
+            <Grid lg={12} sm={12} sx={12} item>
+              <TextField
+                required
+                type="text"
+                placeholder="First Name"
+                variant="standard"
+                onInput={(e) => {
+                  setCandidateFirstName(e.target.value)
+                }}
+              />
+            </Grid>
+
+            <Grid lg={12} sm={12} sx={12} item>
+              <TextField
+                required
+                size="small"
+                id="standard-size-small"
+                type="text"
+                placeholder="Last Name"
+                variant="standard"
+                onInput={(e) => {
+                  setCandidateLastName(e.target.value)
+                }}
+              />
+            </Grid>
+
+            <Grid lg={12} sm={12} sx={12} item>
+              <Autocomplete
+                disablePortal
+                size="small"
+                id="combo-box-demo"
+                options={genderDD}
+                onChange={(event, newValue) => {
+                  setCandidateGender(newValue.key);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    sx={{ width: "176px" }}
+                    variant="standard"
+                    {...params}
+                    placeholder="Gender"
+                    onChange={(event, newValue) => {
+                      setCandidateGender("");
+                    }}
+                  />
+                )}
+                getOptionLabel={(item) => `${item.value}`}
+              />
+            </Grid>
+            <Grid lg={12} sm={12} sx={12} item>
+              <TextField
+                required
+                size="small"
+                id="standard-size-small"
+                type="text"
+                placeholder="Age ( in Year )"
+                variant="standard"
+                onInput={(e) => {
+                  setCandidateAge(e.target.value)
+                }}
+              />
+            </Grid>
+
+            <Grid lg={12} sm={12} sx={12} item>
+              <Autocomplete
+                disablePortal
+                size="small"
+                id="combo-box-demo"
+                options={skillsDD}
+                onChange={(event, newValue) => {
+                  setCandidatePrimarySkills(newValue.uuid);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    sx={{ width: "176px" }}
+                    variant="standard"
+                    {...params}
+                    placeholder="Primary Skill"
+                    onChange={(event, newValue) => {
+                      setCandidatePrimarySkills("");
+                    }}
+                  />
+                )}
+                getOptionLabel={(item) => `${item.name}`}
+              />
+            </Grid>
+          
+            <Grid lg={12} sm={12} sx={12} item>
+              <Autocomplete
+                disablePortal
+                size="small"
+                id="combo-box-demo"
+                options={localityDD}
+                onChange={(event, newValue) => {
+                  setCandidateLocality(newValue.uuid);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    sx={{ width: "176px" }}
+                    variant="standard"
+                    {...params}
+                    placeholder="Locality"
+                    onChange={(event, newValue) => {
+                      setCandidateLocality("");
+                    }}
+                  />
+                )}
+                getOptionLabel={(item) => `${item.microMarketName}`}
+              />
+            </Grid>
+            {/* <Grid lg={12} sm={12} sx={12} item>
+              <Autocomplete
+                disablePortal
+                sx={{ width: "176px" }}
+                size="small"
+                id="combo-box-demo"
+                options={localityDD}
+                onChange={(event, newValue) => {
+                  setCandidateLocality(newValue.uuid);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    sx={{ width: "176px" }}
+                    variant="standard"
+                    {...params}
+                    placeholder="Locality"
+                    onChange={(event, newValue) => {
+                      setCandidateLocality("");
+                    }}
+                  />
+                )}
+                getOptionLabel={(item) => `${item.microMarketName}`}
+              />
+            </Grid> */}
+{/* 
+            <Grid lg={12} sm={12} sx={12} item>
+              <TextField
+                required
+                size="small"
+                id="standard-size-small"
+                type="text"
+                placeholder="Preferred Working Hours"
+                variant="standard"
+                onInput={(e) => {
+                  setCandidateWorkingHr(e.target.value)
+                }}
+              />
+            </Grid> */}
+            
+            <Grid lg={12} sm={12} sx={12} item>
+              <Autocomplete
+                disablePortal
+                size="small"
+                id="combo-box-demo"
+                options={workingHrDD}
+                onChange={(event, newValue) => {
+                  setCandidateWorkingHr(newValue.key);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    sx={{ width: "176px" }}
+                    variant="standard"
+                    {...params}
+                    placeholder="Preferred Working Hours"
+                    onChange={(event, newValue) => {
+                      setCandidateWorkingHr("");
+                    }}
+                  />
+                )}
+                getOptionLabel={(item) => `${item.value}`}
+              />
+            </Grid>
+
+            <Grid lg={12} sm={12} sx={12} item>
+              <Autocomplete
+                disablePortal
+                size="small"
+                id="combo-box-demo"
+                options={religionDD}
+                onChange={(event, newValue) => {
+                  setCandidateReligion(newValue.key);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    variant="standard"
+                    sx={{ width: "176px" }}
+                    {...params}
+                    placeholder="Religion"
+                    onChange={(event, newValue) => {
+                      setCandidateReligion("");
+                    }}
+                  />
+                )}
+                getOptionLabel={(item) => `${item.value}`}
+              />
+            </Grid>
+
+            <Grid lg={12} sm={12} sx={12} item >
+              <TextField
+                required
+                type="number"
+                placeholder=" Partner Phone Number"
+                variant="standard"
+                helperText={helpertext}
+                onInput={(e) => {
+                  setCandidatePartnerPhoneNumber(e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10))
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid mt={4} item>
+            <Button variant="contained" color="success" onClick={handleClick} >
+              Registration
+            </Button>
+          </Grid>
+        </CardContent>
+        {/* </Card> */}
       </Grid>
-      
-    </Grid>
-    <Grid
-  mt={4}
-  sx={{display:"flex",justifyContent:"center"}}   item>
-      <Button 
-     
-      variant="contained"  color="success"  
-      onClick={handleClick}
-      >
-     Registration
-    </Button>
-    </Grid>
-     </CardContent>
-    </Card>
-    </Grid>
- 
     </>
+
   )
 }
 
