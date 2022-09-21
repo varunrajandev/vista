@@ -1,5 +1,6 @@
 import * as React from "react";
 import TextField from "@mui/material/TextField";
+import { useContext } from "react";
 import { Box, Button ,Alert} from "@mui/material";
 import axios from "axios";
 // import Dialog from '@mui/material/Dialog';
@@ -15,10 +16,17 @@ import Card from '@mui/material/Card';
  import OTPInput ,{ResendOTP} from "otp-input-react";
  import InputAdornment from '@mui/material/InputAdornment';
 import { data } from "../../Data";
-import { Link } from "react-router-dom";
-// import Popup from "../../Popup";
+
 import Tooltip from '@mui/material/Tooltip';
 import {useNavigate} from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import { multiStepContext } from "../../ContextApi/StepContext";
+import { masterApiforAll } from "../../AlllData";
+import indianflag from "../../images/india.png"
+import AlertTitle from '@mui/material/AlertTitle';
+
 
 function Login() {
 
@@ -31,11 +39,14 @@ function Login() {
 const [displayalert,setDisplayAlert]=React.useState("none")
     const [openPopup, setOpenPopup] = React.useState(false);
     const[helpertext,setHelpertext]=React.useState("");
+    const[errorvalue,setErrorValue]=React.useState("");
     let navigate=useNavigate();
-    // const handleClickOpen = () => {
-    //   setOpen(true);
-    //   handleClick();
-    // };
+
+    const{loginData,setLoginData}=useContext(multiStepContext);
+
+console.log("loginData",loginData);
+    const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   
     const handleClose = () => {
       setOpen(false);
@@ -45,14 +56,10 @@ const [displayalert,setDisplayAlert]=React.useState("none")
       setIsError(true)
     }
 
-
- 
     const handleClick2 = async () => {
 
-       
-  
         try {
-         let response= await axios.post("http://13.126.160.155:8080/user/auth/resendOtp",
+         let response= await axios.post(masterApiforAll+"user/auth/resendOtp",
             {  
                 
             
@@ -61,17 +68,14 @@ const [displayalert,setDisplayAlert]=React.useState("none")
                     "userType": "WORKER"
                 
             });
-
-         
           alert("User Resend OTP")
-
           console.log("res",response.data.message)
         //   handleClick1();
-        //    console.log(response)
-        //    console.log(mobileNumber);
            handleClose();
         } catch (error) {
           alert("User Registration Faild", error)
+          setDisplayAlert("visible")
+          setErrorValue("OTP Resend Fail Please Try Again")
           handleClose();
         }
     
@@ -79,168 +83,102 @@ const [displayalert,setDisplayAlert]=React.useState("none")
     const handleClick1 = async () => {
 
         if(otp===""){
-            alert("Please fill otp");
+            setDisplayAlert("visible")
+            setErrorValue("OTP is Empty Please Fill OTP")
         }else{
-
-     
-  
         try {
-         let response= await axios.post("http://13.126.160.155:8080/user/auth/validateOtp",
+         let response= await axios.post(masterApiforAll+"user/auth/validateOtp",
             {  
-                
-            
                     "isoCode": "IN",
                     "mobile": mobileNumber,
                     "otp": otp,
                     "userType": "WORKER"
                 
-
-
             });
 
-         
-          // alert("User Registration successfull")
-          // console.log("res",response.data.message)
-          //  console.log(response)
-          //  console.log(mobileNumber);
-           handleClose();
+         // setOpen(true)
+     //  setDisplayAlert("visible")
+    localStorage.setItem("Response",JSON.stringify(response.data.status))
+         setLoginData(response.data)
+          // handleClose();
            navigate("/ycw");
+       
+          console.log("loginData",loginData);
         } catch (error) {
-          alert("User Registration Faild", error)
+          setErrorValue("Please Fill Correct OTP")
+          setDisplayAlert("visible")
           handleClose();
         }
-    }
-
-
+      }
+     }
     
-
-    }
-    // const handleChange = (newValue) => {
-    //     setOtp(newValue.target.value)
-    //   }
-  
-
-
-
-
     const handleClick = async () => {
-  
         try {
-         let response= await axios.post("http://13.126.160.155:8080/user/auth/login",
+         let response= await axios.post(masterApiforAll+"user/auth/login",
             {  
-                
                     "isoCode": "IN",
                     "mobile": mobileNumber,
-                    "userType": "WORKER"     
-                    
+                    "userType": "WORKER"           
             });
-          // axios.defaults.headers.common['Authorization'] = `Bearer ${response['token']}`;
-          //   let response=      axios({
-          //   method:"post",
-          //   url:'http://13.126.160.155:8080/user/auth/login',
-          //   data:{
-          //     "isoCode": "IN",
-          //                 "mobile": mobileNumber,
-          //                 "userType": "WORKER"
-          //   },
-          //   headers: {
-          //     "accepts": "application/json",
-          //     'Access-Control-Allow-Origin': '*',
-          //     'Authorization': 'Bearer ' + "",
-          //   },
-
-
-          // })
-          // axios.defaults.headers.common['Authorization'] = data.token;
-          // alert("User Registration successfull")
           setDisplayOtp("visible")
-          // handleClick2()
-        //   console.log("res",response)
-        //   console.log("login success",response.message)
-        // //   setGivenMobileNumver(mobileNumber)
-        //   console.log(mobileNumber);
-        // setOpen(true);
-       
-        // {<Link to="/ycw"></Link> }
+          setDisplayAlert("none")
         } catch (error) {
-          alert("Please Fill correct Mobile Number", error)
-         
-          
+          setDisplayAlert("visible")
+          setErrorValue("Please Fill correct Mobile Number")
         }
       
     
     }
   return (
     <>
-<Card  sx={{ marginLeft:"39%",maxWidth: 300,padding:"25px" , height:"500px",marginTop:"100px", marginBottom:"220px"}}>
-      <CardMedia
+      <Grid 
+       height={650}
+       sx={{display:"flex",flexDirection:"column",gap:"20px",textAlign:"center",justifyContent:"center",margin:"auto"}}>
+            <Card  
+             sx={{marginTop:"50px", padding:"25px"}}
+            >
+         <CardMedia
+       
          image={image}
         component="img"
-        // height="140"
-        //   width="300"
-        sx={{width:"150px",marginLeft:"24%", marginTop:"60px"}}
+        sx={{width:"150px",margin:"auto",marginTop:"40px"}}
         alt="CARE CREW"
-       // sx={{width:"50px"}}
       />
-      <CardContent   sx={{display:"flex", flexDirection:"column" ,gap:"20px" , width:"250px", justifyContent:"space-around",marginTop:"60px"}}>
-        
-        <Box sx={{ lineHeight:"30px"}}>
+      <Grid>
+      <CardContent   sx={{display:"flex", flexDirection:"column" ,gap:"20px" , width:"250px", justifyContent:"space-around"}}>
        <Box sx={{fontSize:"22px", fontWeight:"900"}}>Log In</Box>
        <Box sx={{ fontSize:"15px",fontWeight:"450",color:"#949494"}}>Enter your Registered phone number</Box>
-
-        </Box>
-     <Box sx={{display:"flex",gap:"10px" , marginTop:"20px"}}>
-     {/* <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    size="small"
-    value="IN"
-    label="India"
-    // onChange={handleChange}
-  > */}
-   {/* <MenuItem value="IN">
-    <img  src="https://cdn.pixabay.com/photo/2018/01/21/14/36/indian-flag-3096740_1280.png" style={{width:"12px",height:"12px"}}></img> 
-     IN</MenuItem> */}
-  {/* </Select> */}
-  <TextField 
-  sx={{width:"60px"}}
-        required
-        size="small"
-       // id="outlined-required"
-        id="standard-size-small"
-
-  InputProps={{
+        <Grid lg={12} sm={12} sx={12} >
+     <Box 
+     mt={3}
+     sx={{display:"flex",gap:"10px" }}>
+          <TextField 
+          sx={{width:"60px"}}
+          required
+          size="small"
+          id="standard-size-small"
+          InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-            <img  src="https://cdn.pixabay.com/photo/2018/01/21/14/36/indian-flag-3096740_1280.png" style={{width:"13px",height:"12px"}}></img> 
-   
+            <img  src={indianflag} style={{width:"13px",height:"13px"}}></img> 
            </InputAdornment>
           ),
         }}
         value="+91"
         variant="standard"
         />
-
-     <TextField
-     sx={{textDecoration:"none",counterText: ""}}
+        <TextField
+         sx={{textDecoration:"none",counterText: ""}}
         required
         size="small"
-   
         id="standard-size-small"
-       type="number"
-      
-      //  TextFieldType="number" 
+        type="number"
          error={isError}
         placeholder="Phone Number"
-        // maxlength="10"
-        // defaultValue=""
-        // TextFieldLength={4}
-        // onfocusout={myfo()}
         variant="standard"
         helperText={helpertext}
         onInput = {(e) =>{
           setMobileNumber( e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10))
-
           if ( e.target.value.length <1||e.target.value.length ===10) {
             setIsError(false);
             setHelpertext("")
@@ -249,81 +187,70 @@ const [displayalert,setDisplayAlert]=React.useState("none")
                       setIsError(true);
                       setDisplayOtp("none")
                       setHelpertext("Please Enter correct Number")
-                }
-        }}
-        // onInput={(event) => {
-        //     setMobileNumber(event.target.value);
-        //     if (event.target.value.length >11) {
-              
-        //       setIsError(true);
-             
-        //     }
-        //     else{
-        //       setIsError(false);
-        //     }
-        //   }}
-      />
-         {/* <Box sx={{display:`${displayalert}`}}>
-          please fill correct Number
-         </Box> */}
+                      setDisplayAlert("none")
+                }}} />     
 
      </Box>
-    
-    
+     </Grid>
+     <Grid lg={12} sm={12} sx={12} >
+      <Button  variant="contained"  color="success"  onClick={handleClick}>  Send OTP </Button>
+
+      </Grid>
+{/* --------------------OTP CODE Start ---------------------------- */}
    
-     
-      <Button 
-      variant="contained"  color="success"  onClick={handleClick}>
-        {/* onClick={handleClick} */}
-     Send OTP
-    </Button>
-
-
-{/* --------------------OTP CODE ---------------------------- */}
-    {/* <Dialog open={open}  >
-        <DialogTitle sx={{padding:"30px"}}>Enter OTP</DialogTitle>
-        <DialogContent> */}
         <Box sx={{display:`${displayopt}`}}>
-<OTPInput  autoFocus OTPLength={4} value={otp} otpType="number"  
-        //  onChange={(event) => {
-        //         setOtp(event.target.value);
-        //       }}
-        onChange={setOtp}
-              />
-         
-          
-        {/* </DialogContent> */}
-        {/* <DialogActions> */}
+          <OTPInput  autoFocus OTPLength={4} value={otp} otpType="number"   onChange={setOtp} />
+     
        <Box sx={{display :"flex", marginTop:"20px", justifyContent:"space-between"}}>
-   <ResendOTP   
-  
-   
-  onClick={handleClick2}
-    maxTime={60} 
-    style={{
-      color:"green"
-    }}
-    // textStyle={style}
-   //style={{color:"red" ,gap:"10px", backgroundColor:"white",border:"none"}}
-   />
-          {/* <Button onClick={handleClick2}>Resend OTP</Button> */}
+       <ResendOTP  onClick={handleClick2}maxTime={6}  style={{color:"green"  }} />
+          
           <button onClick={handleClick1} variant="sucess">Submit</button>
           </Box>
           </Box>
-        {/* </DialogActions> */}
-      {/* </Dialog> */}
-
-{/* --------------------OTP CODE ---------------------------- */}
+      
+{/* --------------------OTP CODE Start ---------------------------- */}
       </CardContent>
-    
+      </Grid>
     </Card>
-    {/* <Popup
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-        title="SUCCESS MESSAGE"
+    <Grid>
+<Alert sx={{display:`${displayalert}`}} severity="error">
+        <AlertTitle>Error</AlertTitle>
+        {errorvalue}  <strong>check it out!</strong>
+      </Alert>
+      </Grid>
+    </Grid>
+ {/* --------------------Login Successfully Code Start---------------------------- */}
+
+    {/* <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        // onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
       >
-        <Alert severity="success">This is a success alert — check it out!</Alert>
-      </Popup> */}
+        <DialogTitle id="responsive-dialog-title">
+          {"Login successfully  "}
+        </DialogTitle>
+        <DialogContent>
+         
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus 
+          onClick={()=>{
+            navigate("/registration");
+          }}
+          >
+          Go to Candidate Registration 
+          </Button>
+          <Button onClick={()=>{
+            navigate("/ycw");
+          }} autoFocus>
+           Go To CRM Desktop
+          </Button>
+        </DialogActions>
+      </Dialog> */}
+{/* --------------------Login Successfully Code Start---------------------------- */}
+
+
     </>
   );
 }

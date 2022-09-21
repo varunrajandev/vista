@@ -22,6 +22,7 @@ function Profile() {
   const[householdMembersInformation,setHouseholdMembersInformation]=React.useState([]);
   const[documents,setDocuments]=React.useState([]);
   const[skills,setSkills]=React.useState([]);
+  const[data,setdata]=React.useState([]);
   const { id } = useParams();
   console.log(userData, id)
 
@@ -33,6 +34,8 @@ function Profile() {
       )
       let profiletadata = await ycwprofiledata.json();
       let useprofiledata = await profiletadata.data;
+
+      setdata(useprofiledata)
       setUserData(useprofiledata.userProfile)
       setCurrentAddressData(useprofiledata.addressDtos[0])
       setPermanentAddressData(useprofiledata.addressDtos[1])
@@ -45,7 +48,7 @@ function Profile() {
     };
     fetchData();
   }, []);
-  console.log("data is ", userData)
+  console.log("data is ", data)
   // console.log("permanetdata is ",permanentAddressData)
 
   // let dob=userData.birthday.toLocaleDateString();

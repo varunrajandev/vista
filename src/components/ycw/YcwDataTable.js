@@ -23,14 +23,8 @@ import { useNavigate } from 'react-router-dom';
 import { masterApi } from "../../AlllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import {
-  IconButton,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
- 
-} from "@mui/material";
+import { LinearProgress } from '@mui/material';
+
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -59,16 +53,14 @@ function Right() {
   const [ycwStatus, setYcwStatus] = React.useState([]);
   const [worktype, setWorkType] = React.useState("");
   const [statusycw, setStatusycw] = React.useState("");
-  const [ycwidorder, setycwIdOrder] = React.useState("asc");
+  const [ycwidorder, setycwIdOrder] = React.useState("desc");
   const [ycwCity, setYcwCity] = React.useState("");
   const [searchItem, setSearchItem] = React.useState("");
   const [searchDD, setSearchDD] = React.useState([]);
   const [cityDD, setCityDD] = React.useState([]);
   const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
-  const [filterName, setFilterName] = React.useState("userId");
-  const [btnColor, setBtnColor] = useState("black");
-  const [btnColor1, setBtnColor1] = useState("black");
+  const [filterName, setFilterName] = React.useState("createdAt");
   const [btnColorUserID, setBtnColorUserId] = useState("black");
   const [btnColor1UserId, setBtnColor1UserId] = useState("black");
   const [btnColorName, setBtnColorName] = useState("black");
@@ -89,7 +81,7 @@ function Right() {
   const [btnColor1WorkHr, setBtnColor1WorkHr] = useState("black");
   const [btnColorJobs, setBtnColorJobs] = useState("black");
   const [btnColor1Jobs, setBtnColor1Jobs] = useState("black");
-  
+
 
   ///onclick status
   const [statusData, setStatusData] = useState("")
@@ -107,40 +99,44 @@ function Right() {
       let jobType = await fetch(
         masterApi + "/skill/get/skills"
       );
-      let data = await fetch(
-
-        masterApi + `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
-      );
       let ycwStatusApidrop = await fetch(
-
         masterApi + "/drop-down/get/profileStatus?flag=all"
-      );
-      let searchData = await fetch(
-        masterApi + `/worker/search/user?searchTerm=${searchItem}`
       );
       let ycwCityDD = await fetch(
         "http://13.126.160.155:8081/locationmaster/city/get/all"
       );
 
       let jobtypeApi = await jobType.json();
-      let res = await data.json();
       let StatusApi = await ycwStatusApidrop.json();
       let cityDD = await ycwCityDD.json();
 
-      let newData = await res.data;
       let JobTypeApi = await jobtypeApi.data;
       let ycwStatusApi = await StatusApi.data;
       let cityDropDown = await cityDD.data;
-  
+
       setJobTypeApi(JobTypeApi);
       setYcwStatus(ycwStatusApi);
       setCityDD(cityDropDown);
-      setTableData(newData.data);
+     
     };
 
     fetchData();
 
-  }, [ycwidorder, worktype, statusycw, ycwCity]);
+  }, []);
+
+  useEffect(()=>{
+    const fetchDataTable = async () => {
+    let data = await fetch(
+      masterApi + `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+     );
+     let res = await data.json();
+     let newData = await res.data;
+     setTableData(newData.data);
+    }
+    
+    fetchDataTable();
+
+  },[ycwidorder, worktype, statusycw, ycwCity])
 
   useEffect(() => {
 
@@ -156,10 +152,8 @@ function Right() {
       fetchSearchData()
     }
   }, [searchItem])
-console.log("giiiii",statusycw)
-console.log("moo",ycwStatus)
 
-  return (
+     return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
       {/* //Add Ycw Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -173,17 +167,17 @@ console.log("moo",ycwStatus)
             ADD NEW YCW
           </Button>
         </NavLink>
-      </Box>
+         </Box>
 
-      {/* //add Filter and Search Section */}
-      <Box
+       {/* //add Filter and Search Section */}
+        <Box
         sx={{
           display: "flex",
           gap: "20px",
           alignItems: "center",
           marginTop: "30px",
-        }}
-      >
+         }}
+          >
 
 
         <Autocomplete
@@ -210,7 +204,6 @@ console.log("moo",ycwStatus)
                   setSearchItem(e.target.value);
                 }}
                 {...params}
-                // label="Search by name"
                 InputProps={{
                   ...params.InputProps,
                   type: "search",
@@ -241,6 +234,7 @@ console.log("moo",ycwStatus)
           )}
           getOptionLabel={(item) => `${item.name}`}
         />
+
 
         <Autocomplete
           disablePortal
@@ -283,7 +277,7 @@ console.log("moo",ycwStatus)
               </Select>
             </FormControl> */}
 
-      
+
 
         <Autocomplete
           disablePortal
@@ -324,7 +318,6 @@ console.log("moo",ycwStatus)
                   <Box sx={{ display: "flex" }}>
                     <Box sx={{ letterSpacing: "1px" }}>YCW ID</Box>
                     <Box
-                      // onClick={() => { handleSort(); { setFilterName("userId") } }}
                       style={{
                         alignItem: "",
                         display: "flex",
@@ -365,7 +358,7 @@ console.log("moo",ycwStatus)
                       />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("userId") }; { setycwIdOrder("desc") } 
+                          { setFilterName("userId") }; { setycwIdOrder("desc") }
                           {
                             {
                               setBtnColorUserId("black")
@@ -443,7 +436,7 @@ console.log("moo",ycwStatus)
                         sx={{ marginTop: "-5px", color: btnColorName }} />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("firstName") }; { setycwIdOrder("desc") } 
+                          { setFilterName("firstName") }; { setycwIdOrder("desc") }
                           {
                             {
                               setBtnColorName("black")
@@ -490,7 +483,7 @@ console.log("moo",ycwStatus)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                        { setFilterName("mobileNo") }; { setycwIdOrder("asc") }
+                          { setFilterName("mobileNo") }; { setycwIdOrder("asc") }
                           {
                             {
                               setBtnColorNamePhone("blue")
@@ -521,9 +514,10 @@ console.log("moo",ycwStatus)
                         sx={{ marginTop: "-5px", color: btnColorPhone }} />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("mobileNo") }; { setycwIdOrder("desc") } 
+                          { setFilterName("mobileNo") }; { setycwIdOrder("desc") }
                           {
-                            { setBtnColorNamePhone("black")
+                            {
+                              setBtnColorNamePhone("black")
                               setBtnColor1Phone("blue")
                               setBtnColorName("black")
                               setBtnColor1Name("black")
@@ -568,7 +562,7 @@ console.log("moo",ycwStatus)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                        { setFilterName("gender") }; { setycwIdOrder("asc") }
+                          { setFilterName("gender") }; { setycwIdOrder("asc") }
                           {
                             {
                               setBtnColorGender("blue")
@@ -598,7 +592,7 @@ console.log("moo",ycwStatus)
                         sx={{ marginTop: "-5px", color: btnColorGender }} />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("gender") }; { setycwIdOrder("desc") } 
+                          { setFilterName("gender") }; { setycwIdOrder("desc") }
                           {
                             {
                               setBtnColorGender("black")
@@ -676,9 +670,10 @@ console.log("moo",ycwStatus)
                         sx={{ marginTop: "-5px", color: btnColorCity }} />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("cityName") }; { setycwIdOrder("desc") } 
+                          { setFilterName("cityName") }; { setycwIdOrder("desc") }
                           {
-                            {setBtnColorCity("black")
+                            {
+                              setBtnColorCity("black")
                               setBtnColor1City("blue")
                               setBtnColorName("black")
                               setBtnColor1Name("black")
@@ -722,7 +717,7 @@ console.log("moo",ycwStatus)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                        { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
+                          { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
                           {
                             {
                               setBtnColorSkills("blue")
@@ -752,9 +747,10 @@ console.log("moo",ycwStatus)
                         sx={{ marginTop: "-5px", color: btnColorSkills }} />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("primarySkill") }; { setycwIdOrder("desc") } 
+                          { setFilterName("primarySkill") }; { setycwIdOrder("desc") }
                           {
-                            {setBtnColorSkills("black")
+                            {
+                              setBtnColorSkills("black")
                               setBtnColor1Skills("blue")
                               setBtnColorName("black")
                               setBtnColor1Name("black")
@@ -797,63 +793,64 @@ console.log("moo",ycwStatus)
                       }}
                     >
                       <ArrowDropUpIcon
-        onClick={() => {
-                 { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
-    {
-     { setBtnColorExp("blue")
-      setBtnColor1Exp("black")
-      setBtnColorSkills("black")
-      setBtnColor1Skills("black")
-      setBtnColorName("black")
-      setBtnColor1Name("black")
-      setBtnColorUserId("black")
-      setBtnColor1UserId("black")
-      setBtnColor1Phone("black")
-      setBtnColorNamePhone("black")
-      setBtnColorGender("black")
-      setBtnColor1Gender("black")
-      setBtnColorCity("black")
-      setBtnColor1City("black")
-      setBtnColorWorkHr("black")
-      setBtnColor1WorkHr("black")
-      setBtnColorJobs("black")
-      setBtnColor1Jobs("black")
-      setBtnColorStatus("black")
-      setBtnColor1Status("black")
-
-       }
-           }
-             }}
-                     sx={{ marginTop: "-5px" , color: btnColorExp}} />
-                      <ArrowDropDownIcon
-                      onClick={() => {
-                        { setFilterName("primarySkill") }; { setycwIdOrder("desc") } 
-                        {
+                        onClick={() => {
+                          { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
                           {
-                          setBtnColorExp("black")
-                          setBtnColor1Exp("blue")
-                           setBtnColorSkills("black")
-                            setBtnColor1Skills("black")
-                            setBtnColorName("black")
-                            setBtnColor1Name("black")
-                            setBtnColorUserId("black")
-                            setBtnColor1UserId("black")
-                            setBtnColor1Phone("black")
-                            setBtnColorNamePhone("black")
-                            setBtnColorGender("black")
-                            setBtnColor1Gender("black")
-                            setBtnColorCity("black")
-                            setBtnColor1City("black")
-                            setBtnColorWorkHr("black")
-                            setBtnColor1WorkHr("black")
-                            setBtnColorJobs("black")
-                            setBtnColor1Jobs("black")
-                            setBtnColorStatus("black")
-                            setBtnColor1Status("black")
+                            {
+                              setBtnColorExp("blue")
+                              setBtnColor1Exp("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+
+                            }
                           }
-                        }
-                      }}
-                      sx={{ marginTop: "-17px" ,color: btnColor1Exp}} />
+                        }}
+                        sx={{ marginTop: "-5px", color: btnColorExp }} />
+                      <ArrowDropDownIcon
+                        onClick={() => {
+                          { setFilterName("primarySkill") }; { setycwIdOrder("desc") }
+                          {
+                            {
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("blue")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("black")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
+                          }
+                        }}
+                        sx={{ marginTop: "-17px", color: btnColor1Exp }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -900,10 +897,10 @@ console.log("moo",ycwStatus)
                             }
                           }
                         }}
-                      sx={{ marginTop: "-5px",color: btnColorWorkHr }} />
-                      <ArrowDropDownIcon 
+                        sx={{ marginTop: "-5px", color: btnColorWorkHr }} />
+                      <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("firstName") }; { setycwIdOrder("desc") } 
+                          { setFilterName("firstName") }; { setycwIdOrder("desc") }
                           {
                             {
                               setBtnColorName("black")
@@ -929,16 +926,16 @@ console.log("moo",ycwStatus)
                             }
                           }
                         }}
-                      sx={{ marginTop: "-17px",color: btnColor1WorkHr }} />
+                        sx={{ marginTop: "-17px", color: btnColor1WorkHr }} />
                     </Box>
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "8%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "12%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box>#JOBS</Box>
+                    <Box>Update Status</Box>
                     <Box
                       style={{
                         alignItem: "",
@@ -948,39 +945,39 @@ console.log("moo",ycwStatus)
                         cursor: "pointer",
                       }}
                     >
-                      <ArrowDropUpIcon 
-                       onClick={() => {
-                        { setFilterName("firstName") }; { setycwIdOrder("asc") }
-                        {
+                      <ArrowDropUpIcon
+                        onClick={() => {
+                          { setFilterName("percentage") }; { setycwIdOrder("asc") }
                           {
-                            setBtnColorName("black")
-                            setBtnColor1Name("black")
-                            setBtnColorUserId("black")
-                            setBtnColor1UserId("black")
-                            setBtnColor1Phone("black")
-                            setBtnColorNamePhone("black")
-                            setBtnColorGender("black")
-                            setBtnColor1Gender("black")
-                            setBtnColorCity("black")
-                            setBtnColor1City("black")
-                            setBtnColorSkills("black")
-                            setBtnColor1Skills("black")
-                            setBtnColorExp("black")
-                            setBtnColor1Exp("black")
-                            setBtnColorWorkHr("black")
-                            setBtnColor1WorkHr("black")
-                            setBtnColorJobs("blue")
-                            setBtnColor1Jobs("black")
-                            setBtnColorStatus("black")
-                            setBtnColor1Status("black")
+                            {
+                              setBtnColorName("black")
+                              setBtnColor1Name("black")
+                              setBtnColorUserId("black")
+                              setBtnColor1UserId("black")
+                              setBtnColor1Phone("black")
+                              setBtnColorNamePhone("black")
+                              setBtnColorGender("black")
+                              setBtnColor1Gender("black")
+                              setBtnColorCity("black")
+                              setBtnColor1City("black")
+                              setBtnColorSkills("black")
+                              setBtnColor1Skills("black")
+                              setBtnColorExp("black")
+                              setBtnColor1Exp("black")
+                              setBtnColorWorkHr("black")
+                              setBtnColor1WorkHr("black")
+                              setBtnColorJobs("blue")
+                              setBtnColor1Jobs("black")
+                              setBtnColorStatus("black")
+                              setBtnColor1Status("black")
+                            }
                           }
-                        }
-                      }}
-                      
-                      sx={{ marginTop: "-5px" ,color: btnColorJobs}} />
+                        }}
+
+                        sx={{ marginTop: "-5px", color: btnColorJobs }} />
                       <ArrowDropDownIcon
-                         onClick={() => {
-                          { setFilterName("firstName") }; { setycwIdOrder("desc") } 
+                        onClick={() => {
+                          { setFilterName("percentage") }; { setycwIdOrder("desc") }
                           {
                             {
                               setBtnColorName("black")
@@ -1006,7 +1003,7 @@ console.log("moo",ycwStatus)
                             }
                           }
                         }}
-                      sx={{ marginTop: "-17px",color: btnColor1Jobs }} />
+                        sx={{ marginTop: "-17px", color: btnColor1Jobs }} />
                     </Box>
                   </Box>
                 </TableCell>
@@ -1028,7 +1025,7 @@ console.log("moo",ycwStatus)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                         { setFilterName("profileStatus") }; { setycwIdOrder("asc") }
+                          { setFilterName("profileStatus") }; { setycwIdOrder("asc") }
                           {
                             {
                               setBtnColorName("black")
@@ -1154,11 +1151,12 @@ console.log("moo",ycwStatus)
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.workingHours || "--"}
+                    {item.workingHours.value || "--"}
                   </TableCell>
 
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {"--"}
+                  <TableCell sx={{ fontSize: "13px"  }} align="left">
+                  <LinearProgress variant="determinate" value={item.percentage} /> {item.percentage}%
+                    {/* {"--"} */}
                   </TableCell>
                   <TableCell align="left" sx={{ border: "none" }}>
 
