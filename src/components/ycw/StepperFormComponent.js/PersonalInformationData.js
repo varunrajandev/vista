@@ -1,83 +1,110 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { Box, Button } from '@mui/material'
-import axios from 'axios';
 import PersonalInfo from '../../form/PersonalInfo'
 import { multiStepContext } from '../../../ContextApi/StepContext';
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 
 function PersonalInformationData() {
   // YCW Personal information useState
-  const [source, setSource] = React.useState("");
-  const [firstname, setFirstname] = React.useState("");
-  const [middlename, setMiddlename] = React.useState("");
-  const [lastname, setLastname] = React.useState("");
-  const [gender, setGender] = React.useState("");
-  const [mobile, setMobile] = React.useState("");
-  const [alternateMobileNumber, setAlternateMobileNumber] = React.useState("");
-  const [isWhatsappAvailable, setIsWhatsappAvailable] = React.useState();
-  const [whatsappNumber, setWhatsappNumber] = React.useState("");
-  const [birthday, setBirthday] = React.useState();
-  const [maritalStatus, setMaritalStatus] = React.useState("");
-  const [religion, setReligion] = React.useState("");
-  const [education, setEducation] = React.useState("");
-  const [educationalRemarks, setEducationalRemarks] = React.useState("");
-  const [covidStatus, setCovidStatus] = React.useState("");
-  const [medicalCondition, setMedicalCondition] = React.useState("");
-  const [submitted, setSubmitted] = React.useState(false)
+  const [source, setSource] = useState("");
+  const [otherSource, setOtherSource] = useState("")
+  const [firstname, setFirstname] = useState("");
+  const [middlename, setMiddlename] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [gender, setGender] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [alternateMobileNumber, setAlternateMobileNumber] = useState("");
+  const [isWhatsappAvailable, setIsWhatsappAvailable] = useState();
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [birthday, setBirthday] = useState();
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [religion, setReligion] = useState("");
+  const [education, setEducation] = useState("");
+  const [educationalRemarks, setEducationalRemarks] = useState("");
+  const [covidStatus, setCovidStatus] = useState("");
+  const [medicalCondition, setMedicalCondition] = useState("");
   const [availableNumberResponse, setAvailableNumberResponse] = useState()
   const [userProfile, setUserProfile] = useState([])
+  
 
   const {id} = useParams()
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
+  let ids = localStorage.getItem('ID');
+  console.log(ids)
 
+// if(birthday){
+//   let PickYear = birthday.getFullYear()
+//   const d = new Date();
+//   let CurrentYear = d.getFullYear();
+//   let age = CurrentYear-PickYear;
+//   if(age<18) alert("Age is less then 18")
+// }
+
+const datatGetById = async() => {
+  let allUserDetails = await fetch(`http://13.126.160.155:8080/user/worker/profile/${id||ids}`);
+  let allDataResponse = await allUserDetails.json();
+  setUserProfile(allDataResponse.data);
+  setPersonalData(allDataResponse)
+
+  setSource(allDataResponse.data.sourcingChannel);
+  setFirstname(allDataResponse.data.firstName);
+  setMiddlename(allDataResponse.data.middleName);
+  setLastname(allDataResponse.data.lastName);
+  setGender(allDataResponse.data.gender);
+  setMobile(allDataResponse.data.mobileNo);
+  setAlternateMobileNumber(allDataResponse.data.secondaryMobileNumber);
+  setIsWhatsappAvailable(allDataResponse.data.whatsappAvailable);
+  setWhatsappNumber(allDataResponse.data.whatsappNumber);
+  setBirthday(allDataResponse.data.birthday)
+  setMaritalStatus(allDataResponse.data.maritalStatus)
+  setReligion(allDataResponse.data.religion)
+  setEducation(allDataResponse.data.education)
+  setEducationalRemarks(allDataResponse.data.educationalRemarks)
+  setCovidStatus(allDataResponse.data.covidStatus)
+  setMedicalCondition(allDataResponse.data.medicalCondition)
+}
+
+console.log(birthday)
  
   
-  useEffect(() => {
+ 
    async function checkMobilenumber(){
     let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${mobile}`)
-    let allUserDetails = await fetch(`http://13.126.160.155:8080/user/worker/profile/${id}`)
     let response = await checkNumber.json();
-    let allDataResponse = await allUserDetails.json();
     setAvailableNumberResponse(response.data)
-    setPersonalData(allDataResponse)
-   }
-  checkMobilenumber()
-  }, [mobile.length===10?mobile:"", id])
+  }
+
+  useEffect(() => {
+  // checkMobilenumber();
+  datatGetById();
+  }, [id, ids])
 
   if(availableNumberResponse){
     alert("Already Available")
   }
   
-  console.log(availableNumberResponse)
-  
   const handleSubmit = async () => {
     try {
         let response = await axios.post("http://13.126.160.155:8080/user/worker/profile",
         {
-            birthday,
-            "bloodGroup": "O_POSITIVE",
+            "birthday":birthday,
             covidStatus,
             educationalRemarks,
-            "email": "string",
              firstName:firstname,
-            "formStatus": "DRAFT",
             gender,
-            "isoCode": "string",
+            "isoCode": "IN",
             lastName:lastname,
             maritalStatus,
             "medicalCondition": medicalCondition,
-            "medium": "PHONE_CALL",
             middleName:middlename,
-            "mobile":mobile,
-            "nationality": "INDIAN",
-            "professsion": "BUSINESS_OWNER",
-            "profileStatus": "IN_ACTIVE",
+            "mobileNo":mobile,
+            "department": "WORKER",
+            "education":education,
             religion,
-            "secondaryEmail": "string",
             "secondaryMobileNumber": alternateMobileNumber,
-            "secondaryMobileVerified": true,
+            "secondaryMobileVerified": false,
             "sourcingChannel": source,
             "userType": "WORKER",
             "whatsappAvailable":isWhatsappAvailable,
@@ -85,6 +112,8 @@ function PersonalInformationData() {
           });
           alert(response.data.message)
           setPersonalData(response.data)
+          localStorage.setItem('ID', response.data.data.userId);
+          response.data.status?localStorage.setItem('steps', 2):localStorage.setItem('steps', 1)
           setCurrentSteps(2)
         
     } catch (error) {
@@ -92,37 +121,43 @@ function PersonalInformationData() {
     }
  }
 
+
+ 
+
  const updataData = async () => {
   try {
       let response = await axios.post("http://13.126.160.155:8080/user/worker/profile",
       {
-          "birthday":birthday?birthday:personalData.data.birthday,
+          "birthday":birthday?birthday:userProfile.birthday,
           "bloodGroup": "O_POSITIVE",
-          "covidStatus":covidStatus?covidStatus:personalData.data.covidStatus,
-          "educationalRemarks":educationalRemarks?educationalRemarks:personalData.data.educationalRemarks,
+          "covidStatus":covidStatus?covidStatus:userProfile.covidStatus,
+          "educationalRemarks":educationalRemarks?educationalRemarks:userProfile.educationalRemarks,
           "email": "string",
-           firstName:firstname?firstname:personalData.data.firstName,
+           firstName:firstname?firstname:userProfile.firstName,
           "formStatus": "DRAFT",
-          "gender":gender?gender:personalData.data.gender,
-          "isoCode": "string",
-          lastName:lastname?lastname:personalData.data.lastName,
-          "maritalStatus":maritalStatus?maritalStatus:personalData.data.maritalStatus,
-          "medicalCondition": medicalCondition?medicalCondition:personalData.data.medicalCondition,
+          "gender":gender?gender:userProfile.gender,
+          "isoCode": "IN",
+          "education":education?education:userProfile.education,
+          lastName:lastname?lastname:userProfile.lastName,
+          "maritalStatus":maritalStatus?maritalStatus:userProfile.maritalStatus,
+          "medicalCondition": medicalCondition?medicalCondition:userProfile.medicalCondition,
           "medium": "PHONE_CALL",
-          middleName:middlename?middlename:personalData.data.middleName,
-          "mobile":mobile?mobile:personalData.data.mobile,
+          middleName:middlename?middlename:userProfile.middleName,
+          "mobileNo":mobile?mobile:userProfile.mobile,
           "nationality": "INDIAN",
           "professsion": "BUSINESS_OWNER",
           "profileStatus": "IN_ACTIVE",
-          "religion":religion?religion:personalData.data.religion,
+          "religion":religion?religion:userProfile.religion,
           "secondaryEmail": "string",
-          "secondaryMobileNumber": alternateMobileNumber?alternateMobileNumber:personalData.data.secondaryMobileNumber,
+          "secondaryMobileNumber": alternateMobileNumber?alternateMobileNumber:userProfile.secondaryMobileNumber,
           "secondaryMobileVerified": true,
-          "sourcingChannel": source?source:personalData.data.sourcingChannel,
+          "sourcingChannel": source?source:userProfile.sourcingChannel,
           "userType": "WORKER",
-          "whatsappAvailable":isWhatsappAvailable?isWhatsappAvailable:personalData.data.whatsappAvailable,
-          "whatsappNumber": whatsappNumber?whatsappNumber:personalData.data.whatsappNumber,
-          userId:personalData.data.userId
+          "whatsappAvailable":isWhatsappAvailable?isWhatsappAvailable:userProfile.whatsappAvailable,
+          "whatsappNumber": whatsappNumber?whatsappNumber:userProfile.whatsappNumber,
+          "department": "TECH",
+          userId:userProfile.userId
+        
         });
         alert("Updated",response.data.message)
         setPersonalData(response.data)
@@ -166,11 +201,12 @@ function PersonalInformationData() {
                 educationalRemarks={educationalRemarks} setEducationalRemarks={setEducationalRemarks}
                 covidStatus={covidStatus} setCovidStatus={setCovidStatus}
                 medicalCondition={medicalCondition} setMedicalCondition={setMedicalCondition}
-                submitted={submitted} setSubmitted={setSubmitted}
+                otherSource={otherSource} setOtherSource={setOtherSource}
                 userProfile={userProfile}
                 />
 
                 <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right"}}>
+                     {console.log(personalData.status)}
                     <Button sx={{display:(personalData.status?"none":"block")}}  variant='contained' onClick={handleSubmit}>NEXT</Button>
                     <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={updataData}>UPDATE & NEXT</Button>
                 </Box>

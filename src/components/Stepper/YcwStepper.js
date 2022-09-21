@@ -38,8 +38,7 @@ function YcwStepper() {
             case 7 : return <HouseHoldMemberData/>
             
         }
-        
-    }
+      }
   return (
     <div>
       <Box sx={{ width: "100%" }}>

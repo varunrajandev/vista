@@ -31,6 +31,8 @@ function SkillExpDetails(props) {
     // values, setValue,
   } = props
 
+  
+
 
 
 
@@ -108,13 +110,6 @@ function SkillExpDetails(props) {
           size="25%"
         />
 
-        {/* <MultiSelected
-          labelData="Last Job Type"
-          dataDD={pSkillDD}
-          setData={setLastJobType}
-          size="45%"
-        /> */}
-
       <FormControlSingleSelect
           labelData="Last Job Type"
           dataDD={pSkillDD}
@@ -138,9 +133,10 @@ function SkillExpDetails(props) {
         <FormControlSingleSelect
           labelData="Primary Skill"
           dataDD={pSkillDD}
-          setData={setPrimarySkill}
+          setDatas={setPrimarySkill}
           values={"name"}
           size="37.5%"
+          data={primarySkill}
         />
 
         <MultiSelected
@@ -157,6 +153,7 @@ function SkillExpDetails(props) {
           setData={setTertiarySkill}
           values={"name"}
           size="48.7%"
+          value = {tertiarySkill}
         />
       </Box>
     </Box>

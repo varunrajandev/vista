@@ -4,14 +4,7 @@ import App from "../App"
 export const multiStepContext = React.createContext();
 
 function StepContext() {
-<<<<<<< Updated upstream
-
-
-  const [currentSteps, setCurrentSteps] = useState(1);
-
-=======
-  const [currentSteps, setCurrentSteps] = useState(1);
->>>>>>> Stashed changes
+  const [currentSteps, setCurrentSteps] = useState(6);
   const [personalData, setPersonalData] = useState([]);
   const [addressDatas, setAddressData] = useState([]);
   const [skillData, setSkillData] = useState([]);

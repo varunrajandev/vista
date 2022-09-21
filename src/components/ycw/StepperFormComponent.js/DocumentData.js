@@ -25,21 +25,32 @@ function DocumentData() {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [documnetTypeDD, setDocumnetTypeDD] = useState([]);
   const [kycTypeDD, setKycTypeDD] = useState([]);
+  const [storeDocument, setStoreDocument] = useState([])
+
+  const ids = localStorage.getItem('ID')
 
   const { setCurrentSteps, personalData, setDocumentData, documentData } = useContext(multiStepContext);
 
+  async function fetchDorpDown(){
+    let documentType = await fetch(`http://13.126.160.155:8080/user/drop-down/get/documentUploadType?flag`)
+    let KycType = await fetch("http://13.126.160.155:8080/user/drop-down/get/documentContext")
+    let responseType = await documentType.json();
+    let responseKycType = await KycType.json();
+    setDocumnetTypeDD(responseType.data)
+    setKycTypeDD(responseKycType.data)
+  }
+
+  const documentGetByID = async () =>{
+    const documentData = await fetch(`http://13.126.160.155:8080/user/document/all/${ids}`);
+    const responseDocument = await documentData.json();
+    setStoreDocument(responseDocument.data)
+  } 
   useEffect(() => {
-   async function fetchDorpDown(){
-      let documentType = await fetch(`http://13.126.160.155:8080/user/drop-down/get/documentUploadType?flag`)
-      let KycType = await fetch("http://13.126.160.155:8080/user/drop-down/get/documentContext")
-      let responseType = await documentType.json();
-      let responseKycType = await KycType.json();
-      setDocumnetTypeDD(responseType.data)
-      setKycTypeDD(responseKycType.data)
-    }
+    documentGetByID()
     fetchDorpDown()
-  }, [])
+  }, [ids])
   
+console.log(storeDocument)
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -53,7 +64,7 @@ function DocumentData() {
     try {
       let response = await axios.post(
         masterApi +
-          `/document/upload?UserId=${personalData.data.userId}&documentContext=${kycDocument}&documentSide=FRONT&documentType=${document}&isActive=true&isReuploaded=false`,
+          `/document/upload?UserId=${ids}&documentContext=${kycDocument}&documentSide=FRONT&documentType=${document}&isActive=true&isReuploaded=false`,
         formData
       );
       alert(response.data.message);
@@ -121,20 +132,18 @@ function DocumentData() {
             gap: "20px",
           }}
         >
-          <Button
-            variant="contained"
-            onClick={() => {
-              setCurrentSteps(5);
-            }}
-          >
-            back
-          </Button>
-          <Button variant="contained" onClick={handleSubmission}>
-            Done
-          </Button>
+          <Button variant="contained" onClick={() => { setCurrentSteps(5)}} > back </Button>
+          <Button variant="contained" onClick={handleSubmission}> Done </Button>
         </Box>
       </Box>
       
+      <Box>
+        {storeDocument.map((item)=>(
+          <img src="kyc-documents/YCW0000002/1663770301148-2345244.jpg" alt="noImg" />
+          //https://pinch-documents.s3.ap-south-1.amazonaws.com/kyc-documents/YCW0000002/1663771775289-Screenshot_%28134%29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220921T144935Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIARAGLMVYHAWFDXLSD%2F20220921%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=3f3eb01903be2fc33186fe2ef5d7e2c5c0b74fa3a1fe560b921186e7823544ae
+        ))}
+      </Box>
+
     </Box>
   );
 }

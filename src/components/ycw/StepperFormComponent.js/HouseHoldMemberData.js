@@ -18,6 +18,7 @@ function HouseHoldMemberData() {
             relationship: "", 
         }
     ])
+    console.log(inputFields)
 
     console.log(inputFields)
     const {currentSteps, setCurrentSteps, personalData, setAddressData, householdData, setHouseholdData} = useContext(multiStepContext)
@@ -48,6 +49,7 @@ function HouseHoldMemberData() {
           alert(error)
         }
       }
+      
   return (
     <>
         <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
@@ -67,7 +69,6 @@ function HouseHoldMemberData() {
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
                 <Button variant='contained' onClick={(()=>{setCurrentSteps(5)})}>back</Button>
                 <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
-
             </Box>
 
         </Box>

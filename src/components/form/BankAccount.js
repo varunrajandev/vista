@@ -22,7 +22,7 @@ function BankAccount(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let AccountType = await fetch( masterApi+"/drop-down/get/accountType");
+      let AccountType = await fetch(masterApi + "/drop-down/get/accountType");
       let AccountTypedata = await AccountType.json();
       setAccountTypeDD(AccountTypedata.data);
     }
@@ -109,6 +109,51 @@ function BankAccount(props) {
               marginBottom: 5,
             }}
           >
+            <TextField
+              style={{ width: "18%" }}
+              name="ifscCode"
+              label="IFSC Code"
+              value={inputField.ifscCode}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+
+            <TextField
+              style={{ width: "18%" }}
+              name="bankName"
+              placeholder="bankName"
+              label="Name of the the Bank"
+              size="small"
+              value={inputField.bankName}
+              //value={ifscCodeData ? ifscCodeData.bankName : inputField.bankName}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+
+            <TextField
+              style={{ width: "18%" }}
+              name="branchName"
+              label="Branch Name"
+              placeholder="Branch Name"
+              value={inputField.branchName}
+              //value={ifscCodeData ? ifscCodeData.branchName : ""}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+
+            <TextField
+              style={{ width: "38.5%" }}
+              name="branchAddress"
+              label="Branch Address"
+              placeholder="Branch Address"
+              value={inputField.branchAddress}
+              //value={ifscCodeData ? ifscCodeData.branchAddress : ""}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+            {/* </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between" }}> */}
+
             <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
               <InputLabel id="demo-select-small">Type of Account</InputLabel>
               <Select
@@ -128,40 +173,6 @@ function BankAccount(props) {
 
             <TextField
               style={{ width: "18%" }}
-              // name="bankName"
-              placeholder="bankName"
-              // label="Name of the the Bank"
-              size="small"
-              // value={inputField.bankName}
-              value={ifscCodeData?ifscCodeData.bankName:""}
-              onChange={(event) => handleChangeInput(index, event)}
-            />
-            <TextField
-              style={{ width: "18%" }}
-              name="branchName"
-              // label="Branch Name"
-              placeholder="Branch Name"
-              // value={inputField.branchName}
-              value={ifscCodeData?ifscCodeData.branchName:""}
-              size="small"
-              onChange={(event) => handleChangeInput(index, event)}
-            />
-
-            <TextField
-              style={{ width: "38.5%" }}
-              // name="branchAddress"
-              //  label="Branch Address"
-              placeholder="Branch Address"
-              // value={inputField.branchAddress}
-              value={ifscCodeData?ifscCodeData.branchAddress:""}
-              size="small"
-              onChange={(event) => handleChangeInput(index, event)}
-            />
-            {/* </div>
-
-            <div style={{ display: "flex", justifyContent: "space-between" }}> */}
-            <TextField
-              style={{ width: "18%" }}
               name="accountHoderName"
               label="Account Holder Name"
               value={inputField.accountHoderName}
@@ -177,14 +188,7 @@ function BankAccount(props) {
               type={Number}
               onChange={(event) => handleChangeInput(index, event)}
             />
-            <TextField
-              style={{ width: "18%" }}
-              name="ifscCode"
-              label="IFSC Code"
-              value={inputField.ifscCode}
-              size="small"
-              onChange={(event) => handleChangeInput(index, event)}
-            />
+
             <TextField
               style={{ width: "18%" }}
               name="BankAccountProof"

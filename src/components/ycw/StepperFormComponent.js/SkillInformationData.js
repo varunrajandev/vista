@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material'
 import axios from 'axios';
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { masterApi } from '../../../AlllData';
 import { multiStepContext } from '../../../ContextApi/StepContext';
@@ -24,11 +24,11 @@ function SkillInformationData() {
     const [reasonLeaving, setReasonLeaving] = React.useState();
     
     const {id} = useParams()
-    let SecondarySkillArray = [];
+    let SecondarySkillArray =[];
     let TertiarySkillArray = [];
     let otherLanguageArray = []
-
-
+    let ids = localStorage.getItem('ID')
+   
     if(secondarySkill){
       secondarySkill.map((item)=>{
           SecondarySkillArray.push(item.uuid)
@@ -47,7 +47,23 @@ function SkillInformationData() {
       })
     }
 
-    console.log(primaryLanguage)
+    useEffect(() => {
+      const allSkillFetchById = async() =>{
+        let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids}`)
+        let responseAllSkill = await allSkillData.json();
+        
+        // setPrimarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto[0].skillName)
+        // setTertiarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
+        // console.log(responseAllSkill.data.skillsMappingDto)
+        setSkillData(responseAllSkill.status)
+      }
+      allSkillFetchById()
+    }, [ids])
+   
+
+    
+   
+    
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
     
@@ -83,12 +99,11 @@ function SkillInformationData() {
             "reasonForLeavingJob": "string",
             "totalExperience": "string"
           },
-            "userId": personalData.data.userId
+            "userId": ids
         }
         )
   
         alert(response.data.message)
-        setSkillData(response.data)
       } catch (error) {
         alert(error)
       }
@@ -134,7 +149,7 @@ function SkillInformationData() {
         
       </Box>
 
-      <Box ><SkillQuestion/></Box>
+      <Box sx={{display:(skillData?"block":"none")}}><SkillQuestion/></Box>
 
     </Box>
     </>

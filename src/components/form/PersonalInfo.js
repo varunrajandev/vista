@@ -11,9 +11,7 @@ import { maritalstatus, masterApi, sourcing } from "../../AlllData";
 import { multiStepContext } from "../../ContextApi/StepContext";
 import { createTheme, ThemeProvider } from "@mui/material";
 
-
 const theme = createTheme({
-
   components: {
       MuiFormLabel: {
           styleOverrides: {
@@ -24,15 +22,14 @@ const theme = createTheme({
 
 })
 
-
-
-
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
   const [religionDD, setReligionDD] = useState([])
   const [maritalDD, setMaritalDD] = useState([])
   const [genderDD, setGenderDD] = useState([])
   const [covidDD, setCovidDD] = useState([])
+  const [educationDD, setEducationDD] = useState([])
+
 
 
   const {
@@ -59,8 +56,6 @@ function PersonalInfo(props) {
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
 
-  
-
   useEffect(() => {
     const dataFetch = async () => {
       let sourceData = await fetch(masterApi+"/drop-down/get/sourceChannel?flag=all");
@@ -68,24 +63,31 @@ function PersonalInfo(props) {
       let maritalData = await fetch(masterApi+"/drop-down/get/maritalStatus")
       let genderData = await fetch(masterApi+"/get/gender")
       let covidData = await fetch(masterApi+"/drop-down/get/covidVaccination")
+      let educationData = await fetch(masterApi+"/drop-down/get/education")
       let res = await sourceData.json();
       let res1 = await religionData.json();
       let res2 = await maritalData.json();
       let res3 = await genderData.json();
       let res4 = await covidData.json();
-      //setSourcingDD(res.data)
+      let res5 = await educationData.json();
       setSourcingDD(res.data)
       setReligionDD(res1.data)
       setMaritalDD(res2.data)
       setGenderDD(res3.data)
       setCovidDD(res4.data)
+      setEducationDD(res5.data)
     }
     dataFetch()
   }, [])
 
+  console.log(userProfile)
+
+
+
   const handleChange = (event) => {
     setWalk(event.target.value);
   };
+
   
   
   return (
@@ -102,16 +104,16 @@ function PersonalInfo(props) {
       >
        
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-          <InputLabel id="demo-select-small" required>Sourcing Channel</InputLabel>
+          <InputLabel id="demo-select-small" required >Sourcing Channel</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             label="Sourcing Channel"
             onChange={handleChange}
-             defaultValue={personalData.status?personalData.data.sourcingChannel:walk}
-            
-          >
+            //  defaultValue={userProfile.status?userProfile.sourcingChannel:walk}
+            value={walk}
+            >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
@@ -132,26 +134,29 @@ function PersonalInfo(props) {
           onChange={(event) => {
             setFname(event.target.value);
           }}
-          
-        />
+          />
        
         <TextField required
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
           label="First Name"
-          defaultValue={personalData.status?personalData.data.firstName:fname}
+          value={fname}
+          // defaultValue={userProfile.status?userProfile.firstName:fname}
           variant="outlined"
           onChange={(event) => {
             setFname(event.target.value);
           }}
         />
+
+      
         
 
         <TextField
           sx={{ width: "18%" }}
           size="small"
-          defaultValue={personalData.status?personalData.data.middleName:mname}
+          // defaultValue={userProfile.status?userProfile.middleName:mname}
+          value={mname}
           id="outlined-basic"
           label="Middle Name"
           variant="outlined"
@@ -166,7 +171,8 @@ function PersonalInfo(props) {
           id="outlined-basic"
           label="Last Name"
           variant="outlined"
-          defaultValue={personalData.status?personalData.data.lastName:lname}
+          // defaultValue={userProfile.status?userProfile.lastName:lname}
+          value={lname}
           onChange={(e) => {
             setLname(e.target.value);
           }}
@@ -191,7 +197,8 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            defaultValue={personalData.status?personalData.data.gender:gender}
+            //defaultValue={userProfile.status?userProfile.gender:gender}
+            value={gender}
             label="gender"
             onChange={(event) => {
               setGender(event.target.value);
@@ -207,7 +214,8 @@ function PersonalInfo(props) {
           type="number"
           sx={{ width: "18%" }}
           size="small"
-          defaultValue={personalData.status?personalData.data.mobile:phoneNumber}
+          //defaultValue={userProfile.status?userProfile.mobileNo:phoneNumber}
+          value={phoneNumber}
           id="outlined-basic"
           label="Phone Number"
           onInput = {(e) =>{
@@ -224,7 +232,8 @@ function PersonalInfo(props) {
           type="number"
           id="outlined-basic"
           label="Alternate Phone Number"
-          defaultValue={personalData.status?personalData.data.secondaryMobileNumber:alternateNumber}
+          //defaultValue={userProfile.status?userProfile.secondaryMobileNumber:alternateNumber}
+          value={alternateNumber}
           onInput = {(e) =>{
             e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
           }}
@@ -238,8 +247,9 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            defaultValue={personalData.status?personalData.data.whatsappAvailable:whatsappAvailable}
-            label="Whatsapp Available"
+            //defaultValue={userProfile.status?userProfile.whatsappAvailable:whatsappAvailable}
+            value={whatsappAvailable}
+            label="Whatsapp Available  "
             onChange={(e) => {
               setWhatsappAvailable(e.target.value);
             }}
@@ -258,7 +268,8 @@ function PersonalInfo(props) {
           id="outlined-basic"
           type="number"
           label="Whatsapp Number*"
-          defaultValue={personalData.status?personalData.data.whatsappNumber:whatsapp}
+          //defaultValue={userProfile.status?userProfile.whatsappNumber:whatsapp}
+          value={whatsapp}
           onInput = {(e) =>{
             e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
           }}
@@ -281,7 +292,7 @@ function PersonalInfo(props) {
           <DesktopDatePicker
             label="DOB"
             value={birthday}
-            defaultValue={personalData.status?personalData.data.birthday:birthday}
+           // defaultValue={userProfile.status?userProfile.birthday:birthday}
             onChange={(newValue) => {
               setBirthday(newValue);
             }}
@@ -296,7 +307,8 @@ function PersonalInfo(props) {
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
-            defaultValue={personalData.status?personalData.data.maritalStatus:maritalStatus}
+            value={maritalStatus}
+            //defaultValue={userProfile.status?userProfile.maritalStatus:maritalStatus}
             id="demo-select-small"
             label="Marital Status"
             onChange={(e) => {
@@ -317,7 +329,8 @@ function PersonalInfo(props) {
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
-            defaultValue={personalData.status?personalData.data.religion:religion}
+            //defaultValue={userProfile.status?userProfile.religion:religion}
+            value={religion}
             id="demo-select-small"
             label="Religion"
             onChange={(e) => {
@@ -341,6 +354,7 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
+            value={education}
             label="Educational Qualifications"
             onChange={(e) => {
               setEducation(e.target.value);
@@ -349,22 +363,18 @@ function PersonalInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"No Education"}>No Education</MenuItem>
-            <MenuItem value={"5th"}>5th</MenuItem>
-            <MenuItem value={"8th"}>8th</MenuItem>
-            <MenuItem value={"10th"}>10th</MenuItem>
-            <MenuItem value={"12th"}>12th</MenuItem>
-            <MenuItem value={"Pursuing Graduation"}> Pursuing Graduation</MenuItem>
-            <MenuItem value={"Graduate"}>Graduate</MenuItem>
-            <MenuItem value={"Post Graduate"}>Post Graduation</MenuItem>
-          </Select>
+            {educationDD.map((item)=>(
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
+            </Select>
         </FormControl>
 
         <TextField
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          defaultValue={personalData.status?personalData.data.educationalRemarks:educationalRemarks}
+          value={educationalRemarks}
+         // defaultValue={userProfile.status?userProfile.educationalRemarks:educationalRemarks}
           label="Educational Remarks"
           variant="outlined"
           onChange={(e) => {
@@ -388,7 +398,8 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            defaultValue={personalData.status?personalData.data.covidStatus:covidStatus}
+            //defaultValue={userProfile.status?userProfile.covidStatus:covidStatus}
+            value={covidStatus}
             label="COVID Vaccination Status*"
             onChange={(e) => {
               setCovidStatus(e.target.value);
@@ -404,7 +415,8 @@ function PersonalInfo(props) {
           sx={{ width: "79.5%" }}
           size="small"
           id="outlined-basic"
-          defaultValue={personalData.status?personalData.data.medicalCondition:medicalCondition}
+          //defaultValue={userProfile.status?userProfile.medicalCondition:medicalCondition}
+          value={medicalCondition}
           label="Medical Condition(if any)"
           variant="outlined"
           onChange={(e) => {
@@ -416,5 +428,41 @@ function PersonalInfo(props) {
        </ThemeProvider>
   );
 }
-
 export default PersonalInfo;
+
+
+
+
+// {
+//   "userId": "YCW0000001",
+//   "firstName": "Intezar",
+//   "middleName": "Ahmad",
+//   "lastName": "khan",
+//   "gender": "MALE",
+//   "mobileNo": "8655587806",
+//   "profileStatus": "IN_ACTIVE",
+//   "secondaryMobileNumber": "1234567890",
+//   "birthday": null,
+//   "userType": "WORKER",
+//   "maritalStatus": "MARRIED",
+//   "whatsappNumber": null,
+//   "email": "string",
+//   "secondaryEmail": "string",
+//   "nationality": "INDIAN",
+//   "sourcingChannel": "BROKER_OR_AGENCY",
+//   "medium": "PHONE_CALL",
+//   "professsion": "BUSINESS_OWNER",
+//   "department": null,
+//   "religion": "HINDU",
+//   "bloodGroup": "O_POSITIVE",
+//   "education": null,
+//   "educationalRemarks": "good",
+//   "medicalCondition": "nothing",
+//   "covidStatus": "FIRST_DOSE",
+//   "formStatus": "PERSONAL",
+//   "isoCode": "IN",
+//   "percentage": 20,
+//   "uuid": "642ddcb1-c7c6-4849-8140-2712f0cc012e",
+//   "secondaryMobileVerified": false,
+//   "whatsappAvailable": false
+// }

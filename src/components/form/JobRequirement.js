@@ -1,5 +1,5 @@
 import { Box, TextField, Typography } from "@mui/material";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -19,229 +19,133 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 function JobRequirement(props) {
   const [jobtypeDD, setJobtypeDD] = useState([])
   const [trainingDD, setTrainingDD] = useState([])
-const {  
-  openToTraining, setOpenToTraining,
-  preferJob, setPreferJob,
-  preferWorkHour, setPreferWorkHour,
-  startTime, setStartTime,
-  endTime, setEndTime,
-  vehicleAvailable, setVehicleAvailable,
-  minSal, setMinSal,
-  maxSal, setMaxSal,
-  traningMode, setTraningMode,
-  jobRemarks, setJobRemarks,} = props;
+  const [workingDD, setWorkingDD] = useState([])
+
+  const {
+    openToTraining, setOpenToTraining,
+    preferJob, setPreferJob,
+    preferWorkHour, setPreferWorkHour,
+    startTime, setStartTime,
+    endTime, setEndTime,
+    vehicleAvailable, setVehicleAvailable,
+    minSal, setMinSal,
+    maxSal, setMaxSal,
+    traningMode, setTraningMode,
+    jobRemarks, setJobRemarks, } = props;
 
   useEffect(() => {
     async function fetchData() {
       let Jobtypedata = await fetch("http://13.126.160.155:8080/user/skill/get/skills");
       let trainingModeData = await fetch("http://13.126.160.155:8080/user/drop-down/get/traningMode")
+      let workinghoursData = await fetch("http://13.126.160.155:8080/user/drop-down/get/workingHours")
       let res3 = await Jobtypedata.json();
       let res4 = await trainingModeData.json();
+      let res5 = await workinghoursData.json()
       setJobtypeDD(res3.data || [{ value: "NO DATA" }]);
       setTrainingDD(res4.data || [{ value: "NO DATA" }]);
+      setWorkingDD(res5.data || [{value:"NO DATA"}])
     }
     fetchData()
   }, [])
 
 
   return (
-    <Box  
-    sx={{
-      marginTop: 7,
-      display: "grid",
-      gap: 1,
-    }}>
+    <Box sx={{ marginTop: 7, display: "grid", gap: 1, }}>
       <h5>Job Requirements</h5>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap:"wrap",
-          justifyContent:"space-between"
+      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }} >
 
-        }}
-      >
-        <Autocomplete
-          multiple
-          id="checkboxes-tags-demo"
-          options={jobtypeDD}
-          disableCloseOnSelect
-          getOptionLabel={(option) => option.name}
-          onChange={(event, newValue) => {
-            setPreferJob([...newValue]);
-          }}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.name}
-            </li>
-          )}
-          style={{ width: "18%" }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Preferred Job Types"
-              placeholder="Favorites"
-              size="small"
-            />
-          )}
-        />
-
-        <Autocomplete
-          multiple
-          id="checkboxes-tags-demo"
-          options={PreferredWorkingHour}
-          disableCloseOnSelect
-          getOptionLabel={(option) => option.hour}
-          onChange={(event, newValue) => {
-            setPreferWorkHour([...newValue]);
-          }}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.hour}
-            </li>
-          )}
-          style={{ width: "18%" }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Preferred Working Hours"
-              placeholder="Favorites"
-              size="small"
-            />
-          )}
-        />
-
-          
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <TimePicker
-              label="Preferred Start Time"
-              value={startTime}
-              disableIgnoringDatePartForTimeValidation={false}
-              onChange={(newValue) => {
-                setStartTime(newValue);
-              }}
-              renderInput={(params) => (
-                <TextField size="small" sx={{ width: "18%" }} {...params} />
-              )}
-            />
-          </LocalizationProvider>
-          
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <TimePicker
-              label="Preferred End Time"
-              value={endTime}
-              onChange={(newValue) => {
-                setEndTime(newValue);
-              }}
-              renderInput={(params) => (
-                <TextField size="small" sx={{ width: "18%" }} {...params} />
-              )}
-            />
-          </LocalizationProvider>
-
-          <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
-          <InputLabel id="demo-select-small">Cycle/Bike available for travel?</InputLabel>
-          <Select
-            sx={{ width: "100%" }}
-            labelId="demo-select-small"
-            id="demo-select-small"
-            label="Cycle/Bike available for travel?"
-            onChange={(e)=>{
-              setVehicleAvailable(e.target.value)
-            }}
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Preferred Job Types</InputLabel>
+          <Select sx={{ width: "100%" }} label="Preferred Job Types" value={preferJob} 
+          onChange={(e) => { setPreferJob(e.target.value) }}
           >
-          
+            {jobtypeDD.map((item) => (
+              <MenuItem value={item.uuid}>{item.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Preferred Working Hours</InputLabel>
+          <Select sx={{ width: "100%" }}label="Preferred Working Hours" value={preferWorkHour}>
+            {workingDD.map((item) => (
+              <MenuItem onClick={() => { setPreferWorkHour(item.key) }} value={item.key}>{item.value}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <TimePicker label="Preferred Start Time" value={startTime} onChange={(newValue) => {
+              setStartTime(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField size="small" sx={{ width: "18%" }} {...params} />
+            )}
+          />
+        </LocalizationProvider>
+
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <TimePicker label="Preferred End Time" value={endTime} onChange={(newValue) => {
+              setEndTime(newValue);
+            }}
+            renderInput={(params) => ( 
+            <TextField size="small" sx={{ width: "18%" }} {...params} />
+            )}
+          />
+        </LocalizationProvider>
+
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel>Cycle/Bike available for travel?</InputLabel>
+          <Select sx={{ width: "100%" }} label="Cycle/Bike available for travel?" value={vehicleAvailable} onChange={(e) => {
+              setVehicleAvailable(e.target.value)
+            }}>
             <MenuItem value={true}>YES</MenuItem>
             <MenuItem value={false}>NO</MenuItem>
           </Select>
         </FormControl>
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mt:"30px"
-        }}
-      >
-        <TextField
-          sx={{ width: "18%" }}
-          size="small"
-          id="outlined-basic"
-          label="Expected Salary[min]"
-          variant="outlined"
-          onChange={(e)=>{
-            setMinSal(e.target.value)
-          }}
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: "30px"}}>
+
+        <TextField sx={{ width: "18%" }} size="small" label="Expected Salary [min]" variant="outlined" onChange={(e) => {
+          setMinSal(e.target.value) }}
+          value={minSal}
         />
-        <TextField
-          sx={{ width: "18%" }}
-          size="small"
-          id="outlined-basic"
-          label="Expected Salary[max]"
-          variant="outlined"
-          onChange={(e)=>{
-            setMaxSal(e.target.value)
-          }}
+
+        <TextField sx={{ width: "18%" }} size="small" label="Expected Salary [max]" variant="outlined" onChange={(e) => {
+          setMaxSal(e.target.value) }}
+          value={maxSal}
         />
-        <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
+
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Open to Training?</InputLabel>
-          <Select
-            sx={{ width: "100%" }}
-            labelId="demo-select-small"
-            id="demo-select-small"
-            label="Open to Training?"
-            onChange={(e)=>{
-              setOpenToTraining(e.target.value)
-            }}
-          >
-          
+          <Select sx={{ width: "100%" }} labelId="demo-select-small" id="demo-select-small" label="Open to Training?" onChange={(e) => {
+            setOpenToTraining(e.target.value)
+          }}>
             <MenuItem value={true}>YES</MenuItem>
             <MenuItem value={false}>NO</MenuItem>
           </Select>
         </FormControl>
 
-        <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Training Mode</InputLabel>
-          <Select
-            sx={{ width: "100%" }}
-            labelId="demo-select-small"
-            id="demo-select-small"
-            label="Training Mode"
-            disabled={!openToTraining}
-            onChange={(e)=>{
-              setTraningMode(e.target.value)
-            }}
+          <Select sx={{ width: "100%" }} label="Training Mode" disabled={!openToTraining} onChange={(e) => {
+              setTraningMode(e.target.value)}}
+              value={traningMode}
           >
-            {trainingDD.map((item)=>(
-            <MenuItem value={item.key}>{item.value}</MenuItem>
+            {trainingDD.map((item) => (
+              <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
-            </Select>
+          </Select>
         </FormControl>
 
-      
-        <TextField
-          sx={{ width: "18%" }}
-          size="small"
-          id="outlined-basic"
-          label="Job Remarks"
-          variant="outlined"
-          onChange={(e)=>{
-            setJobRemarks(e.target.value)
-          }}
+        <TextField sx={{ width: "18%" }} size="small" label="Job Remarks" variant="outlined" onChange={(e) => {
+            setJobRemarks(e.target.value)}}
+            value={jobRemarks}
+
         />
-          
+
       </Box>
     </Box>
   );

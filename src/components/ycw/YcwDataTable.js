@@ -67,6 +67,7 @@ function Right() {
   const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
   const [filterName, setFilterName] = React.useState("userId");
+
   const [btnColor, setBtnColor] = useState("black");
   const [btnColor1, setBtnColor1] = useState("black");
   const [btnColorUserID, setBtnColorUserId] = useState("black");
@@ -94,9 +95,6 @@ function Right() {
   ///onclick status
   const [statusData, setStatusData] = useState("")
   const [id, setId] = useState("")
-
-  // console.log("id", id)
-  console.log("statusData", tableData)
 
 
 
@@ -1089,17 +1087,7 @@ console.log("moo",ycwStatus)
 
 
 
-
-<<<<<<< Updated upstream
-
-            {/* ///ghjkl;dfghjkl;dfghkl;dfghjkl;'sdfhjl;sdfghkl;sdfhkl;'sdfhjl; */}
-=======
-{/*...........................Table Body.............................. */}
->>>>>>> Stashed changes
-
-
-
-            <TableBody component={Paper}>
+<TableBody component={Paper}>
               {tableData.map((item) => (
                 <StyledTableRow
                   onClick={() => { setId(item.userId); { setStatusData(item.profileStatus.value) } }}
