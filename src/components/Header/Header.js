@@ -13,12 +13,10 @@ const StyledToolbar = styled(Toolbar)({
 });
 
 export default function Header(){
-  // const loginLocalStorageData=localStorage.getItem("Response")
-  // console.log("localresponce",JSON.parse(loginLocalStorageData));
+  const loginLocalStorageData=localStorage.getItem("ResponseName")
  const{loginData,setLoginData}=useContext(multiStepContext); 
+ let LoginUserName=JSON.parse(loginLocalStorageData)
  let navigate=useNavigate();
-// console.log(loginLocalStorageData.data)
-// setLoginUserName(loginData.data.firstName)
   return (
     <AppBar
       position="sticky"
@@ -37,7 +35,7 @@ export default function Header(){
           <StyledToolbar>
             <Avatar alt="Abhi" src="/static/images/avatar/1.jpg" />
             <h4 style={{ marginLeft: "2%" }}>
-        Sam<h6 style={{ "margin-top": "5px" }}>manager</h6>
+            {LoginUserName}<h6 style={{ "margin-top": "5px" }}>A R O</h6>
             </h4>
           </StyledToolbar>
           <PowerSettingsNewIcon

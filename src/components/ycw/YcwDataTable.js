@@ -8,13 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow, { tableRowClasses } from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled, alpha } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Navigate, NavLink } from "react-router-dom";
 import { FilterData } from "../../AlllData";
-import { useSelector } from "react-redux/es/exports";
 import { useEffect } from "react";
 import { useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -24,6 +21,7 @@ import { masterApi } from "../../AlllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { LinearProgress } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -82,17 +80,14 @@ function Right() {
   const [btnColorJobs, setBtnColorJobs] = useState("black");
   const [btnColor1Jobs, setBtnColor1Jobs] = useState("black");
 
+  let navigate = useNavigate();
 
   ///onclick status
   const [statusData, setStatusData] = useState("")
   const [id, setId] = useState("")
 
-  // console.log("id", id)
+
   console.log("statusData", tableData)
-
-
-
-  let navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -169,7 +164,7 @@ function Right() {
         </NavLink>
          </Box>
 
-       {/* //add Filter and Search Section */}
+          {/* Filter and Search Section Like Search and All DropDown Code Start */}
         <Box
         sx={{
           display: "flex",
@@ -178,7 +173,6 @@ function Right() {
           marginTop: "30px",
          }}
           >
-
 
         <Autocomplete
           sx={{ width: "25%", backgroundColor: "white" }}
@@ -258,27 +252,6 @@ function Right() {
           getOptionLabel={(item) => `${item.value}`}
         />
 
-        {/* <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-              <InputLabel id="demo-select-small">Select YCW Status</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                name="Select YCW Status"
-               value={statusycw}
-                label="Select YCW Status"
-                onChange={(event, newValue) => {
-                  setStatusycw(newValue.profileStatus.key);
-                }}
-              >
-                {ycwStatus.map((item)=>(
-                  <MenuItem value={item.key}>{item.value}</MenuItem>
-                ))}
-              </Select>
-            </FormControl> */}
-
-
-
         <Autocomplete
           disablePortal
           size="small"
@@ -300,11 +273,11 @@ function Right() {
           )}
           getOptionLabel={(item) => `${item.cityName}`}
         />
-
-
       </Box>
 
-      {/* DataTableList */}
+      {/* Filter Section Like Search and All DropDown Code End */}
+
+      {/* DataTableList code Start From Here*/}
       <Box marginTop={5}>
         <h4> All YCWS ({tableData.length})</h4>
         <TableContainer >
@@ -1086,7 +1059,6 @@ function Right() {
 
 
 
-            {/* ///ghjkl;dfghjkl;dfghkl;dfghjkl;'sdfhjl;sdfghkl;sdfhkl;'sdfhjl; */}
 {/*...........................Table Body.............................. */}
 
 
@@ -1196,8 +1168,11 @@ function Right() {
           </Table>
         </TableContainer>
       </Box>
-      {statusData == "INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
-      {statusData == "ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
+      {statusData === "INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
+      {statusData === "ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
+
+      
+      {/* <Pagination  sx={{display:"flex",marginTop:"100px",alignItems:"center", justifyContent:"center"}}count={20} color="primary" /> */}
     </Box>
   );
 }
