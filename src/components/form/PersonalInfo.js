@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, createTheme, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -9,6 +9,20 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { maritalstatus, masterApi, sourcing } from "../../AlllData";
 import { multiStepContext } from "../../ContextApi/StepContext";
+import { createTheme, ThemeProvider } from "@mui/material";
+
+
+const theme = createTheme({
+
+  components: {
+      MuiFormLabel: {
+          styleOverrides: {
+              asterisk: { color: "red" },
+          },
+      },
+  },
+
+})
 
 
 
@@ -75,7 +89,7 @@ function PersonalInfo(props) {
   
   
   return (
-    
+    <ThemeProvider theme={theme}> 
     <form>
       
       <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
@@ -86,17 +100,16 @@ function PersonalInfo(props) {
           alignItems: "center",
         }}
       >
-        
+       
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-          <InputLabel id="demo-select-small">Sourcing Channel</InputLabel>
+          <InputLabel id="demo-select-small" required>Sourcing Channel</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             label="Sourcing Channel"
             onChange={handleChange}
-            // defaultValue={personalData.status?personalData.data.sourcingChannel:walk}
-            defaultValue={userProfile.sourcingChannel}
+             defaultValue={personalData.status?personalData.data.sourcingChannel:walk}
             
           >
             <MenuItem value="">
@@ -127,8 +140,7 @@ function PersonalInfo(props) {
           size="small"
           id="outlined-basic"
           label="First Name"
-          //defaultValue={personalData.status?personalData.data.firstName:fname}
-          defaultValue={userProfile.firstName}
+          defaultValue={personalData.status?personalData.data.firstName:fname}
           variant="outlined"
           onChange={(event) => {
             setFname(event.target.value);
@@ -148,7 +160,7 @@ function PersonalInfo(props) {
           }}
         />
 
-        <TextField required
+        <TextField
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
@@ -174,7 +186,7 @@ function PersonalInfo(props) {
           sx={{ minWidth: 120, display: "flex", width: "18%" }}
           size="small"
         >
-          <InputLabel id="demo-select-small">Gender*</InputLabel>
+          <InputLabel required id="demo-select-small">Gender</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
@@ -191,13 +203,10 @@ function PersonalInfo(props) {
           </Select>
         </FormControl>
 
-        <TextField
+        <TextField required
           type="number"
           sx={{ width: "18%" }}
           size="small"
-          // error ={NumberVelidation}
-          // helperText={text}
-          // required={true}
           defaultValue={personalData.status?personalData.data.mobile:phoneNumber}
           id="outlined-basic"
           label="Phone Number"
@@ -214,7 +223,7 @@ function PersonalInfo(props) {
           size="small"
           type="number"
           id="outlined-basic"
-          label="Alternate Phone Number*"
+          label="Alternate Phone Number"
           defaultValue={personalData.status?personalData.data.secondaryMobileNumber:alternateNumber}
           onInput = {(e) =>{
             e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
@@ -224,13 +233,13 @@ function PersonalInfo(props) {
           }}
         />
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-          <InputLabel id="demo-select-small">Whatsapp Available?*</InputLabel>
+          <InputLabel id="demo-select-small" required>Whatsapp Available?</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
             defaultValue={personalData.status?personalData.data.whatsappAvailable:whatsappAvailable}
-            label="Whatsapp Available "
+            label="Whatsapp Available"
             onChange={(e) => {
               setWhatsappAvailable(e.target.value);
             }}
@@ -277,19 +286,19 @@ function PersonalInfo(props) {
               setBirthday(newValue);
             }}
             renderInput={(params) => (
-              <TextField {...params} size="small" sx={{ width: "18%" }}/>
+              <TextField required {...params} size="small" sx={{ width: "18%" }}/>
             )}
           />
         </LocalizationProvider>
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-          <InputLabel id="demo-select-small">Marital Status*</InputLabel>
+          <InputLabel id="demo-select-small" required>Marital Status</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             defaultValue={personalData.status?personalData.data.maritalStatus:maritalStatus}
             id="demo-select-small"
-            label="Marital Status*"
+            label="Marital Status"
             onChange={(e) => {
               setMaritalStatus(e.target.value);
             }}
@@ -304,7 +313,7 @@ function PersonalInfo(props) {
         </FormControl>
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-          <InputLabel id="demo-select-small">Religion</InputLabel>
+          <InputLabel id="demo-select-small" required>Religion</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
@@ -372,7 +381,7 @@ function PersonalInfo(props) {
         }}
       >
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-          <InputLabel id="demo-select-small">
+          <InputLabel id="demo-select-small" required>
             COVID Vaccination Status
           </InputLabel>
           <Select
@@ -404,6 +413,7 @@ function PersonalInfo(props) {
         />
       </Box>
        </form>
+       </ThemeProvider>
   );
 }
 

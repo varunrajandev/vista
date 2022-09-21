@@ -25,7 +25,7 @@ const steps = [
 ];
 
 function YcwStepper() {
-    const {currentSteps} = useContext(multiStepContext)
+    const {currentSteps, setCurrentSteps} = useContext(multiStepContext)
 
     function showSteps(steps){
         switch(steps){
@@ -44,8 +44,8 @@ function YcwStepper() {
     <div>
       <Box sx={{ width: "100%" }}>
         <Stepper activeStep={currentSteps-1} alternativeLabel>
-          {steps.map((label) => (
-            <Step key={label}>
+          {steps.map((label, index) => (
+            <Step sx={{cursor: "pointer"}} onClick={()=>{setCurrentSteps(index+1)}} key={label}>
               <StepLabel>{label}</StepLabel>
             </Step>
           ))}
