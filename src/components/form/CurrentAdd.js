@@ -54,6 +54,8 @@ function CurrentAdd(props) {
     fetchData();
   }, [countryID, stateID, cityID]);
 
+  console.log({countryID, stateID, cityID})
+
   return (
     <Box
       sx={{

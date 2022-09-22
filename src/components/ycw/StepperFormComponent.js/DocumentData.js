@@ -62,9 +62,7 @@ console.log(storeDocument)
 
   const handleSubmission = async () => {
     try {
-      let response = await axios.post(
-        masterApi +
-          `/document/upload?UserId=${ids}&documentContext=${kycDocument}&documentSide=FRONT&documentType=${document}&isActive=true&isReuploaded=false`,
+      let response = await axios.post(  masterApi + `/document/upload?UserId=${ids}&documentContext=${kycDocument}&documentSide=FRONT&documentType=${document}&isActive=true&isReuploaded=false`,
         formData
       );
       alert(response.data.message);
@@ -78,12 +76,66 @@ console.log(storeDocument)
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
       <Box marginTop={5} sx={{ padding: 3, bgcolor: "white", borderRadius: 3, }} >
-        <Box sx={{width: "300px", display:"grid", gap: "20px", backgroundColor: "#e7c6f7", padding: "30px", }} >
+      <Box sx={{ display: "flex", flexWrap: "wrap", rowGap:"30px", justifyContent:"space-between" }}>
+    {/* First Document */}
+      <Box sx={{ width:"27%",display:"grid", backgroundColor: "#e7c6f0", padding: "30px",boxSizing:"boderBox" }} >
+        <Div2>
+              <TextSnippetOutlinedIcon />
+              <p style={{ fontSize: "13px", fontWeight: "bolder" }}>  PROFILE PICTURE </p>
+        </Div2>
+        <Box display={"flex"} gap={"10px"} alignItems={"center"}>
+          <Typography>
+            <Button  upload component="label" startIcon={<AttachFileOutlinedIcon />} color="secondary">
+              Upload Document
+              <input hidden type="file" name="file"/>
+            </Button>
+          </Typography>
+            {/* <h5>{isFilePicked && selectedFile.name}</h5> */}
+          </Box>
+        </Box>
+
+        {/* second Document */}
+        <Box sx={{ width:"27%",display:"grid", gap: "20px", backgroundColor: "#e7c6f0", padding: "30px",boxSizing:"boderBox" }} >
+        <Div2>
+              <TextSnippetOutlinedIcon />
+              <p style={{ fontSize: "13px", fontWeight: "bolder" }}>  AADHAAR CARD </p>
+        </Div2>
+        <Box display={"flex"} gap={"10px"} alignItems={"center"}>
+          <Typography>
+            <Button  upload component="label" startIcon={<AttachFileOutlinedIcon />} color="secondary">
+              Upload Document
+              <input hidden type="file" name="file"/>
+            </Button>
+          </Typography>
+            {/* <h5>{isFilePicked && selectedFile.name}</h5> */}
+          </Box>
+        </Box>
+
+        {/* third Document */}
+        <Box sx={{ width:"27%",display:"grid", gap: "20px", backgroundColor: "#e7c6f0", padding: "30px",boxSizing:"boderBox" }} >
+        <Div2>
+              <TextSnippetOutlinedIcon />
+              <p style={{ fontSize: "13px", fontWeight: "bolder" }}> ADDRESS PROOF </p>
+        </Div2>
+        <Box display={"flex"} gap={"10px"} alignItems={"center"}>
+          <Typography>
+            <Button  upload component="label" startIcon={<AttachFileOutlinedIcon />} color="secondary">
+              Upload Document
+              <input hidden type="file" name="file" />
+            </Button>
+          </Typography>
+            {/* <h5>{isFilePicked && selectedFile.name}</h5> */}
+          </Box>
+        </Box>
+
+         {/* Last Document */}
+
+        <Box sx={{ width:"27%",display:"grid", gap: "20px", backgroundColor: "#e7c6f0", padding: "30px",boxSizing:"boderBox" }} >
         <Div2>
               <TextSnippetOutlinedIcon />
               <p style={{ fontSize: "13px", fontWeight: "bolder" }}>  DOCUMENT UPLOAD </p>
         </Div2>
-          <Typography sx={{ display: "flex", alignItems: "center", gap: "1px"}} >
+        <Typography sx={{ display: "flex", alignItems: "center", gap: "1px"}} >
             <BookmarkBorderRoundedIcon />
             <FormControlSingleSelect
             labelData="KYC Type"
@@ -122,6 +174,7 @@ console.log(storeDocument)
             <h5>{isFilePicked && selectedFile.name}</h5>
           </Box>
         </Box>
+        </Box>
 
         <Box
           sx={{
@@ -133,7 +186,7 @@ console.log(storeDocument)
           }}
         >
           <Button variant="contained" onClick={() => { setCurrentSteps(5)}} > back </Button>
-          <Button variant="contained" onClick={handleSubmission}> Done </Button>
+          <Button variant="contained" onClick={handleSubmission}> save </Button>
         </Box>
       </Box>
       

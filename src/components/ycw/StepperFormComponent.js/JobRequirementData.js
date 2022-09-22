@@ -18,9 +18,28 @@ function JobRequirementData() {
   const [traningMode, setTraningMode] = React.useState("")
   const [jobRemarks, setJobRemarks] = React.useState("");
 
+  const [totalExp, setTotalExp] = React.useState();
+  const [experienceRemarks, setExperienceRemarks] = React.useState("");
+  const [lastJobType, setLastJobType] = React.useState([]);
+  const [lastJobDuration, setLastJobDuration] = React.useState();
+  const [reasonLeaving, setReasonLeaving] = React.useState();
+  const [jobExpMonth, setJobExpMonth] = React.useState("");
+  const [ jobExpYear, setJobExpYear] = React.useState("");
+
+  
+
+
   const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
   // const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
   // const endTimeFormat = endTime ? endTime.toLocaleTimeString() : '';
+   
+if(startTime && endTime){
+var stt = startTime.getTime();
+var endt = endTime.getTime();
+}
+if(stt >endt){
+   alert("max time")
+}
 
   const ids = localStorage.getItem("ID")
 
@@ -62,8 +81,18 @@ function JobRequirementData() {
         "traningMode": traningMode,
         "userId": ids,
         "vehicle": "string",
-        "workingHours": workingHour
+        "workingHours": workingHour,
+
+        "userExperienceRequestDto": {
+          "experienceRemarks": "string",
+          "jobDurationMonths": 0,
+          "jobDurationYears": 0,
+          "jobTypeUuid": "string",
+          "reasonForLeavingJob": reasonLeaving,
+          "totalExperience": "string"
+        },
       })
+      //console.log({totalExp,experienceRemarks, lastJobType, lastJobDuration, reasonLeaving, jobExpMonth, jobExpYear})
       
       alert(response.data.message)
       setCurrentSteps(5)
@@ -96,10 +125,19 @@ function JobRequirementData() {
               maxSal={maxSalaryExpected} setMaxSal={setMaxSalaryExpected}
               traningMode={traningMode} setTraningMode={setTraningMode}
               jobRemarks={jobRemarks} setJobRemarks={setJobRemarks}
+            
+              totalExp={totalExp} setTotalExp={setTotalExp}
+              experienceRemarks={experienceRemarks} setExperienceRemarks={setExperienceRemarks}
+              lastJobType={lastJobType} setLastJobType={setLastJobType}
+              lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}
+              ReasonLeaving={reasonLeaving} setReasonLeaving={setReasonLeaving}
+              jobExpYear={jobExpYear} setJobExpYear={setJobExpYear}
+              jobExpMonth={jobExpMonth} setJobExpMonth={setJobExpMonth}
+
               />
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
                 <Button variant='contained' onClick={(()=>{setCurrentSteps(3)})}>back</Button>
-                <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+                <Button variant='contained' onClick={handleSubmit}>save</Button>
             </Box>
         
       </Box>

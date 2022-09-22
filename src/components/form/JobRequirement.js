@@ -12,6 +12,8 @@ import Checkbox from "@mui/material/Checkbox";
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import TextFieldComponent from "../MuiComponents/TextFieldComponent";
+import FormControlSingleSelect from "../MuiComponents/FormControlSingleSelect";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -20,6 +22,7 @@ function JobRequirement(props) {
   const [jobtypeDD, setJobtypeDD] = useState([])
   const [trainingDD, setTrainingDD] = useState([])
   const [workingDD, setWorkingDD] = useState([])
+  const [lastJobTypeDD, setLastJobTypeDD] = useState([])
 
   const {
     openToTraining, setOpenToTraining,
@@ -31,7 +34,15 @@ function JobRequirement(props) {
     minSal, setMinSal,
     maxSal, setMaxSal,
     traningMode, setTraningMode,
-    jobRemarks, setJobRemarks, } = props;
+    jobRemarks, setJobRemarks,
+    totalExp, setTotalExp,
+    experienceRemarks, setExperienceRemarks,
+    lastJobType, setLastJobType,
+    lastJobDuration, setLastJobDuration,
+    ReasonLeaving, setReasonLeaving,
+    jobExpMonth, setJobExpMonth,
+    jobExpYear, setJobExpYear,
+  } = props;
 
   useEffect(() => {
     async function fetchData() {
@@ -40,10 +51,11 @@ function JobRequirement(props) {
       let workinghoursData = await fetch("http://13.126.160.155:8080/user/drop-down/get/workingHours")
       let res3 = await Jobtypedata.json();
       let res4 = await trainingModeData.json();
-      let res5 = await workinghoursData.json()
+      let res5 = await workinghoursData.json();
       setJobtypeDD(res3.data || [{ value: "NO DATA" }]);
       setTrainingDD(res4.data || [{ value: "NO DATA" }]);
-      setWorkingDD(res5.data || [{value:"NO DATA"}])
+      setWorkingDD(res5.data || [{ value: "NO DATA" }])
+      setLastJobTypeDD(res3.data)
     }
     fetchData()
   }, [])
@@ -52,12 +64,11 @@ function JobRequirement(props) {
   return (
     <Box sx={{ marginTop: 7, display: "grid", gap: 1, }}>
       <h5>Job Requirements</h5>
-      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }} >
-
+      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", rowGap: "30px" }}>
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Preferred Job Types</InputLabel>
-          <Select sx={{ width: "100%" }} label="Preferred Job Types" value={preferJob} 
-          onChange={(e) => { setPreferJob(e.target.value) }}
+          <Select sx={{ width: "100%" }} label="Preferred Job Types" value={preferJob}
+            onChange={(e) => { setPreferJob(e.target.value) }}
           >
             {jobtypeDD.map((item) => (
               <MenuItem value={item.uuid}>{item.name}</MenuItem>
@@ -67,7 +78,7 @@ function JobRequirement(props) {
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Preferred Working Hours</InputLabel>
-          <Select sx={{ width: "100%" }}label="Preferred Working Hours" value={preferWorkHour}>
+          <Select sx={{ width: "100%" }} label="Preferred Working Hours" value={preferWorkHour}>
             {workingDD.map((item) => (
               <MenuItem onClick={() => { setPreferWorkHour(item.key) }} value={item.key}>{item.value}</MenuItem>
             ))}
@@ -77,8 +88,8 @@ function JobRequirement(props) {
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <TimePicker label="Preferred Start Time" value={startTime} onChange={(newValue) => {
-              setStartTime(newValue);
-            }}
+            setStartTime(newValue);
+          }}
             renderInput={(params) => (
               <TextField size="small" sx={{ width: "18%" }} {...params} />
             )}
@@ -87,10 +98,10 @@ function JobRequirement(props) {
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <TimePicker label="Preferred End Time" value={endTime} onChange={(newValue) => {
-              setEndTime(newValue);
-            }}
-            renderInput={(params) => ( 
-            <TextField size="small" sx={{ width: "18%" }} {...params} />
+            setEndTime(newValue);
+          }}
+            renderInput={(params) => (
+              <TextField size="small" sx={{ width: "18%" }} {...params} />
             )}
           />
         </LocalizationProvider>
@@ -98,24 +109,28 @@ function JobRequirement(props) {
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel>Cycle/Bike available for travel?</InputLabel>
           <Select sx={{ width: "100%" }} label="Cycle/Bike available for travel?" value={vehicleAvailable} onChange={(e) => {
-              setVehicleAvailable(e.target.value)
-            }}>
+            setVehicleAvailable(e.target.value)
+          }}>
             <MenuItem value={true}>YES</MenuItem>
             <MenuItem value={false}>NO</MenuItem>
           </Select>
         </FormControl>
-      </Box>
+        {/* </Box> */}
 
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: "30px"}}>
+        {/* <Box sx={{ display: "flex", justifyContent: "space-between", mt: "30px"}}> */}
 
-        <TextField sx={{ width: "18%" }} size="small" label="Expected Salary [min]" variant="outlined" onChange={(e) => {
-          setMinSal(e.target.value) }}
+        <TextField sx={{ width: "18%" }} size="small" label="last salary withdraw" variant="outlined" onChange={(e) => {
+          setMinSal(e.target.value)
+        }}
           value={minSal}
+
         />
 
         <TextField sx={{ width: "18%" }} size="small" label="Expected Salary [max]" variant="outlined" onChange={(e) => {
-          setMaxSal(e.target.value) }}
+          setMaxSal(e.target.value)
+        }}
           value={maxSal}
+          error={minSal > maxSal ? true : false}
         />
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
@@ -131,8 +146,9 @@ function JobRequirement(props) {
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Training Mode</InputLabel>
           <Select sx={{ width: "100%" }} label="Training Mode" disabled={!openToTraining} onChange={(e) => {
-              setTraningMode(e.target.value)}}
-              value={traningMode}
+            setTraningMode(e.target.value)
+          }}
+            value={traningMode}
           >
             {trainingDD.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
@@ -141,10 +157,64 @@ function JobRequirement(props) {
         </FormControl>
 
         <TextField sx={{ width: "18%" }} size="small" label="Job Remarks" variant="outlined" onChange={(e) => {
-            setJobRemarks(e.target.value)}}
-            value={jobRemarks}
-
+          setJobRemarks(e.target.value)
+        }}
+          value={jobRemarks}
         />
+
+        {/* -------------------------------------- */}
+        {/* <TextFieldComponent
+          labelData="Total Experience"
+          setData={setTotalExp}
+          size="18%"
+        /> */}
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Total Experience (years)</InputLabel>
+          <Select sx={{ width: "100%" }} label="Total Experience (years)" onChange={(e) => {
+            setJobExpYear(e.target.value)
+          }}>
+            <MenuItem value={"1"}>1</MenuItem>
+            <MenuItem value={"2"}>2</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Total Experience (months)</InputLabel>
+          <Select sx={{ width: "100%" }}label="Total Experience (months)" onChange={(e) => {
+            setJobExpMonth(e.target.value)
+          }}>
+            <MenuItem value={"1"}>1</MenuItem>
+            <MenuItem value={"2"}>2</MenuItem>
+          </Select>
+        </FormControl>
+
+        <TextFieldComponent
+          labelData="Experience Remarks"
+          setData={setExperienceRemarks}
+          size="18%"
+        />
+
+        <FormControlSingleSelect
+          labelData="Last Job Type"
+          dataDD={lastJobTypeDD}
+          setData={setLastJobType}
+          values={"name"}
+          size="18%"
+        />
+
+        <TextFieldComponent
+          labelData="Last Job Duration(in months)"
+          setData={setLastJobDuration}
+          size="18%"
+        />
+
+        <TextFieldComponent
+          labelData="Reason For Leaving Last Job"
+          setData={setReasonLeaving}
+          size="18%"
+        />
+
+
 
       </Box>
     </Box>

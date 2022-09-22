@@ -207,8 +207,8 @@ console.log(birthday)
 
                 <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right"}}>
                      {console.log(personalData.status)}
-                    <Button sx={{display:(personalData.status?"none":"block")}}  variant='contained' onClick={handleSubmit}>NEXT</Button>
-                    <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={updataData}>UPDATE & NEXT</Button>
+                    <Button sx={{display:(personalData.status?"none":"block")}}  variant='contained' onClick={handleSubmit}>save</Button>
+                    <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={updataData}>UPDATE & save</Button>
                 </Box>
                 </Box>
 

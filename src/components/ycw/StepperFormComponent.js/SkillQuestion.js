@@ -156,7 +156,7 @@ function SkillQuestion() {
               back
             </Button>
             <Button variant="contained" onClick={handleSubmit}>
-              NEXT
+              save
             </Button>
             {/* (()=>{setCurrentSteps(4)}) */}
           </Box>

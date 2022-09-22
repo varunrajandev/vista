@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material'
 import axios from 'axios'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { masterApi } from '../../../AlllData'
 import { multiStepContext } from '../../../ContextApi/StepContext'
@@ -18,27 +18,54 @@ function HouseHoldMemberData() {
             relationship: "", 
         }
     ])
-    console.log(inputFields)
-
-    console.log(inputFields)
+    const ids = localStorage.getItem("ID")
     const {currentSteps, setCurrentSteps, personalData, setAddressData, householdData, setHouseholdData} = useContext(multiStepContext)
+
+    useEffect(() => {
+      const getAllDataById = async ()=>{
+        let fetchbyid = await fetch(`http://13.126.160.155:8080/user/worker/familyMember/${ids}`)
+        let responsehousehold = await fetchbyid.json()
+        console.log(responsehousehold.data)
+        
+        setInputFields([
+          { 
+              age: responsehousehold.data.familyMemberDto[0].age,
+              email: responsehousehold.data.familyMemberDto[0].email,
+              jobType: responsehousehold.data.familyMemberDto[0].jobType,
+              mobileNo: responsehousehold.data.familyMemberDto[0].mobileNo,
+              name: responsehousehold.data.familyMemberDto[0].name,
+              relationship: responsehousehold.data.familyMemberDto[0].relationship, 
+          }
+        ])
+      }
+      getAllDataById()
+    }, [ids])
+    
     
     async function handleSubmit(){
-    
-        try {
+    try {
           let response = await axios.post(masterApi+"/worker/familyMember",
-          [
-            {
-              "age": inputFields[0].age,
-              "email": inputFields[0].email,
-              "jobType": inputFields[0].jobType,
-              "mobileNo": inputFields[0].mobileNo,
-              "name": inputFields[0].name,
-              "relationship": inputFields[0].relationship,
-              "userId": personalData.data.userId
-            }
-          ]
-          )
+    // {    "familyMemberDto":  [
+    //         {
+    //           "age": inputFields[0].age,
+    //           "email": inputFields[0].email,
+    //           "jobType": inputFields[0].jobType,
+    //           "mobileNo": inputFields[0].mobileNo,
+    //           "name": inputFields[0].name,
+    //           "relationship": inputFields[0].relationship,
+              
+    //         }
+    //       ],
+    //       "userId": ids
+    //     }
+
+
+     {    
+      "familyMemberDto": inputFields,
+          "userId": ids
+        }
+
+    )
     
           alert(response.data.message)
           setHouseholdData(response.data)
@@ -68,7 +95,7 @@ function HouseHoldMemberData() {
             
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
                 <Button variant='contained' onClick={(()=>{setCurrentSteps(5)})}>back</Button>
-                <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+                <Button variant='contained' onClick={handleSubmit}>save</Button>
             </Box>
 
         </Box>

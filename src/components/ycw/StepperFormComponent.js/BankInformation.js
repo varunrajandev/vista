@@ -107,7 +107,7 @@ function BankInformation() {
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
                 <Button variant='contained' onClick={(()=>{setCurrentSteps(4)})}>back</Button>
-                <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+                <Button variant='contained' onClick={handleSubmit}>save</Button>
             </Box>
 
         </Box>
