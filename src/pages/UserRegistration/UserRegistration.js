@@ -38,14 +38,11 @@ function UserRegistration() {
   const [candidategender, setCandidateGender] = React.useState("");
   const [candidateage, setCandidateAge] = React.useState("");
   const [candidateworkingHr, setCandidateWorkingHr] = React.useState("");
-  const [candidateprimarySkills, setCandidatePrimarySkills] =
-    React.useState("");
+  const [candidateprimarySkills, setCandidatePrimarySkills] = React.useState("");
   const [candidatelocality, setCandidateLocality] = React.useState("");
   const [candidatereligion, setCandidateReligion] = React.useState("");
-  const [candidatePartnerPhoneNumber, setCandidatePartnerPhoneNumber] =
-    React.useState("");
-  const [availableNumberResponse, setAvailableNumberResponse] =
-    React.useState();
+  const [candidatePartnerPhoneNumber, setCandidatePartnerPhoneNumber] = React.useState("");
+  const [availableNumberResponse, setAvailableNumberResponse] = React.useState();
   const [helpertext, setHelpertext] = React.useState("");
   const [displayalert, setDisplayalert] = React.useState("none");
 
@@ -119,8 +116,8 @@ function UserRegistration() {
           marginTop: "0px",
         }}
       >
-        {/* <Card  sx={{ padding: "10px",}} > */}
-        <Grid sx={{ display: "flex" }}>
+        <Card  sx={{ padding: "10px"}}>
+        {/* <Grid sx={{ display: "flex" }}>
           <CardMedia
             image={image}
             component="img"
@@ -134,14 +131,14 @@ function UserRegistration() {
             }}
             alt="CARE CREW"
           />
-        </Grid>
+        </Grid> */}
         <CardContent>
           <Box
             sx={{
               fontSize: "22px",
               fontWeight: "900",
               color: "#BDBDBD",
-              marginLeft: "4%",
+              marginLeft: "3%",
             }}
           >
             Candidate Registration
@@ -210,7 +207,7 @@ function UserRegistration() {
                 }}
                 renderInput={(params) => (
                   <TextField
-                    sx={{ width: "176px" }}
+                    sx={{ width: "180px" }}
                     variant="standard"
                     {...params}
                     placeholder="Gender"
@@ -247,7 +244,7 @@ function UserRegistration() {
                 }}
                 renderInput={(params) => (
                   <TextField
-                    sx={{ width: "176px" }}
+                    sx={{ width: "180px" }}
                     variant="standard"
                     {...params}
                     placeholder="Primary Skill"
@@ -271,7 +268,7 @@ function UserRegistration() {
                 }}
                 renderInput={(params) => (
                   <TextField
-                    sx={{ width: "176px" }}
+                    sx={{ width: "180px" }}
                     variant="standard"
                     {...params}
                     placeholder="Locality"
@@ -295,7 +292,7 @@ function UserRegistration() {
                 }}
                 renderInput={(params) => (
                   <TextField
-                    sx={{ width: "176px" }}
+                    sx={{ width: "180px" }}
                     variant="standard"
                     {...params}
                     placeholder="Preferred Working Hours"
@@ -320,7 +317,7 @@ function UserRegistration() {
                 renderInput={(params) => (
                   <TextField
                     variant="standard"
-                    sx={{ width: "176px" }}
+                    sx={{ width: "180px" }}
                     {...params}
                     placeholder="Religion"
                     onChange={(event, newValue) => {
@@ -349,13 +346,13 @@ function UserRegistration() {
               />
             </Grid>
           </Grid>
-          <Grid mt={4} item>
+          <Grid mt={4} ml={4} item>
             <Button variant="contained" color="success" onClick={handleClick}>
               Registration
             </Button>
           </Grid>
         </CardContent>
-        {/* </Card> */}
+        </Card>
         <Grid>
           <Alert sx={{ display: `${displayalert}` }} severity="success"  action={
           <Button color="inherit" size="small" onClick={()=>{window.location.reload(false)}}>

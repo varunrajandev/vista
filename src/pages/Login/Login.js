@@ -18,6 +18,10 @@ import { multiStepContext } from "../../ContextApi/StepContext";
 import { masterApiforAll } from "../../AlllData";
 import indianflag from "../../images/india.png";
 import AlertTitle from "@mui/material/AlertTitle";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 function Login() {
   const [mobileNumber, setMobileNumber] = React.useState("");
@@ -30,11 +34,30 @@ function Login() {
   const [openPopup, setOpenPopup] = React.useState(false);
   const [helpertext, setHelpertext] = React.useState("");
   const [errorvalue, setErrorValue] = React.useState("");
+  const [userType, setUserType] = React.useState("");
+
   let navigate = useNavigate();
 
+  // const renderButtonforResendOtp =()=>{
+  //   return <Button onClick={handleClickforReSendOTP} sx={{cursor:"ponter"}}>Resend</Button>;
+
+  // }
+
+  // const renderTime = remainingTime => {
+  //   return <span>{remainingTime} seconds remaining</span>;
+  // };
+  const renderButton = (buttonProps) => {
+    return (
+      <Button {...buttonProps} onClick={handleClickforReSendOTP}>
+        {buttonProps.remainingTime !== 0
+          ? `wait for ${buttonProps.remainingTime} sec`
+          : "Resend"}
+      </Button>
+    );
+  };
+  const renderTime = () => React.Fragment;
   const { loginData, setLoginData } = useContext(multiStepContext);
 
-  console.log("loginData", loginData);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -51,13 +74,12 @@ function Login() {
       let response = await axios.post(masterApiforAll + "user/auth/resendOtp", {
         isoCode: "IN",
         mobile: mobileNumber,
-        userType: "WORKER",
       });
       alert("User Resend OTP");
+      setDisplayAlert("none");
       console.log("res", response.data.message);
       handleClose();
     } catch (error) {
-      // alert("User Registration Faild", error)
       setDisplayAlert("visible");
       setErrorValue("OTP Resend Fail Please Try Again");
       handleClose();
@@ -75,14 +97,30 @@ function Login() {
             isoCode: "IN",
             mobile: mobileNumber,
             otp: otp,
-            userType: "WORKER",
           }
         );
 
         localStorage.setItem("Response", JSON.stringify(response.data.status));
-        localStorage.setItem("ResponseName", JSON.stringify(response.data.data.firstName))
+        localStorage.setItem(
+          "ResponseName",
+          JSON.stringify(response.data.data.firstName)
+        );
+        localStorage.setItem(
+          "ResponseLastName",
+          JSON.stringify(response.data.data.lastName)
+        );
+        localStorage.setItem(
+          "ResponseUserType",
+          JSON.stringify(response.data.data.userType)
+        );
+
+        if (response.data.data.userType === "OPS") {
+          navigate("/ycw");
+        }
+        if (response.data.data.userType === "FIELD_OFFICER") {
+          navigate("/registration");
+        }
         setLoginData(response.data);
-        navigate("/ycw");
       } catch (error) {
         setErrorValue("Please Fill Correct OTP");
         setDisplayAlert("visible");
@@ -96,7 +134,6 @@ function Login() {
       let response = await axios.post(masterApiforAll + "user/auth/login", {
         isoCode: "IN",
         mobile: mobileNumber,
-        userType: "WORKER",
       });
       setDisplayOtp("visible");
       setDisplayAlert("none");
@@ -220,19 +257,20 @@ function Login() {
                 <Box
                   sx={{
                     display: "flex",
-                    marginTop: "20px",
+                    marginTop: "10px",
                     justifyContent: "space-between",
                   }}
                 >
                   <ResendOTP
-                    onClick={handleClickforReSendOTP}
+                    //  renderButton={renderButtonforResendOtp}
+                    renderButton={renderButton}
+                    renderTime={renderTime}
                     maxTime={30}
-                    style={{ color: "green" }}
+                    mt={2}
+                    style={{ display: "flex", gap: "10px", color: "red" }}
                   />
 
-                  <button onClick={handleClickforLogin} variant="sucess">
-                    Submit
-                  </button>
+                  <Button onClick={handleClickforLogin}>Submit</Button>
                 </Box>
               </Box>
 

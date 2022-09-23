@@ -21,7 +21,6 @@ import { masterApi } from "../../AlllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { LinearProgress } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
 
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -87,7 +86,7 @@ function Right() {
   const [id, setId] = useState("")
 
 
-  console.log("statusData", tableData)
+  console.log("Datatale", tableData)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -173,7 +172,6 @@ function Right() {
           marginTop: "30px",
          }}
           >
-
         <Autocomplete
           sx={{ width: "25%", backgroundColor: "white" }}
           freeSolo
@@ -188,14 +186,11 @@ function Right() {
           options={searchDD}
           renderInput={(params) => (
             <Box sx={{ display: "flex" }}>
-
               {/* <SearchIcon /> */}
-
               <TextField
-
-                placeholder="Search by name or phone number..."
+                placeholder="Search by Name"
                 onChange={(e) => {
-                  setSearchItem(e.target.value);
+                   setSearchItem(e.target.value);
                 }}
                 {...params}
                 InputProps={{
@@ -260,6 +255,7 @@ function Right() {
           sx={{ width: "20%" }}
           onChange={(event, newValue) => {
             setYcwCity(newValue.uuid);
+            
           }}
           renderInput={(params) => (
             <TextField
@@ -479,8 +475,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
-
                             }
                           }
                         }}
@@ -510,7 +504,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
                             }
                           }
                         }}
@@ -558,7 +551,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
                             }
                           }
                         }}
@@ -588,7 +580,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
                             }
                           }
                         }}
@@ -1119,11 +1110,13 @@ function Right() {
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.workingHours.value || "--"}
+                    {item.workingHours || "--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px"  }} align="left">
-                  <LinearProgress variant="determinate" value={item.percentage} /> {item.percentage}%
+                  <LinearProgress variant="determinate" value={item.percentage}
+                   color="secondary"
+                  /> {item.percentage}%
                     {/* {"--"} */}
                   </TableCell>
                   <TableCell align="left" sx={{ border: "none" }}>
@@ -1170,9 +1163,6 @@ function Right() {
       </Box>
       {statusData === "INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
       {statusData === "ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
-
-      
-      {/* <Pagination  sx={{display:"flex",marginTop:"100px",alignItems:"center", justifyContent:"center"}}count={20} color="primary" /> */}
     </Box>
   );
 }
