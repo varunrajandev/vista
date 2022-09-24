@@ -54,6 +54,8 @@ function CurrentAdd(props) {
     fetchData();
   }, [countryID, stateID, cityID]);
 
+  console.log({countryID, stateID, cityID})
+
   return (
     <Box
       sx={{
@@ -67,6 +69,7 @@ function CurrentAdd(props) {
           <Box sx={{display:(marginTopSize?"block":"none")}}>
           <Checkbox onChange={(e) => setIsPermanent(e.target.checked)}{...label}
             color="success"
+            checked={isPermanent}
           />
           <span style={{ fontWeight: "100" }}>Same as current Address</span>
           </Box>
@@ -84,8 +87,8 @@ function CurrentAdd(props) {
           size="small"
           id="outlined-basic"
           label="Flat/Building"
-          // value={addressL1}
-          defaultValue={AllAddress?AllAddress.addressLine1:addressL1}
+           value={addressL1}
+          //defaultValue={AllAddress?AllAddress.addressLine1:addressL1}
           variant="outlined"
           onChange={(e) => {
             setAddressL1(e.target.value);
@@ -95,8 +98,8 @@ function CurrentAdd(props) {
         <TextField
           sx={{ width: "18%" }}
           size="small"
-          //value={addressL2}
-          defaultValue={AllAddress?AllAddress.addressLine2:addressL2}
+          value={addressL2}
+          //defaultValue={AllAddress?AllAddress.addressLine2:addressL2}
           id="outlined-basic"
           label="Society/Colony/Area"
           variant="outlined"
@@ -107,8 +110,8 @@ function CurrentAdd(props) {
 
         <TextField
           sx={{ width: "18%" }}
-         // value={landmark}
-          defaultValue={AllAddress?AllAddress.landmark:landmark}
+          value={landmark}
+          //defaultValue={AllAddress?AllAddress.landmark:landmark}
           size="small"
           id="outlined-basic"
           label="Landmark"
@@ -122,8 +125,8 @@ function CurrentAdd(props) {
           sx={{ width: "18%" }}
           size="small"
           type="number"
-          //value={pinCode}
-          defaultValue={AllAddress?AllAddress.postalCode:pinCode}
+          value={pinCode}
+          //defaultValue={AllAddress?AllAddress.postalCode:pinCode}
           id="outlined-basic"
           label="Pin Code"
           variant="outlined"
@@ -141,8 +144,8 @@ function CurrentAdd(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            defaultValue={AllAddress?AllAddress.countryName:country}
-            //value={country}
+            //defaultValue={AllAddress?AllAddress.countryName:country}
+            value={country}
             label="Country"
             onChange={(e) => {
               setCountry(e.target.value);
@@ -167,9 +170,9 @@ function CurrentAdd(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            defaultValue={AllAddress?AllAddress.stateName:state}
+            //defaultValue={AllAddress?AllAddress.stateName:state}
             label="State"
-            // value={state}
+            value={state}
             onChange={(e) => {
               setState(e.target.value);
             }}
@@ -187,8 +190,8 @@ function CurrentAdd(props) {
             labelId="demo-select-small"
             id="demo-select-small"
             label="City"
-            //value={city}
-            defaultValue={AllAddress?AllAddress.cityName:city}
+            value={city}
+            //defaultValue={AllAddress?AllAddress.cityName:city}
             onChange={(e) => {
               setCity(e.target.value);
             }}
@@ -206,8 +209,8 @@ function CurrentAdd(props) {
             labelId="demo-select-small"
             id="demo-select-small"
             label="Locality"
-            //value={locality}
-            defaultValue={AllAddress?AllAddress.micromarketName:locality}
+            value={locality}
+            //defaultValue={AllAddress?AllAddress.micromarketName:locality}
             onChange={(e) => {
               setLocality(e.target.value);
             }}
@@ -224,8 +227,8 @@ function CurrentAdd(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            //value={addressProofType}
-            defaultValue={AllAddress?AllAddress.addressProofType:addressProofType}
+            value={addressProofType}
+            //defaultValue={AllAddress?AllAddress.addressProofType:addressProofType}
             label="Address Proof Type"
             onChange={(e) => {
               setAddressProofType(e.target.value);

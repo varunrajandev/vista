@@ -24,6 +24,7 @@ function SkillQuestion() {
   const [storeQuestion, setStoreQuestion] = useState([]);
 
   const {id} = useParams()
+  let ids = localStorage.getItem('ID')
 
   const { currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext);
 
@@ -31,7 +32,7 @@ function SkillQuestion() {
 
   useEffect(() => {
     const fetchSkillData = async () => {
-      let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${id}`)
+      let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${id||ids}`)
      
       let responseQuestion = await QuestionData.json();
       setAllQuestion(responseQuestion.data);
@@ -45,7 +46,7 @@ function SkillQuestion() {
      try {
     let response = await axios.post("http://13.126.160.155:8080/user/skill/save/userResponse",{
       skillDto:storeQuestion,
-      userId:id
+      userId:ids
     });
 
        alert(response.data.message);
@@ -155,7 +156,7 @@ function SkillQuestion() {
               back
             </Button>
             <Button variant="contained" onClick={handleSubmit}>
-              NEXT
+              save
             </Button>
             {/* (()=>{setCurrentSteps(4)}) */}
           </Box>

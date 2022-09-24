@@ -10,7 +10,7 @@ import CurrentAdd from "../../form/CurrentAdd";
 
 function AddressInformation() {
         // isPermanent or not
-        const [isPermanent, setIsPermanent] = useState(false);
+        const [isPermanent, setIsPermanent] = useState();
         const [primaryAddress, setPrimaryAddress] = useState([]);
         const [secondaryAddress, setSecondaryAddress] = useState([])
 
@@ -46,13 +46,47 @@ function AddressInformation() {
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, addressDatas} = useContext(multiStepContext)
 
+    let ids = localStorage.getItem('ID');
+
+    const  AddressFetchByPincode = async (pincode, num)=>{
+        let AddressByPincode = await fetch(masterApi+`/address/get/address/${pincode}`)
+        let AddressResponse = await AddressByPincode.json()
+        num===1?setPrimaryAddress(AddressResponse.data):setSecondaryAddress(AddressResponse.data)
+    }
+
+    const AddressGetById = async()=>{
+        let addressData = await fetch(`http://13.126.160.155:8080/user/address/get/${ids}`);
+        let responseData =await addressData.json();
+        console.log(responseData)
+        //current Address
+        setAddressLine1(responseData.data[0].addressLine1)
+        setAddressLine2(responseData.data[0].addressLine2)
+        setLandmark(responseData.data[0].landmark)
+        setPostalCode(responseData.data[0].postalCode)
+        setCountryName(responseData.data[0].countryName)
+        setStateName(responseData.data[0].stateName)
+        setCityName(responseData.data[0].cityName)
+        setLocality(responseData.data[0].micromarketName)
+        setAddressProofType(responseData.data[0].addressProofType)
+
+        //PermanentAddress
+        setAddressLine1p(responseData.data[1].addressLine1)
+        setAddressLine2p(responseData.data[1].addressLine2)
+        setLandmarkp(responseData.data[1].landmark)
+        setPostalCodep(responseData.data[1].postalCode)
+        setCountryNamep(responseData.data[1].countryName)
+        setStateNamep(responseData.data[1].stateName)
+        setCityNamep(responseData.data[1].cityName)
+        setLocalityp(responseData.data[1].micromarketName)
+        setAddressProofTypep(responseData.data[1].addressProofType)
+        setIsPermanent(responseData.data[1].permanent)
+    }
+
+    console.log("ispermanment", isPermanent)
+
     useEffect(() => {
-       const  AddressFetchByPincode = async (pincode, num)=>{
-            let AddressByPincode = await fetch(masterApi+`/address/get/address/${pincode}`)
-            let AddressResponse = await AddressByPincode.json()
-            num===1?setPrimaryAddress(AddressResponse.data):setSecondaryAddress(AddressResponse.data)
-            
-        }
+         AddressGetById()
+  
         if(postalCode.length==6){
             AddressFetchByPincode(postalCode, 1)
         }
@@ -60,9 +94,9 @@ function AddressInformation() {
             AddressFetchByPincode(postalCodep, 2)
         }
         
-    }, [postalCode , postalCodep])
+    }, [postalCode , postalCodep, ids])
 
-console.log(addressDatas[0])
+console.log(addressDatas)
     
 
 
@@ -84,33 +118,32 @@ console.log(addressDatas[0])
               "permanent": !isPermanent,
               "postalCode": postalCode,
               "stateName": stateName,
-              "userId": personalData.data.userId
+              "userId": ids
             },
             {
-                "addressLine1": isPermanent?addressLine1:addressLine1p,
-                "addressLine2": isPermanent?addressLine2:addressLine2p,
+                "addressLine1": addressLine1p,
+                "addressLine2": addressLine2p,
                 "addressProofType": "AAADHAR_CARD",
-                "cityName": isPermanent?cityName:cityNamep,
-                "countryName": isPermanent?countryName:countryNamep,
-                "landmark": isPermanent?landmark:landmarkp,
-                "locality": isPermanent?locality:localityp,
-                "micromarketName": isPermanent?locality:localityp,
+                "cityName": cityNamep,
+                "countryName": countryNamep,
+                "landmark": landmarkp,
+                "locality": localityp,
+                "micromarketName":localityp,
                 "permanent": isPermanent,
-                "postalCode": isPermanent?postalCode:postalCodep,
-                "stateName": isPermanent?stateName:stateNamep,
-                "userId": personalData.data.userId
+                "postalCode":postalCodep,
+                "stateName":stateNamep,
+                "userId": ids
               }])
               alert(response.data.message)
               setCurrentSteps(3)
               setAddressData(response.data.data)
-
-
-        
-       } catch (error) {
+            } catch (error) {
         console.log(error)
        }
 
     }
+
+
     
     return (
         <>
@@ -165,7 +198,7 @@ console.log(addressDatas[0])
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
                 <Button variant='contained' onClick={(()=>{setCurrentSteps(1)})}>back</Button>
-                <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+                <Button variant='contained' onClick={handleSubmit}>save</Button>
             </Box>
                 </Box>
             </Box>

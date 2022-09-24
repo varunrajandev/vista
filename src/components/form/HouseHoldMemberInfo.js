@@ -128,8 +128,8 @@ function HouseHoldMemberInfo(props) {
                 sx={{ width: "100%" }}
                 labelId="demo-select-small"
                 id="demo-select-small"
-                name="Relationship"
-                value={inputField.Relationship}
+                name="relationship"
+                value={inputField.relationship}
                 label="Occupation"
                 onChange={(event) => handleChangeInput(index, event)}
               >

@@ -86,6 +86,7 @@ function Right() {
   const [id, setId] = useState("")
 
 
+
   console.log("Datatale", tableData)
 
   useEffect(() => {
@@ -1050,12 +1051,16 @@ function Right() {
 
 
 
+
 {/*...........................Table Body.............................. */}
 
 
 
 
-            <TableBody component={Paper}>
+           
+
+<TableBody component={Paper}>
+
               {tableData.map((item) => (
                 <StyledTableRow
                   onClick={() => { setId(item.userId); { setStatusData(item.profileStatus.value) } }}

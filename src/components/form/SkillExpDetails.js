@@ -19,17 +19,12 @@ function SkillExpDetails(props) {
     secondarySkill, setSecondarySkill,
     tertiarySkill, setTertiarySkill,
     skillRemarks, setSkillRemarks,
-    vegNonveg, setVegNonveg,
-    cuisinesKnown, setCuisinesKnown,
     primaryLanguage, setPrimaryLanguage,
     otherLanguages, setOtherLanguages,
-    totalExp, setTotalExp,
-    experienceRemarks, setExperienceRemarks,
-    lastJobType, setLastJobType,
-    lastJobDuration, setLastJobDuration,
-    ReasonLeaving, setReasonLeaving,
     // values, setValue,
   } = props
+
+  
 
 
 
@@ -95,52 +90,52 @@ function SkillExpDetails(props) {
           setData={setOtherLanguages}
           size="45%"
         />
-
+{/* 
         <TextFieldComponent
           labelData="Total Experience"
           setData={setTotalExp}
           size="25%"
-        />
+        /> */}
 
-        <TextFieldComponent
+        {/* <TextFieldComponent
           labelData="Experience Remarks"
           setData={setExperienceRemarks}
           size="25%"
-        />
-
-        {/* <MultiSelected
-          labelData="Last Job Type"
-          dataDD={pSkillDD}
-          setData={setLastJobType}
-          size="45%"
         /> */}
 
+       <TextFieldComponent
+          labelData="Skill Remarks"
+          setData={setSkillRemarks}
+          size="25%"
+        />
+{/* 
       <FormControlSingleSelect
           labelData="Last Job Type"
           dataDD={pSkillDD}
           setData={setLastJobType}
           values={"name"}
           size="37.5%"
-        />
+        /> */}
 
-        <TextFieldComponent
+        {/* <TextFieldComponent
           labelData="Last Job Duration(in months)"
           setData={setLastJobDuration}
           size="25%"
-        />
+        /> */}
 
-        <TextFieldComponent
+        {/* <TextFieldComponent
           labelData="Reason For Leaving Last Job"
           setData={setReasonLeaving}
           size="60%"
-        />
+        /> */}
 
         <FormControlSingleSelect
           labelData="Primary Skill"
           dataDD={pSkillDD}
-          setData={setPrimarySkill}
+          setDatas={setPrimarySkill}
           values={"name"}
-          size="37.5%"
+          size="25%"
+          data={primarySkill}
         />
 
         <MultiSelected
@@ -148,7 +143,7 @@ function SkillExpDetails(props) {
           dataDD={sSkillDD}
           setData={setSecondarySkill}
           values={"name"}
-          size="48.7%"
+          size="34.7%"
         />
 
         <MultiSelected
@@ -156,7 +151,8 @@ function SkillExpDetails(props) {
           dataDD={tSkillDD}
           setData={setTertiarySkill}
           values={"name"}
-          size="48.7%"
+          size="34.7%"
+          value = {tertiarySkill}
         />
       </Box>
     </Box>

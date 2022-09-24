@@ -14,27 +14,54 @@ function BankInformation() {
       branchName: "",
       branchAddress: "",
       accountHoderName: "",
+      ifscCode: "",
       accountNumber: "",
     },
   ]);
 
   const [ifscCodeData, setIfscCodeData] = useState([])
+  const ids = localStorage.getItem("ID")
+
+//Data Fetch by IFce
+  async function fetchData(ifsc) {
+    let FetchByIfce = await fetch(masterApi+`/bank/get/bankDetails/${ifsc}`)
+    let AccountTypeData = await FetchByIfce.json()
+    setIfscCodeData(AccountTypeData.data)
+  }
+  console.log("account",ifscCodeData)
+
+  //All Details fetch by id
+  async function DataFetchById(){
+    let bankData = await fetch(`http://13.126.160.155:8080/user/bank/get/${ids}`)
+    let allDataResponse = await bankData.json();
+    setInputFields([
+      {
+        accountType: allDataResponse.data[0].accountType,
+        bankName:ifscCodeData.bankName?ifscCodeData.bankName:allDataResponse.data[0].bankName,
+        branchName:ifscCodeData.branchName?ifscCodeData.branchName:allDataResponse.data[0].branchName,
+        branchAddress:ifscCodeData.branchAddress?ifscCodeData.branchAddress:allDataResponse.data[0].branchAddress,
+        accountHoderName: allDataResponse.data[0].accountHolderName,
+        ifscCode: inputFields[0].ifscCode?inputFields[0].ifscCode:allDataResponse.data[0].ifscCode,
+        accountNumber: allDataResponse.data[0].accountNumber,
+      },
+    ])
+  }
+  
+ 
+
 
   useEffect(() => {
-    async function fetchData() {
-      let FetchByIfce = await fetch(masterApi+`/bank/get/bankDetails/${inputFields[0].ifscCode}`)
-      let AccountTypeData = await FetchByIfce.json()
-      setIfscCodeData(AccountTypeData.data)
+    if(inputFields[0].ifscCode.length===11){
+       fetchData(inputFields[0].ifscCode);
     }
-    fetchData();
-  }, [inputFields[0].ifscCode]);
+    DataFetchById()
+  }, [ids, inputFields[0].ifscCode]);
 
-  console.log("first",inputFields[0].ifscCode)
+  const {currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext)
 
-  const {currentSteps, setCurrentSteps, personalData, setAddressData, } = useContext(multiStepContext)
+
    
   async function handleSubmit(){
-    
     try {
       let response = await axios.post(BankApi, 
         [
@@ -42,12 +69,12 @@ function BankInformation() {
             "accountHolderName": inputFields[0].accountHoderName,
             "accountNumber": inputFields[0].accountNumber,
             "accountType": inputFields[0].accountType,
-            "bankName": ifscCodeData.bankName,
-            "branchAddress": ifscCodeData.branchAddress,
-            "branchName": ifscCodeData.branchName,
+            "bankName": inputFields[0].bankName,
+            "branchAddress": inputFields[0].branchAddress,
+            "branchName": inputFields[0].branchName,
             "ifscCode": inputFields[0].ifscCode,
             "primary": true,
-            "userId": personalData.data.userId
+            "userId": ids
           }
         ]
       )
@@ -80,7 +107,7 @@ function BankInformation() {
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
                 <Button variant='contained' onClick={(()=>{setCurrentSteps(4)})}>back</Button>
-                <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+                <Button variant='contained' onClick={handleSubmit}>save</Button>
             </Box>
 
         </Box>

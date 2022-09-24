@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material'
 import axios from 'axios';
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { masterApi } from '../../../AlllData';
 import { multiStepContext } from '../../../ContextApi/StepContext';
@@ -13,22 +14,18 @@ function SkillInformationData() {
     const [secondarySkill, setSecondarySkill] = React.useState([]);
     const [tertiarySkill, setTertiarySkill] = React.useState([]);
     const [skillRemarks, setSkillRemarks] = React.useState("");
-    const [cookType, setCookType] = React.useState("");
-    const [cuisinesKnown, setCuisinesKnown] = React.useState([]);
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
-    const [totalExp, setTotalExp] = React.useState();
-    const [experienceRemarks, setExperienceRemarks] = React.useState("");
-    const [lastJobType, setLastJobType] = React.useState([]);
-    const [lastJobDuration, setLastJobDuration] = React.useState();
-    const [reasonLeaving, setReasonLeaving] = React.useState();
+
+    const [booliean, setBooliean] = useState(false)
+
     
     const {id} = useParams()
-    let SecondarySkillArray = [];
+    let SecondarySkillArray =[];
     let TertiarySkillArray = [];
     let otherLanguageArray = []
-
-
+    let ids = localStorage.getItem('ID')
+   
     if(secondarySkill){
       secondarySkill.map((item)=>{
           SecondarySkillArray.push(item.uuid)
@@ -47,7 +44,23 @@ function SkillInformationData() {
       })
     }
 
-    console.log(primaryLanguage)
+    useEffect(() => {
+      const allSkillFetchById = async() =>{
+        let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids}`)
+        let responseAllSkill = await allSkillData.json();
+        
+        // setPrimarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto[0].skillName)
+        // setTertiarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
+        // console.log(responseAllSkill.data.skillsMappingDto)
+        
+      }
+      allSkillFetchById()
+    }, [ids])
+   
+
+    
+   
+    
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
     
@@ -57,15 +70,13 @@ function SkillInformationData() {
       try {
         let response = await axios.post(masterApi+"/skill/save",
         {
-          "otherLanguage": otherLanguageArray, 
+          "otherLanguage":otherLanguageArray,
           "primaryLanguage": primaryLanguage,
           "skillRemarks": skillRemarks,
           "skillRequestDtos": [
             {
               "skillLevel": "PRIMARY",
-              "skillUuid": [
-                primarySkill
-              ]
+              "skillUuid": [primarySkill]
             },
             {
               "skillLevel": "SECONDARY",
@@ -73,22 +84,14 @@ function SkillInformationData() {
             },
             {
               "skillLevel": "TERTIARY",
-              "skillUuid":TertiarySkillArray
+              "skillUuid": TertiarySkillArray
             }
           ],
-          "userExperienceRequestDto": {
-            "experienceRemarks": experienceRemarks,
-            "jobDuration": lastJobDuration,
-            "jobTypeUuid": "string",
-            "reasonForLeavingJob": "string",
-            "totalExperience": "string"
-          },
-            "userId": personalData.data.userId
-        }
-        )
+          "userId": ids
+        })
   
         alert(response.data.message)
-        setSkillData(response.data)
+        setBooliean(true)
       } catch (error) {
         alert(error)
       }
@@ -113,28 +116,20 @@ function SkillInformationData() {
           secondarySkill={secondarySkill} setSecondarySkill={setSecondarySkill}
           tertiarySkill={tertiarySkill} setTertiarySkill={setTertiarySkill}
           skillRemarks={skillRemarks} setSkillRemarks={setSkillRemarks}
-          vegNonveg={cookType} setVegNonveg={setCookType}
-          cuisinesKnown={cuisinesKnown} setCuisinesKnown={setCuisinesKnown}
           primaryLanguage={primaryLanguage} setPrimaryLanguage={setPrimaryLanguage}
           otherLanguages={otherLanguages} setOtherLanguages={setOtherLanguages}
-          totalExp={totalExp} setTotalExp={setTotalExp}
-          experienceRemarks={experienceRemarks} setExperienceRemarks={setExperienceRemarks}
-          lastJobType={lastJobType} setLastJobType={setLastJobType}
-          lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}
-          ReasonLeaving={reasonLeaving} setReasonLeaving={setReasonLeaving}
-        // values={values} setValue={setValue}
+          // values={values} setValue={setValue}
         />
        
 
           <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
-              <Button variant='contained' onClick={(()=>{setCurrentSteps(2)})}>back</Button>
-              <Button variant='contained' onClick={handleSubmit}>NEXT</Button>
+              <Button variant='contained' onClick={handleSubmit}>save</Button>
               {/* (()=>{setCurrentSteps(4)}) */}
           </Box>
         
       </Box>
 
-      <Box ><SkillQuestion/></Box>
+      <Box sx={{display:(booliean?"block":"none")}}><SkillQuestion/></Box>
 
     </Box>
     </>
