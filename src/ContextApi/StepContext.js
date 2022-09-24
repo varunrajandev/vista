@@ -5,7 +5,13 @@ export const multiStepContext = React.createContext();
 
 
 function StepContext() {
-  const [currentSteps, setCurrentSteps] = useState(7);
+
+  const [currentSteps, setCurrentSteps] = useState(1);
+
+  const [loginData, setLoginData] = useState([])
+   const [currentSteps, setCurrentSteps] = useState(1);
+
+
   const [personalData, setPersonalData] = useState([]);
   const [addressDatas, setAddressData] = useState([]);
   const [skillData, setSkillData] = useState([]);

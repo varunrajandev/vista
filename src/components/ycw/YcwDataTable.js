@@ -8,13 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow, { tableRowClasses } from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled, alpha } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Navigate, NavLink } from "react-router-dom";
 import { FilterData } from "../../AlllData";
-import { useSelector } from "react-redux/es/exports";
 import { useEffect } from "react";
 import { useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -82,6 +79,7 @@ function Right() {
   const [btnColorJobs, setBtnColorJobs] = useState("black");
   const [btnColor1Jobs, setBtnColor1Jobs] = useState("black");
 
+  let navigate = useNavigate();
 
   ///onclick status
   const [statusData, setStatusData] = useState("")
@@ -89,7 +87,7 @@ function Right() {
 
 
 
-  let navigate = useNavigate();
+  console.log("Datatale", tableData)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -166,7 +164,7 @@ function Right() {
         </NavLink>
          </Box>
 
-       {/* //add Filter and Search Section */}
+          {/* Filter and Search Section Like Search and All DropDown Code Start */}
         <Box
         sx={{
           display: "flex",
@@ -175,8 +173,6 @@ function Right() {
           marginTop: "30px",
          }}
           >
-
-
         <Autocomplete
           sx={{ width: "25%", backgroundColor: "white" }}
           freeSolo
@@ -191,14 +187,11 @@ function Right() {
           options={searchDD}
           renderInput={(params) => (
             <Box sx={{ display: "flex" }}>
-
               {/* <SearchIcon /> */}
-
               <TextField
-
-                placeholder="Search by name or phone number..."
+                placeholder="Search by Name"
                 onChange={(e) => {
-                  setSearchItem(e.target.value);
+                   setSearchItem(e.target.value);
                 }}
                 {...params}
                 InputProps={{
@@ -255,27 +248,6 @@ function Right() {
           getOptionLabel={(item) => `${item.value}`}
         />
 
-        {/* <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-              <InputLabel id="demo-select-small">Select YCW Status</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                name="Select YCW Status"
-               value={statusycw}
-                label="Select YCW Status"
-                onChange={(event, newValue) => {
-                  setStatusycw(newValue.profileStatus.key);
-                }}
-              >
-                {ycwStatus.map((item)=>(
-                  <MenuItem value={item.key}>{item.value}</MenuItem>
-                ))}
-              </Select>
-            </FormControl> */}
-
-
-
         <Autocomplete
           disablePortal
           size="small"
@@ -284,6 +256,7 @@ function Right() {
           sx={{ width: "20%" }}
           onChange={(event, newValue) => {
             setYcwCity(newValue.uuid);
+            
           }}
           renderInput={(params) => (
             <TextField
@@ -297,11 +270,11 @@ function Right() {
           )}
           getOptionLabel={(item) => `${item.cityName}`}
         />
-
-
       </Box>
 
-      {/* DataTableList */}
+      {/* Filter Section Like Search and All DropDown Code End */}
+
+      {/* DataTableList code Start From Here*/}
       <Box marginTop={5}>
         <h4> All YCWS ({tableData.length})</h4>
         <TableContainer >
@@ -503,8 +476,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
-
                             }
                           }
                         }}
@@ -534,7 +505,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
                             }
                           }
                         }}
@@ -582,7 +552,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
                             }
                           }
                         }}
@@ -612,7 +581,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorStatus("black")
                               setBtnColor1Status("black")
-
                             }
                           }
                         }}
@@ -1083,7 +1051,16 @@ function Right() {
 
 
 
+
+{/*...........................Table Body.............................. */}
+
+
+
+
+           
+
 <TableBody component={Paper}>
+
               {tableData.map((item) => (
                 <StyledTableRow
                   onClick={() => { setId(item.userId); { setStatusData(item.profileStatus.value) } }}
@@ -1138,11 +1115,13 @@ function Right() {
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.workingHours.value || "--"}
+                    {item.workingHours || "--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px"  }} align="left">
-                  <LinearProgress variant="determinate" value={item.percentage} /> {item.percentage}%
+                  <LinearProgress variant="determinate" value={item.percentage}
+                   color="secondary"
+                  /> {item.percentage}%
                     {/* {"--"} */}
                   </TableCell>
                   <TableCell align="left" sx={{ border: "none" }}>
@@ -1187,8 +1166,8 @@ function Right() {
           </Table>
         </TableContainer>
       </Box>
-      {statusData == "INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
-      {statusData == "ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
+      {statusData === "INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
+      {statusData === "ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
     </Box>
   );
 }
