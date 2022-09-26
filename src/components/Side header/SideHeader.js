@@ -18,7 +18,7 @@ const DIV = styled("div")({
 const SideHeader = () => {
 
   const handleClick = ()=>{
-    localStorage.clear()
+    localStorage.removeItem("ID")
   }
 
   return (
