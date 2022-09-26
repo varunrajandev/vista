@@ -4,6 +4,7 @@ import { multiStepContext } from '../../../ContextApi/StepContext';
 import JobRequirement from '../../form/JobRequirement';
 import { JobRequirementApis, masterApi } from '../../../AlllData';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 function JobRequirementData() {
     //job requirements:
@@ -17,37 +18,38 @@ function JobRequirementData() {
   const [maxSalaryExpected, setMaxSalaryExpected] = React.useState("")
   const [traningMode, setTraningMode] = React.useState("")
   const [jobRemarks, setJobRemarks] = React.useState("");
-
-  const [totalExp, setTotalExp] = React.useState();
   const [experienceRemarks, setExperienceRemarks] = React.useState("");
   const [lastJobType, setLastJobType] = React.useState([]);
   const [lastJobDuration, setLastJobDuration] = React.useState();
   const [reasonLeaving, setReasonLeaving] = React.useState();
   const [jobExpMonth, setJobExpMonth] = React.useState("");
   const [ jobExpYear, setJobExpYear] = React.useState("");
+  const [jobData, setJobData] = React.useState("");
 
   
 
 
   const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
+  let {id} = useParams()
   // const startTimeFormat = startTime ? startTime.toLocaleTimeString() : '';
   // const endTimeFormat = endTime ? endTime.toLocaleTimeString() : '';
    
-if(startTime && endTime){
+if(startTime && endTime && !jobData){
 var stt = startTime.getTime();
 var endt = endTime.getTime();
 }
 if(stt >endt){
    alert("max time")
-}
+} else console.log("")
 
   const ids = localStorage.getItem("ID")
 
   useEffect(() => {
     const JobDataFetchById = async()=>{
-      const jobAllData = await fetch(`http://13.126.160.155:8080/user/worker/jobRequirement/${ids}`)
+      const jobAllData = await fetch(`http://13.126.160.155:8080/user/worker/jobRequirement/${id||ids}`)
       const responseJobData = await jobAllData.json();
-      console.log(responseJobData)
+      setJobData(responseJobData.status)
+      console.log("data is",responseJobData.data)
        setOpenToTraining(responseJobData.data.openToTraining)
        setPreferJob(responseJobData.data.jobTypeUuid)
        setWorkingHour(responseJobData.data.workingHours)
@@ -58,9 +60,16 @@ if(stt >endt){
        setMaxSalaryExpected(responseJobData.data.maxSalaryExpected)
        setTraningMode(responseJobData.data.traningMode)
        setJobRemarks(responseJobData.data.jobRemarks)
+       setLastJobType(responseJobData.data.userExperienceRequestDto.jobTypeUuid)
+       setJobExpYear(responseJobData.data.userExperienceRequestDto.totalExperienceYears)
+       setJobExpMonth(responseJobData.data.userExperienceRequestDto.totalExperienceMonths)
+       setLastJobDuration(responseJobData.data.userExperienceRequestDto.jobDuration)
+       setReasonLeaving(responseJobData.data.userExperienceRequestDto.reasonForLeavingJob)
+       setExperienceRemarks(responseJobData.data.userExperienceRequestDto.experienceRemarks)
+       
       }
     JobDataFetchById()
-  }, [ids])
+  }, [ids, id])
 
   console.log(preferJob)
   
@@ -74,22 +83,22 @@ if(stt >endt){
         "jobTypeUuid": preferJob,
         "maxSalaryExpected":maxSalaryExpected,
         "minSalaryExpected":minSalaryExpected,
-        "openToTiming": true,
+        "openToTiming": openToTraining,
         "openToTraining": openToTraining,
         "startTime": startTime,
         "totalSimultaneousJob": 0,
         "traningMode": traningMode,
-        "userId": ids,
-        "vehicle": "string",
+        "userId": ids || id,
+        "vehicle": vehicle,
         "workingHours": workingHour,
 
         "userExperienceRequestDto": {
-          "experienceRemarks": "string",
-          "jobDurationMonths": 0,
-          "jobDurationYears": 0,
-          "jobTypeUuid": "string",
+          "experienceRemarks": experienceRemarks,
+          "jobDuration": lastJobDuration,
+          "jobTypeUuid": lastJobType,
           "reasonForLeavingJob": reasonLeaving,
-          "totalExperience": "string"
+          "totalExperienceMonths": jobExpMonth,
+          "totalExperienceYears": jobExpYear
         },
       })
       //console.log({totalExp,experienceRemarks, lastJobType, lastJobDuration, reasonLeaving, jobExpMonth, jobExpYear})
@@ -126,7 +135,7 @@ if(stt >endt){
               traningMode={traningMode} setTraningMode={setTraningMode}
               jobRemarks={jobRemarks} setJobRemarks={setJobRemarks}
             
-              totalExp={totalExp} setTotalExp={setTotalExp}
+             
               experienceRemarks={experienceRemarks} setExperienceRemarks={setExperienceRemarks}
               lastJobType={lastJobType} setLastJobType={setLastJobType}
               lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}

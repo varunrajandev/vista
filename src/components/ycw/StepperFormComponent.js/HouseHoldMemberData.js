@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { masterApi } from '../../../AlllData'
 import { multiStepContext } from '../../../ContextApi/StepContext'
 import HouseHoldMemberInfo from '../../form/HouseHoldMemberInfo'
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 function HouseHoldMemberData() {
     const [inputFields, setInputFields] = useState([
@@ -19,11 +19,12 @@ function HouseHoldMemberData() {
         }
     ])
     const ids = localStorage.getItem("ID")
+    const {id} = useParams()
     const {currentSteps, setCurrentSteps, personalData, setAddressData, householdData, setHouseholdData} = useContext(multiStepContext)
 
     useEffect(() => {
       const getAllDataById = async ()=>{
-        let fetchbyid = await fetch(`http://13.126.160.155:8080/user/worker/familyMember/${ids}`)
+        let fetchbyid = await fetch(`http://13.126.160.155:8080/user/worker/familyMember/${ids || id}`)
         let responsehousehold = await fetchbyid.json()
         console.log(responsehousehold.data)
         
@@ -39,7 +40,7 @@ function HouseHoldMemberData() {
         ])
       }
       getAllDataById()
-    }, [ids])
+    }, [ids, id])
     
     
     async function handleSubmit(){
@@ -62,7 +63,7 @@ function HouseHoldMemberData() {
 
      {    
       "familyMemberDto": inputFields,
-          "userId": ids
+          "userId": ids || id
         }
 
     )

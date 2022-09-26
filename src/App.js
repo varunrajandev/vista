@@ -31,8 +31,14 @@ function App() {
     <BrowserRouter>
         <Box>
      {loginLocalStorageData&&<Header/>}
+    
       <Stack direction="row">
+
+        {loginLocalStorageData&&<SideHeader />}
+       
+
         {(userTypeofLogin=="OPS")&&loginLocalStorageData&&<SideHeader />}
+
         <Routes>
        
         <Route path="/" element={<YcwAllData/>}/>

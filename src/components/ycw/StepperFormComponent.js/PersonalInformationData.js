@@ -18,7 +18,7 @@ function PersonalInformationData() {
   const [alternateMobileNumber, setAlternateMobileNumber] = useState("");
   const [isWhatsappAvailable, setIsWhatsappAvailable] = useState();
   const [whatsappNumber, setWhatsappNumber] = useState("");
-  const [birthday, setBirthday] = useState();
+  const [birthday, setBirthday] = useState(null);
   const [maritalStatus, setMaritalStatus] = useState("");
   const [religion, setReligion] = useState("");
   const [education, setEducation] = useState("");
@@ -34,18 +34,12 @@ function PersonalInformationData() {
   let ids = localStorage.getItem('ID');
   console.log(ids)
 
-// if(birthday){
-//   let PickYear = birthday.getFullYear()
-//   const d = new Date();
-//   let CurrentYear = d.getFullYear();
-//   let age = CurrentYear-PickYear;
-//   if(age<18) alert("Age is less then 18")
-// }
+
 
 const datatGetById = async() => {
   let allUserDetails = await fetch(`http://13.126.160.155:8080/user/worker/profile/${id||ids}`);
   let allDataResponse = await allUserDetails.json();
-  setUserProfile(allDataResponse.data);
+  setUserProfile(allDataResponse);
   setPersonalData(allDataResponse)
 
   setSource(allDataResponse.data.sourcingChannel);
@@ -64,10 +58,26 @@ const datatGetById = async() => {
   setEducationalRemarks(allDataResponse.data.educationalRemarks)
   setCovidStatus(allDataResponse.data.covidStatus)
   setMedicalCondition(allDataResponse.data.medicalCondition)
+
+  console.log("profileData", allDataResponse)
 }
 
-console.log(birthday)
- 
+
+   if(birthday&&!userProfile.status){
+    let PickYear = birthday.getFullYear()
+    const d = new Date();
+    let CurrentYear = d.getFullYear();
+    let age = CurrentYear-PickYear;
+   const i = setTimeout(() => {
+      if(age<18 ) alert("age is less then 18")
+    }, 1000);
+
+   
+      if(maritalStatus){
+        clearTimeout(i)
+      }
+    }
+  
   
  
    async function checkMobilenumber(){
@@ -77,13 +87,20 @@ console.log(birthday)
   }
 
   useEffect(() => {
-  // checkMobilenumber();
+  checkMobilenumber();
   datatGetById();
-  }, [id, ids])
+  }, [id, ids, mobile])
 
-  if(availableNumberResponse){
-    alert("Already Available")
-  }
+ 
+
+  const n = setTimeout(() => {
+    if(availableNumberResponse&&!userProfile.status){
+      alert("Already Available")
+    }
+  }, 1000);
+  if(alternateMobileNumber || whatsappNumber || birthday || maritalStatus){
+      clearTimeout(n)
+    }
   
   const handleSubmit = async () => {
     try {
@@ -111,7 +128,6 @@ console.log(birthday)
             "whatsappNumber": whatsappNumber,
           });
           alert(response.data.message)
-          setPersonalData(response.data)
           localStorage.setItem('ID', response.data.data.userId);
           response.data.status?localStorage.setItem('steps', 2):localStorage.setItem('steps', 1)
           setCurrentSteps(2)
@@ -156,11 +172,10 @@ console.log(birthday)
           "whatsappAvailable":isWhatsappAvailable?isWhatsappAvailable:userProfile.whatsappAvailable,
           "whatsappNumber": whatsappNumber?whatsappNumber:userProfile.whatsappNumber,
           "department": "TECH",
-          userId:userProfile.userId
+          userId:ids || id
         
         });
         alert("Updated",response.data.message)
-        setPersonalData(response.data)
         setCurrentSteps(2)
       
   } catch (error) {

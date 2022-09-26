@@ -39,9 +39,9 @@ function CurrentAdd(props) {
   useEffect(() => {
     async function fetchData() {
       let countryData = await fetch("http://13.126.160.155:8081/locationmaster/country/get/all");
-      let stateData = await fetch(`http://13.126.160.155:8081/locationmaster/state/get/states/by/${countryID}`);
-      let cityData = await fetch(`http://13.126.160.155:8081/locationmaster/city/get/cities/by/${stateID}`);
-      let localityData = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${cityID}`);
+      let stateData = await fetch(`http://13.126.160.155:8081/locationmaster/state/get/states/by/${country}`);
+      let cityData = await fetch(`http://13.126.160.155:8081/locationmaster/city/get/cities/by/${state}`);
+      let localityData = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${city}`);
       let res1 = await countryData.json();
       let res2 = await stateData.json();
       let res3 = await cityData.json();
@@ -52,9 +52,9 @@ function CurrentAdd(props) {
       setLocalityDD(res4.data || [{ names: "please Select City" }])
     }
     fetchData();
-  }, [countryID, stateID, cityID]);
+  }, [country, state, city]);
 
-  console.log({countryID, stateID, cityID})
+  console.log({country})
 
   return (
     <Box
@@ -69,7 +69,7 @@ function CurrentAdd(props) {
           <Box sx={{display:(marginTopSize?"block":"none")}}>
           <Checkbox onChange={(e) => setIsPermanent(e.target.checked)}{...label}
             color="success"
-            checked={isPermanent}
+            checked={isPermanent?true:false}
           />
           <span style={{ fontWeight: "100" }}>Same as current Address</span>
           </Box>
@@ -88,7 +88,6 @@ function CurrentAdd(props) {
           id="outlined-basic"
           label="Flat/Building"
            value={addressL1}
-          //defaultValue={AllAddress?AllAddress.addressLine1:addressL1}
           variant="outlined"
           onChange={(e) => {
             setAddressL1(e.target.value);
@@ -99,7 +98,6 @@ function CurrentAdd(props) {
           sx={{ width: "18%" }}
           size="small"
           value={addressL2}
-          //defaultValue={AllAddress?AllAddress.addressLine2:addressL2}
           id="outlined-basic"
           label="Society/Colony/Area"
           variant="outlined"
@@ -111,7 +109,6 @@ function CurrentAdd(props) {
         <TextField
           sx={{ width: "18%" }}
           value={landmark}
-          //defaultValue={AllAddress?AllAddress.landmark:landmark}
           size="small"
           id="outlined-basic"
           label="Landmark"
@@ -126,8 +123,6 @@ function CurrentAdd(props) {
           size="small"
           type="number"
           value={pinCode}
-          //defaultValue={AllAddress?AllAddress.postalCode:pinCode}
-          id="outlined-basic"
           label="Pin Code"
           variant="outlined"
           onInput = {(e) =>{
@@ -144,14 +139,12 @@ function CurrentAdd(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            //defaultValue={AllAddress?AllAddress.countryName:country}
-            value={country}
             label="Country"
             onChange={(e) => {
               setCountry(e.target.value);
             }}
           >{countryDD.map((item) => (
-            <MenuItem value={item.countryName} onClick={() => { setCountryID(item.uuid) }}>{item.countryName}</MenuItem>
+            <MenuItem value={item.uuid} >{item.countryName}</MenuItem>
           ))}
           </Select>
         </FormControl>
@@ -168,9 +161,6 @@ function CurrentAdd(props) {
           <InputLabel id="demo-select-small">State</InputLabel>
           <Select
             sx={{ width: "100%" }}
-            labelId="demo-select-small"
-            id="demo-select-small"
-            //defaultValue={AllAddress?AllAddress.stateName:state}
             label="State"
             value={state}
             onChange={(e) => {
@@ -178,7 +168,7 @@ function CurrentAdd(props) {
             }}
           >
             {stateDD.map((item) => (
-              <MenuItem value={item.label} onClick={() => { setStateID(item.value) }}>{item.label}{item.name}</MenuItem>
+              <MenuItem value={item.value}>{item.key}{item.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -191,13 +181,12 @@ function CurrentAdd(props) {
             id="demo-select-small"
             label="City"
             value={city}
-            //defaultValue={AllAddress?AllAddress.cityName:city}
-            onChange={(e) => {
+      onChange={(e) => {
               setCity(e.target.value);
             }}
           >
             {cityDD.map((item) => (
-              <MenuItem value={item.label} onClick={() => { setCityID(item.value) }}>{item.label}{item.name}</MenuItem>
+              <MenuItem value={item.value}>{item.key}{item.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -210,13 +199,12 @@ function CurrentAdd(props) {
             id="demo-select-small"
             label="Locality"
             value={locality}
-            //defaultValue={AllAddress?AllAddress.micromarketName:locality}
             onChange={(e) => {
               setLocality(e.target.value);
             }}
           >
             {localityDD.map((item) => (
-              <MenuItem value={item.name}>{item.name}{item.names}</MenuItem>
+              <MenuItem value={item.id}>{item.name}{item.names}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -228,13 +216,12 @@ function CurrentAdd(props) {
             labelId="demo-select-small"
             id="demo-select-small"
             value={addressProofType}
-            //defaultValue={AllAddress?AllAddress.addressProofType:addressProofType}
             label="Address Proof Type"
             onChange={(e) => {
               setAddressProofType(e.target.value);
             }}
           >
-            <MenuItem value={"AAADHAR_CARD"}>Aadhaar Card</MenuItem></Select>
+            <MenuItem value={"AADHAAR"}>Aadhaar</MenuItem></Select>
         </FormControl>
         <div style={{ width: "18%" }}></div>
       </Box>

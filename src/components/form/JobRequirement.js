@@ -111,8 +111,9 @@ function JobRequirement(props) {
           <Select sx={{ width: "100%" }} label="Cycle/Bike available for travel?" value={vehicleAvailable} onChange={(e) => {
             setVehicleAvailable(e.target.value)
           }}>
-            <MenuItem value={true}>YES</MenuItem>
-            <MenuItem value={false}>NO</MenuItem>
+            <MenuItem value={"Cycle"}>Cycle</MenuItem>
+            <MenuItem value={"Bike"}>Bike</MenuItem>
+            <MenuItem value={"Others"}>Others</MenuItem>
           </Select>
         </FormControl>
         {/* </Box> */}
@@ -170,7 +171,7 @@ function JobRequirement(props) {
         /> */}
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Total Experience (years)</InputLabel>
-          <Select sx={{ width: "100%" }} label="Total Experience (years)" onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Total Experience (years)" value={jobExpYear} onChange={(e) => {
             setJobExpYear(e.target.value)
           }}>
             <MenuItem value={"1"}>1</MenuItem>
@@ -180,7 +181,7 @@ function JobRequirement(props) {
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Total Experience (months)</InputLabel>
-          <Select sx={{ width: "100%" }}label="Total Experience (months)" onChange={(e) => {
+          <Select sx={{ width: "100%" }}label="Total Experience (months)" value={jobExpMonth} onChange={(e) => {
             setJobExpMonth(e.target.value)
           }}>
             <MenuItem value={"1"}>1</MenuItem>
@@ -192,6 +193,7 @@ function JobRequirement(props) {
           labelData="Experience Remarks"
           setData={setExperienceRemarks}
           size="18%"
+          data={experienceRemarks}
         />
 
         <FormControlSingleSelect
@@ -199,6 +201,7 @@ function JobRequirement(props) {
           dataDD={lastJobTypeDD}
           setData={setLastJobType}
           values={"name"}
+          data={lastJobType}
           size="18%"
         />
 
@@ -206,12 +209,14 @@ function JobRequirement(props) {
           labelData="Last Job Duration(in months)"
           setData={setLastJobDuration}
           size="18%"
+          data={lastJobDuration}
         />
 
         <TextFieldComponent
           labelData="Reason For Leaving Last Job"
           setData={setReasonLeaving}
           size="18%"
+          data={ReasonLeaving}
         />
 
 

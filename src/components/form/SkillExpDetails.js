@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import { Autocomplete, Box, Checkbox, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Cuisines, masterApi } from "../../AlllData";
 import FormControlSingleSelect from "../MuiComponents/FormControlSingleSelect";
 import MultiSelected from "../MuiComponents/MultiSelected";
 import TextFieldComponent from "../MuiComponents/TextFieldComponent";
 import SkillSection from "../MuiComponents/SkillSection";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 function SkillExpDetails(props) {
   const [pSkillDD, setPSkillDD] = useState([])
@@ -21,15 +26,8 @@ function SkillExpDetails(props) {
     skillRemarks, setSkillRemarks,
     primaryLanguage, setPrimaryLanguage,
     otherLanguages, setOtherLanguages,
-    // values, setValue,
   } = props
-
   
-
-
-
-
-
   useEffect(() => {
     async function fetchData() {
       let primarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
@@ -54,8 +52,6 @@ function SkillExpDetails(props) {
     }
     fetchData()
   }, [primarySkill, primaryLanguage, secondarySkill])
-
-  console.log(tertiarySkill)
   
 
 
@@ -69,81 +65,105 @@ function SkillExpDetails(props) {
       }}
     >
       <h5>Skill and Experience Details</h5>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          rowGap: "30px",
-          justifyContent: "space-between",
-        }}
-      >
-        <FormControlSingleSelect
-          labelData="Primary Language"
-          dataDD={primarylanguageDD}
-          setData={setPrimaryLanguage}
-          size="25%"
-        />
+      <Box sx={{ display: "flex", flexWrap: "wrap", rowGap: "30px", justifyContent: "space-between"}}>
+          
+        <FormControl sx={{ minWidth: 120, width: "25%"}} size="small">
+          <InputLabel id="demo-select-small" required>Primary Language</InputLabel>
+          <Select sx={{ width: "100%" }} value={primaryLanguage} onChange={(e)=>{setPrimaryLanguage(e.target.value)}}  label="Primary Language">
+            {primarylanguageDD.map((items, index) => (
+              <MenuItem key={index} value={items.key}>{items.value}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        <MultiSelected
-          labelData="Other Languages"
-          dataDD={otherlanguageDD}
-          setData={setOtherLanguages}
-          size="45%"
+         <Autocomplete
+          multiple
+          size='small'
+          options={otherlanguageDD}
+          value={otherLanguages}
+          disableCloseOnSelect
+          getOptionLabel={(option) =>option.key}
+          onChange={(event, newValue) => {
+            setOtherLanguages([...newValue]);
+          }}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                size='small'
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option.key}
+            </li>
+          )}
+           style={{ width: "45%" }}
+           renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Other Languages"
+              size="small"
+            />
+          )}
         />
-{/* 
+       
+        
+        
         <TextFieldComponent
-          labelData="Total Experience"
-          setData={setTotalExp}
-          size="25%"
-        /> */}
-
-        {/* <TextFieldComponent
-          labelData="Experience Remarks"
-          setData={setExperienceRemarks}
-          size="25%"
-        /> */}
-
-       <TextFieldComponent
           labelData="Skill Remarks"
           setData={setSkillRemarks}
+          data={skillRemarks}
           size="25%"
         />
-{/* 
-      <FormControlSingleSelect
-          labelData="Last Job Type"
-          dataDD={pSkillDD}
-          setData={setLastJobType}
-          values={"name"}
-          size="37.5%"
-        /> */}
 
-        {/* <TextFieldComponent
-          labelData="Last Job Duration(in months)"
-          setData={setLastJobDuration}
-          size="25%"
-        /> */}
+        <FormControl sx={{ minWidth: 120, width: "25%"}} size="small">
+          <InputLabel id="demo-select-small" required>Primary Skill</InputLabel>
+          <Select sx={{ width: "100%" }} value={primarySkill}  label="Primary Skill==">
+            {pSkillDD.map((items, index) => (
+              <MenuItem key={index} onClick={() => {setPrimarySkill(items.uuid)}} value={items.uuid}>{items.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        {/* <TextFieldComponent
-          labelData="Reason For Leaving Last Job"
-          setData={setReasonLeaving}
-          size="60%"
-        /> */}
-
-        <FormControlSingleSelect
-          labelData="Primary Skill"
-          dataDD={pSkillDD}
-          setDatas={setPrimarySkill}
-          values={"name"}
-          size="25%"
-          data={primarySkill}
-        />
-
-        <MultiSelected
+        {/* <MultiSelected
           labelData="Secondary Skill"
           dataDD={sSkillDD}
           setData={setSecondarySkill}
           values={"name"}
           size="34.7%"
+        /> */}
+
+        <Autocomplete
+          multiple
+          size='small'
+          options={sSkillDD}
+          value={secondarySkill.skillName}
+          disableCloseOnSelect
+          getOptionLabel={(option) =>option.name}
+          onChange={(event, newValue) => {
+            setSecondarySkill([...newValue]);
+          }}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                size='small'
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option.name}
+            </li>
+          )}
+           style={{ width: "34.7%" }}
+           renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Secondary Skill"
+              size="small"
+            />
+          )}
         />
 
         <MultiSelected

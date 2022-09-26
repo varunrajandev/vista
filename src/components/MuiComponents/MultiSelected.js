@@ -8,14 +8,14 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 const label = { inputProps: { "aria-label": "Checkbox demo" } };;
 
 function MultiSelected(props) {
-  const {labelData, dataDD, setData, size, values} = props
+  const {labelData, dataDD, setData, size, values, data} = props
   return (
     <>
       <Autocomplete
           multiple
           size='small'
-          id="checkboxes-tags-demo"
           options={dataDD}
+          value={data}
           disableCloseOnSelect
           getOptionLabel={(option) =>values?option.name:option.key}
           onChange={(event, newValue) => {
@@ -38,7 +38,6 @@ function MultiSelected(props) {
             <TextField
               {...params}
               label={labelData}
-              placeholder="Favorites"
               size="small"
             />
           )}

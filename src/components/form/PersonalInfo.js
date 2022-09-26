@@ -19,8 +19,9 @@ const theme = createTheme({
           },
       },
   },
-
 })
+
+
 
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
@@ -29,6 +30,9 @@ function PersonalInfo(props) {
   const [genderDD, setGenderDD] = useState([])
   const [covidDD, setCovidDD] = useState([])
   const [educationDD, setEducationDD] = useState([])
+  
+
+
 
 
 
@@ -52,7 +56,7 @@ function PersonalInfo(props) {
     submitted, setSubmitted,
     userProfile
   } = props;
-
+  
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
 
 
@@ -78,13 +82,10 @@ function PersonalInfo(props) {
       setEducationDD(res5.data)
     }
     dataFetch()
-  }, [])
-
+  }, []) 
   console.log(userProfile)
 
-
-
-  const handleChange = (event) => {
+const handleChange = (event) => {
     setWalk(event.target.value);
   };
 
@@ -107,11 +108,8 @@ function PersonalInfo(props) {
           <InputLabel id="demo-select-small" required >Sourcing Channel</InputLabel>
           <Select
             sx={{ width: "100%" }}
-            labelId="demo-select-small"
-            id="demo-select-small"
             label="Sourcing Channel"
             onChange={handleChange}
-            //  defaultValue={userProfile.status?userProfile.sourcingChannel:walk}
             value={walk}
             >
             <MenuItem value="">
@@ -127,7 +125,6 @@ function PersonalInfo(props) {
           sx={{ width: "18%" }}
           size="small"
           disabled={walk === "Others" ? false : true}
-          id="outlined-basic"
           label="Other Source"
           placeholder="Please Mention..."
           variant="outlined"
@@ -142,7 +139,6 @@ function PersonalInfo(props) {
           id="outlined-basic"
           label="First Name"
           value={fname}
-          // defaultValue={userProfile.status?userProfile.firstName:fname}
           variant="outlined"
           onChange={(event) => {
             setFname(event.target.value);
@@ -155,7 +151,6 @@ function PersonalInfo(props) {
         <TextField
           sx={{ width: "18%" }}
           size="small"
-          // defaultValue={userProfile.status?userProfile.middleName:mname}
           value={mname}
           id="outlined-basic"
           label="Middle Name"
@@ -171,7 +166,6 @@ function PersonalInfo(props) {
           id="outlined-basic"
           label="Last Name"
           variant="outlined"
-          // defaultValue={userProfile.status?userProfile.lastName:lname}
           value={lname}
           onChange={(e) => {
             setLname(e.target.value);
@@ -197,7 +191,6 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            //defaultValue={userProfile.status?userProfile.gender:gender}
             value={gender}
             label="gender"
             onChange={(event) => {
@@ -214,7 +207,6 @@ function PersonalInfo(props) {
           type="number"
           sx={{ width: "18%" }}
           size="small"
-          //defaultValue={userProfile.status?userProfile.mobileNo:phoneNumber}
           value={phoneNumber}
           id="outlined-basic"
           label="Phone Number"
@@ -232,7 +224,6 @@ function PersonalInfo(props) {
           type="number"
           id="outlined-basic"
           label="Alternate Phone Number"
-          //defaultValue={userProfile.status?userProfile.secondaryMobileNumber:alternateNumber}
           value={alternateNumber}
           onInput = {(e) =>{
             e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
@@ -247,7 +238,6 @@ function PersonalInfo(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            //defaultValue={userProfile.status?userProfile.whatsappAvailable:whatsappAvailable}
             value={whatsappAvailable}
             label="Whatsapp Available  "
             onChange={(e) => {
@@ -292,12 +282,11 @@ function PersonalInfo(props) {
           <DesktopDatePicker
             label="DOB"
             value={birthday}
-           // defaultValue={userProfile.status?userProfile.birthday:birthday}
             onChange={(newValue) => {
-              setBirthday(newValue);
+            setBirthday(newValue);
             }}
             renderInput={(params) => (
-              <TextField required {...params} size="small" sx={{ width: "18%" }}/>
+              <TextField required {...params} size="small" sx={{ width: "18%" }} />
             )}
           />
         </LocalizationProvider>

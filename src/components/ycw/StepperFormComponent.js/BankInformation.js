@@ -1,6 +1,7 @@
 import { Box, Button } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { BankApi, masterApi } from "../../../AlllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import BankAccount from "../../form/BankAccount";
@@ -21,18 +22,31 @@ function BankInformation() {
 
   const [ifscCodeData, setIfscCodeData] = useState([])
   const ids = localStorage.getItem("ID")
+  const {id} = useParams()
 
 //Data Fetch by IFce
   async function fetchData(ifsc) {
     let FetchByIfce = await fetch(masterApi+`/bank/get/bankDetails/${ifsc}`)
-    let AccountTypeData = await FetchByIfce.json()
-    setIfscCodeData(AccountTypeData.data)
+    let AccountTypeData = await FetchByIfce.json();
+    setIfscCodeData(AccountTypeData.data);
+
+    setInputFields([
+      {
+        accountType: "",
+        bankName:AccountTypeData.data.bankName?AccountTypeData.data.bankName:"",
+        branchName:AccountTypeData.data.branchName?AccountTypeData.data.branchName:"",
+        branchAddress:AccountTypeData.data.branchAddress?AccountTypeData.data.branchAddress:"",
+        accountHoderName: "",
+        ifscCode: inputFields[0].ifscCode?inputFields[0].ifscCode:"",
+        accountNumber: "",
+      },])
+    
   }
   console.log("account",ifscCodeData)
 
   //All Details fetch by id
   async function DataFetchById(){
-    let bankData = await fetch(`http://13.126.160.155:8080/user/bank/get/${ids}`)
+    let bankData = await fetch(`http://13.126.160.155:8080/user/bank/get/${ids || id}`)
     let allDataResponse = await bankData.json();
     setInputFields([
       {
@@ -46,6 +60,8 @@ function BankInformation() {
       },
     ])
   }
+
+  console.log(inputFields[0].branchAddress)
   
  
 
@@ -55,7 +71,7 @@ function BankInformation() {
        fetchData(inputFields[0].ifscCode);
     }
     DataFetchById()
-  }, [ids, inputFields[0].ifscCode]);
+  }, [ids||id, inputFields[0].ifscCode]);
 
   const {currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext)
 
@@ -74,7 +90,7 @@ function BankInformation() {
             "branchName": inputFields[0].branchName,
             "ifscCode": inputFields[0].ifscCode,
             "primary": true,
-            "userId": ids
+            "userId": ids || id
           }
         ]
       )

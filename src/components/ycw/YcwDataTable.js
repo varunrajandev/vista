@@ -1116,9 +1116,17 @@ console.log("goooo",tableData)
                     {item.totalExperience || "--"}
                   </TableCell>
 
+
                   <TableCell sx={{ fontSize: "13px" }} align="left">
+
                     {item.workingHours?item.workingHours.value:"--"}
+
+                 
+
                   </TableCell>
+
+               
+
 
                   <TableCell sx={{ fontSize: "13px"  }} align="left">
                   <LinearProgress variant="determinate" value={item.percentage}
