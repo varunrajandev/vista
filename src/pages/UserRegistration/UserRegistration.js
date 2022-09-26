@@ -48,7 +48,7 @@ function UserRegistration() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let genderDD = await fetch(masterApiforAll + "user/get/gender");
+      let genderDD = await fetch(masterApiforAll + "user/drop-down/get/gender");
       let localityDataDD = await fetch(
         MasterApiForLocation + "/locationmaster/internal/micromarkets/all"
       );
@@ -81,7 +81,10 @@ function UserRegistration() {
 
     fetchData();
   }, []);
-
+// console.log("genderDD",genderDD)
+// console.log("religionDD",religionDD)
+// console.log("skillsDD",skillsDD)
+// console.log("workingHrDD",workingHrDD)
   const handleClick = async () => {
     try {
       let response = await axios.post(masterApiforAll + "user/internal/add", {
@@ -224,11 +227,15 @@ function UserRegistration() {
                 required
                 size="small"
                 id="standard-size-small"
-                type="text"
+                type="number"
                 placeholder="Age ( in Year )"
                 variant="standard"
                 onInput={(e) => {
-                  setCandidateAge(e.target.value);
+                  setCandidateAge(
+                    (e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 2))
+                  );
                 }}
               />
             </Grid>

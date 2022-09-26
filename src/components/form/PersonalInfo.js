@@ -61,7 +61,7 @@ function PersonalInfo(props) {
       let sourceData = await fetch(masterApi+"/drop-down/get/sourceChannel?flag=all");
       let religionData = await fetch(masterApi+"/drop-down/get/religion");
       let maritalData = await fetch(masterApi+"/drop-down/get/maritalStatus")
-      let genderData = await fetch(masterApi+"/get/gender")
+      let genderData = await fetch(masterApi+"/drop-down/get/gender")
       let covidData = await fetch(masterApi+"/drop-down/get/covidVaccination")
       let educationData = await fetch(masterApi+"/drop-down/get/education")
       let res = await sourceData.json();

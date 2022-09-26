@@ -98,9 +98,6 @@ function AddressInformation() {
 
 console.log(addressDatas)
     
-
-
-
     const handleSubmit = async () => {
         console.log("clicked")
        try {
