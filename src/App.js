@@ -22,21 +22,25 @@ function App() {
   
   const{loginData, setLoginData} = useContext(multiStepContext); 
    const loginLocalStorageData=localStorage.getItem("Response")
-  // console.log("localresponce",JSON.parse(loginLocalStorageData));
-  // console.log(loginData)
+   const loginLocalStorageUserType=localStorage.getItem("ResponseUserType")
+  const  userTypeofLogin= JSON.parse(loginLocalStorageUserType);
+ console.log("loginLocalStorageUserType",userTypeofLogin)
   return (
     <>
  
     <BrowserRouter>
         <Box>
-     {/* {loginLocalStorageData&&<Header/>} */}
-     <Header/>
+     {loginLocalStorageData&&<Header/>}
+    
       <Stack direction="row">
-        {/* {loginLocalStorageData&&<SideHeader />} */}
-        <SideHeader />
+
+        {loginLocalStorageData&&<SideHeader />}
+       
+
+        {(userTypeofLogin=="OPS")&&loginLocalStorageData&&<SideHeader />}
+
         <Routes>
        
-         {/* <Route path="/login" element={<Login/>} /> */}
         <Route path="/" element={<YcwAllData/>}/>
         <Route path="/ycw" element={<YcwAllData/>}/>
         <Route path="/login" element={<Login/>} />
@@ -53,7 +57,6 @@ function App() {
         <Route path="/jobs" element={<JobsTable/>}/>
         <Route path="/jobs/new" element={<AddNewRequest/>}/>
         <Route path="/jobs/new" element={<AddNewRequest/>}/>
-
 
         
         </Routes>

@@ -166,6 +166,7 @@ export const Cuisines = [
 ]
 
 
+
 export const JobType = [
   {job:"Housekeeping"},
   {job:"Cooking"},
