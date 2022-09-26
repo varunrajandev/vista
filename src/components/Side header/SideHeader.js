@@ -17,6 +17,10 @@ const DIV = styled("div")({
 
 const SideHeader = () => {
 
+  const handleClick = ()=>{
+    localStorage.clear()
+  }
+
   return (
     <Box
       position="sticky"
@@ -26,7 +30,7 @@ const SideHeader = () => {
       
     >
       <Box position="fixed" sx={{ marginTop: "20px", marginRight:"20px" }}>
-        <DIV>
+        <DIV onClick={handleClick}>
           <NavLink
             to="/ycw"
             style={({ isActive }) => {

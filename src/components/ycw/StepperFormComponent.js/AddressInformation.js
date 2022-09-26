@@ -2,6 +2,7 @@ import { Box, Button, Checkbox } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { masterApi } from "../../../AlllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import CurrentAdd from "../../form/CurrentAdd";
@@ -44,6 +45,8 @@ function AddressInformation() {
     const [stateIDp, setStateIDp] = useState()
     const [cityIDp, setCityIDp] = useState()
 
+    const {id} = useParams()
+
     const {currentSteps, setCurrentSteps, personalData, setAddressData, addressDatas} = useContext(multiStepContext)
 
     let ids = localStorage.getItem('ID');
@@ -55,7 +58,7 @@ function AddressInformation() {
     }
 
     const AddressGetById = async()=>{
-        let addressData = await fetch(`http://13.126.160.155:8080/user/address/get/${ids}`);
+        let addressData = await fetch(`http://13.126.160.155:8080/user/address/get/${ids || id}`);
         let responseData =await addressData.json();
         console.log(responseData)
         //current Address
@@ -63,10 +66,10 @@ function AddressInformation() {
         setAddressLine2(responseData.data[0].addressLine2)
         setLandmark(responseData.data[0].landmark)
         setPostalCode(responseData.data[0].postalCode)
-        setCountryName(responseData.data[0].countryName)
-        setStateName(responseData.data[0].stateName)
-        setCityName(responseData.data[0].cityName)
-        setLocality(responseData.data[0].micromarketName)
+        setCountryName(responseData.data[0].countryUuid)
+        setStateName(responseData.data[0].stateUuid)
+        setCityName(responseData.data[0].cityUuid)
+        setLocality(responseData.data[0].micromarketUuid)
         setAddressProofType(responseData.data[0].addressProofType)
 
         //PermanentAddress
@@ -74,13 +77,21 @@ function AddressInformation() {
         setAddressLine2p(responseData.data[1].addressLine2)
         setLandmarkp(responseData.data[1].landmark)
         setPostalCodep(responseData.data[1].postalCode)
-        setCountryNamep(responseData.data[1].countryName)
-        setStateNamep(responseData.data[1].stateName)
-        setCityNamep(responseData.data[1].cityName)
-        setLocalityp(responseData.data[1].micromarketName)
+        setCountryNamep(responseData.data[1].countryUuid)
+        setStateNamep(responseData.data[1].stateUuid)
+        setCityNamep(responseData.data[1].cityUuid)
+        setLocalityp(responseData.data[1].micromarketUuid)
         setAddressProofTypep(responseData.data[1].addressProofType)
         setIsPermanent(responseData.data[1].permanent)
     }
+    // {
+    //     "district": "Gurgaon",
+    //     "state": "Haryana",
+    //     "country": "India",
+    //     "locality": [
+    //         "DLF Ph-III"
+    //     ]
+    // }
 
     console.log("ispermanment", isPermanent)
 
@@ -96,7 +107,6 @@ function AddressInformation() {
         
     }, [postalCode , postalCodep, ids])
 
-console.log(addressDatas)
     
 
 
@@ -109,30 +119,30 @@ console.log(addressDatas)
             {
               "addressLine1": addressLine1,
               "addressLine2": addressLine2,
-              "addressProofType": "AAADHAR_CARD",
-              "cityName": cityName,
-              "countryName": countryName,
+              "addressProofType": "OTHERS",
+              "cityUuid": cityName,
+              "countryUuid": countryName,
               "landmark": landmark,
               "locality": locality,
-              "micromarketName": locality,
+              "micromarketUuid": locality,
               "permanent": !isPermanent,
               "postalCode": postalCode,
-              "stateName": stateName,
-              "userId": ids
+              "stateUuid": stateName,
+              "userId": ids || id
             },
             {
                 "addressLine1": addressLine1p,
                 "addressLine2": addressLine2p,
-                "addressProofType": "AAADHAR_CARD",
-                "cityName": cityNamep,
-                "countryName": countryNamep,
+                "addressProofType": "OTHERS",
+                "cityUuid": cityNamep,
+                "countryUuid": countryNamep,
                 "landmark": landmarkp,
                 "locality": localityp,
-                "micromarketName":localityp,
+                "micromarketUuid":localityp,
                 "permanent": isPermanent,
                 "postalCode":postalCodep,
-                "stateName":stateNamep,
-                "userId": ids
+                "stateUuid":stateNamep,
+                "userId": ids || id
               }])
               alert(response.data.message)
               setCurrentSteps(3)

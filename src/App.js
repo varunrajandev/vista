@@ -29,9 +29,11 @@ function App() {
  
     <BrowserRouter>
         <Box>
-     {loginLocalStorageData&&<Header/>}
+     {/* {loginLocalStorageData&&<Header/>} */}
+     <Header/>
       <Stack direction="row">
-        {loginLocalStorageData&&<SideHeader />}
+        {/* {loginLocalStorageData&&<SideHeader />} */}
+        <SideHeader />
         <Routes>
        
          {/* <Route path="/login" element={<Login/>} /> */}

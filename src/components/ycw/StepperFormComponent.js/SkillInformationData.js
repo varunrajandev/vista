@@ -16,8 +16,7 @@ function SkillInformationData() {
     const [skillRemarks, setSkillRemarks] = React.useState("");
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
-
-    const [booliean, setBooliean] = useState(false)
+    const [status, setStatus] = useState()
 
     
     const {id} = useParams()
@@ -46,20 +45,24 @@ function SkillInformationData() {
 
     useEffect(() => {
       const allSkillFetchById = async() =>{
-        let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids}`)
+        let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
         let responseAllSkill = await allSkillData.json();
+        setStatus(responseAllSkill.status)
+        console.log(responseAllSkill)
         
-        // setPrimarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto[0].skillName)
-        // setTertiarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
-        // console.log(responseAllSkill.data.skillsMappingDto)
+        setPrimaryLanguage(responseAllSkill.data.primaryLanguage)
+        setOtherLanguages(responseAllSkill.data.otherLanguage)
+        setSkillRemarks(responseAllSkill.data.skillRemarks)
+        setPrimarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto[0].skillUuid)
+        //secondarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto)
+    
+    
+        setSecondarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto)
+       
         
       }
       allSkillFetchById()
-    }, [ids])
-   
-
-    
-   
+    }, [ids, id])
     
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
@@ -87,11 +90,10 @@ function SkillInformationData() {
               "skillUuid": TertiarySkillArray
             }
           ],
-          "userId": ids
+          "userId": ids || id
         })
   
         alert(response.data.message)
-        setBooliean(true)
       } catch (error) {
         alert(error)
       }
@@ -129,7 +131,7 @@ function SkillInformationData() {
         
       </Box>
 
-      <Box sx={{display:(booliean?"block":"none")}}><SkillQuestion/></Box>
+       <Box sx={{display:(status?"block":"none")}}><SkillQuestion/></Box> 
 
     </Box>
     </>

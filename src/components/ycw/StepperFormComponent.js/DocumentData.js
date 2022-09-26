@@ -10,6 +10,7 @@ import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import styled from "@emotion/styled";
+import { useParams } from "react-router-dom";
 
 
 const Div2 = styled("div")({
@@ -28,6 +29,7 @@ function DocumentData() {
   const [storeDocument, setStoreDocument] = useState([])
 
   const ids = localStorage.getItem('ID')
+  const {id} = useParams()
 
   const { setCurrentSteps, personalData, setDocumentData, documentData } = useContext(multiStepContext);
 
@@ -41,14 +43,14 @@ function DocumentData() {
   }
 
   const documentGetByID = async () =>{
-    const documentData = await fetch(`http://13.126.160.155:8080/user/document/all/${ids}`);
+    const documentData = await fetch(`http://13.126.160.155:8080/user/document/all/${ids || id}`);
     const responseDocument = await documentData.json();
     setStoreDocument(responseDocument.data)
   } 
   useEffect(() => {
     documentGetByID()
     fetchDorpDown()
-  }, [ids])
+  }, [ids,id])
   
 console.log(storeDocument)
 
@@ -62,7 +64,7 @@ console.log(storeDocument)
 
   const handleSubmission = async () => {
     try {
-      let response = await axios.post(  masterApi + `/document/upload?UserId=${ids}&documentContext=${kycDocument}&documentSide=FRONT&documentType=${document}&isActive=true&isReuploaded=false`,
+      let response = await axios.post(  masterApi + `/document/upload?UserId=${ids||id}&documentContext=${kycDocument}&documentSide=FRONT&documentType=${document}&isActive=true&isReuploaded=false`,
         formData
       );
       alert(response.data.message);
@@ -190,10 +192,11 @@ console.log(storeDocument)
         </Box>
       </Box>
       
-      <Box>
+      <Box mt={2} sx={{display:"flex", gap:"10px"}}>
         {storeDocument.map((item)=>(
-          <img src="kyc-documents/YCW0000002/1663770301148-2345244.jpg" alt="noImg" />
-          //https://pinch-documents.s3.ap-south-1.amazonaws.com/kyc-documents/YCW0000002/1663771775289-Screenshot_%28134%29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220921T144935Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIARAGLMVYHAWFDXLSD%2F20220921%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=3f3eb01903be2fc33186fe2ef5d7e2c5c0b74fa3a1fe560b921186e7823544ae
+          
+          <img width={"20%"} download src={item.fileUrl} alt="noImg" />
+          
         ))}
       </Box>
 

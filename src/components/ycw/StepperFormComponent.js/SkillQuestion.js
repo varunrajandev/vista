@@ -19,7 +19,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 
 function SkillQuestion() {
 
-  const [allQuestion, setAllQuestion] = useState([]);
+  const [allQuestion, setAllQuestion] = useState([])
   //const [storeQuestion, setStoreQuestion] = useState([])
   const [storeQuestion, setStoreQuestion] = useState([]);
 
@@ -32,21 +32,25 @@ function SkillQuestion() {
 
   useEffect(() => {
     const fetchSkillData = async () => {
-      let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${id||ids}`)
+      let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${ids || id}`)
      
       let responseQuestion = await QuestionData.json();
       setAllQuestion(responseQuestion.data);
     };
     fetchSkillData();
-  }, [id]);
+  }, [id || ids]);
+
+  console.log(ids)
 
   console.log(storeQuestion);
+
+  console.log("all question is",allQuestion)
 
   async function handleSubmit() {
      try {
     let response = await axios.post("http://13.126.160.155:8080/user/skill/save/userResponse",{
       skillDto:storeQuestion,
-      userId:ids
+      userId:ids || id
     });
 
        alert(response.data.message);

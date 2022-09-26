@@ -1137,9 +1137,9 @@ function Right() {
                     {item.totalExperience || "--"}
                   </TableCell>
 
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
+                  {/* <TableCell sx={{ fontSize: "13px" }} align="left">
                     {item.workingHours.value || "--"}
-                  </TableCell>
+                  </TableCell> */}
 
                   <TableCell sx={{ fontSize: "13px"  }} align="left">
                   <LinearProgress variant="determinate" value={item.percentage} /> {item.percentage}%
