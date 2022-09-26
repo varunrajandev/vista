@@ -64,7 +64,7 @@ function Profile() {
         setHouseholdMembers(useprofiledata.familyMemberDto.familyMemberDto);
         setDocuments(useprofiledata.documentResponseDtos);
         setSkills(useprofiledata.skillResponseDto);
-        setProperSkillsDto(skills.skillsMappingDto)
+        setProperSkillsDto(skills.skillsMappingDto);
         // setSubSkillsDto(properSkillsDto.skillDto)
 
         setname(userData.firstName);
@@ -589,11 +589,11 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={skills.skillRemarks}
+                  // value={skills.skillsMappingDto[0].skillDto[0].skillName}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
-                  label="Skills Remarks"
+                  label="Primary Skills"
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
@@ -601,11 +601,44 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  // value={skills.skillsMappingDto[0].skillDto[0].skillName}
+                  //  value={item.skillLevel}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
-                  label="Primary Skills"
+                  label="Secondary Skills"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  // value={skills.cityName}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="TERTIARY Skills"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mt: 4,
+                }}
+              >
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={skills.skillRemarks}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Skills Remarks"
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
@@ -621,57 +654,11 @@ function Profile() {
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
+                <Box sx={{ width: "18%" }}></Box>
+
+                <Box sx={{ width: "18%" }}></Box>
+                <Box sx={{ width: "18%" }}></Box>
               </Box>
-
-              {/* <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mt: 4,
-              }}
-            >
-   
-             <TextField
-                sx={{ width: "18%" }}
-                size="small"
-             //  value={item.skillLevel}
-                id="outlined-basic"
-                variant='filled'
-                color="secondary" 
-                label="State"
-                InputLabelProps={{ shrink: true }}
-                focused
-              />
-                      
-               <TextField
-                sx={{ width: "18%" }}
-                size="small"
-               // value={skills.cityName}
-                id="outlined-basic"
-                variant='filled'
-                color="secondary" 
-                label="City"
-                InputLabelProps={{ shrink: true }}
-                focused
-              />
-          
-          <TextField
-                sx={{ width: "18%" }}
-                size="small"
-             //   value={skills.locality }
-                id="outlined-basic"
-                variant='filled'
-                color="secondary" 
-                label="Locality"
-                InputLabelProps={{ shrink: true }}
-                focused
-              />
-              
-              <Box  sx={{ width: "18%" }}></Box>    
-             <Box  sx={{ width: "18%" }}></Box>
-
-            </Box>  */}
               {/* ))} */}
             </Box>
             {/* ========================== Skills Section Code End================= */}
@@ -1019,8 +1006,7 @@ function Profile() {
                         mt: 4,
                       }}
                     >
-              
-                   <Box>
+                      <Box>
                         <BookmarkBorderIcon />
                         <TextField
                           size="small"
@@ -1046,11 +1032,10 @@ function Profile() {
                           focused
                         />
                       </Box>
-                   
                     </Box>
                     <Box ml={6} mt={2}>
                       <a href={item.fileUrl} target="blank" download>
-                      <img width="90%" src={item.fileUrl} />
+                        <img width="90%" src={item.fileUrl} />
                       </a>
                     </Box>
                   </StyleBox>
