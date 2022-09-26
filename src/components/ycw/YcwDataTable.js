@@ -55,6 +55,7 @@ function Right() {
   const [searchItem, setSearchItem] = React.useState("");
   const [searchDD, setSearchDD] = React.useState([]);
   const [cityDD, setCityDD] = React.useState([]);
+  const [searchycwStatus, setSearchYcwStatus]= React.useState("");
   const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
   const [filterName, setFilterName] = React.useState("createdAt");
@@ -148,6 +149,9 @@ function Right() {
     }
   }, [searchItem])
 
+console.log("searchDD",searchDD)
+console.log("goooo",tableData)
+
      return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
       {/* //Add Ycw Section section */}
@@ -180,7 +184,12 @@ function Right() {
           //  value={searchDD}
           onChange={(event, newValue) => {
             setYcwSearchUserId(newValue.userId);
+            setSearchYcwStatus(newValue.profileStatus);
+             if(newValue.profileStatus=="ACTIVE"){
             navigate(`/ycw/profile/${newValue.userId}`)
+             } else{
+              navigate(`/ycw/add/${newValue.userId}`)
+             }
           }}
           disableClearable
           size="small"
@@ -189,15 +198,15 @@ function Right() {
             <Box sx={{ display: "flex" }}>
               {/* <SearchIcon /> */}
               <TextField
-                placeholder="Search by Name"
+                placeholder="Search by Name & Mobile Number"
                 onChange={(e) => {
                    setSearchItem(e.target.value);
                 }}
                 {...params}
-                InputProps={{
-                  ...params.InputProps,
-                  type: "search",
-                }}
+                // InputProps={{
+                //   ...params.InputProps,
+                //   type: "search",
+                // }}
               />
             </Box>
           )}
@@ -759,7 +768,7 @@ function Right() {
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
+                          { setFilterName("totalExperience") }; { setycwIdOrder("asc") }
                           {
                             {
                               setBtnColorExp("blue")
@@ -789,7 +798,7 @@ function Right() {
                         sx={{ marginTop: "-5px", color: btnColorExp }} />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("primarySkill") }; { setycwIdOrder("desc") }
+                          { setFilterName("totalExperience") }; { setycwIdOrder("desc") }
                           {
                             {
                               setBtnColorExp("black")
@@ -836,7 +845,7 @@ function Right() {
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("firstName") }; { setycwIdOrder("asc") }
+                          { setFilterName("workingHours") }; { setycwIdOrder("asc") }
                           {
                             {
                               setBtnColorName("black")
@@ -865,7 +874,7 @@ function Right() {
                         sx={{ marginTop: "-5px", color: btnColorWorkHr }} />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("firstName") }; { setycwIdOrder("desc") }
+                          { setFilterName("workingHours") }; { setycwIdOrder("desc") }
                           {
                             {
                               setBtnColorName("black")
@@ -1038,7 +1047,6 @@ function Right() {
                               setBtnColor1Jobs("black")
                               setBtnColorSkills("black")
                               setBtnColor1Skills("black")
-
                             }
                           }
                         }}
@@ -1050,14 +1058,9 @@ function Right() {
             </TableHead>
 
 
-
-
 {/*...........................Table Body.............................. */}
 
 
-
-
-           
 
 <TableBody component={Paper}>
 
@@ -1069,7 +1072,6 @@ function Right() {
                     "&:last-child td, &:last-child th": { border: 0 },
                     zIndex: "999",
                     border: "1px solid #E0E0E0",
-                    // borderLeft:"100px"
                     fontSize: "13px"
                   }}
                 >
@@ -1116,7 +1118,11 @@ function Right() {
 
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.workingHours.value || "--"}
+
+                    {item.workingHours?item.workingHours.value:"--"}
+
+                 
+
                   </TableCell>
 
                
@@ -1129,7 +1135,6 @@ function Right() {
                     {/* {"--"} */}
                   </TableCell>
                   <TableCell align="left" sx={{ border: "none" }}>
-
                     <Typography
                       sx={{
                         width: "150px",

@@ -108,9 +108,6 @@ function AddressInformation() {
     }, [postalCode , postalCodep, ids])
 
     
-
-
-
     const handleSubmit = async () => {
         console.log("clicked")
        try {
