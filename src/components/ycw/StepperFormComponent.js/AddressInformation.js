@@ -20,7 +20,7 @@ function AddressInformation() {
     const [addressLine2, setAddressLine2] = React.useState("");
     const [landmark, setLandmark] = React.useState("");
     const [postalCode, setPostalCode] = React.useState("");
-    const [countryName, setCountryName] = React.useState("");
+    const [countryName, setCountryName] = React.useState("0");
     const [stateName, setStateName] = React.useState("");
     const [cityName, setCityName] = React.useState("");
     const [locality, setLocality] = React.useState("");
@@ -36,7 +36,7 @@ function AddressInformation() {
     const [addressLine2p, setAddressLine2p] = React.useState("");
     const [landmarkp, setLandmarkp] = React.useState("");
     const [postalCodep, setPostalCodep] = React.useState("");
-    const [countryNamep, setCountryNamep] = React.useState("");
+    const [countryNamep, setCountryNamep] = React.useState("0");
     const [stateNamep, setStateNamep] = React.useState("");
     const [cityNamep, setCityNamep] = React.useState("");
     const [localityp, setLocalityp] = React.useState("");
@@ -60,7 +60,7 @@ function AddressInformation() {
     const AddressGetById = async()=>{
         let addressData = await fetch(`http://13.126.160.155:8080/user/address/get/${ids || id}`);
         let responseData =await addressData.json();
-        console.log(responseData)
+        console.log("data address",responseData)
         //current Address
         setAddressLine1(responseData.data[0].addressLine1)
         setAddressLine2(responseData.data[0].addressLine2)
@@ -105,7 +105,7 @@ function AddressInformation() {
             AddressFetchByPincode(postalCodep, 2)
         }
         
-    }, [postalCode , postalCodep, ids])
+    }, [ ids])
 
     
     const handleSubmit = async () => {

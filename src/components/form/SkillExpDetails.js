@@ -27,7 +27,9 @@ function SkillExpDetails(props) {
     primaryLanguage, setPrimaryLanguage,
     otherLanguages, setOtherLanguages,
   } = props
-  
+
+
+
   useEffect(() => {
     async function fetchData() {
       let primarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
@@ -52,7 +54,7 @@ function SkillExpDetails(props) {
     }
     fetchData()
   }, [primarySkill, primaryLanguage, secondarySkill])
-  
+
 
 
   return (
@@ -64,117 +66,105 @@ function SkillExpDetails(props) {
         gap: 1,
       }}
     >
-      <h5>Skill and Experience Details</h5>
-      <Box sx={{ display: "flex", flexWrap: "wrap", rowGap: "30px", justifyContent: "space-between"}}>
-          
-        <FormControl sx={{ minWidth: 120, width: "25%"}} size="small">
+      <h5>Skill and Language Details</h5>
+      <Box sx={{ display: "flex", flexWrap: "wrap", rowGap: "30px", justifyContent: "space-between" }}>
+
+        <FormControl sx={{ minWidth: 120, width: "20%" }} size="small">
+          <InputLabel id="demo-select-small" required>Primary Skill</InputLabel>
+          <Select sx={{ width: "100%" }} value={primarySkill} label="Primary Skill==">
+            {pSkillDD.map((items, index) => (
+              <MenuItem key={index} onClick={() => { setPrimarySkill(items.uuid) }} value={items.uuid}>{items.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Autocomplete
+          multiple
+          disableCloseOnSelect
+          size="small"
+          options={sSkillDD}
+          sx={{ width: "30%" }}
+          getOptionLabel={(option) => option.name}
+          value={secondarySkill.map((item) => (item))}
+          onChange={(event, newValue) => {
+            setSecondarySkill([...newValue]);
+          }}
+          renderInput={(params) => (
+            <TextField {...params}
+              label="Secondary Skill"
+
+            />
+          )}
+        />
+
+      {/* <Autocomplete
+        id="size-small-outlined"
+        size="small"
+        options={sSkillDD}
+        sx={{ width: "30%" }}
+        getOptionLabel={(option) => option.name}
+        value={secondarySkill[0]}
+        onChange={(event, newValue) => {
+          setSecondarySkill([newValue]);
+        }}
+        renderInput={(params) => (
+          <TextField {...params} label="Secondary Skill" />
+        )}
+      /> */}
+
+        <Autocomplete
+          multiple
+          disableCloseOnSelect
+          size="small"
+          sx={{ width: "45%" }}
+          options={tSkillDD}
+          getOptionLabel={(option) => option.name}
+          value={tertiarySkill.map((item) => (item))}
+          onChange={(event, newValue) => {
+            setTertiarySkill([...newValue]);
+          }}
+          renderInput={(params) => (
+            <TextField {...params}
+              label="Tertiary Skill"
+            />
+          )}
+        />
+
+        <TextFieldComponent
+          labelData="Skill Remarks"
+          setData={setSkillRemarks}
+          data={skillRemarks}
+          size="40%"
+        />
+
+        <FormControl sx={{ minWidth: 120, width: "20%" }} size="small">
           <InputLabel id="demo-select-small" required>Primary Language</InputLabel>
-          <Select sx={{ width: "100%" }} value={primaryLanguage} onChange={(e)=>{setPrimaryLanguage(e.target.value)}}  label="Primary Language">
+          <Select sx={{ width: "100%" }} value={primaryLanguage} onChange={(e) => { setPrimaryLanguage(e.target.value) }} label="Primary Language">
             {primarylanguageDD.map((items, index) => (
               <MenuItem key={index} value={items.key}>{items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
-         <Autocomplete
-          multiple
-          size='small'
-          options={otherlanguageDD}
-          value={otherLanguages}
-          disableCloseOnSelect
-          getOptionLabel={(option) =>option.key}
-          onChange={(event, newValue) => {
-            setOtherLanguages([...newValue]);
-          }}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                size='small'
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.key}
-            </li>
-          )}
-           style={{ width: "45%" }}
-           renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Other Languages"
-              size="small"
-            />
-          )}
-        />
-       
-        
-        
-        <TextFieldComponent
-          labelData="Skill Remarks"
-          setData={setSkillRemarks}
-          data={skillRemarks}
-          size="25%"
-        />
-
-        <FormControl sx={{ minWidth: 120, width: "25%"}} size="small">
-          <InputLabel id="demo-select-small" required>Primary Skill</InputLabel>
-          <Select sx={{ width: "100%" }} value={primarySkill}  label="Primary Skill==">
-            {pSkillDD.map((items, index) => (
-              <MenuItem key={index} onClick={() => {setPrimarySkill(items.uuid)}} value={items.uuid}>{items.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        {/* <MultiSelected
-          labelData="Secondary Skill"
-          dataDD={sSkillDD}
-          setData={setSecondarySkill}
-          values={"name"}
-          size="34.7%"
-        /> */}
 
         <Autocomplete
           multiple
-          size='small'
-          options={sSkillDD}
-          value={secondarySkill.skillName}
           disableCloseOnSelect
-          getOptionLabel={(option) =>option.name}
+          size="small"
+          sx={{width:"35%"}}
+          options={otherlanguageDD}
+          getOptionLabel={(option) => option.value}
+          value={otherLanguages.map((item) => (item))}
           onChange={(event, newValue) => {
-            setSecondarySkill([...newValue]);
+            setOtherLanguages([...newValue]);
           }}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                size='small'
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.name}
-            </li>
-          )}
-           style={{ width: "34.7%" }}
-           renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Secondary Skill"
-              size="small"
+          renderInput={(params) => (
+            <TextField {...params}
+              label="Other Languages"
             />
           )}
         />
-
-        <MultiSelected
-          labelData="Tertiary Skill"
-          dataDD={tSkillDD}
-          setData={setTertiarySkill}
-          values={"name"}
-          size="34.7%"
-          value = {tertiarySkill}
-        />
-      </Box>
+        </Box>
     </Box>
   );
 }

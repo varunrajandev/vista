@@ -15,7 +15,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { multiStepContext } from "../../ContextApi/StepContext";
-import { masterApiforAll } from "../../AlllData";
+import { masterApi, masterApiforAll } from "../../AlllData";
 import indianflag from "../../images/india.png";
 import AlertTitle from "@mui/material/AlertTitle";
 import InputLabel from "@mui/material/InputLabel";
@@ -131,7 +131,7 @@ function Login() {
 
   const handleClickforSendOTP = async () => {
     try {
-      let response = await axios.post(masterApiforAll + "user/auth/login", {
+      let response = await axios.post(masterApi+"/auth/login", {
         isoCode: "IN",
         mobile: mobileNumber,
       });

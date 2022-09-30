@@ -37,12 +37,6 @@ function SkillInformationData() {
       })
     }
 
-       if(otherLanguages){
-        otherLanguages.map((item)=>{
-          otherLanguageArray.push(item.key)
-      })
-    }
-
     useEffect(() => {
       const allSkillFetchById = async() =>{
         let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
@@ -53,16 +47,15 @@ function SkillInformationData() {
         setPrimaryLanguage(responseAllSkill.data.primaryLanguage)
         setOtherLanguages(responseAllSkill.data.otherLanguage)
         setSkillRemarks(responseAllSkill.data.skillRemarks)
-        setPrimarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto[0].skillUuid)
-        //secondarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto)
-    
-    
-        setSecondarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto)
-       
+        setPrimarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto[0].uuid)
+        setSecondarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
+        setTertiarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto)
         
       }
       allSkillFetchById()
     }, [ids, id])
+
+    console.log("3",otherLanguages)
     
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
@@ -73,7 +66,7 @@ function SkillInformationData() {
       try {
         let response = await axios.post(masterApi+"/skill/save",
         {
-          "otherLanguage":otherLanguageArray,
+          "otherLanguage":otherLanguages,
           "primaryLanguage": primaryLanguage,
           "skillRemarks": skillRemarks,
           "skillRequestDtos": [

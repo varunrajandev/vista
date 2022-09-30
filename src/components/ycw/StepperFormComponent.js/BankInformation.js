@@ -14,13 +14,16 @@ function BankInformation() {
       bankName: "",
       branchName: "",
       branchAddress: "",
-      accountHoderName: "",
+      accountHolderName: "",
       ifscCode: "",
       accountNumber: "",
     },
   ]);
+  
+
 
   const [ifscCodeData, setIfscCodeData] = useState([])
+  const [data, setData] = useState([])
   const ids = localStorage.getItem("ID")
   const {id} = useParams()
 
@@ -32,40 +35,39 @@ function BankInformation() {
 
     setInputFields([
       {
-        accountType: "",
+        accountType: data.accountType?data.accountType:"",
         bankName:AccountTypeData.data.bankName?AccountTypeData.data.bankName:"",
         branchName:AccountTypeData.data.branchName?AccountTypeData.data.branchName:"",
         branchAddress:AccountTypeData.data.branchAddress?AccountTypeData.data.branchAddress:"",
-        accountHoderName: "",
+        accountHolderName: data.accountHolderName ,
         ifscCode: inputFields[0].ifscCode?inputFields[0].ifscCode:"",
-        accountNumber: "",
+        accountNumber: data.accountNumber?data.accountNumber:"",
       },])
     
   }
-  console.log("account",ifscCodeData)
 
   //All Details fetch by id
   async function DataFetchById(){
     let bankData = await fetch(`http://13.126.160.155:8080/user/bank/get/${ids || id}`)
     let allDataResponse = await bankData.json();
+    setData(allDataResponse.data[0])
+    console.log(allDataResponse.data[0])
+
     setInputFields([
       {
         accountType: allDataResponse.data[0].accountType,
         bankName:ifscCodeData.bankName?ifscCodeData.bankName:allDataResponse.data[0].bankName,
         branchName:ifscCodeData.branchName?ifscCodeData.branchName:allDataResponse.data[0].branchName,
         branchAddress:ifscCodeData.branchAddress?ifscCodeData.branchAddress:allDataResponse.data[0].branchAddress,
-        accountHoderName: allDataResponse.data[0].accountHolderName,
+        accountHolderName: allDataResponse.data[0].accountHolderName,
         ifscCode: inputFields[0].ifscCode?inputFields[0].ifscCode:allDataResponse.data[0].ifscCode,
         accountNumber: allDataResponse.data[0].accountNumber,
       },
     ])
   }
 
-  console.log(inputFields[0].branchAddress)
+  console.log(inputFields[0].branchAddress);
   
- 
-
-
   useEffect(() => {
     if(inputFields[0].ifscCode.length===11){
        fetchData(inputFields[0].ifscCode);
@@ -82,7 +84,7 @@ function BankInformation() {
       let response = await axios.post(BankApi, 
         [
           {
-            "accountHolderName": inputFields[0].accountHoderName,
+            "accountHolderName": inputFields[0].accountHolderName,
             "accountNumber": inputFields[0].accountNumber,
             "accountType": inputFields[0].accountType,
             "bankName": inputFields[0].bankName,
@@ -94,12 +96,8 @@ function BankInformation() {
           }
         ]
       )
-
       alert(response.data.message)
       setCurrentSteps(6)
-      
-
-      
     } catch (error) {
       alert(error)
     }

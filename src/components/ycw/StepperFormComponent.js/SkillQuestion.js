@@ -37,14 +37,31 @@ function SkillQuestion() {
       let responseQuestion = await QuestionData.json();
       setAllQuestion(responseQuestion.data);
     };
+
+    const getResponseQuestionById = async()=>{
+      let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/YCW0015181`)
+      let Answer = await allResponse.json();
+      //console.log("answer======", Answer.data.skillsMappingDto)
+      Answer.data.skillsMappingDto.map((item)=>(
+        // console.log(item.skillDto)
+        item.skillDto.map((item1)=>(
+          // console.log(items.question)
+          item1.question.map((item2)=>(
+            console.log(item2.answer)
+            ))
+        ))
+      ))
+    }
+    getResponseQuestionById()
+
     fetchSkillData();
-  }, [id || ids]);
+  }, [id, ids]);
 
-  console.log(ids)
+  // console.log(ids)
 
-  console.log(storeQuestion);
+   console.log(storeQuestion);
 
-  console.log("all question is",allQuestion)
+  // console.log("all question is",allQuestion)
 
   async function handleSubmit() {
      try {
@@ -72,9 +89,8 @@ function SkillQuestion() {
           "question": questions
         }
       ],
-      "skillUuid": uuid
+      "uuid": uuid
     }
-
     setStoreQuestion(values);
   };
 
@@ -131,8 +147,7 @@ function SkillQuestion() {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={item.skillNmae}
-                        placeholder="Favorites"
+                        label={item.skillName}
                         size="small"
                       />
                     )}
@@ -159,9 +174,7 @@ function SkillQuestion() {
             >
               back
             </Button>
-            <Button variant="contained" onClick={handleSubmit}>
-              save
-            </Button>
+            <Button variant="contained" onClick={handleSubmit}>save</Button>
             {/* (()=>{setCurrentSteps(4)}) */}
           </Box>
         </Box>

@@ -140,6 +140,7 @@ function CurrentAdd(props) {
             labelId="demo-select-small"
             id="demo-select-small"
             label="Country"
+            value={country}
             onChange={(e) => {
               setCountry(e.target.value);
             }}

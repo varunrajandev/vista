@@ -52,7 +52,7 @@ function BankAccount(props) {
         bankName: "",
         branchName: "",
         branchAddress: "",
-        accountHoderName: "",
+        accountHolderName: "",
         accountNumber: "",
         ifscCode: "",
         bankAccountProof: "",
@@ -173,9 +173,9 @@ function BankAccount(props) {
 
             <TextField
               style={{ width: "18%" }}
-              name="accountHoderName"
+              name="accountHolderName"
               label="Account Holder Name"
-              value={inputField.accountHoderName}
+              value={inputField.accountHolderName}
               size="small"
               onChange={(event) => handleChangeInput(index, event)}
             />

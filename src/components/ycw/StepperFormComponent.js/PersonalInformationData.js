@@ -11,7 +11,7 @@ function PersonalInformationData() {
   const [source, setSource] = useState("");
   const [otherSource, setOtherSource] = useState("")
   const [firstname, setFirstname] = useState("");
-  const [middlename, setMiddlename] = useState("");
+  const [age, setAge] = useState("");
   const [lastname, setLastname] = useState("");
   const [gender, setGender] = useState("");
   const [mobile, setMobile] = useState("");
@@ -32,7 +32,6 @@ function PersonalInformationData() {
   const {id} = useParams()
   const {setCurrentSteps, setPersonalData, personalData} = useContext(multiStepContext)
   let ids = localStorage.getItem('ID');
-  console.log(ids)
 
 
 
@@ -41,10 +40,10 @@ const datatGetById = async() => {
   let allDataResponse = await allUserDetails.json();
   setUserProfile(allDataResponse);
   setPersonalData(allDataResponse)
-
+  
   setSource(allDataResponse.data.sourcingChannel);
   setFirstname(allDataResponse.data.firstName);
-  setMiddlename(allDataResponse.data.middleName);
+  // setMiddlename(allDataResponse.data.middleName);
   setLastname(allDataResponse.data.lastName);
   setGender(allDataResponse.data.gender);
   setMobile(allDataResponse.data.mobileNo);
@@ -59,41 +58,29 @@ const datatGetById = async() => {
   setCovidStatus(allDataResponse.data.covidStatus)
   setMedicalCondition(allDataResponse.data.medicalCondition)
 
-  console.log("profileData", allDataResponse)
-}
-
-
-   if(birthday&&!userProfile.status){
-    let PickYear = birthday.getFullYear()
+    let PickYear = allDataResponse.data.birthday.slice(0, 4)
     const d = new Date();
     let CurrentYear = d.getFullYear();
-    let age = CurrentYear-PickYear;
-   const i = setTimeout(() => {
-      if(age<18 ) alert("age is less then 18")
-    }, 1000);
+     setAge(CurrentYear-PickYear)
 
-   
-      if(maritalStatus){
-        clearTimeout(i)
-      }
-    }
-  
-  
+     console.log("profileData", personalData.data.birthday)
+}
+
  
-   async function checkMobilenumber(){
+   async function checkMobilenumber(mobile){
     let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${mobile}`)
     let response = await checkNumber.json();
     setAvailableNumberResponse(response.data)
   }
-
   useEffect(() => {
-  checkMobilenumber();
-  datatGetById();
-  }, [id, ids, mobile])
-
- 
+   
+    datatGetById();
+  }, [id || ids])
+  
+  
 
   const n = setTimeout(() => {
+    if(mobile.length===10) checkMobilenumber(mobile);
     if(availableNumberResponse&&!userProfile.status){
       alert("Already Available")
     }
@@ -115,7 +102,7 @@ const datatGetById = async() => {
             lastName:lastname,
             maritalStatus,
             "medicalCondition": medicalCondition,
-            middleName:middlename,
+            // middleName:middlename,
             "mobileNo":mobile,
             "department": "WORKER",
             "education":education,
@@ -144,39 +131,31 @@ const datatGetById = async() => {
   try {
       let response = await axios.post("http://13.126.160.155:8080/user/worker/profile",
       {
-          "birthday":birthday?birthday:userProfile.birthday,
-          "bloodGroup": "O_POSITIVE",
-          "covidStatus":covidStatus?covidStatus:userProfile.covidStatus,
-          "educationalRemarks":educationalRemarks?educationalRemarks:userProfile.educationalRemarks,
-          "email": "string",
-           firstName:firstname?firstname:userProfile.firstName,
-          "formStatus": "DRAFT",
-          "gender":gender?gender:userProfile.gender,
+          "birthday":birthday,
+          "covidStatus":covidStatus,
+          "educationalRemarks":educationalRemarks,
+           firstName:firstname,
+          "gender":gender,
           "isoCode": "IN",
-          "education":education?education:userProfile.education,
-          lastName:lastname?lastname:userProfile.lastName,
-          "maritalStatus":maritalStatus?maritalStatus:userProfile.maritalStatus,
-          "medicalCondition": medicalCondition?medicalCondition:userProfile.medicalCondition,
-          "medium": "PHONE_CALL",
-          middleName:middlename?middlename:userProfile.middleName,
-          "mobileNo":mobile?mobile:userProfile.mobile,
+          "education":education,
+          lastName:lastname,
+          "maritalStatus":maritalStatus,
+          "medicalCondition": medicalCondition,
+          // middleName:middlename,
+          "mobileNo":mobile,
           "nationality": "INDIAN",
-          "professsion": "BUSINESS_OWNER",
-          "profileStatus": "IN_ACTIVE",
-          "religion":religion?religion:userProfile.religion,
-          "secondaryEmail": "string",
-          "secondaryMobileNumber": alternateMobileNumber?alternateMobileNumber:userProfile.secondaryMobileNumber,
-          "secondaryMobileVerified": true,
-          "sourcingChannel": source?source:userProfile.sourcingChannel,
-          "userType": "WORKER",
-          "whatsappAvailable":isWhatsappAvailable?isWhatsappAvailable:userProfile.whatsappAvailable,
-          "whatsappNumber": whatsappNumber?whatsappNumber:userProfile.whatsappNumber,
+          "religion":religion,
+          "secondaryMobileNumber": alternateMobileNumber,
+          "sourcingChannel": source,
+          "whatsappAvailable":isWhatsappAvailable,
+          "whatsappNumber": whatsappNumber,
           "department": "TECH",
+          "userType": "WORKER",
           userId:ids || id
         
         });
         alert("Updated",response.data.message)
-        setCurrentSteps(2)
+        
       
   } catch (error) {
     alert("Please fill All the details"); 
@@ -202,7 +181,7 @@ const datatGetById = async() => {
              <PersonalInfo
                 walk={source} setWalk={setSource}
                 fname={firstname} setFname={setFirstname}
-                mname={middlename} setMname={setMiddlename}
+                age={age} setAge={setAge}
                 lname={lastname} setLname={setLastname}
                 gender={gender} setGender={setGender}
                 phoneNumber={mobile} setPhoneNumber={setMobile}
@@ -220,10 +199,10 @@ const datatGetById = async() => {
                 userProfile={userProfile}
                 />
 
-                <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right"}}>
-                     {console.log(personalData.status)}
+                <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
                     <Button sx={{display:(personalData.status?"none":"block")}}  variant='contained' onClick={handleSubmit}>save</Button>
-                    <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={updataData}>UPDATE & save</Button>
+                    <Button sx={{display:(personalData.status?"block":"none")}} variant='contained' onClick={updataData}>save</Button>
+                    <Button variant='contained' onClick={()=>{setCurrentSteps(2)}}>next</Button>
                 </Box>
                 </Box>
 
