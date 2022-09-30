@@ -109,7 +109,7 @@ const datatGetById = async() => {
             "secondaryMobileVerified": false,
             "sourcingChannel": source,
             "userType": "WORKER",
-            "whatsappAvailable":isWhatsappAvailable,
+            "whatsappAvailable":(isWhatsappAvailable==="Other number"||isWhatsappAvailable==="Same as alternte number"||isWhatsappAvailable==="Same as mobile number")?true:false,
             "whatsappNumber": whatsappNumber,
           });
           alert(response.data.message)
@@ -145,7 +145,7 @@ const datatGetById = async() => {
           "religion":religion,
           "secondaryMobileNumber": alternateMobileNumber,
           "sourcingChannel": source,
-          "whatsappAvailable":isWhatsappAvailable,
+          "whatsappAvailable":(isWhatsappAvailable==="Other number"||isWhatsappAvailable==="Same as alternte number"||isWhatsappAvailable==="Same as mobile number")?true:false,
           "whatsappNumber": whatsappNumber,
           "department": "TECH",
           "userType": "WORKER",
