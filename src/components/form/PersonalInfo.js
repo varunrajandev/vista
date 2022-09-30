@@ -34,6 +34,8 @@ function PersonalInfo(props) {
   const [genderDD, setGenderDD] = useState([])
   const [covidDD, setCovidDD] = useState([])
   const [educationDD, setEducationDD] = useState([])
+  
+  
 
   const [message, setMessage] = useState('');
 
@@ -73,7 +75,7 @@ function PersonalInfo(props) {
     covidStatus, setCovidStatus,
     medicalCondition, setMedicalCondition,
     submitted, setSubmitted,
-    userProfile
+    userProfile,
   } = props;
 
   const { setCurrentSteps, setPersonalData, personalData } = useContext(multiStepContext)
@@ -87,6 +89,8 @@ function PersonalInfo(props) {
       let genderData = await fetch(masterApi + "/drop-down/get/gender")
       let covidData = await fetch(masterApi + "/drop-down/get/covidVaccination")
       let educationData = await fetch(masterApi + "/drop-down/get/education")
+      
+   
       let res = await sourceData.json();
       let res1 = await religionData.json();
       let res2 = await maritalData.json();

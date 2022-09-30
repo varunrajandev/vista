@@ -72,13 +72,11 @@ const datatGetById = async() => {
     let response = await checkNumber.json();
     setAvailableNumberResponse(response.data)
   }
+
   useEffect(() => {
-   
     datatGetById();
   }, [id || ids])
   
-  
-
   const n = setTimeout(() => {
     if(mobile.length===10) checkMobilenumber(mobile);
     if(availableNumberResponse&&!userProfile.status){

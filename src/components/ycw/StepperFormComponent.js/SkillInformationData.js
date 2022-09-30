@@ -16,7 +16,7 @@ function SkillInformationData() {
     const [skillRemarks, setSkillRemarks] = React.useState("");
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
-    const [status, setStatus] = useState()
+    const [status, setStatus] = useState(false)
 
     
     const {id} = useParams()
@@ -41,9 +41,7 @@ function SkillInformationData() {
       const allSkillFetchById = async() =>{
         let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
         let responseAllSkill = await allSkillData.json();
-        setStatus(responseAllSkill.status)
         console.log(responseAllSkill)
-        
         setPrimaryLanguage(responseAllSkill.data.primaryLanguage)
         setOtherLanguages(responseAllSkill.data.otherLanguage)
         setSkillRemarks(responseAllSkill.data.skillRemarks)
@@ -54,8 +52,6 @@ function SkillInformationData() {
       }
       allSkillFetchById()
     }, [ids, id])
-
-    console.log("3",otherLanguages)
     
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
@@ -85,7 +81,7 @@ function SkillInformationData() {
           ],
           "userId": ids || id
         })
-  
+        setSkillData(response.data)
         alert(response.data.message)
       } catch (error) {
         alert(error)
@@ -113,7 +109,6 @@ function SkillInformationData() {
           skillRemarks={skillRemarks} setSkillRemarks={setSkillRemarks}
           primaryLanguage={primaryLanguage} setPrimaryLanguage={setPrimaryLanguage}
           otherLanguages={otherLanguages} setOtherLanguages={setOtherLanguages}
-          // values={values} setValue={setValue}
         />
        
 
@@ -124,7 +119,7 @@ function SkillInformationData() {
         
       </Box>
 
-       <Box sx={{display:(status?"block":"none")}}><SkillQuestion/></Box> 
+       <Box sx={{display:(skillData.status?"block":"none")}}><SkillQuestion/></Box> 
 
     </Box>
     </>

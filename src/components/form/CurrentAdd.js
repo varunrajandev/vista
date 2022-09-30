@@ -30,7 +30,8 @@ function CurrentAdd(props) {
     stateID, setStateID,
     cityID, setCityID,
     addressData,
-    AllAddress
+    AllAddress,
+    documnetTypeDD
   } = props
 
   const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
@@ -222,7 +223,10 @@ function CurrentAdd(props) {
               setAddressProofType(e.target.value);
             }}
           >
-            <MenuItem value={"AADHAAR"}>Aadhaar</MenuItem></Select>
+            {documnetTypeDD.map(item=>(
+              <MenuItem value={item.key}>{item.value}</MenuItem>
+            ))}
+            </Select>
         </FormControl>
         <div style={{ width: "18%" }}></div>
       </Box>
