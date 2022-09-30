@@ -29,6 +29,7 @@ function AddressInformation() {
     const [stateID, setStateID] = useState()
     const [cityID, setCityID] = useState()
     const [localityDD, setLocalityDD] = useState([])
+    const [documnetTypeDD, setDocumnetTypeDD] = useState([]);
 
 
 // YCW Permanent Adddress
@@ -44,6 +45,7 @@ function AddressInformation() {
     const [countryIDp, setCountryIDp] = useState()
     const [stateIDp, setStateIDp] = useState()
     const [cityIDp, setCityIDp] = useState()
+    const [documnetTypeDDp, setDocumnetTypeDDp] = useState([]);
 
     const {id} = useParams()
 
@@ -84,19 +86,19 @@ function AddressInformation() {
         setAddressProofTypep(responseData.data[1].addressProofType)
         setIsPermanent(responseData.data[1].permanent)
     }
-    // {
-    //     "district": "Gurgaon",
-    //     "state": "Haryana",
-    //     "country": "India",
-    //     "locality": [
-    //         "DLF Ph-III"
-    //     ]
-    // }
+
+    async function fetchDorpDown(){
+        let documentType = await fetch(`http://13.126.160.155:8080/user/drop-down/get/documentUploadType?flag`)
+        let responseType = await documentType.json();
+        setDocumnetTypeDD(responseType.data)
+        setDocumnetTypeDDp(responseType.data)
+      }
 
     console.log("ispermanment", isPermanent)
 
     useEffect(() => {
          AddressGetById()
+         fetchDorpDown()
   
         if(postalCode.length==6){
             AddressFetchByPincode(postalCode, 1)
@@ -116,7 +118,7 @@ function AddressInformation() {
             {
               "addressLine1": addressLine1,
               "addressLine2": addressLine2,
-              "addressProofType": "OTHERS",
+              "addressProofType": addressProofType,
               "cityUuid": cityName,
               "countryUuid": countryName,
               "landmark": landmark,
@@ -130,7 +132,7 @@ function AddressInformation() {
             {
                 "addressLine1": addressLine1p,
                 "addressLine2": addressLine2p,
-                "addressProofType": "OTHERS",
+                "addressProofType": addressProofTypep,
                 "cityUuid": cityNamep,
                 "countryUuid": countryNamep,
                 "landmark": landmarkp,
@@ -179,6 +181,7 @@ function AddressInformation() {
                         cityID={cityID} setCityID={setCityID}
                         localityDD={localityDD} setLocalityDD={setLocalityDD}
                         AllAddress = {addressDatas[0]}
+                        documnetTypeDD={documnetTypeDD}
                     />
 
                     
@@ -201,6 +204,7 @@ function AddressInformation() {
                         cityID={isPermanent?cityID:cityIDp} setCityID={setCityIDp}
                         localityDD={localityDD} setLocalityDD={setLocalityDD}
                         AllAddress = {isPermanent?addressDatas[0]:addressDatas[1]}
+                        documnetTypeDD={documnetTypeDDp}
                     />
 
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>

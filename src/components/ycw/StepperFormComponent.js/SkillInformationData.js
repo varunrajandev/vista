@@ -41,21 +41,18 @@ function SkillInformationData() {
       const allSkillFetchById = async() =>{
         let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
         let responseAllSkill = await allSkillData.json();
-        setStatus(responseAllSkill.status)
         console.log(responseAllSkill)
-        
         setPrimaryLanguage(responseAllSkill.data.primaryLanguage)
         setOtherLanguages(responseAllSkill.data.otherLanguage)
         setSkillRemarks(responseAllSkill.data.skillRemarks)
         setPrimarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto[0].uuid)
         setSecondarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
         setTertiarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto)
+        setStatus(responseAllSkill.data)
         
       }
       allSkillFetchById()
     }, [ids, id])
-
-    console.log("3",otherLanguages)
     
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
@@ -85,7 +82,7 @@ function SkillInformationData() {
           ],
           "userId": ids || id
         })
-  
+        setSkillData(response.data)
         alert(response.data.message)
       } catch (error) {
         alert(error)
@@ -113,7 +110,6 @@ function SkillInformationData() {
           skillRemarks={skillRemarks} setSkillRemarks={setSkillRemarks}
           primaryLanguage={primaryLanguage} setPrimaryLanguage={setPrimaryLanguage}
           otherLanguages={otherLanguages} setOtherLanguages={setOtherLanguages}
-          // values={values} setValue={setValue}
         />
        
 
