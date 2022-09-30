@@ -33,14 +33,6 @@ function App() {
      {loginLocalStorageData&&<Header/>}
     
       <Stack direction="row">
-
-<<<<<<< Updated upstream
-        {/* {loginLocalStorageData&&<SideHeader />} */}
-=======
-   
->>>>>>> Stashed changes
-       
-
         {(userTypeofLogin=="OPS")&&loginLocalStorageData&&<SideHeader />}
 
         <Routes>
