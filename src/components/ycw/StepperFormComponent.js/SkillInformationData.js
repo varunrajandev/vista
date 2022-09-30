@@ -16,7 +16,7 @@ function SkillInformationData() {
     const [skillRemarks, setSkillRemarks] = React.useState("");
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
-    const [status, setStatus] = useState(false)
+    const [status, setStatus] = useState()
 
     
     const {id} = useParams()
@@ -48,6 +48,7 @@ function SkillInformationData() {
         setPrimarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto[0].uuid)
         setSecondarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
         setTertiarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto)
+        setStatus(responseAllSkill.data)
         
       }
       allSkillFetchById()
@@ -119,7 +120,7 @@ function SkillInformationData() {
         
       </Box>
 
-       <Box sx={{display:(skillData.status?"block":"none")}}><SkillQuestion/></Box> 
+       <Box sx={{display:(status?"block":"none")}}><SkillQuestion/></Box> 
 
     </Box>
     </>
