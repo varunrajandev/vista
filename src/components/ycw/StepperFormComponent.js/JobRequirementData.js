@@ -25,6 +25,8 @@ function JobRequirementData() {
   const [jobExpMonth, setJobExpMonth] = React.useState("");
   const [ jobExpYear, setJobExpYear] = React.useState("");
   const [jobData, setJobData] = React.useState("");
+  const [ LastjobDurationYear, setLastJobDurationYear] = React.useState("");
+  const [LastjobDurationMonths, setLastJobDurationMonths] = React.useState("");
 
   
 
@@ -66,12 +68,16 @@ if(stt >endt){
        setLastJobDuration(responseJobData.data.userExperienceRequestDto.jobDuration)
        setReasonLeaving(responseJobData.data.userExperienceRequestDto.reasonForLeavingJob)
        setExperienceRemarks(responseJobData.data.userExperienceRequestDto.experienceRemarks)
+       setLastJobDurationMonths(responseJobData.data.userExperienceRequestDto.jobDurationMonths)
+       setLastJobDurationYear(responseJobData.data.userExperienceRequestDto.jobDurationYears)
        
       }
     JobDataFetchById()
   }, [ids, id])
 
   console.log(preferJob)
+
+  console.log(LastjobDurationMonths, LastjobDurationYear)
   
 
   async function handleSubmit(){
@@ -94,7 +100,8 @@ if(stt >endt){
 
         "userExperienceRequestDto": {
           "experienceRemarks": experienceRemarks,
-          "jobDuration": lastJobDuration,
+          "jobDurationMonths": LastjobDurationMonths,
+          "jobDurationYears": LastjobDurationYear,
           "jobTypeUuid": lastJobType,
           "reasonForLeavingJob": reasonLeaving,
           "totalExperienceMonths": jobExpMonth,
@@ -134,8 +141,9 @@ if(stt >endt){
               maxSal={maxSalaryExpected} setMaxSal={setMaxSalaryExpected}
               traningMode={traningMode} setTraningMode={setTraningMode}
               jobRemarks={jobRemarks} setJobRemarks={setJobRemarks}
-            
-             
+              LastjobDurationYear={LastjobDurationYear} setLastJobDurationYear={setLastJobDurationYear}
+              LastjobDurationMonths={LastjobDurationMonths} setLastJobDurationMonths={setLastJobDurationMonths}
+              
               experienceRemarks={experienceRemarks} setExperienceRemarks={setExperienceRemarks}
               lastJobType={lastJobType} setLastJobType={setLastJobType}
               lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}
