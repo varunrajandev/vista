@@ -16,12 +16,12 @@ import SkillQuestion from "../ycw/StepperFormComponent.js/SkillQuestion";
 
 const steps = [
   "PERSONAL",
-  "ADDRESS",
   "SKILL",
   "JOB",
-  "BANK",
+  "ADDRESS",
   "DOCUMENT",
   "HOUSEHOLD",
+  "BANK",
 ];
 
 function YcwStepper() {
@@ -30,12 +30,12 @@ function YcwStepper() {
     function showSteps(steps){
         switch(steps){
             case 1 : return <PersonalInformationData/>
-            case 2 : return <AddressInformation/>
-            case 3 : return <SkillInformationData/>
-            case 4 : return <JobRequirementData/>
-            case 5 : return <BankInformation/>
-            case 6 : return <DocumentData/>
-            case 7 : return <HouseHoldMemberData/>
+            case 4 : return <AddressInformation/>
+            case 2 : return <SkillInformationData/>
+            case 3 : return <JobRequirementData/>
+            case 7 : return <BankInformation/>
+            case 5 : return <DocumentData/>
+            case 6 : return <HouseHoldMemberData/>
             
         }
       }

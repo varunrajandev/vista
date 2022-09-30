@@ -78,6 +78,13 @@ function PersonalInfo(props) {
     userProfile,
   } = props;
 
+ if(whatsappAvailable==="Same as mobile number"){
+  setWhatsapp(phoneNumber)
+ }
+ if(whatsappAvailable==="Same as alternte number"){
+  setWhatsapp(alternateNumber)
+ }
+
   const { setCurrentSteps, setPersonalData, personalData } = useContext(multiStepContext)
 
 
@@ -268,8 +275,10 @@ function PersonalInfo(props) {
                 setWhatsappAvailable(e.target.value);
               }}
             >
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
+              <MenuItem value={"Same as mobile number"}>Same as mobile number</MenuItem>
+              <MenuItem value={"Same as alternte number"}>Same as alternte number</MenuItem>
+              <MenuItem value={"Other number"}>Other number</MenuItem>
+              <MenuItem value={"Not Available"}>Not Available</MenuItem>
             </Select>
           </FormControl>
 
@@ -299,7 +308,7 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setWhatsapp(e.target.value);
             }}
-            disabled={!whatsappAvailable}
+            disabled={whatsappAvailable==="Not Available"?true:false}
             error={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 ? false : true) : false}
             helperText={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 ? "" : "please fill 10 digit number") : ""}
           />
