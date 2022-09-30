@@ -181,7 +181,7 @@ function CurrentAddress(props) {
           sx={{ width: "18%" }}
           size="small"
           id="outlined-basic"
-          value={pincode1.state||"state"}
+        //  value={pincode1.state||"state"}
           variant="outlined"
         //  label="State"
         

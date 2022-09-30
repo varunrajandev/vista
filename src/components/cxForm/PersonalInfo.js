@@ -81,9 +81,9 @@ function PersonalInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {customerSourcing.map((item) => (
+            {/* {customerSourcing.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))}
+            ))} */}
           </Select>
         </FormControl>
 
@@ -118,9 +118,9 @@ function PersonalInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {customerMedium.map((item) => (
+            {/* {customerMedium.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))}
+            ))} */}
           </Select>
         </FormControl>
 

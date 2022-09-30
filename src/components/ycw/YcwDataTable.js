@@ -185,11 +185,11 @@ console.log("goooo",tableData)
           onChange={(event, newValue) => {
             setYcwSearchUserId(newValue.userId);
             setSearchYcwStatus(newValue.profileStatus);
-             if(newValue.profileStatus=="ACTIVE"){
-            navigate(`/ycw/profile/${newValue.userId}`)
-             } else{
-              navigate(`/ycw/add/${newValue.userId}`)
-             }
+            //  if(newValue.profileStatus=="ACTIVE"){
+            // navigate(`/ycw/profile/${newValue.userId}`)
+            //  } else{
+            //   navigate(`/ycw/add/${newValue.userId}`)
+            //  }
           }}
           disableClearable
           size="small"
