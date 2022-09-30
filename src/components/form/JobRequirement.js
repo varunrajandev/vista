@@ -23,6 +23,7 @@ function JobRequirement(props) {
   const [trainingDD, setTrainingDD] = useState([])
   const [workingDD, setWorkingDD] = useState([])
   const [lastJobTypeDD, setLastJobTypeDD] = useState([])
+  const  [reasionofLeavingJob,setReasionofLeavingJob]=useState([])
 
   const {
     openToTraining, setOpenToTraining,
@@ -49,6 +50,8 @@ function JobRequirement(props) {
       let Jobtypedata = await fetch("http://13.126.160.155:8080/user/skill/get/skills");
       let trainingModeData = await fetch("http://13.126.160.155:8080/user/drop-down/get/traningMode")
       let workinghoursData = await fetch("http://13.126.160.155:8080/user/drop-down/get/workingHours")
+      let reasionForleavingJob = await fetch ("http://13.126.160.155:8080/user/skill/get/skills")
+      let res9 = await reasionForleavingJob.json();
       let res3 = await Jobtypedata.json();
       let res4 = await trainingModeData.json();
       let res5 = await workinghoursData.json();
@@ -56,6 +59,7 @@ function JobRequirement(props) {
       setTrainingDD(res4.data || [{ value: "NO DATA" }]);
       setWorkingDD(res5.data || [{ value: "NO DATA" }])
       setLastJobTypeDD(res3.data)
+      setReasionofLeavingJob(res9.data)
     }
     fetchData()
   }, [])
@@ -120,14 +124,44 @@ function JobRequirement(props) {
 
         {/* <Box sx={{ display: "flex", justifyContent: "space-between", mt: "30px"}}> */}
 
-        <TextField sx={{ width: "18%" }} size="small" label="last salary withdraw" variant="outlined" onChange={(e) => {
+        <TextField  
+          type="number"
+           sx={{
+              width: "18%",
+              '& input[type=number]': {
+                '-moz-appearance': 'textfield'
+              },
+              '& input[type=number]::-webkit-outer-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0
+              },
+              '& input[type=number]::-webkit-inner-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0
+              }
+            }} size="small" label="last salary withdraw" variant="outlined" onChange={(e) => {
           setMinSal(e.target.value)
         }}
           value={minSal}
 
         />
 
-        <TextField sx={{ width: "18%" }} size="small" label="Expected Salary [max]" variant="outlined" onChange={(e) => {
+        <TextField  
+          type="number"
+        sx={{
+              width: "18%",
+              '& input[type=number]': {
+                '-moz-appearance': 'textfield'
+              },
+              '& input[type=number]::-webkit-outer-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0
+              },
+              '& input[type=number]::-webkit-inner-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0
+              }
+            }} size="small" label="Expected Salary [max]" variant="outlined" onChange={(e) => {
           setMaxSal(e.target.value)
         }}
           value={maxSal}
@@ -212,12 +246,40 @@ function JobRequirement(props) {
           data={lastJobDuration}
         />
 
-        <TextFieldComponent
+        {/* <TextFieldComponent
           labelData="Reason For Leaving Last Job"
           setData={setReasonLeaving}
           size="18%"
           data={ReasonLeaving}
-        />
+        /> */}
+           <Autocomplete
+                    disablePortal
+                    size="small"
+                    id="combo-box-demo"
+                    options={reasionofLeavingJob}
+                    onChange={(event, newValue) => {
+                      // if (newValue.key === "OTHERS") {
+                        // setTextfieldshow("visible")
+                        setReasonLeaving(newValue.name);
+                      // } else {
+                      //   setTextfieldshow("none")
+                      // }
+
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                      variant="outlined"
+                        sx={{ minWidth: 220, width: "18%" }}
+                        {...params}
+                        placeholder="Reason For Leaving Last Job"
+                        onChange={(event, newValue) => {
+                          setReasonLeaving("");
+                          // setTextfieldshow("none")
+                        }}
+                      />
+                    )}
+                    getOptionLabel={(item) => `${item.name}`}
+                  />
 
 
 

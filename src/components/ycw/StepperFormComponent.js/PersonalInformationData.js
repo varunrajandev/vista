@@ -145,7 +145,7 @@ const datatGetById = async() => {
           "religion":religion,
           "secondaryMobileNumber": alternateMobileNumber,
           "sourcingChannel": source,
-          "whatsappAvailable":isWhatsappAvailable,
+          "whatsappAvailable":"false",
           "whatsappNumber": whatsappNumber,
           "department": "TECH",
           "userType": "WORKER",
