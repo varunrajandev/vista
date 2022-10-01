@@ -34,6 +34,7 @@ function PersonalInfo(props) {
   const [genderDD, setGenderDD] = useState([])
   const [covidDD, setCovidDD] = useState([])
   const [educationDD, setEducationDD] = useState([])
+  const [whatsAppValue, setWhatsAppValue] = useState("")
   
   
 
@@ -275,11 +276,10 @@ function PersonalInfo(props) {
                 setWhatsappAvailable(e.target.value);
               }}
             >
-              <MenuItem value={"Same as mobile number"}>Same as mobile number</MenuItem>
-              <MenuItem value={"Same as alternte number"}>Same as alternte number</MenuItem>
-              <MenuItem value={"Other number"}>Other number</MenuItem>
-              <MenuItem value={"Not Available"}>Not Available</MenuItem>
-            </Select>
+           {WhatsAppStatus.map((item, index)=>(
+            <MenuItem key={index} value={item.value}>{item.value}</MenuItem>
+           ))}
+           </Select>
           </FormControl>
 
           <TextField
@@ -449,8 +449,6 @@ function PersonalInfo(props) {
             </InputLabel>
             <Select
               sx={{ width: "100%" }}
-              labelId="demo-select-small"
-              id="demo-select-small"
               value={covidStatus}
               label="COVID Vaccination Status*"
               onChange={(e) => {
@@ -479,6 +477,13 @@ function PersonalInfo(props) {
     </ThemeProvider>
   );
 }
+
+const WhatsAppStatus = [
+  {key:true, value:"Same as mobile number"},
+  {key:true, value:"Same as alternte number"},
+  {key:true, value:"Other number"},
+  {key:false, value:"Not Available"},
+]
 export default PersonalInfo;
 
 

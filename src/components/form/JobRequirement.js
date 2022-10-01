@@ -7,13 +7,14 @@ import Select from "@mui/material/Select";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { JobType, PreferredWorkingHour } from "../../AlllData";
+import { JobType, PreferredWorkingHour, year, months } from "../../AlllData";
 import Checkbox from "@mui/material/Checkbox";
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import TextFieldComponent from "../MuiComponents/TextFieldComponent";
 import FormControlSingleSelect from "../MuiComponents/FormControlSingleSelect";
+
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -43,6 +44,8 @@ function JobRequirement(props) {
     ReasonLeaving, setReasonLeaving,
     jobExpMonth, setJobExpMonth,
     jobExpYear, setJobExpYear,
+    LastjobDurationYear, setLastJobDurationYear, 
+    LastjobDurationMonths, setLastJobDurationMonths
   } = props;
 
   useEffect(() => {
@@ -197,19 +200,14 @@ function JobRequirement(props) {
           value={jobRemarks}
         />
 
-        {/* -------------------------------------- */}
-        {/* <TextFieldComponent
-          labelData="Total Experience"
-          setData={setTotalExp}
-          size="18%"
-        /> */}
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Total Experience (years)</InputLabel>
           <Select sx={{ width: "100%" }} label="Total Experience (years)" value={jobExpYear} onChange={(e) => {
             setJobExpYear(e.target.value)
           }}>
-            <MenuItem value={"1"}>1</MenuItem>
-            <MenuItem value={"2"}>2</MenuItem>
+          {year.map(item=>(
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
           </Select>
         </FormControl>
 
@@ -218,8 +216,9 @@ function JobRequirement(props) {
           <Select sx={{ width: "100%" }}label="Total Experience (months)" value={jobExpMonth} onChange={(e) => {
             setJobExpMonth(e.target.value)
           }}>
-            <MenuItem value={"1"}>1</MenuItem>
-            <MenuItem value={"2"}>2</MenuItem>
+             {months.map(item=>(
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
           </Select>
         </FormControl>
 
@@ -239,18 +238,34 @@ function JobRequirement(props) {
           size="18%"
         />
 
-        <TextFieldComponent
-          labelData="Last Job Duration(in months)"
-          setData={setLastJobDuration}
-          size="18%"
-          data={lastJobDuration}
-        />
+          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Last Job Duration (years)</InputLabel>
+          <Select sx={{ width: "100%" }} label="Last Job Duration (years)" value={LastjobDurationYear} onChange={(e) => {
+            setLastJobDurationYear(e.target.value)
+          }}>
+             {year.map(item=>(
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Last Job Duration (months)</InputLabel>
+          <Select sx={{ width: "100%" }} label="Last Job Duration (months)" value={LastjobDurationMonths} onChange={(e) => {
+            setLastJobDurationMonths(e.target.value)
+          }}>
+            {months.map(item=>(
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
+          </Select>
+        </FormControl>
 
         {/* <TextFieldComponent
           labelData="Reason For Leaving Last Job"
           setData={setReasonLeaving}
           size="18%"
           data={ReasonLeaving}
+
         /> */}
            <Autocomplete
                     disablePortal
@@ -280,6 +295,10 @@ function JobRequirement(props) {
                     )}
                     getOptionLabel={(item) => `${item.name}`}
                   />
+
+
+        />
+       <div style={{width:"59%"}}></div>
 
 
 
