@@ -43,8 +43,7 @@ export default function Header() {
               {LoginUserName} {LoginUserLastName}
               <h6 style={{ "margin-top": "5px" }}>{userTypeofLogin}</h6>
             </h4>
-          </StyledToolbar>
-          <PowerSettingsNewIcon
+            <PowerSettingsNewIcon
             sx={{
               background: "#faf7f5",
               padding: "20px",
@@ -57,6 +56,20 @@ export default function Header() {
               window.location.reload(false);
             }}
           />
+          </StyledToolbar>
+          {/* <PowerSettingsNewIcon
+            sx={{
+              background: "#faf7f5",
+              padding: "20px",
+              marginRight: "-20px !important",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              localStorage.clear();
+              navigate("/login");
+              window.location.reload(false);
+            }}
+          /> */}
         </StyledToolbar>
       </StyledToolbar>
     </AppBar>

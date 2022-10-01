@@ -48,7 +48,7 @@ function Login() {
   // };
   const renderButton = (buttonProps) => {
     return (
-      <Button {...buttonProps} onClick={handleClickforReSendOTP}>
+      <Button  color="success" {...buttonProps} onClick={handleClickforReSendOTP}>
         {buttonProps.remainingTime !== 0
           ? `wait for ${buttonProps.remainingTime} sec`
           : "Resend"}
@@ -117,8 +117,12 @@ function Login() {
         if (response.data.data.userType === "OPS") {
           navigate("/ycw");
         }
-        if (response.data.data.userType === "FIELD_OFFICER") {
+        else if (response.data.data.userType === "FIELD_OFFICER") {
           navigate("/registration");
+        }else{
+          localStorage.clear();
+          navigate("/login");
+          window.location.reload(false);
         }
         setLoginData(response.data);
       } catch (error) {
@@ -156,7 +160,7 @@ function Login() {
         }}
       >
         {/*--------------------- Login Field Code Start ---------------------------- */}
-        <Card sx={{ marginTop: "50px", padding: "25px" }}>
+        <Card   sx={{ padding:"30px" }}>
           <CardMedia
             image={image}
             component="img"
@@ -201,7 +205,22 @@ function Login() {
                     variant="standard"
                   />
                   <TextField
-                    sx={{ textDecoration: "none", counterText: "" }}
+                   
+                    sx={{
+                      width: "200px",
+                      "& input[type=number]": {
+                        "-moz-appearance": "textfield",
+                      },
+                      "& input[type=number]::-webkit-outer-spin-button": {
+                        "-webkit-appearance": "none",
+                        margin: 0,
+                      },
+                      "& input[type=number]::-webkit-inner-spin-button": {
+                        "-webkit-appearance": "none",
+                        margin: 0,
+                      },
+                      textDecoration: "none", counterText: "" 
+                    }}
                     required
                     size="small"
                     id="standard-size-small"
@@ -270,7 +289,7 @@ function Login() {
                     style={{ display: "flex", gap: "10px", color: "red" }}
                   />
 
-                  <Button onClick={handleClickforLogin}>Submit</Button>
+                  <Button  color="success" onClick={handleClickforLogin}>Submit</Button>
                 </Box>
               </Box>
 

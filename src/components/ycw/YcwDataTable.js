@@ -56,7 +56,8 @@ function Right() {
   const [searchDD, setSearchDD] = React.useState([]);
   const [cityDD, setCityDD] = React.useState([]);
   const [searchycwStatus, setSearchYcwStatus]= React.useState("");
-  const [ycwSearchUserId, setYcwSearchUserId] = React.useState("");
+  const [ycwSearchUserId, setYcwSearchUserId] = React.useState([]);
+  const [ycwSearchUserIdList, setYcwSearchUserIdList] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
   const [filterName, setFilterName] = React.useState("createdAt");
   const [btnColorUserID, setBtnColorUserId] = useState("black");
@@ -146,11 +147,15 @@ function Right() {
     };
     if (searchItem.length > 3) {
       fetchSearchData()
+      // searchDD.map((item)=>{
+      //   setYcwSearchUserIdList(item.userId)
+      // })
+      
     }
   }, [searchItem])
 
 console.log("searchDD",searchDD)
-console.log("goooo",tableData)
+console.log("goooo",ycwSearchUserIdList)
 
      return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
@@ -187,8 +192,10 @@ console.log("goooo",tableData)
             setSearchYcwStatus(newValue.profileStatus);
              if(newValue.profileStatus=="ACTIVE"){
             navigate(`/ycw/profile/${newValue.userId}`)
-             } else{
+             } else if(newValue.profileStatus=="IN_ACTIVE"){
               navigate(`/ycw/add/${newValue.userId}`)
+             }else{
+              navigate("/ycw")
              }
           }}
           disableClearable
@@ -203,10 +210,10 @@ console.log("goooo",tableData)
                    setSearchItem(e.target.value);
                 }}
                 {...params}
-                // InputProps={{
-                //   ...params.InputProps,
-                //   type: "search",
-                // }}
+                InputProps={{
+                  ...params.InputProps,
+                  type: "search",
+                }}
               />
             </Box>
           )}

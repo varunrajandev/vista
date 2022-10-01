@@ -229,8 +229,8 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setPhoneNumber(e.target.value);
             }}
-            error={phoneNumber.length == 10 ? false : true}
-            helperText={phoneNumber.length == 10 ? "" : "please fill 10 digit number"}
+            error={phoneNumber.length == 10||phoneNumber.length < 1 ? false : true}
+            helperText={phoneNumber.length == 10 ||phoneNumber.length <1 ? "" : "please fill 10 digit number"}
           />
 
           <TextField
@@ -260,8 +260,8 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setAlternateNumber(e.target.value);
             }}
-            error={(alternateNumber != null && alternateNumber.length == 10 ? false : true)}
-            helperText={alternateNumber != null && alternateNumber.length == 10 ? "" : "please fill 10 digit number"}
+            error={(alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? false : true)}
+            helperText={alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? "" : "please fill 10 digit number"}
           />
 
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
@@ -309,12 +309,25 @@ function PersonalInfo(props) {
               setWhatsapp(e.target.value);
             }}
             disabled={whatsappAvailable==="Not Available"?true:false}
-            error={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 ? false : true) : false}
-            helperText={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 ? "" : "please fill 10 digit number") : ""}
+            error={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10||whatsapp.length < 1 ? false : true) : false}
+            helperText={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 || whatsapp.length < 1 ? "" : "please fill 10 digit number") : ""}
           />
           
           <TextField
-            sx={{ width: "18%" }}
+             sx={{
+              width: "18%",
+              '& input[type=number]': {
+                '-moz-appearance': 'textfield'
+              },
+              '& input[type=number]::-webkit-outer-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0
+              },
+              '& input[type=number]::-webkit-inner-spin-button': {
+                '-webkit-appearance': 'none',
+                margin: 0
+              }
+            }}
             size="small"
             value={age}
             type="number"

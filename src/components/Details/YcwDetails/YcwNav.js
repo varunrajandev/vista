@@ -133,21 +133,18 @@ function YcwNav() {
 
         <Button
           sx={{
-            bgcolor: "#FFB701",
-            color: "white",
+            color: "#FFB701",
             border: "1px solid #FFB701",
             marginRight: "20px",
             letterSpacing: "3px",
             paddingLeft: "30px",
             paddingRight: "30px",
           }}
-        
         >
           <NavLink
             to={`/ycw/add/${id}`}
             style={{
-              color: "White",
-              bgcolor: "#FFB701",
+              color: "#FFB701",
               fontWeight: 900,
               textDecoration: "none",
               display: "flex",

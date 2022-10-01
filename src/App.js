@@ -33,10 +33,6 @@ function App() {
      {loginLocalStorageData&&<Header/>}
     
       <Stack direction="row">
-
-        {/* {loginLocalStorageData&&<SideHeader />} */}
-       
-
         {(userTypeofLogin=="OPS")&&loginLocalStorageData&&<SideHeader />}
 
         <Routes>
