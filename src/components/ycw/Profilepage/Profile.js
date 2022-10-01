@@ -499,6 +499,213 @@ function Profile() {
               </Box>
             </Box>
             {/* ========================== Skills Section Code End================= */}
+
+          {/* ========================== Job Requirement Section Code Start================= */}
+          <Box mt={6}>
+              <h3 style={{ marginBottom: "6px" }}>Job Requirement</h3>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  mt: 4,
+                }}
+              >
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.jobTypeUuid}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Job Type"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.workingHours}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Working Hours"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.startTime}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Start Time"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.endTime}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="End Time"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.totalSimultaneousJob}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Total Simultaneous Job"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  mt: 4,
+                }}
+              >
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.minSalaryExpectedStr}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Min Salary Expected"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.maxSalaryExpectedStr}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Max Salary Expected"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.openToTraining}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Open To Training"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.traningMode}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Traning Mode"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.jobRemarks}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Job Remarks"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+              </Box>
+              {/* <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mt: 4,
+                }}
+              >
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement.vehicle}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Vehicle"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                 // value={jobRequirement.userExperienceRequestDto.jobTypeUuid}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Last Job Type"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                 // value={jobRequirement.totalExperienceStr.reasonForLeavingJob}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Reason For Leaving Job"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+           //     value={jobRequirement.userExperienceRequestDto.totalExperienceStr}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Total Experience"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                 // value={jobRequirement.jobRemarks}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  // label="Job Remarks"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+              </Box> */}
+            </Box>
+            {/* ========================== Job Requirement Section Code End================= */}
+
             {/* ========================== Current Address Data Section Code Start================= */}
 
             <Box mt={6}>
@@ -742,211 +949,7 @@ function Profile() {
             </Box>
             {/* ========================== Permanent Address Data Section Code End================= */}
 
-            {/* ========================== Job Requirement Section Code Start================= */}
-            <Box mt={6}>
-              <h3 style={{ marginBottom: "6px" }}>Job Requirement</h3>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  mt: 4,
-                }}
-              >
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.jobTypeUuid}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Job Type"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.workingHours}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Working Hours"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.startTime}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Start Time"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.endTime}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="End Time"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.totalSimultaneousJob}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Total Simultaneous Job"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  mt: 4,
-                }}
-              >
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.minSalaryExpectedStr}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Min Salary Expected"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.maxSalaryExpectedStr}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Max Salary Expected"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.openToTraining}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Open To Training"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.traningMode}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Traning Mode"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.jobRemarks}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Job Remarks"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-              </Box>
-              {/* <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mt: 4,
-                }}
-              >
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                  value={jobRequirement.vehicle}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Vehicle"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                 // value={jobRequirement.userExperienceRequestDto.jobTypeUuid}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Last Job Type"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                 // value={jobRequirement.totalExperienceStr.reasonForLeavingJob}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Reason For Leaving Job"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-           //     value={jobRequirement.userExperienceRequestDto.totalExperienceStr}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  label="Total Experience"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-                <TextField
-                  sx={{ width: "18%" }}
-                  size="small"
-                 // value={jobRequirement.jobRemarks}
-                  id="outlined-basic"
-                  variant="filled"
-                  color="secondary"
-                  // label="Job Remarks"
-                  InputLabelProps={{ shrink: true }}
-                  focused
-                />
-              </Box> */}
-            </Box>
-            {/* ========================== Job Requirement Section Code End================= */}
+  
             {/* ========================== Bank Details Section Code Start================= */}
 
             <Box mt={6}>
