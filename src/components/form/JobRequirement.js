@@ -297,7 +297,7 @@ function JobRequirement(props) {
                   />
 
 
-        />
+    
        <div style={{width:"59%"}}></div>
 
 
