@@ -282,8 +282,16 @@ function JobRequirement(props) {
                     )}
                     getOptionLabel={(item) => `${item.name}`}
                   />
-                  <div style={{width:"59%"}}></div>
-                  </Box>
+
+
+
+    
+       <div style={{width:"59%"}}></div>
+
+
+
+      </Box>
+
     </Box>
   );
 }
