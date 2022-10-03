@@ -353,6 +353,7 @@ function UserRegistration() {
                         setCandidatePrimarySkills(newValue.uuid);
                       } else {
                         setTextfieldshowSkill("none")
+                        setCandidatePrimarySkills(newValue.uuid);
                       }
                     }}
                     onInputChange={(event, newInputValue) => {
@@ -489,6 +490,7 @@ function UserRegistration() {
                         setCandidateReligion(newValue.key);
                       } else {
                         setTextfieldshow("none")
+                        setCandidateReligion(newValue.key);
                       }
 
                     }}
