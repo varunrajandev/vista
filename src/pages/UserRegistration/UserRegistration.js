@@ -38,7 +38,8 @@ function UserRegistration() {
   const [skillsDD, setSkillsDD] = React.useState([]);
   const [workingHrDD, setWorkingHrDD] = React.useState([]);
 
-  const [candidatemobileNumber, setCandidateMobileNumber] = React.useState();
+  const [helperText, setHelperText] = React.useState("")
+  const [candidatemobileNumber, setCandidateMobileNumber] = React.useState("");
   const [candidateFirstName, setCandidateFirstName] = React.useState();
   const [candidateLastName, setCandidateLastName] = React.useState();
   const [candidategender, setCandidateGender] = React.useState();
@@ -118,16 +119,17 @@ function UserRegistration() {
   }, [candidatecity]);
   
 
-  // async function checkMobilenumber(){
-  //   let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${candidatemobileNumber}`)
-  //   let response = await checkNumber.json();
-  //   setAvailableNumberResponse(response.data)
-  // }
+  async function checkMobilenumber(){
+    let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${candidatemobileNumber}`)
+    let response = await checkNumber.json();
+   // setAvailableNumberResponse(response.data)
+   response.data?setHelperText("Number is already exist Please Update the Profile"):setHelperText()
+  }
 
-  // useEffect(() => {
-  // checkMobilenumber();
+  useEffect(() => {
+  checkMobilenumber();
 
-  // }, [candidatemobileNumber])
+  },[candidatemobileNumber.length===10?candidatemobileNumber:""])
 
 
   const handleClick = async () => {
@@ -215,25 +217,33 @@ function UserRegistration() {
                   type="number"
                   placeholder="Phone Number"
                   variant="standard"
-                  error={isError}
-                  helperText={helpertext}
+                  value={candidatemobileNumber}
                   onInput={(e) => {
                     setCandidateMobileNumber(
                       (e.target.value = Math.max(0, parseInt(e.target.value))
                         .toString()
                         .slice(0, 10))
-                    );
-                    if (
-                      e.target.value.length < 1 ||
-                      e.target.value.length === 10
-                    ) {
-                      setIsError(false);
-                      setHelpertext("");
-                    } else {
-                      setIsError(true);
-                      setHelpertext("Please Enter correct Number");
-                    }
+                    )
+                   
                   }}
+                  onChange={(e) => {
+                    setCandidateMobileNumber(e.target.value);
+                  }}
+                    error={candidatemobileNumber.length === 10||candidatemobileNumber.length < 1 ? false : true}
+                    helperText={candidatemobileNumber.length===10? helperText:(candidatemobileNumber.length === 10 ||candidatemobileNumber.length <1 ? "" : "please fill 10 digit number")}
+                     // error={isError}
+                  // helperText={helpertext}
+                  //   if (
+                  //     e.target.value.length < 1 ||
+                  //     e.target.value.length === 10
+                  //   ) {
+                  //     setIsError(false);
+                  //     setHelpertext("");
+                  //   } else {
+                  //     setIsError(true);
+                  //     setHelpertext("Please Enter correct Number");
+                  //   }
+                
                 />
               </Grid>
 
