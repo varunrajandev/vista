@@ -17,7 +17,6 @@ import Profile from "./components/ycw/Profilepage/Profile";
 import UserRegistration from "./pages/UserRegistration/UserRegistration";
 import { multiStepContext } from "./ContextApi/StepContext";
 
-
 function App() {
   
   const{loginData, setLoginData} = useContext(multiStepContext); 
@@ -36,7 +35,6 @@ function App() {
         {(userTypeofLogin=="OPS")&&loginLocalStorageData&&<SideHeader />}
 
         <Routes>
-       
         <Route path="/" element={<YcwAllData/>}/>
         <Route path="/ycw" element={<YcwAllData/>}/>
         <Route path="/login" element={<Login/>} />

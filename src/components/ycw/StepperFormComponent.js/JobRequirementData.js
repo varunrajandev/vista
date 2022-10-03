@@ -21,7 +21,7 @@ function JobRequirementData() {
   const [experienceRemarks, setExperienceRemarks] = React.useState("");
   const [lastJobType, setLastJobType] = React.useState([]);
   const [lastJobDuration, setLastJobDuration] = React.useState();
-  const [reasonLeaving, setReasonLeaving] = React.useState();
+  const [reasonLeaving, setReasonLeaving] = React.useState("");
   const [jobExpMonth, setJobExpMonth] = React.useState("");
   const [ jobExpYear, setJobExpYear] = React.useState("");
   const [jobData, setJobData] = React.useState("");

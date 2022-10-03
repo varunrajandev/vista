@@ -90,7 +90,7 @@ function JobsDataTable() {
         "http://13.126.160.155:8081/locationmaster/city/get/all"
       );
       const statusDropdownApi = await fetch(
-        "http://13.126.160.155:8080/user/get/jobStatus"
+        "http://13.126.160.155:8080/user/drop-down/get/jobCurrentStatus"
       );
       const localityApidata = await fetch(
         "http://13.126.160.155:8081/locationmaster/internal/micromarkets/all"
@@ -98,21 +98,22 @@ function JobsDataTable() {
         // `http://13.126.160.155:8081/locationmaster/micromarket/get/all/${cxcityId}`
       );
       const jobDataApi = await fetch(
-        `http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=${jobsOrder}&status=${statusjobs}`
+        "http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=asc"
+       // `http://13.126.160.155:8080/user/job/get/all/job?filter=jobId&pageNo=1&pageSize=30&sortby=${jobsOrder}&status=${statusjobs}`
       );
-      let searchData = await fetch(
-        `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
-      );
+      // let searchData = await fetch(
+      //  // `http://13.126.160.155:8080/user/worker/search/user?searchTerm=${searchItem}`
+      // );
       let CityDropdown = await selectCityDropdownApi.json();
       let statusDropdown = await statusDropdownApi.json();
       let jobdata = await jobDataApi.json();
       let LocalityDropdown = await localityApidata.json();
-      let responseSearch = await searchData.json();
+      //let responseSearch = await searchData.json();
       let statusApi = await statusDropdown.data;
       let selectCity = await CityDropdown.data;
       let listjobData = await jobdata.data;
       let localitydata = await LocalityDropdown.data;
-      setSearchDD(responseSearch.data || [{ name: "No Data" }]);
+     // setSearchDD(responseSearch.data || [{ name: "No Data" }]);
       setSelectCityDropdown(selectCity);
       setJobDatatable(listjobData.data);
       setStatusDropdownApi(statusApi);
@@ -468,7 +469,7 @@ function JobsDataTable() {
                     {row.jobId}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {row.jobType.value}
+                    {/* {row.jobType.value||""} */}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
                     {row.userId}

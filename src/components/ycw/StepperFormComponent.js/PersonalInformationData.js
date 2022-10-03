@@ -108,6 +108,7 @@ const datatGetById = async() => {
             "secondaryMobileNumber": alternateMobileNumber,
             "secondaryMobileVerified": false,
             "sourcingChannel": source,
+            "otherSourcingChannel": otherSource,
             "userType": "WORKER",
             "whatsappAvailable":(isWhatsappAvailable==="Other number"||isWhatsappAvailable==="Same as alternte number"||isWhatsappAvailable==="Same as mobile number")?true:false,
             "whatsappNumber": whatsappNumber,
@@ -145,7 +146,7 @@ const datatGetById = async() => {
           "religion":religion,
           "secondaryMobileNumber": alternateMobileNumber,
           "sourcingChannel": source,
-
+          "otherSourcingChannel": otherSource,
 
           "whatsappAvailable":(isWhatsappAvailable==="Other number"||isWhatsappAvailable==="Same as alternte number"||isWhatsappAvailable==="Same as mobile number")?true:false,
 
@@ -162,9 +163,6 @@ const datatGetById = async() => {
     alert("Please fill All the details"); 
   }
 }
-
- 
-
 
 
   return (

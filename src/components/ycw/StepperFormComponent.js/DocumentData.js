@@ -192,12 +192,14 @@ console.log(storeDocument)
         </Box>
       </Box>
       
+      <Box marginTop={5} sx={{ padding: 3, bgcolor: "white", borderRadius: 3, }} >
       <Box mt={2} sx={{display:"flex", gap:"10px"}}>
         {storeDocument.map((item)=>(
-          
-          <img width={"20%"} download src={item.fileUrl} alt="noImg" />
-          
+               <a href={item.fileUrl} target="blank" download>
+          <img width={"20%"} src={item.fileUrl} alt="noImg" />
+          </a>
         ))}
+      </Box>
       </Box>
 
     </Box>
