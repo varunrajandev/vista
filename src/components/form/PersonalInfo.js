@@ -131,10 +131,11 @@ function PersonalInfo(props) {
     }
     else setAge(age)
 
-    async function checkMobilenumber(mobile){
+    async function checkMobilenumber(){
       let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${phoneNumber}`)
       let response = await checkNumber.json();
      response.data?setHelperText("Number is already exist"):setHelperText()
+   
     }
 
 
