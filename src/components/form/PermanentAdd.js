@@ -88,7 +88,20 @@ function PermanentAdd(props) {
             />
 
             <TextField
-              sx={{ width: "18%" }}
+              sx={{
+                width: "18%" ,
+                "& input[type=number]": {
+                  "-moz-appearance": "textfield",
+                },
+                "& input[type=number]::-webkit-outer-spin-button": {
+                  "-webkit-appearance": "none",
+                  margin: 0,
+                },
+                "& input[type=number]::-webkit-inner-spin-button": {
+                  "-webkit-appearance": "none",
+                  margin: 0,
+                },
+              }}
               size="small"
               id="outlined-basic"
               label="Pin Code"

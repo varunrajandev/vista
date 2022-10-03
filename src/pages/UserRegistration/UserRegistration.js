@@ -278,6 +278,9 @@ function UserRegistration() {
                   onChange={(event, newValue) => {
                     setCandidateGender(newValue.key);
                   }}
+                  onInputChange={(event, newInputValue) => {
+                    setCandidateGender(newInputValue);
+                  }}
                   renderInput={(params) => (
                     <TextField
                       sx={{ width: "200px" }}
@@ -352,6 +355,9 @@ function UserRegistration() {
                         setTextfieldshowSkill("none")
                       }
                     }}
+                    onInputChange={(event, newInputValue) => {
+                      setCandidatePrimarySkills(newInputValue);
+                    }}
                     renderInput={(params) => (
                       <TextField
                         sx={{ width: "200px" }}
@@ -394,6 +400,9 @@ function UserRegistration() {
                   onChange={(event, newValue) => {
                     setCandidateCity(newValue.uuid);
                   }}
+                  onInputChange={(event, newInputValue) => {
+                    setCandidateCity(newInputValue);
+                  }}
                   renderInput={(params) => (
                     <TextField
                       sx={{ width: "200px" }}
@@ -417,6 +426,9 @@ function UserRegistration() {
                   options={localityDD}
                   onChange={(event, newValue) => {
                     setCandidateLocality(newValue.id);
+                  }}
+                  onInputChange={(event, newInputValue) => {
+                    setCandidateLocality(newInputValue);
                   }}
                   renderInput={(params) => (
                     <TextField
@@ -443,6 +455,9 @@ function UserRegistration() {
                   options={workingHrDD}
                   onChange={(event, newValue) => {
                     setCandidateWorkingHr(newValue.key);
+                  }}
+                  onInputChange={(event, newInputValue) => {
+                    setCandidateWorkingHr(newInputValue);
                   }}
                   renderInput={(params) => (
                     <TextField
@@ -476,6 +491,9 @@ function UserRegistration() {
                         setTextfieldshow("none")
                       }
 
+                    }}
+                    onInputChange={(event, newInputValue) => {
+                      setCandidateReligion(newInputValue);
                     }}
                     renderInput={(params) => (
                       <TextField

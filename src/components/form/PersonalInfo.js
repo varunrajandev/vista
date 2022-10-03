@@ -26,7 +26,6 @@ const theme = createTheme({
 })
 
 
-
 function PersonalInfo(props) {
   const [sourcingDD, setSourcingDD] = useState([])
   const [religionDD, setReligionDD] = useState([])
@@ -60,6 +59,7 @@ function PersonalInfo(props) {
 
   const {
     walk, setWalk,
+    otherSource,setOtherSource,
     fname, setFname,
     age, setAge,
     lname, setLname,
@@ -171,10 +171,11 @@ function PersonalInfo(props) {
             size="small"
             disabled={walk === "Others" ? false : true}
             label="Other Source"
+            value={otherSource}
             placeholder="Please Mention..."
             variant="outlined"
             onChange={(event) => {
-              setFname(event.target.value);
+              setOtherSource(event.target.value);
             }}
           />
 

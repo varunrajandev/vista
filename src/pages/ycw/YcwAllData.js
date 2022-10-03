@@ -15,12 +15,7 @@ import { getData } from '../../Redux/Posts/action';
 function YcwDataList() { 
   return ( 
        <>
-     
       <YcwDataTable/>
-     
-    
-      
-       
        </>
   )
 }

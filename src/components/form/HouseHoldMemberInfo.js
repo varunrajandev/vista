@@ -15,6 +15,7 @@ import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
 import { FilterData, masterApi } from "../../AlllData";
 
+
 function HouseHoldMemberInfo(props) {
   
   const [occupationDD, setOccupationDD] = React.useState([]);
@@ -29,6 +30,8 @@ function HouseHoldMemberInfo(props) {
     values[index][event.target.name] = event.target.value;
     setInputFields(values);
   };
+  
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -162,15 +165,7 @@ function HouseHoldMemberInfo(props) {
               onChange={(event) => handleChangeInput(index, event)}
             />
 
-            <TextField
-              style={{ width: "38.5%" }}
-              name="email"
-              label="Email"
-              value={inputField.email}
-              size="small"
-              onChange={(event) => handleChangeInput(index, event)}
-            />
-
+         
             <TextField
               style={{ width: "18%" }}
               name="age"
@@ -197,18 +192,35 @@ function HouseHoldMemberInfo(props) {
               </Select>
             </FormControl>
 
-            <div
-              style={{
-                display: "flex",
-                justfyContent: "space-between",
-                width: "18%",
-                alignItems: "center",
-              }}
-            >
+            <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+              <InputLabel id="demo-select-small">Address</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small"
+                id="demo-select-small"
+                // name="jobType"
+               value={inputField.event}
+                label="Addrrss"
+                onChange={(event) => handleChangeInput(index, event)}
+              >
+                  <MenuItem value="Same As Current Address" >Same As Current Address</MenuItem>
+                  <MenuItem value ="Same As Permanent Address">Same As Permanent Address</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+             
+              </Select>
+            </FormControl>
+            <TextField
+              style={{ width: "73%" }}
+              name="age"
+              label="Address/Locality"
+              value={inputField.age}
+              size="small"
+              onChange={(event) => handleChangeInput(index, event)}
+            />
+
               <IconButton aria-label="delete">
                 <DeleteIcon onClick={() => handleRemoveFields(index)} />
               </IconButton>
-            </div>
           </Box>
         ))}
       </form>

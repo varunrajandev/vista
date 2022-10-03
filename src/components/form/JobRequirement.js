@@ -37,23 +37,21 @@ function JobRequirement(props) {
     maxSal, setMaxSal,
     traningMode, setTraningMode,
     jobRemarks, setJobRemarks,
-    totalExp, setTotalExp,
     experienceRemarks, setExperienceRemarks,
     lastJobType, setLastJobType,
-    lastJobDuration, setLastJobDuration,
     ReasonLeaving, setReasonLeaving,
     jobExpMonth, setJobExpMonth,
     jobExpYear, setJobExpYear,
     LastjobDurationYear, setLastJobDurationYear, 
     LastjobDurationMonths, setLastJobDurationMonths
   } = props;
-
+console.log("reasonLeaving",ReasonLeaving)
   useEffect(() => {
     async function fetchData() {
       let Jobtypedata = await fetch("http://13.126.160.155:8080/user/skill/get/skills");
       let trainingModeData = await fetch("http://13.126.160.155:8080/user/drop-down/get/traningMode")
       let workinghoursData = await fetch("http://13.126.160.155:8080/user/drop-down/get/workingHours")
-      let reasionForleavingJob = await fetch ("http://13.126.160.155:8080/user/skill/get/skills")
+      let reasionForleavingJob = await fetch ("http://13.126.160.155:8080/user/drop-down/get/reasonForLeftJob")
       let res9 = await reasionForleavingJob.json();
       let res3 = await Jobtypedata.json();
       let res4 = await trainingModeData.json();
@@ -119,8 +117,9 @@ function JobRequirement(props) {
             setVehicleAvailable(e.target.value)
           }}>
             <MenuItem value={"Cycle"}>Cycle</MenuItem>
-            <MenuItem value={"Bike"}>Bike</MenuItem>
-            <MenuItem value={"Others"}>Others</MenuItem>
+            <MenuItem value={"Two_Wheeler"}>Two-Wheeler</MenuItem>
+            <MenuItem value={"Three_Wheeler"}>Three-Wheeler</MenuItem>
+            <MenuItem value={"Four_Wheeler"}>Four-Wheeler</MenuItem>
           </Select>
         </FormControl>
         {/* </Box> */}
@@ -260,32 +259,20 @@ function JobRequirement(props) {
           </Select>
         </FormControl>
 
-           <Autocomplete
-                    disablePortal
-                    size="small"
-                    id="combo-box-demo"
-                    options={reasionofLeavingJob}
-                    onChange={(event, newValue) => {
-                        setReasonLeaving(newValue.name);
-                      }}
-                    renderInput={(params) => (
-                      <TextField
-                      variant="outlined"
-                        sx={{ minWidth: 220, width: "18%" }}
-                        {...params}
-                        placeholder="Reason For Leaving Last Job"
-                        onChange={(event, newValue) => {
-                          setReasonLeaving("");
-                          // setTextfieldshow("none")
-                        }}
-                      />
-                    )}
-                    getOptionLabel={(item) => `${item.name}`}
-                  />
+
+        
+        <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+          <InputLabel id="demo-select-small">Reason For Leaving Last Job</InputLabel>
+          <Select sx={{ width: "100%" }} label="Last Job Duration (months)" value={ReasonLeaving} onChange={(e) => {
+            setReasonLeaving(e.target.value)
+          }}>
+            {reasionofLeavingJob.map(item=>(
+            <MenuItem value={item.key}>{item.value}</MenuItem>
+          ))}
+          </Select>
+        </FormControl>
 
 
-
-    
        <div style={{width:"59%"}}></div>
 
 
