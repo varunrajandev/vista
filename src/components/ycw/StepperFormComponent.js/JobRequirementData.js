@@ -1,32 +1,34 @@
 import { Box, Button } from '@mui/material'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import JobRequirement from '../../form/JobRequirement';
 import { JobRequirementApis, masterApi } from '../../../AlllData';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Notify from '../../Notification/Notify';
 
 function JobRequirementData() {
     //job requirements:
-  const [openToTraining, setOpenToTraining] = React.useState(false);
-  const [preferJob, setPreferJob] = React.useState("");
-  const [workingHour, setWorkingHour] = React.useState("");
-  const [startTime, setStartTime] = React.useState(null);
-  const [endTime, setEndTime] = React.useState(null);
-  const [vehicle, setVehicle] = React.useState("")
-  const [minSalaryExpected, setMinSalaryExpected] = React.useState("")
-  const [maxSalaryExpected, setMaxSalaryExpected] = React.useState("")
-  const [traningMode, setTraningMode] = React.useState("")
-  const [jobRemarks, setJobRemarks] = React.useState("");
-  const [experienceRemarks, setExperienceRemarks] = React.useState("");
-  const [lastJobType, setLastJobType] = React.useState([]);
-  const [lastJobDuration, setLastJobDuration] = React.useState();
-  const [reasonLeaving, setReasonLeaving] = React.useState();
-  const [jobExpMonth, setJobExpMonth] = React.useState("");
-  const [ jobExpYear, setJobExpYear] = React.useState("");
-  const [jobData, setJobData] = React.useState("");
-  const [ LastjobDurationYear, setLastJobDurationYear] = React.useState("");
-  const [LastjobDurationMonths, setLastJobDurationMonths] = React.useState("");
+  const [openToTraining, setOpenToTraining] = useState(false);
+  const [preferJob, setPreferJob] = useState("");
+  const [workingHour, setWorkingHour] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [vehicle, setVehicle] = useState("")
+  const [minSalaryExpected, setMinSalaryExpected] = useState("")
+  const [maxSalaryExpected, setMaxSalaryExpected] = useState("")
+  const [traningMode, setTraningMode] = useState("")
+  const [jobRemarks, setJobRemarks] = useState("");
+  const [experienceRemarks, setExperienceRemarks] = useState("");
+  const [lastJobType, setLastJobType] = useState([]);
+  const [lastJobDuration, setLastJobDuration] = useState();
+  const [reasonLeaving, setReasonLeaving] = useState();
+  const [jobExpMonth, setJobExpMonth] = useState("");
+  const [ jobExpYear, setJobExpYear] = useState("");
+  const [jobData, setJobData] = useState("");
+  const [ LastjobDurationYear, setLastJobDurationYear] = useState("");
+  const [LastjobDurationMonths, setLastJobDurationMonths] = useState("");
+  const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
 
   
 
@@ -108,28 +110,38 @@ if(stt >endt){
           "totalExperienceYears": jobExpYear
         },
       })
-      //console.log({totalExp,experienceRemarks, lastJobType, lastJobDuration, reasonLeaving, jobExpMonth, jobExpYear})
+
       
-      alert(response.data.message)
-      setCurrentSteps(5)
+      setNotify(
+        {isOpen:response.data.status,
+         message:response.data.message,
+         type:"success"}
+        )
+      
       
     } catch (error) {
-      alert(error)
+      setNotify(
+        {isOpen:true,
+         message:"Error",
+         type:"error"}
+        )
     }
   }
   
   return (
     <>
+    <Notify 
+    notify={notify}
+    setNotify={setNotify}
+  />
    <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
     <Box
         marginTop={5}
         sx={{
-
           padding: 3,
           bgcolor: "white",
           borderRadius: 3,
-        }}
-      >
+        }}>
              <JobRequirement                                                               
               openToTraining={openToTraining} setOpenToTraining={setOpenToTraining}
               preferJob={preferJob} setPreferJob={setPreferJob}
@@ -149,12 +161,12 @@ if(stt >endt){
               lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}
               ReasonLeaving={reasonLeaving} setReasonLeaving={setReasonLeaving}
               jobExpYear={jobExpYear} setJobExpYear={setJobExpYear}
-              jobExpMonth={jobExpMonth} setJobExpMonth={setJobExpMonth}
+              jobExpMonth={jobExpMonth} setJobExpMonth={setJobExpMonth}/>
 
-              />
             <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
-                <Button variant='contained' onClick={(()=>{setCurrentSteps(3)})}>back</Button>
+                <Button variant='contained' onClick={(()=>{setCurrentSteps(2)})}>back</Button>
                 <Button variant='contained' onClick={handleSubmit}>save</Button>
+                <Button variant='contained' onClick={(()=>{setCurrentSteps(4)})}>next</Button>
             </Box>
         
       </Box>

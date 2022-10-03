@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { masterApi } from '../../../AlllData';
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import SkillExpDetails from '../../form/SkillExpDetails'
+import Notify from '../../Notification/Notify';
 import SkillQuestion from './SkillQuestion';
 
 function SkillInformationData() {
@@ -17,6 +18,7 @@ function SkillInformationData() {
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
     const [status, setStatus] = useState()
+    const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
 
     
     const {id} = useParams()
@@ -59,6 +61,7 @@ function SkillInformationData() {
     
 
     async function handleSubmit(){
+
     
       try {
         let response = await axios.post(masterApi+"/skill/save",
@@ -83,9 +86,17 @@ function SkillInformationData() {
           "userId": ids || id
         })
         setSkillData(response.data)
-        alert(response.data.message)
+        setNotify(
+          {isOpen:response.data.status,
+           message:response.data.message,
+           type:"success"}
+          )
       } catch (error) {
-        alert(error)
+        setNotify(
+          {isOpen:true,
+           message:"Error",
+           type:"error"}
+          )
       }
     }
 
@@ -93,6 +104,10 @@ function SkillInformationData() {
 
   return (
     <>
+    <Notify 
+    notify={notify}
+    setNotify={setNotify}
+  />
        <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
     <Box
         marginTop={5}

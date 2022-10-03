@@ -35,6 +35,7 @@ function PersonalInfo(props) {
   const [covidDD, setCovidDD] = useState([])
   const [educationDD, setEducationDD] = useState([])
   const [whatsAppValue, setWhatsAppValue] = useState("")
+  const [helperText, setHelperText] = useState("")
   
   
 
@@ -47,7 +48,6 @@ function PersonalInfo(props) {
     console.log(char);
     if (!regex.test(char)) {
       e.target.value = chars.join('');
-      alert("Please enter only alphabets");
       e.preventDefault();
       return false;
     }
@@ -113,9 +113,9 @@ function PersonalInfo(props) {
       setEducationDD(res5.data)
     }
     dataFetch()
-  }, [])
+    checkMobilenumber()
+  }, [phoneNumber.length===10?phoneNumber:""])
   console.log(userProfile)
-  let objects = {};
 
   const handleChange = (event) => {
     setWalk(event.target.value);
@@ -130,6 +130,13 @@ function PersonalInfo(props) {
        setAge(CurrentYear-PickYear)
     }
     else setAge(age)
+
+    async function checkMobilenumber(mobile){
+      let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${phoneNumber}`)
+      let response = await checkNumber.json();
+     response.data?setHelperText("Number is already exist"):setHelperText()
+    }
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -230,7 +237,7 @@ function PersonalInfo(props) {
               setPhoneNumber(e.target.value);
             }}
             error={phoneNumber.length == 10||phoneNumber.length < 1 ? false : true}
-            helperText={phoneNumber.length == 10 ||phoneNumber.length <1 ? "" : "please fill 10 digit number"}
+            helperText={phoneNumber.length===10? helperText:(phoneNumber.length == 10 ||phoneNumber.length <1 ? "" : "please fill 10 digit number")}
           />
 
           <TextField

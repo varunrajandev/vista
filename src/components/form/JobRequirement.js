@@ -260,27 +260,14 @@ function JobRequirement(props) {
           </Select>
         </FormControl>
 
-        {/* <TextFieldComponent
-          labelData="Reason For Leaving Last Job"
-          setData={setReasonLeaving}
-          size="18%"
-          data={ReasonLeaving}
-
-        /> */}
            <Autocomplete
                     disablePortal
                     size="small"
                     id="combo-box-demo"
                     options={reasionofLeavingJob}
                     onChange={(event, newValue) => {
-                      // if (newValue.key === "OTHERS") {
-                        // setTextfieldshow("visible")
                         setReasonLeaving(newValue.name);
-                      // } else {
-                      //   setTextfieldshow("none")
-                      // }
-
-                    }}
+                      }}
                     renderInput={(params) => (
                       <TextField
                       variant="outlined"
@@ -295,14 +282,8 @@ function JobRequirement(props) {
                     )}
                     getOptionLabel={(item) => `${item.name}`}
                   />
-
-
-        />
-       <div style={{width:"59%"}}></div>
-
-
-
-      </Box>
+                  <div style={{width:"59%"}}></div>
+                  </Box>
     </Box>
   );
 }
