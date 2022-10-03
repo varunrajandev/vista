@@ -15,6 +15,7 @@ import DataUsageOutlinedIcon from "@mui/icons-material/DataUsageOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const BOX = styled(Box)({
   display: "flex",
@@ -1300,7 +1301,7 @@ function Profile() {
                       </Box>
 
                       <Box>
-                        <MailOutlineIcon
+                        <LocationOnIcon
                           sx={{
                             color: "action.active",
                             mr: 1,
@@ -1314,7 +1315,7 @@ function Profile() {
                           id="outlined-basic"
                           variant="standard"
                           color="secondary"
-                          label="Email"
+                          label="Address"
                           InputLabelProps={{ shrink: true }}
                           focused
                         />

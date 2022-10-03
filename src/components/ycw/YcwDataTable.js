@@ -1118,7 +1118,7 @@ console.log("goooo",ycwSearchUserIdList)
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.gender.value || "--"}
+                    {item.gender?item.gender.value:"--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
@@ -1126,7 +1126,7 @@ console.log("goooo",ycwSearchUserIdList)
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.primarySkill || "--"}
+                    {item.primarySkill?item.primarySkill: "--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">

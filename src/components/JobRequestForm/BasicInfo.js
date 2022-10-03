@@ -44,11 +44,11 @@ function BasicInfo(props) {
   useEffect(() => {
     const dataFetch = async () => {
       const jobTypeApidata = await fetch("http://13.126.160.155:8080/user/skill/get/skills");
-      const languageApi = await fetch("http://13.126.160.155:8080/user/get/language");
-      const genderApidata = await fetch("http://13.126.160.155:8080/user/get/gender");
-      const trainingTypedata = await fetch("http://13.126.160.155:8080/user/get/trainingType");
+      const languageApi = await fetch("http://13.126.160.155:8080/user/drop-down/get/language?language=");
+      const genderApidata = await fetch("http://13.126.160.155:8080/user/drop-down/get/gender");
+      const trainingTypedata = await fetch("http://13.126.160.155:8080/user/drop-down/get/trainingType");
       const agePreferenceDropdown = await fetch("http://13.126.160.155:8080/user/get/agePreference");
-      const religionPreferenceDropdown = await fetch("http://13.126.160.155:8080/user/get/religion");
+      const religionPreferenceDropdown = await fetch("http://13.126.160.155:8080/user/drop-down/get/religion");
 
       let jobTyperes = await jobTypeApidata.json();
       let language = await languageApi.json();
@@ -164,12 +164,10 @@ function BasicInfo(props) {
               setLanguagePreference(event.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {/* {languageDropdown.map((item) => (
+         
+            {languageDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))} */}
+            ))}
           </Select>
         </FormControl>
       </Box>
@@ -193,13 +191,11 @@ function BasicInfo(props) {
               setTrainingPreference(event.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
+        
 
-            {/* {trainingTypeDropdown.map((item) => (
+            {trainingTypeDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))} */}
+            ))}
           </Select>
         </FormControl>
 
@@ -215,12 +211,10 @@ function BasicInfo(props) {
               setReligionPreference(event.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {/* {religionPreferenceDropdown.map((item) => (
+           
+            {religionPreferenceDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))} */}
+            ))}
           </Select>
         </FormControl>
 
@@ -235,9 +229,7 @@ function BasicInfo(props) {
               setAgePreference(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
+            
             {/* {agePreferenceDropdown.map((item) => (
               <MenuItem value={item.value}>{item.value}</MenuItem>
             ))} */}
@@ -255,12 +247,10 @@ function BasicInfo(props) {
               setGenderPreference(e.target.value);
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {/* {genderDropdown.map((item) => (
+          
+            {genderDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))} */}
+            ))}
           </Select>
         </FormControl>
 
