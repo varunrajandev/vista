@@ -8,6 +8,7 @@ import SkillExpDetails from "../../form/SkillExpDetails";
 import { Cuisines } from "../../../AlllData";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { useParams } from "react-router-dom";
+import Notify from "../../Notification/Notify";
 
 let Array = [];
 
@@ -20,8 +21,8 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 function SkillQuestion() {
 
   const [allQuestion, setAllQuestion] = useState([])
-  //const [storeQuestion, setStoreQuestion] = useState([])
   const [storeQuestion, setStoreQuestion] = useState([]);
+  const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
 
   const {id} = useParams()
   let ids = localStorage.getItem('ID')
@@ -57,11 +58,7 @@ function SkillQuestion() {
     fetchSkillData();
   }, [id, ids]);
 
-  // console.log(ids)
-
    console.log(storeQuestion);
-
-  // console.log("all question is",allQuestion)
 
   async function handleSubmit() {
      try {
@@ -70,10 +67,18 @@ function SkillQuestion() {
       userId:ids || id
     });
 
-       alert(response.data.message);
-       setCurrentSteps(4)
+    setNotify(
+      {isOpen:response.data.status,
+       message:response.data.message,
+       type:"success"}
+      )
+      
      } catch (error) {
-       alert(error);
+      setNotify(
+        {isOpen:true,
+         message:"Error",
+         type:"error"}
+        )
      }
   }
 
@@ -96,6 +101,10 @@ function SkillQuestion() {
 
   return (
     <>
+    <Notify 
+    notify={notify}
+    setNotify={setNotify}
+  />
       <Box>
         <Box
           marginTop={5}
@@ -166,16 +175,9 @@ function SkillQuestion() {
               gap: "20px",
             }}
           >
-            <Button
-              variant="contained"
-              onClick={() => {
-                setCurrentSteps(2);
-              }}
-            >
-              back
-            </Button>
+            <Button variant="contained" onClick={() => { setCurrentSteps(2)}}>  back </Button>
             <Button variant="contained" onClick={handleSubmit}>save</Button>
-            {/* (()=>{setCurrentSteps(4)}) */}
+            <Button variant="contained" onClick={() => { setCurrentSteps(3)}}>next</Button>
           </Box>
         </Box>
       </Box>

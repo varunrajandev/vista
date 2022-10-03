@@ -4,6 +4,8 @@ import PersonalInfo from '../../form/PersonalInfo'
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import Notify from '../../Notification/Notify';
 
 
 function PersonalInformationData() {
@@ -27,6 +29,7 @@ function PersonalInformationData() {
   const [medicalCondition, setMedicalCondition] = useState("");
   const [availableNumberResponse, setAvailableNumberResponse] = useState()
   const [userProfile, setUserProfile] = useState([])
+  const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
   
 
   const {id} = useParams()
@@ -65,27 +68,11 @@ const datatGetById = async() => {
 
      console.log("profileData", personalData.data.birthday)
 }
-
- 
-   async function checkMobilenumber(mobile){
-    let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${mobile}`)
-    let response = await checkNumber.json();
-    setAvailableNumberResponse(response.data)
-  }
-
-  useEffect(() => {
+ useEffect(() => {
     datatGetById();
   }, [id || ids])
   
-  const n = setTimeout(() => {
-    if(mobile.length===10) checkMobilenumber(mobile);
-    if(availableNumberResponse&&!userProfile.status){
-      alert("Already Available")
-    }
-  }, 1000);
-  if(alternateMobileNumber || whatsappNumber || birthday || maritalStatus){
-      clearTimeout(n)
-    }
+
   
   const handleSubmit = async () => {
     try {
@@ -113,13 +100,21 @@ const datatGetById = async() => {
             "whatsappAvailable":(isWhatsappAvailable==="Other number"||isWhatsappAvailable==="Same as alternte number"||isWhatsappAvailable==="Same as mobile number")?true:false,
             "whatsappNumber": whatsappNumber,
           });
-          alert(response.data.message)
+          setNotify(
+            {isOpen:response.data.status,
+             message:response.data.message,
+             type:"success"}
+            )
           localStorage.setItem('ID', response.data.data.userId);
           response.data.status?localStorage.setItem('steps', 2):localStorage.setItem('steps', 1)
           setCurrentSteps(2)
         
     } catch (error) {
-      alert("Please fill All the details"); 
+      setNotify(
+        {isOpen:true,
+         message:"Please Filled phone Number",
+         type:"error"}
+        )
     }
  }
 
@@ -146,37 +141,55 @@ const datatGetById = async() => {
           "religion":religion,
           "secondaryMobileNumber": alternateMobileNumber,
           "sourcingChannel": source,
+
           "otherSourcingChannel": otherSource,
 
-          "whatsappAvailable":(isWhatsappAvailable==="Other number"||isWhatsappAvailable==="Same as alternte number"||isWhatsappAvailable==="Same as mobile number")?true:false,
 
+          "whatsappAvailable":(isWhatsappAvailable==="Other number"||isWhatsappAvailable==="Same as alternte number"||isWhatsappAvailable==="Same as mobile number")?true:false,
           "whatsappNumber": whatsappNumber,
           "department": "TECH",
           "userType": "WORKER",
           userId:ids || id
         
         });
-        alert("Updated",response.data.message)
+        setNotify(
+          {isOpen:response.data.message,
+           message:response.data.message,
+           type:"success"}
+          )
         
       
   } catch (error) {
-    alert("Please fill All the details"); 
+    setNotify(
+      {isOpen:true,
+       message:error,
+       type:"error"}
+      )
   }
 }
 
 
+
   return (
+
   <>
+   <Box >
+ <Notify 
+    notify={notify}
+    setNotify={setNotify}
+  />
+ </Box>
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
     <Box
         marginTop={5}
         sx={{
-
           padding: 3,
           bgcolor: "white",
           borderRadius: 3,
         }}
       >
+        {personalData.data&&<div style={{display:"flex", alignItems:"center", justifyContent:"right", gap:"5px" }}><h5>Saved</h5><VerifiedIcon color='secondary' fontSize='13px'/></div>}
+        
              <PersonalInfo
                 walk={source} setWalk={setSource}
                 fname={firstname} setFname={setFirstname}
@@ -207,7 +220,6 @@ const datatGetById = async() => {
 
 
     </Box>
-
     </>
   )
 }

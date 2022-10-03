@@ -1,13 +1,15 @@
 import { Box, Button } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { BankApi, masterApi } from "../../../AlllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import BankAccount from "../../form/BankAccount";
+import Notify from "../../Notification/Notify";
 
 function BankInformation() {
-    //bank account
+  //bank account
+  const [boolean, setBoolean] = useState(false)
   const [inputFields, setInputFields] = useState([
     {
       accountType: "",
@@ -19,35 +21,36 @@ function BankInformation() {
       accountNumber: "",
     },
   ]);
-  
+  const [notify, setNotify] = useState({ isOpen: false, message: "", type: "" })
+
 
 
   const [ifscCodeData, setIfscCodeData] = useState([])
   const [data, setData] = useState([])
   const ids = localStorage.getItem("ID")
-  const {id} = useParams()
+  const { id } = useParams()
 
-//Data Fetch by IFce
+  //Data Fetch by IFce
   async function fetchData(ifsc) {
-    let FetchByIfce = await fetch(masterApi+`/bank/get/bankDetails/${ifsc}`)
+    let FetchByIfce = await fetch(masterApi + `/bank/get/bankDetails/${ifsc}`)
     let AccountTypeData = await FetchByIfce.json();
     setIfscCodeData(AccountTypeData.data);
 
     setInputFields([
       {
-        accountType: data.accountType?data.accountType:"",
-        bankName:AccountTypeData.data.bankName?AccountTypeData.data.bankName:"",
-        branchName:AccountTypeData.data.branchName?AccountTypeData.data.branchName:"",
-        branchAddress:AccountTypeData.data.branchAddress?AccountTypeData.data.branchAddress:"",
-        accountHolderName: data.accountHolderName ,
-        ifscCode: inputFields[0].ifscCode?inputFields[0].ifscCode:"",
-        accountNumber: data.accountNumber?data.accountNumber:"",
+        accountType: data.accountType ? data.accountType : "",
+        bankName: AccountTypeData.data.bankName ? AccountTypeData.data.bankName : "",
+        branchName: AccountTypeData.data.branchName ? AccountTypeData.data.branchName : "",
+        branchAddress: AccountTypeData.data.branchAddress ? AccountTypeData.data.branchAddress : "",
+        accountHolderName: data.accountHolderName,
+        ifscCode: inputFields[0].ifscCode ? inputFields[0].ifscCode : "",
+        accountNumber: data.accountNumber ? data.accountNumber : "",
       },])
-    
+
   }
 
   //All Details fetch by id
-  async function DataFetchById(){
+  async function DataFetchById() {
     let bankData = await fetch(`http://13.126.160.155:8080/user/bank/get/${ids || id}`)
     let allDataResponse = await bankData.json();
     setData(allDataResponse.data[0])
@@ -56,32 +59,32 @@ function BankInformation() {
     setInputFields([
       {
         accountType: allDataResponse.data[0].accountType,
-        bankName:ifscCodeData.bankName?ifscCodeData.bankName:allDataResponse.data[0].bankName,
-        branchName:ifscCodeData.branchName?ifscCodeData.branchName:allDataResponse.data[0].branchName,
-        branchAddress:ifscCodeData.branchAddress?ifscCodeData.branchAddress:allDataResponse.data[0].branchAddress,
+        bankName: ifscCodeData.bankName ? ifscCodeData.bankName : allDataResponse.data[0].bankName,
+        branchName: ifscCodeData.branchName ? ifscCodeData.branchName : allDataResponse.data[0].branchName,
+        branchAddress: ifscCodeData.branchAddress ? ifscCodeData.branchAddress : allDataResponse.data[0].branchAddress,
         accountHolderName: allDataResponse.data[0].accountHolderName,
-        ifscCode: inputFields[0].ifscCode?inputFields[0].ifscCode:allDataResponse.data[0].ifscCode,
+        ifscCode: inputFields[0].ifscCode ? inputFields[0].ifscCode : allDataResponse.data[0].ifscCode,
         accountNumber: allDataResponse.data[0].accountNumber,
       },
     ])
   }
 
   console.log(inputFields[0].branchAddress);
-  
+
   useEffect(() => {
-    if(inputFields[0].ifscCode.length===11){
-       fetchData(inputFields[0].ifscCode);
+    if (inputFields[0].ifscCode.length === 11) {
+      fetchData(inputFields[0].ifscCode);
     }
     DataFetchById()
-  }, [ids||id, inputFields[0].ifscCode]);
+  }, [ids || id, inputFields[0].ifscCode]);
 
-  const {currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext)
+  const { currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext)
 
 
-   
-  async function handleSubmit(){
+
+  async function handleSubmit() {
     try {
-      let response = await axios.post(BankApi, 
+      let response = await axios.post(BankApi,
         [
           {
             "accountHolderName": inputFields[0].accountHolderName,
@@ -96,14 +99,29 @@ function BankInformation() {
           }
         ]
       )
-      alert(response.data.message)
-      setCurrentSteps(6)
+      setNotify(
+        {
+          isOpen: response.data.status,
+          message: response.data.message,
+          type: "success"
+        }
+      )
     } catch (error) {
-      alert(error)
+      setNotify(
+        {
+          isOpen: true,
+          message: "Error",
+          type: "error"
+        }
+      )
     }
   }
   return (
     <>
+      <Notify
+        notify={notify}
+        setNotify={setNotify}
+      />
       <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
         <Box
           marginTop={5}
@@ -114,18 +132,20 @@ function BankInformation() {
           }}
         >
           <BankAccount
-           setInputFields={setInputFields}
-           inputFields={inputFields}
-           ifscCodeData={ifscCodeData}
+            setInputFields={setInputFields}
+            inputFields={inputFields}
+            ifscCodeData={ifscCodeData}
           />
 
-            <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
-                <Button variant='contained' onClick={(()=>{setCurrentSteps(4)})}>back</Button>
-                <Button variant='contained' onClick={handleSubmit}>save</Button>
-            </Box>
-
-        </Box>
+          <Box sx={{ display: "flex", alignItems: "end", height: "100px", justifyContent: "right", gap: "20px" }}>
+            <Button variant='contained' onClick={(() => { setCurrentSteps(4) })}>back</Button>
+            <Button variant='contained' onClick={handleSubmit}>save</Button>
+            <Button variant='contained' onClick={()=>{setBoolean(true)}}>Finish</Button>
+          </Box>
+          </Box>
       </Box>
+     {boolean && <Navigate to="/ycw" />} 
+
     </>
   );
 }

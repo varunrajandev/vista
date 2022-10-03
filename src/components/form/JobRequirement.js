@@ -259,6 +259,7 @@ console.log("reasonLeaving",ReasonLeaving)
           </Select>
         </FormControl>
 
+
         
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Reason For Leaving Last Job</InputLabel>
@@ -271,11 +272,13 @@ console.log("reasonLeaving",ReasonLeaving)
           </Select>
         </FormControl>
 
+
        <div style={{width:"59%"}}></div>
 
 
 
       </Box>
+
     </Box>
   );
 }
