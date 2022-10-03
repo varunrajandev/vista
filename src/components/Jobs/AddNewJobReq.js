@@ -6,16 +6,16 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 
 function AddNewJobReq() {
-  const [jobTypes, setJobTypes] = React.useState("");
-  const [workDuration, setWorkDuration] = React.useState("");
-  const [dailyStartTime, setDailyStartTime] = React.useState("");
-  const [membersInFamily, setMembersInFamily] = React.useState("");
-  const [languagePreference, setLanguagePreference] = React.useState("");
-  const [trainingPreference, setTrainingPreference] = React.useState("");
-  const [religionPreference, setReligionPreference] = React.useState("");
-  const [value, setValue] = React.useState("");
+  const [jobTypes, setJobTypes] = React.useState();
+  const [workDuration, setWorkDuration] = React.useState();
+  const [dailyStartTime, setDailyStartTime] = React.useState();
+  const [membersInFamily, setMembersInFamily] = React.useState();
+  const [languagePreference, setLanguagePreference] = React.useState();
+  const [trainingPreference, setTrainingPreference] = React.useState();
+  const [religionPreference, setReligionPreference] = React.useState();
+  const [value, setValue] = React.useState();
   const [agePreference, setAgePreference] = React.useState();
-  const [genderPreference, setGenderPreference] = React.useState("");
+  const [genderPreference, setGenderPreference] = React.useState();
   const [budgetMax, setBudgetMax] = React.useState("");
   const [budgetMin, setBudgetMin] = React.useState();
   const [remarks, setRemarks] = React.useState("");

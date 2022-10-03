@@ -228,6 +228,10 @@ console.log("goooo",ycwSearchUserIdList)
           onChange={(event, newValue) => {
             setWorkType(newValue.uuid);
           }}
+
+          onInputChange={(event, newInputValue) => {
+            setWorkType("");
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: "white", borderRadius: "5px" }}
@@ -249,6 +253,9 @@ console.log("goooo",ycwSearchUserIdList)
           options={ycwStatus}
           onChange={(event, newValue) => {
             setStatusycw(newValue.key);
+          }}
+          onInputChange={(event, newInputValue) => {
+            setStatusycw(newInputValue);
           }}
           sx={{ width: "20%" }}
           renderInput={(params) => (
@@ -273,6 +280,9 @@ console.log("goooo",ycwSearchUserIdList)
           onChange={(event, newValue) => {
             setYcwCity(newValue.uuid);
             
+          }}
+          onInputChange={(event, newInputValue) => {
+            setYcwCity(newInputValue);
           }}
           renderInput={(params) => (
             <TextField
@@ -682,7 +692,7 @@ console.log("goooo",ycwSearchUserIdList)
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "18%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "14%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
@@ -759,7 +769,7 @@ console.log("goooo",ycwSearchUserIdList)
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "10%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "12%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
@@ -836,7 +846,7 @@ console.log("goooo",ycwSearchUserIdList)
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "13%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "14%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
@@ -912,7 +922,7 @@ console.log("goooo",ycwSearchUserIdList)
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "12%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "13%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>

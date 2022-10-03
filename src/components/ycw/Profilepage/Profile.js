@@ -15,6 +15,7 @@ import DataUsageOutlinedIcon from "@mui/icons-material/DataUsageOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+
 const BOX = styled(Box)({
   display: "flex",
 });
@@ -51,6 +52,7 @@ function Profile() {
   const [tertiarySkillsDto, setTertiarySkillsDto] = React.useState([]);
   const [subSkillsDto, setSubSkillsDto] = React.useState([]);
   const [data, setdata] = React.useState([]);
+  const[ expandLastJob,setExpandLastJob]= React.useState({});
   const { id } = useParams();
   //console.log("userData", secondarySkillsQuestions);
 
@@ -89,7 +91,7 @@ function Profile() {
         );
         setSkillotherLanguage(useprofiledata.skillResponseDto.otherLanguage)
         // setSubSkillsDto(properSkillsDto.skillDto)
-
+        setExpandLastJob(useprofiledata.jobRequirementResponseDto.userExperienceRequestDto)
         setname(userData.firstName);
       } catch (error) {
         console.log(error);
@@ -99,7 +101,6 @@ function Profile() {
   }, []);
   console.log("data is ", data);
 
-  console.log("dob", subSkillsDto);
 
   return (
     <>
@@ -227,7 +228,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.birthday}
+               value={userData.birthday}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -315,11 +316,10 @@ function Profile() {
               />
             </Box>
             {/* ========================== Personal Data Section Code End================= */}
-
                         {/* ========================== Skills Section Code Start================= */}
                         <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>
-                Skill and Experience Details
+                Skill and Language Details
               </h3>
               <Box
                 sx={{
@@ -331,7 +331,7 @@ function Profile() {
                 }}
               >
                 <TextField
-                  sx={{ width: "26%" }}
+                  sx={{ width: "18%" }}
                   size="small"
                   value={skills.primaryLanguage}
                   id="outlined-basic"
@@ -342,12 +342,10 @@ function Profile() {
                   focused
                 />
 
-                {skillotherLanguage.map((item) => (
-
                   <TextField
-                    sx={{ width: "26%" }}
+                    sx={{ width: "59%" }}
                     size="small"
-                    value={item.value}
+                    value={skillotherLanguage.map((item) => (item.value))}
                     id="outlined-basic"
                     variant="filled"
                     color="secondary"
@@ -355,7 +353,7 @@ function Profile() {
                     InputLabelProps={{ shrink: true }}
                     focused
                   />
-                ))}
+          
               </Box>
               <Box mt={4}>
                 <h4>Primary Skills</h4>
@@ -377,7 +375,7 @@ function Profile() {
                     mt: 2,
                   }}
                 >
-                  {primarySkillsQuestions.map((item) => (
+                  {primarySkillsQuestions?primarySkillsQuestions.map((item) => (
                     <Box >
                       <TextField
                         sx={{ width: "350px" }}
@@ -396,7 +394,7 @@ function Profile() {
                         </Box>
                       ))}
                     </Box>
-                  ))}
+                  )):<Box mt={1}><h5 >No Questions</h5></Box>}
                 </Box>
               </Box>
               <Box mt={4}>
@@ -413,7 +411,7 @@ function Profile() {
                       <h3>{item.name}</h3>
                       <Box sx={{ display: "flex", gap: "2%", }}>
 
-                        {item.question.map((value) => (
+                        {item.question?item.question.map((value) => (
                           <Box mt={2}  >
                             <TextField
                               sx={{ width: "350px" }}
@@ -432,7 +430,7 @@ function Profile() {
                               </Box>
                             ))}
                           </Box>
-                        ))}
+                        )):<Box mt={1}><h5 >No Questions</h5></Box>}
                       </Box>
                     </Box>
                   ))}
@@ -501,8 +499,10 @@ function Profile() {
             {/* ========================== Skills Section Code End================= */}
 
           {/* ========================== Job Requirement Section Code Start================= */}
+          
           <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>Job Requirement</h3>
+              
               <Box
                 sx={{
                   display: "flex",
@@ -638,7 +638,7 @@ function Profile() {
                   focused
                 />
               </Box>
-              {/* <Box
+              <Box
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -657,10 +657,57 @@ function Profile() {
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
+                </Box>
+              </Box>
+              <Box mt={6}>
+              <h3 style={{ marginBottom: "6px" }}>Job Experience Details</h3>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mt: 4,
+                }}
+              >
+                 <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+               value={expandLastJob.totalExperienceStr}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Total Experience"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                 // value={jobRequirement.userExperienceRequestDto.jobTypeUuid}
+                  value={expandLastJob.totalExperienceYears}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Total Experience in Years"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+             
+             <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={expandLastJob.totalExperienceMonths}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Total Experience in Months"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={expandLastJob.jobTypeUuid}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -672,7 +719,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                 // value={jobRequirement.totalExperienceStr.reasonForLeavingJob}
+                 value={expandLastJob.reasonForLeavingJob}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -680,29 +727,45 @@ function Profile() {
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
+               
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mt: 4,
+                }}
+              >
+                
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-           //     value={jobRequirement.userExperienceRequestDto.totalExperienceStr}
+                  value={expandLastJob.jobDurationMonths}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
-                  label="Total Experience"
+                  label="Last Job Duration in Months"
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
+
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                 // value={jobRequirement.jobRemarks}
+                 value={expandLastJob.jobDurationYears}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
-                  // label="Job Remarks"
+                  label="Last Job Duration in Years"
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-              </Box> */}
+                 <Box sx={{width: "18%"}}></Box>
+                 <Box sx={{width: "18%"}}></Box>
+               <Box sx={{width: "18%"}}></Box>
+              </Box>
             </Box>
             {/* ========================== Job Requirement Section Code End================= */}
 
@@ -1079,9 +1142,9 @@ function Profile() {
 
             <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>Documents</h3>
-              <Box sx={{ display: "flex", gap: "20px", flexWrap: "wrap", }}>
+              <Box sx={{ display: "flex", gap: "30px", flexWrap: "wrap", }}>
                 {documents.map((item) => (
-                  <Box>
+                  // <Box>
                     <StyleBox>
 
                       <Box
@@ -1098,7 +1161,7 @@ function Profile() {
                           <BookmarkBorderIcon />
                           <TextField
                             size="small"
-                            value={item.documentUploadType}
+                            value={item.documentContext}
                             id="outlined-basic"
                             variant="filled"
                             color="secondary"
@@ -1128,7 +1191,7 @@ function Profile() {
                       </Box>
 
                     </StyleBox>
-                  </Box>
+                  // </Box>
                 ))}
 
 

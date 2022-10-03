@@ -9,6 +9,7 @@ import Notify from '../../Notification/Notify';
 
 function JobRequirementData() {
     //job requirements:
+
   const [openToTraining, setOpenToTraining] = useState(false);
   const [preferJob, setPreferJob] = useState("");
   const [workingHour, setWorkingHour] = useState("");
@@ -29,6 +30,7 @@ function JobRequirementData() {
   const [ LastjobDurationYear, setLastJobDurationYear] = useState("");
   const [LastjobDurationMonths, setLastJobDurationMonths] = useState("");
   const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
+
 
   
 

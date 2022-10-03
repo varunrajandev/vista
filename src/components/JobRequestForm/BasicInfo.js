@@ -41,16 +41,14 @@ function BasicInfo(props) {
 
   } = props
 
-
   useEffect(() => {
     const dataFetch = async () => {
-      const jobTypeApidata = await fetch("http://13.126.160.155:8080/user/drop-down/get/jobType");
+      const jobTypeApidata = await fetch("http://13.126.160.155:8080/user/skill/get/skills");
       const languageApi = await fetch("http://13.126.160.155:8080/user/get/language");
       const genderApidata = await fetch("http://13.126.160.155:8080/user/get/gender");
       const trainingTypedata = await fetch("http://13.126.160.155:8080/user/get/trainingType");
       const agePreferenceDropdown = await fetch("http://13.126.160.155:8080/user/get/agePreference");
       const religionPreferenceDropdown = await fetch("http://13.126.160.155:8080/user/get/religion");
-
 
       let jobTyperes = await jobTypeApidata.json();
       let language = await languageApi.json();
@@ -58,7 +56,6 @@ function BasicInfo(props) {
       let training = await trainingTypedata.json();
       let agePreference = await agePreferenceDropdown.json();
       let religionPreference = await religionPreferenceDropdown.json();
-
 
       setJobDropdown(jobTyperes.data);
       setLanguageDropdown(language.data);
@@ -70,7 +67,6 @@ function BasicInfo(props) {
 
     dataFetch()
   }, [])
-
 
   console.log(
     workDuration,
@@ -86,7 +82,6 @@ function BasicInfo(props) {
     noOfPets,
     value
   )
-
 
   const handleChange = (event) => {
     setJobTypes(event.target.value);
@@ -115,9 +110,9 @@ function BasicInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {jobTypeDropdown.map((item) => (
-              <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))}
+            {/* {jobTypeDropdown.map((item) => (
+            //   <MenuItem value={item.key}>{item.value}</MenuItem>
+            // ))} */}
           </Select>
         </FormControl>
 
@@ -131,7 +126,6 @@ function BasicInfo(props) {
             setWorkDuration(event.target.value);
           }}
         />
-
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <TimePicker
 
@@ -173,9 +167,9 @@ function BasicInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {languageDropdown.map((item) => (
+            {/* {languageDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))}
+            ))} */}
           </Select>
         </FormControl>
       </Box>
@@ -203,9 +197,9 @@ function BasicInfo(props) {
               <em>None</em>
             </MenuItem>
 
-            {trainingTypeDropdown.map((item) => (
+            {/* {trainingTypeDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))}
+            ))} */}
           </Select>
         </FormControl>
 
@@ -224,9 +218,9 @@ function BasicInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {religionPreferenceDropdown.map((item) => (
+            {/* {religionPreferenceDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))}
+            ))} */}
           </Select>
         </FormControl>
 
@@ -244,9 +238,9 @@ function BasicInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {agePreferenceDropdown.map((item) => (
+            {/* {agePreferenceDropdown.map((item) => (
               <MenuItem value={item.value}>{item.value}</MenuItem>
-            ))}
+            ))} */}
           </Select>
         </FormControl>
 
@@ -264,9 +258,9 @@ function BasicInfo(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {genderDropdown.map((item) => (
+            {/* {genderDropdown.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
-            ))}
+            ))} */}
           </Select>
         </FormControl>
 
