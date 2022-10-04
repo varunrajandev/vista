@@ -99,39 +99,6 @@ function SkillQuestion() {
   };
 
   return (
-
-  //   [
-  //     {
-  //         "skillUuid": "50cad247-395b-4bcf-8ad1-18df6361b87b",
-  //         "skillName": "Cooking",
-  //         "skillLevel": "PRIMARY",
-  //         "question": "Type of meals candidate can cook",
-  //         "selectionType": "MULTI",
-  //         "questionOption": [
-  //             "Vegetarian only",
-  //             "Vegetarian & egg only",
-  //             "Both vegetarian & non-vegetarian meals"
-  //         ],
-  //         "questionType": "DROPDOWN",
-  //         "maindatory": true
-  //     },
-  //     {
-  //         "skillUuid": "50cad247-395b-4bcf-8ad1-18df6361b87b",
-  //         "skillName": "Cooking",
-  //         "skillLevel": "PRIMARY",
-  //         "question": "Type of Cuisines candidate can cook",
-  //         "selectionType": "MULTI",
-  //         "questionOption": [
-  //             "North Indian",
-  //             "South Indian",
-  //             "Chinese",
-  //             "Italian",
-       
-  //         ],
-  //         "questionType": "DROPDOWN",
-  //         "maindatory": true
-  //     }
-  // ]
     <>
     <Notify 
     notify={notify}
