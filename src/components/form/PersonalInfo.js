@@ -71,6 +71,7 @@ function PersonalInfo(props) {
     birthday, setBirthday,
     maritalStatus, setMaritalStatus,
     religion, setReligion,
+    otherreligion, setOtherReligion,
     education, setEducation,
     educationalRemarks, setEducationalRemarks,
     covidStatus, setCovidStatus,
@@ -411,10 +412,13 @@ function PersonalInfo(props) {
 
 
           <TextField
-            label="Last Job Type Others"
+            label="Other Religion"
             size="small"
             sx={{ width: "18%", }}
             disabled={religion === "OTHERS" ? false : true}
+            value={otherreligion}
+            InputLabelProps={{ shrink: true }}
+            onChange={(e)=>{setOtherReligion(e.target.value)}}
           />
 
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">

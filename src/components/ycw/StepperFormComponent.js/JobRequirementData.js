@@ -12,6 +12,7 @@ function JobRequirementData() {
 
   const [openToTraining, setOpenToTraining] = useState(false);
   const [preferJob, setPreferJob] = useState("");
+  const [ preferOtherJob, setPreferOtherJob] =useState("");
   const [workingHour, setWorkingHour] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
@@ -22,13 +23,16 @@ function JobRequirementData() {
   const [jobRemarks, setJobRemarks] = useState("");
   const [experienceRemarks, setExperienceRemarks] = useState("");
   const [lastJobType, setLastJobType] = useState([]);
+  const [lastJobTypeOther, setLastJobTypeOther] = useState();
   const [lastJobDuration, setLastJobDuration] = useState();
   const [reasonLeaving, setReasonLeaving] = useState();
+  const [otherreasonLeaving, setOtherReasonLeaving] = useState();
   const [jobExpMonth, setJobExpMonth] = useState("");
   const [ jobExpYear, setJobExpYear] = useState("");
   const [jobData, setJobData] = useState("");
   const [ LastjobDurationYear, setLastJobDurationYear] = useState("");
   const [LastjobDurationMonths, setLastJobDurationMonths] = useState("");
+
   const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
 
 
@@ -58,6 +62,7 @@ if(stt >endt){
       console.log("data is",responseJobData.data)
        setOpenToTraining(responseJobData.data.openToTraining)
        setPreferJob(responseJobData.data.jobTypeUuid)
+       setPreferOtherJob(responseJobData.data.otherJobTypeUuid)
        setWorkingHour(responseJobData.data.workingHours)
        setStartTime(responseJobData.data.startTime)
        setEndTime(responseJobData.data.endTime)
@@ -67,6 +72,7 @@ if(stt >endt){
        setTraningMode(responseJobData.data.traningMode)
        setJobRemarks(responseJobData.data.jobRemarks)
        setLastJobType(responseJobData.data.userExperienceRequestDto.jobTypeUuid)
+       setLastJobTypeOther(responseJobData.data.userExperienceRequestDto.otherJobTypeUuid)
        setJobExpYear(responseJobData.data.userExperienceRequestDto.totalExperienceYears)
        setJobExpMonth(responseJobData.data.userExperienceRequestDto.totalExperienceMonths)
        setLastJobDuration(responseJobData.data.userExperienceRequestDto.jobDuration)
@@ -74,6 +80,7 @@ if(stt >endt){
        setExperienceRemarks(responseJobData.data.userExperienceRequestDto.experienceRemarks)
        setLastJobDurationMonths(responseJobData.data.userExperienceRequestDto.jobDurationMonths)
        setLastJobDurationYear(responseJobData.data.userExperienceRequestDto.jobDurationYears)
+       setOtherReasonLeaving(responseJobData.data.userExperienceRequestDto.otherReasonForLeavingJob)
        
       }
     JobDataFetchById()
@@ -91,6 +98,7 @@ if(stt >endt){
         "endTime": endTime,
         "jobRemarks": jobRemarks,
         "jobTypeUuid": preferJob,
+        "otherJobTypeUuid": preferOtherJob,
         "maxSalaryExpected":maxSalaryExpected,
         "minSalaryExpected":minSalaryExpected,
         "openToTiming": openToTraining,
@@ -107,7 +115,9 @@ if(stt >endt){
           "jobDurationMonths": LastjobDurationMonths,
           "jobDurationYears": LastjobDurationYear,
           "jobTypeUuid": lastJobType,
+          "otherJobTypeUuid": lastJobTypeOther,
           "reasonForLeavingJob": reasonLeaving,
+          "otherReasonForLeavingJob":otherreasonLeaving ,
           "totalExperienceMonths": jobExpMonth,
           "totalExperienceYears": jobExpYear
         },
@@ -147,6 +157,7 @@ if(stt >endt){
              <JobRequirement                                                               
               openToTraining={openToTraining} setOpenToTraining={setOpenToTraining}
               preferJob={preferJob} setPreferJob={setPreferJob}
+              preferOtherJob={preferOtherJob} setPreferOtherJob={setPreferOtherJob}
               preferWorkHour={workingHour} setPreferWorkHour={setWorkingHour}
               startTime={startTime} setStartTime={setStartTime}
               endTime={endTime} setEndTime={setEndTime}
@@ -160,8 +171,10 @@ if(stt >endt){
               
               experienceRemarks={experienceRemarks} setExperienceRemarks={setExperienceRemarks}
               lastJobType={lastJobType} setLastJobType={setLastJobType}
+              lastJobTypeOther={lastJobTypeOther} setLastJobTypeOther={setLastJobTypeOther}
               lastJobDuration={lastJobDuration} setLastJobDuration={setLastJobDuration}
               ReasonLeaving={reasonLeaving} setReasonLeaving={setReasonLeaving}
+              otherreasonLeaving={otherreasonLeaving} setOtherReasonLeaving={setOtherReasonLeaving}
               jobExpYear={jobExpYear} setJobExpYear={setJobExpYear}
               jobExpMonth={jobExpMonth} setJobExpMonth={setJobExpMonth}/>
 

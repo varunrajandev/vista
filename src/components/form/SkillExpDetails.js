@@ -37,17 +37,19 @@ function SkillExpDetails(props) {
       let tertiarySkillData = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
       let primaryLanguagedata = await fetch(masterApi + "/drop-down/get/language?language");
       let otherLanguagedata = await fetch(masterApi + `/drop-down/get/language?language=${primaryLanguage}`);
-      
+
       let Pres = await primarySkilldata.json();
       let Sres = await secondarySkilldata.json();
       let Tres = await tertiarySkillData.json()
       let res1 = await primaryLanguagedata.json();
       let res2 = await otherLanguagedata.json();
+
       setPSkillDD(Pres.data || [{ value: "NO DATA" }]);
       setSSkillDD(Sres.data || [{ value: "NO DATA" }]);
       setTSkillDD(Tres.data || [{ value: "NO DATA" }]);
       setPrimarylanguageDD(res1.data || [{ value: "NO DATA" }]);
       setOtherlanguageDD(res2.data || [{ value: "NO DATA" }]);
+
     }
     fetchData()
   }, [primarySkill, primaryLanguage, secondarySkill])
