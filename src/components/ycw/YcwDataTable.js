@@ -1100,9 +1100,9 @@ console.log("goooo",ycwSearchUserIdList)
                       borderLeft:
                         (item.profileStatus.value === "ACTIVE" &&
                           "5px solid #0A9475") ||
-                        (item.profileStatus.value ===
-                          "ACTIVE & NOT AVAILABLE" &&
-                          "5px solid #f7aa02") ||
+                        // (item.profileStatus.value ===
+                        //   "ACTIVE & NOT AVAILABLE" &&
+                        //   "5px solid #f7aa02") ||
                         (item.profileStatus.value === "INACTIVE" &&
                           "5px solid #F55F71"),
                     }}
@@ -1176,9 +1176,9 @@ console.log("goooo",ycwSearchUserIdList)
                           (item.profileStatus.value ===
                             "ACTIVE" &&
                             "#0A9475") ||
-                          (item.profileStatus.value ===
-                            "ACTIVE & NOT AVAILABLE" &&
-                            "#FFB701") ||
+                          // (item.profileStatus.value ===
+                          //   "ACTIVE & NOT AVAILABLE" &&
+                          //   "#FFB701") ||
                           (item.profileStatus.value === "INACTIVE" &&
                             "#F55F71"),
                       }}
