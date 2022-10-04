@@ -79,7 +79,16 @@ console.log("reasonLeaving",ReasonLeaving)
               <MenuItem value={item.uuid}>{item.name}</MenuItem>
             ))}
           </Select>
+
         </FormControl>
+
+        <TextField
+        label="Prefer Job Others"
+        size="small"
+        sx={{
+          width: "18%",}}
+
+        />
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Preferred Working Hours</InputLabel>
@@ -237,6 +246,15 @@ console.log("reasonLeaving",ReasonLeaving)
           size="18%"
         />
 
+        
+       <TextField
+        label="Last Job Type Others"
+        size="small"
+        sx={{
+          width: "18%",}}
+
+        />
+
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Last Job Duration (years)</InputLabel>
           <Select sx={{ width: "100%" }} label="Last Job Duration (years)" value={LastjobDurationYear} onChange={(e) => {
@@ -273,7 +291,7 @@ console.log("reasonLeaving",ReasonLeaving)
         </FormControl>
 
 
-       <div style={{width:"59%"}}></div>
+       <div style={{width:"18%"}}></div>
 
 
 
