@@ -12,13 +12,21 @@ function HouseHoldMemberData() {
   const [inputFields, setInputFields] = useState([
     {
       age: "",
-      email: "",
-      jobType: "",
+      jobTypeUuid: "",
+      otherJobType:"",
       mobileNo: "",
       name: "",
       relationship: "",
+      otherrRlationship:"",
+      otherJobType:"",
+      relationship:"",
+      locality:"",
+      addressType:"",
+      address:""
+
     }
   ])
+
   const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
   const ids = localStorage.getItem("ID")
   const { id } = useParams()
@@ -34,10 +42,16 @@ function HouseHoldMemberData() {
         {
           age: responsehousehold.data.familyMemberDto[0].age,
           email: responsehousehold.data.familyMemberDto[0].email,
-          jobType: responsehousehold.data.familyMemberDto[0].jobType,
+          jobTypeUuid: responsehousehold.data.familyMemberDto[0].jobTypeUuid,
           mobileNo: responsehousehold.data.familyMemberDto[0].mobileNo,
           name: responsehousehold.data.familyMemberDto[0].name,
           relationship: responsehousehold.data.familyMemberDto[0].relationship,
+          otherrRlationship:responsehousehold.data.familyMemberDto[0].otherrRlationship,
+          otherJobType:responsehousehold.data.familyMemberDto[0].otherJobType,
+          locality:responsehousehold.data.familyMemberDto[0].locality,
+          addressType:responsehousehold.data.familyMemberDto[0].addressType,
+          address:responsehousehold.data.familyMemberDto[0].address
+
         }
       ])
     }
@@ -48,21 +62,6 @@ function HouseHoldMemberData() {
   async function handleSubmit() {
     try {
       let response = await axios.post(masterApi + "/worker/familyMember",
-        // {    "familyMemberDto":  [
-        //         {
-        //           "age": inputFields[0].age,
-        //           "email": inputFields[0].email,
-        //           "jobType": inputFields[0].jobType,
-        //           "mobileNo": inputFields[0].mobileNo,
-        //           "name": inputFields[0].name,
-        //           "relationship": inputFields[0].relationship,
-
-        //         }
-        //       ],
-        //       "userId": ids
-        //     }
-
-
         {
           "familyMemberDto": inputFields,
           "userId": ids || id

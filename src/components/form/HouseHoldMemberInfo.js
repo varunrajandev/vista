@@ -17,20 +17,19 @@ import { FilterData, masterApi } from "../../AlllData";
 
 
 function HouseHoldMemberInfo(props) {
-  
+
   const [occupationDD, setOccupationDD] = React.useState([]);
   const [relationshipDD, setRelationshipDD] = React.useState([]);
   const [occupation, setOccupation] = React.useState("");
   const [relation, setRelation] = React.useState("");
-  const { setInputFields, inputFields} = props;
-  console.log("first", inputFields)
+  const { setInputFields, inputFields } = props;
 
   const handleChangeInput = (index, event) => {
     const values = [...inputFields];
     values[index][event.target.name] = event.target.value;
     setInputFields(values);
   };
-  
+
 
 
   const handleSubmit = (e) => {
@@ -43,14 +42,23 @@ function HouseHoldMemberInfo(props) {
       ...inputFields,
       {
         age: "",
-        email: "",
-        jobType: "",
+        jobTypeUuid: "",
+        otherJobType: "",
         mobileNo: "",
         name: "",
         relationship: "",
+        otherrRlationship: "",
+        relationship: "",
+        locality: "",
+        addressType: "",
+        address: ""
       },
     ]);
   };
+
+  const ispermanaentFetchByStatus = async () => {
+    let response = await fetch(`http://13.126.160.155:8080/user/address/get/address/YCW6548029}?isPermanent=true`)
+    let data = await response.json();}
 
   useEffect(() => {
     async function fetchDD() {
@@ -62,6 +70,7 @@ function HouseHoldMemberInfo(props) {
       setOccupationDD(occupationDD.data);
     }
     fetchDD()
+    ispermanaentFetchByStatus()
   }, [])
 
   console.log("relation", relation)
@@ -123,7 +132,7 @@ function HouseHoldMemberInfo(props) {
               onChange={(event) => handleChangeInput(index, event)}
             />
 
-           
+
 
             <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
               <InputLabel id="demo-select-small">Relationship</InputLabel>
@@ -136,19 +145,22 @@ function HouseHoldMemberInfo(props) {
                 label="Occupation"
                 onChange={(event) => handleChangeInput(index, event)}
               >
-                {relationshipDD.map((item)=>(
+                {relationshipDD.map((item) => (
                   <MenuItem value={item.key}>{item.value}</MenuItem>
                 ))}
               </Select>
             </FormControl>
 
-            
-        <TextField
-        label="Last Job Type Others"
-        size="small"
-        sx={{ width: "18%",}}
-        disabled={inputField.relationship==="OTHERS"?false:true}
-        />
+
+            <TextField
+              label="Others Relationship"
+              name="otherrRlationship"
+              size="small"
+              value={inputField.otherrRlationship}
+              sx={{ width: "18%", }}
+              disabled={inputField.relationship === "OTHERS" ? false : true}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
 
             <TextField
               sx={{
@@ -173,7 +185,7 @@ function HouseHoldMemberInfo(props) {
               onChange={(event) => handleChangeInput(index, event)}
             />
 
-         
+
             <TextField
               style={{ width: "18%" }}
               name="age"
@@ -189,55 +201,58 @@ function HouseHoldMemberInfo(props) {
                 sx={{ width: "100%" }}
                 labelId="demo-select-small"
                 id="demo-select-small"
-                name="jobType"
-                value={inputField.jobType}
+                name="jobTypeUuid"
+                value={inputField.jobTypeUuid}
                 label="Occupation"
                 onChange={(event) => handleChangeInput(index, event)}
               >
-                {occupationDD.map((item)=>(
+                {occupationDD.map((item) => (
                   <MenuItem value={item.name}>{item.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
 
-         <TextField
-        label="Last Job Type Others"
-        size="small"
-        sx={{ width: "18%",}}
-        disabled={inputField.jobType==="Others"?false:true}
-        />
+            <TextField
+              label="Others Last Job"
+              name="otherJobType"
+              size="small"
+              value={inputField.otherJobType}
+              sx={{ width: "18%", }}
+              disabled={inputField.jobTypeUuid === "Others" ? false : true}
+              onChange={(event) => handleChangeInput(index, event)}
+            />
 
             <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-              <InputLabel id="demo-select-small">Address</InputLabel>
+              <InputLabel id="demo-select-small">Address Type</InputLabel>
               <Select
                 sx={{ width: "100%" }}
                 labelId="demo-select-small"
                 id="demo-select-small"
-                // name="jobType"
-               value={inputField.event}
-                label="Addrrss"
+                name="addressType"
+                value={inputField.addressType}
+                label="Address Type"
                 onChange={(event) => handleChangeInput(index, event)}
               >
-                  <MenuItem value="Same As Current Address" >Same As Current Address</MenuItem>
-                  <MenuItem value ="Same As Permanent Address">Same As Permanent Address</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
-             
-              </Select>
+                <MenuItem value={false}>Same As Current Address</MenuItem>
+                <MenuItem value={true}>Same As Permanent Address</MenuItem>
+                <MenuItem value={null}>Other</MenuItem>
+                </Select>
             </FormControl>
+
             <TextField
               style={{ width: "38.3%" }}
-              name="age"
+              name="address"
               label="Address/Locality"
-              value={inputField.age}
+              value={inputField.address}
               size="small"
               onChange={(event) => handleChangeInput(index, event)}
             />
 
-             <Box sx={{display:"flex", justifyContent:"right", width:"100%"}}>
+            <Box sx={{ display: "flex", justifyContent: "right", width: "100%" }}>
               <IconButton aria-label="delete">
                 <DeleteIcon onClick={() => handleRemoveFields(index)} />
               </IconButton>
-             </Box>
+            </Box>
           </Box>
         ))}
       </form>

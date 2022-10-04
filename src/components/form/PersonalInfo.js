@@ -273,8 +273,6 @@ function PersonalInfo(props) {
            helperText={alternateNumber !== null?( alternateNumber.length == 10||alternateNumber.length < 1  ? "" : "please fill 10 digit number"):""}
           />
 
-{console.log("dfghjkl;dfghjkl;'dfghjkl;'",alternateNumber)}
-
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
             <InputLabel id="demo-select-small" required>Whatsapp Available?</InputLabel>
             <Select
