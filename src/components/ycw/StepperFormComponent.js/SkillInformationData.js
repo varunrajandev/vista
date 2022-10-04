@@ -17,12 +17,12 @@ function SkillInformationData() {
     const [skillRemarks, setSkillRemarks] = React.useState("");
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
-    const [status, setStatus] = useState()
+    const [status, setStatus] = useState(false)
     const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
 
     
     const {id} = useParams()
-    let SecondarySkillArray =[];
+    let SecondarySkillArray = [];
     let TertiarySkillArray = [];
     let otherLanguageArray = []
     let ids = localStorage.getItem('ID')
@@ -50,12 +50,14 @@ function SkillInformationData() {
         setPrimarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto[0].uuid)
         setSecondarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
         setTertiarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto)
-        setStatus(responseAllSkill.data)
+        
         
       }
       allSkillFetchById()
     }, [ids, id])
     
+
+    console.log("status", status)
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
     
@@ -135,7 +137,7 @@ function SkillInformationData() {
         
       </Box>
 
-       <Box sx={{display:(status?"block":"none")}}><SkillQuestion/></Box> 
+       <Box sx={{display:(status?"none":"block")}}><SkillQuestion/></Box> 
 
     </Box>
     </>

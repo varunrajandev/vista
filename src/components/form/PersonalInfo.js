@@ -270,8 +270,8 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setAlternateNumber(e.target.value);
             }}
-          // error={(alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? false : true)}
-          // helperText={alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? "" : "please fill 10 digit number"}
+           error={alternateNumber !== null?( alternateNumber.length == 10||alternateNumber.length < 1  ? false : true):""}
+           helperText={alternateNumber !== null?( alternateNumber.length == 10||alternateNumber.length < 1  ? "" : "please fill 10 digit number"):""}
           />
 
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">

@@ -69,8 +69,6 @@ const datatGetById = async() => {
     const d = new Date();
     let CurrentYear = d.getFullYear();
      setAge(CurrentYear-PickYear)
-
-     console.log("profileData", personalData.data.birthday)
 }
  useEffect(() => {
     datatGetById();

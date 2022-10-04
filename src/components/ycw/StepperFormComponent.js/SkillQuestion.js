@@ -34,31 +34,30 @@ function SkillQuestion() {
   useEffect(() => {
     const fetchSkillData = async () => {
       let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${ids || id}`)
-     
       let responseQuestion = await QuestionData.json();
       setAllQuestion(responseQuestion.data);
     };
 
-    const getResponseQuestionById = async()=>{
-      let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/YCW0015181`)
-      let Answer = await allResponse.json();
-      //console.log("answer======", Answer.data.skillsMappingDto)
-      Answer.data.skillsMappingDto.map((item)=>(
-        // console.log(item.skillDto)
-        item.skillDto.map((item1)=>(
-          // console.log(items.question)
-          item1.question.map((item2)=>(
-            console.log(item2.answer)
-            ))
-        ))
-      ))
-    }
-    getResponseQuestionById()
+    // const getResponseQuestionById = async()=>{
+    //   let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/YCW0015181`)
+    //   let Answer = await allResponse.json();
+    //   //console.log("answer======", Answer.data.skillsMappingDto)
+    //   Answer.data.skillsMappingDto.map((item)=>(
+    //     // console.log(item.skillDto)
+    //     item.skillDto.map((item1)=>(
+    //       // console.log(items.question)
+    //       item1.question.map((item2)=>(
+    //         console.log(item2.answer)
+    //         ))
+    //     ))
+    //   ))
+    // }
+    // getResponseQuestionById()
 
     fetchSkillData();
   }, [id, ids]);
 
-   console.log(storeQuestion);
+  console.log("all question", allQuestion)
 
   async function handleSubmit() {
      try {
@@ -100,6 +99,39 @@ function SkillQuestion() {
   };
 
   return (
+
+  //   [
+  //     {
+  //         "skillUuid": "50cad247-395b-4bcf-8ad1-18df6361b87b",
+  //         "skillName": "Cooking",
+  //         "skillLevel": "PRIMARY",
+  //         "question": "Type of meals candidate can cook",
+  //         "selectionType": "MULTI",
+  //         "questionOption": [
+  //             "Vegetarian only",
+  //             "Vegetarian & egg only",
+  //             "Both vegetarian & non-vegetarian meals"
+  //         ],
+  //         "questionType": "DROPDOWN",
+  //         "maindatory": true
+  //     },
+  //     {
+  //         "skillUuid": "50cad247-395b-4bcf-8ad1-18df6361b87b",
+  //         "skillName": "Cooking",
+  //         "skillLevel": "PRIMARY",
+  //         "question": "Type of Cuisines candidate can cook",
+  //         "selectionType": "MULTI",
+  //         "questionOption": [
+  //             "North Indian",
+  //             "South Indian",
+  //             "Chinese",
+  //             "Italian",
+       
+  //         ],
+  //         "questionType": "DROPDOWN",
+  //         "maindatory": true
+  //     }
+  // ]
     <>
     <Notify 
     notify={notify}
@@ -114,20 +146,9 @@ function SkillQuestion() {
             borderRadius: 3,
           }}
         >
-          <Box
-            width={"100%"}
-            sx={{
-              display: "flex",
-              rowGap: "40px",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-            }}
-          >
+          <Box width={"100%"} sx={{ display: "flex", rowGap: "40px", flexWrap: "wrap", justifyContent: "space-between", }}>
             {allQuestion.map((item, index) => (
-              <Box
-                sx={{ display: "grid", gap: "8px", width: "48%" }}
-                key={index}
-              >
+              <Box sx={{ display: "grid", gap: "8px", width: "48%" }} key={index} >
                 <h5>{item.question}</h5>
                 <Box width={"100%"}>
                   <Autocomplete
