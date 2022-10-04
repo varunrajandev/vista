@@ -142,6 +142,14 @@ function HouseHoldMemberInfo(props) {
               </Select>
             </FormControl>
 
+            
+        <TextField
+        label="Last Job Type Others"
+        size="small"
+        sx={{ width: "18%",}}
+        disabled={inputField.relationship==="OTHERS"?false:true}
+        />
+
             <TextField
               sx={{
                 width: "18%",
@@ -187,10 +195,17 @@ function HouseHoldMemberInfo(props) {
                 onChange={(event) => handleChangeInput(index, event)}
               >
                 {occupationDD.map((item)=>(
-                  <MenuItem value={item.uuid}>{item.name}</MenuItem>
+                  <MenuItem value={item.name}>{item.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
+
+         <TextField
+        label="Last Job Type Others"
+        size="small"
+        sx={{ width: "18%",}}
+        disabled={inputField.jobType==="Others"?false:true}
+        />
 
             <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
               <InputLabel id="demo-select-small">Address</InputLabel>
@@ -210,7 +225,7 @@ function HouseHoldMemberInfo(props) {
               </Select>
             </FormControl>
             <TextField
-              style={{ width: "73%" }}
+              style={{ width: "38.3%" }}
               name="age"
               label="Address/Locality"
               value={inputField.age}
@@ -218,9 +233,11 @@ function HouseHoldMemberInfo(props) {
               onChange={(event) => handleChangeInput(index, event)}
             />
 
+             <Box sx={{display:"flex", justifyContent:"right", width:"100%"}}>
               <IconButton aria-label="delete">
                 <DeleteIcon onClick={() => handleRemoveFields(index)} />
               </IconButton>
+             </Box>
           </Box>
         ))}
       </form>
