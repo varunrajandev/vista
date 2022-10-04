@@ -35,8 +35,8 @@ function PersonalInfo(props) {
   const [educationDD, setEducationDD] = useState([])
   const [whatsAppValue, setWhatsAppValue] = useState("")
   const [helperText, setHelperText] = useState("")
-  
-  
+
+
 
   const [message, setMessage] = useState('');
 
@@ -59,7 +59,7 @@ function PersonalInfo(props) {
 
   const {
     walk, setWalk,
-    otherSource,setOtherSource,
+    otherSource, setOtherSource,
     fname, setFname,
     age, setAge,
     lname, setLname,
@@ -79,12 +79,12 @@ function PersonalInfo(props) {
     userProfile,
   } = props;
 
- if(whatsappAvailable==="Same as mobile number"){
-  setWhatsapp(phoneNumber)
- }
- if(whatsappAvailable==="Same as alternte number"){
-  setWhatsapp(alternateNumber)
- }
+  if (whatsappAvailable === "Same as mobile number") {
+    setWhatsapp(phoneNumber)
+  }
+  if (whatsappAvailable === "Same as alternte number") {
+    setWhatsapp(alternateNumber)
+  }
 
   const { setCurrentSteps, setPersonalData, personalData } = useContext(multiStepContext)
 
@@ -97,8 +97,8 @@ function PersonalInfo(props) {
       let genderData = await fetch(masterApi + "/drop-down/get/gender")
       let covidData = await fetch(masterApi + "/drop-down/get/covidVaccination")
       let educationData = await fetch(masterApi + "/drop-down/get/education")
-      
-   
+
+
       let res = await sourceData.json();
       let res1 = await religionData.json();
       let res2 = await maritalData.json();
@@ -114,29 +114,29 @@ function PersonalInfo(props) {
     }
     dataFetch()
     checkMobilenumber()
-  }, [phoneNumber.length===10?phoneNumber:""])
+  }, [phoneNumber.length === 10 ? phoneNumber : ""])
   console.log(userProfile)
 
   const handleChange = (event) => {
     setWalk(event.target.value);
   };
 
-  console.log("birthday type is",typeof birthday, birthday)
-  if(!personalData.status&&birthday){
-      let PickYear = birthday.getFullYear()
-      console.log(PickYear)
-      const d = new Date();
-      let CurrentYear = d.getFullYear();
-       setAge(CurrentYear-PickYear)
-    }
-    else setAge(age)
+  console.log("birthday type is", typeof birthday, birthday)
+  if (!personalData.status && birthday) {
+    let PickYear = birthday.getFullYear()
+    console.log(PickYear)
+    const d = new Date();
+    let CurrentYear = d.getFullYear();
+    setAge(CurrentYear - PickYear)
+  }
+  else setAge(age)
 
-    async function checkMobilenumber(){
-      let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${phoneNumber}`)
-      let response = await checkNumber.json();
-     response.data?setHelperText("Number is already exist"):setHelperText()
-   
-    }
+  async function checkMobilenumber() {
+    let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${phoneNumber}`)
+    let response = await checkNumber.json();
+    response.data ? setHelperText("Number is already exist") : setHelperText()
+
+  }
 
 
   return (
@@ -192,8 +192,8 @@ function PersonalInfo(props) {
             pattern="[a-zA-Z]*"
             onKeyPress={(e) => alphacheck(e)}
           />
-          
-          <TextField sx={{ width: "18%" }}  size="small" label="Last Name"
+
+          <TextField sx={{ width: "18%" }} size="small" label="Last Name"
             variant="outlined"
             value={lname}
             onChange={(e) => {
@@ -205,15 +205,15 @@ function PersonalInfo(props) {
             <InputLabel required id="demo-select-small">Gender</InputLabel>
             <Select width={"100%"} value={gender} label="gender" onChange={(event) => {
               setGender(event.target.value);
-            }}> 
-            {genderDD.map((item) => (<MenuItem value={item.key}>{item.value}</MenuItem>))}
+            }}>
+              {genderDD.map((item) => (<MenuItem value={item.key}>{item.value}</MenuItem>))}
             </Select>
           </FormControl>
 
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4, }}>
-        <TextField required
+          <TextField required
             type="number"
             sx={{
               width: "18%",
@@ -238,8 +238,8 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setPhoneNumber(e.target.value);
             }}
-            error={phoneNumber.length == 10||phoneNumber.length < 1 ? false : true}
-            helperText={phoneNumber.length===10? helperText:(phoneNumber.length == 10 ||phoneNumber.length <1 ? "" : "please fill 10 digit number")}
+            error={phoneNumber.length == 10 || phoneNumber.length < 1 ? false : true}
+            helperText={phoneNumber.length === 10 ? helperText : (phoneNumber.length == 10 || phoneNumber.length < 1 ? "" : "please fill 10 digit number")}
           />
 
           <TextField
@@ -269,8 +269,8 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setAlternateNumber(e.target.value);
             }}
-            // error={(alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? false : true)}
-            // helperText={alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? "" : "please fill 10 digit number"}
+          // error={(alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? false : true)}
+          // helperText={alternateNumber != null && alternateNumber.length == 10||alternateNumber.length < 1  ? "" : "please fill 10 digit number"}
           />
 
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
@@ -285,10 +285,10 @@ function PersonalInfo(props) {
                 setWhatsappAvailable(e.target.value);
               }}
             >
-           {WhatsAppStatus.map((item, index)=>(
-            <MenuItem key={index} value={item.value}>{item.value}</MenuItem>
-           ))}
-           </Select>
+              {WhatsAppStatus.map((item, index) => (
+                <MenuItem key={index} value={item.value}>{item.value}</MenuItem>
+              ))}
+            </Select>
           </FormControl>
 
           <TextField
@@ -317,13 +317,13 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setWhatsapp(e.target.value);
             }}
-            disabled={whatsappAvailable==="Not Available"?true:false}
-            error={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10||whatsapp.length < 1 ? false : true) : false}
+            disabled={whatsappAvailable === "Not Available" ? true : false}
+            error={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 || whatsapp.length < 1 ? false : true) : false}
             helperText={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 || whatsapp.length < 1 ? "" : "please fill 10 digit number") : ""}
           />
-          
+
           <TextField
-             sx={{
+            sx={{
               width: "18%",
               '& input[type=number]': {
                 '-moz-appearance': 'textfield'
@@ -349,7 +349,7 @@ function PersonalInfo(props) {
             onInput={(e) => {
               e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 2)
             }}
-          /> 
+          />
         </Box>
 
         <Box
@@ -409,6 +409,14 @@ function PersonalInfo(props) {
             </Select>
           </FormControl>
 
+
+          <TextField
+            label="Last Job Type Others"
+            size="small"
+            sx={{ width: "18%", }}
+            disabled={religion === "OTHERS" ? false : true}
+          />
+
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
             <InputLabel id="demo-select-small">
               Educational Qualifications
@@ -432,7 +440,17 @@ function PersonalInfo(props) {
             </Select>
           </FormControl>
 
-          <TextField
+        
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: 4,
+          }}
+        >
+            <TextField
             sx={{ width: "18%" }}
             size="small"
             id="outlined-basic"
@@ -443,15 +461,7 @@ function PersonalInfo(props) {
               setEducationalRemarks(e.target.value);
             }}
           />
-        </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mt: 4,
-          }}
-        >
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
             <InputLabel id="demo-select-small" required>
               COVID Vaccination Status
@@ -471,7 +481,7 @@ function PersonalInfo(props) {
           </FormControl>
 
           <TextField
-            sx={{ width: "79.5%" }}
+            sx={{ width: "59%" }}
             size="small"
             id="outlined-basic"
             value={medicalCondition}
@@ -488,10 +498,10 @@ function PersonalInfo(props) {
 }
 
 const WhatsAppStatus = [
-  {key:true, value:"Same as mobile number"},
-  {key:true, value:"Same as alternte number"},
-  {key:true, value:"Other number"},
-  {key:false, value:"Not Available"},
+  { key: true, value: "Same as mobile number" },
+  { key: true, value: "Same as alternte number" },
+  { key: true, value: "Other number" },
+  { key: false, value: "Not Available" },
 ]
 export default PersonalInfo;
 

@@ -25,6 +25,7 @@ function JobRequirement(props) {
   const [workingDD, setWorkingDD] = useState([])
   const [lastJobTypeDD, setLastJobTypeDD] = useState([])
   const  [reasionofLeavingJob,setReasionofLeavingJob]=useState([])
+  const [OtherStringValue, setOtherStringValue]= useState("")
 
   const {
     openToTraining, setOpenToTraining,
@@ -76,7 +77,7 @@ console.log("reasonLeaving",ReasonLeaving)
             onChange={(e) => { setPreferJob(e.target.value) }}
           >
             {jobtypeDD.map((item) => (
-              <MenuItem value={item.uuid}>{item.name}</MenuItem>
+              <MenuItem onClick={()=>{setOtherStringValue(item.name)}} value={item.uuid}>{item.name}</MenuItem>
             ))}
           </Select>
 
@@ -85,10 +86,9 @@ console.log("reasonLeaving",ReasonLeaving)
         <TextField
         label="Prefer Job Others"
         size="small"
-        sx={{
-          width: "18%",}}
-
-        />
+        sx={{ width: "18%",}}
+          disabled={OtherStringValue==="Others"?false:true}
+          />
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Preferred Working Hours</InputLabel>
@@ -250,8 +250,8 @@ console.log("reasonLeaving",ReasonLeaving)
        <TextField
         label="Last Job Type Others"
         size="small"
-        sx={{
-          width: "18%",}}
+        sx={{ width: "18%",}}
+        disabled={lastJobType==="Others"?false:true}
 
         />
 
@@ -285,13 +285,18 @@ console.log("reasonLeaving",ReasonLeaving)
             setReasonLeaving(e.target.value)
           }}>
             {reasionofLeavingJob.map(item=>(
-            <MenuItem value={item.key}>{item.value}</MenuItem>
+            <MenuItem value={item.value}>{item.value}</MenuItem>
           ))}
           </Select>
         </FormControl>
 
 
-       <div style={{width:"18%"}}></div>
+        <TextField
+        label="Last Job Type Others"
+        size="small"
+        sx={{ width: "18%",}}
+        disabled={ReasonLeaving==="Others"?false:true}
+        />
 
 
 
