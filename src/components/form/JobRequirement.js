@@ -30,6 +30,7 @@ function JobRequirement(props) {
   const {
     openToTraining, setOpenToTraining,
     preferJob, setPreferJob,
+    preferOtherJob, setPreferOtherJob,
     preferWorkHour, setPreferWorkHour,
     startTime, setStartTime,
     endTime, setEndTime,
@@ -40,7 +41,9 @@ function JobRequirement(props) {
     jobRemarks, setJobRemarks,
     experienceRemarks, setExperienceRemarks,
     lastJobType, setLastJobType,
+    lastJobTypeOther, setLastJobTypeOther,
     ReasonLeaving, setReasonLeaving,
+    otherreasonLeaving, setOtherReasonLeaving,
     jobExpMonth, setJobExpMonth,
     jobExpYear, setJobExpYear,
     LastjobDurationYear, setLastJobDurationYear, 
@@ -87,7 +90,10 @@ console.log("reasonLeaving",ReasonLeaving)
         label="Prefer Job Others"
         size="small"
         sx={{ width: "18%",}}
+          value={preferOtherJob}
+          InputLabelProps={{ shrink: true }}
           disabled={OtherStringValue==="Others"?false:true}
+          onChange={(e)=>{setPreferOtherJob(e.target.value)}}
           />
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
@@ -206,6 +212,7 @@ console.log("reasonLeaving",ReasonLeaving)
           setJobRemarks(e.target.value)
         }}
           value={jobRemarks}
+          
         />
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
@@ -250,8 +257,11 @@ console.log("reasonLeaving",ReasonLeaving)
        <TextField
         label="Last Job Type Others"
         size="small"
+        InputLabelProps={{ shrink: true }}
         sx={{ width: "18%",}}
         disabled={lastJobType==="Others"?false:true}
+        onChange={(e)=>{setLastJobTypeOther(e.target.value)}}
+        value={lastJobTypeOther}
 
         />
 
@@ -295,10 +305,11 @@ console.log("reasonLeaving",ReasonLeaving)
         label="Last Job Type Others"
         size="small"
         sx={{ width: "18%",}}
+        value={otherreasonLeaving}
+        InputLabelProps={{ shrink: true }}
         disabled={ReasonLeaving==="Others"?false:true}
+        onChange={(e)=>{setOtherReasonLeaving(e.target.value)}}
         />
-
-
 
       </Box>
 

@@ -157,7 +157,7 @@ function UserRegistration() {
       setTimeout(function () {
         setRegisteredSuccessfully(false)
         window.location.reload(false);
-      }, 4000);
+      }, 40000);
     } catch (error) {
       alert("Please Fill correct Details", error);
     }

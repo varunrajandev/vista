@@ -23,6 +23,7 @@ function PersonalInformationData() {
   const [birthday, setBirthday] = useState(null);
   const [maritalStatus, setMaritalStatus] = useState("");
   const [religion, setReligion] = useState("");
+const [otherreligion, setOtherReligion] =useState("")
   const [education, setEducation] = useState("");
   const [educationalRemarks, setEducationalRemarks] = useState("");
   const [covidStatus, setCovidStatus] = useState("");
@@ -43,8 +44,10 @@ const datatGetById = async() => {
   let allDataResponse = await allUserDetails.json();
   setUserProfile(allDataResponse);
   setPersonalData(allDataResponse)
+  console.log("ProfileData is=>", allDataResponse)
   
   setSource(allDataResponse.data.sourcingChannel);
+  setOtherSource(allDataResponse.data.otherSourcingChannel)
   setFirstname(allDataResponse.data.firstName);
   // setMiddlename(allDataResponse.data.middleName);
   setLastname(allDataResponse.data.lastName);
@@ -56,6 +59,7 @@ const datatGetById = async() => {
   setBirthday(allDataResponse.data.birthday)
   setMaritalStatus(allDataResponse.data.maritalStatus)
   setReligion(allDataResponse.data.religion)
+  setOtherReligion(allDataResponse.data.otherReligion)
   setEducation(allDataResponse.data.education)
   setEducationalRemarks(allDataResponse.data.educationalRemarks)
   setCovidStatus(allDataResponse.data.covidStatus)
@@ -92,6 +96,7 @@ const datatGetById = async() => {
             "department": "WORKER",
             "education":education,
             religion,
+            "otherReligion": otherreligion,
             "secondaryMobileNumber": alternateMobileNumber,
             "secondaryMobileVerified": false,
             "sourcingChannel": source,
@@ -139,6 +144,7 @@ const datatGetById = async() => {
           "mobileNo":mobile,
           "nationality": "INDIAN",
           "religion":religion,
+          "otherReligion": otherreligion,
           "secondaryMobileNumber": alternateMobileNumber,
           "sourcingChannel": source,
 
@@ -203,6 +209,7 @@ const datatGetById = async() => {
                 birthday={birthday} setBirthday={setBirthday}
                 maritalStatus={maritalStatus} setMaritalStatus={setMaritalStatus}
                 religion={religion} setReligion={setReligion}
+                otherreligion={otherreligion} setOtherReligion={setOtherReligion}
                 education={education} setEducation={setEducation}
                 educationalRemarks={educationalRemarks} setEducationalRemarks={setEducationalRemarks}
                 covidStatus={covidStatus} setCovidStatus={setCovidStatus}
