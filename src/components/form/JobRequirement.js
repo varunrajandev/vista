@@ -291,7 +291,7 @@ console.log("reasonLeaving",ReasonLeaving)
         
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Reason For Leaving Last Job</InputLabel>
-          <Select sx={{ width: "100%" }} label="Last Job Duration (months)" value={ReasonLeaving} onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Last Job Duration (months)" value={ReasonLeaving?ReasonLeaving:""} onChange={(e) => {
             setReasonLeaving(e.target.value)
           }}>
             {reasionofLeavingJob.map(item=>(
@@ -299,7 +299,6 @@ console.log("reasonLeaving",ReasonLeaving)
           ))}
           </Select>
         </FormControl>
-
 
         <TextField
         label="Last Job Type Others"
