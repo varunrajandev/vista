@@ -127,7 +127,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.sourcingChannel}
+                value={userData?userData.sourcingChannel:""}
                 label="Sourcing Channel"
                 color="secondary"
                 InputLabelProps={{ shrink: true }}
@@ -138,7 +138,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.firstName}
+                value={userData?userData.firstName:""}
                 label="First Name*"
                 color="secondary"
                 InputLabelProps={{ shrink: true }}
@@ -152,7 +152,7 @@ function Profile() {
                 size="small"
                 label="Last Name*"
                 color="secondary"
-                value={userData.lastName}
+                value={userData?userData.lastName:""}
                 id="outlined-basic"
                 variant="filled"
                 InputLabelProps={{ shrink: true }}
@@ -162,7 +162,7 @@ function Profile() {
                 sx={{ width: "18%" }}
                 size="small"
                 label="gender"
-                value={userData.gender}
+                value={userData?userData.gender:""}
                 color="secondary"
                 id="outlined-basic"
                 InputLabelProps={{ shrink: true }}
@@ -175,7 +175,7 @@ function Profile() {
                 size="small"
                 color="secondary"
                 label="Phone Number*"
-                value={userData.mobileNo}
+                value={userData?userData.mobileNo:""}
                 id="outlined-basic"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
@@ -197,7 +197,7 @@ function Profile() {
                 sx={{ width: "18%" }}
                 size="small"
                 color="secondary"
-                value={userData.secondaryMobileNumber}
+                value={userData?userData.secondaryMobileNumber:""}
                 id="outlined-basic"
                 variant="filled"
                 label="Alternate Phone Number*"
@@ -207,7 +207,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.whatsappAvailable}
+                value={userData?userData.whatsappAvailable:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -218,7 +218,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.whatsappNumber}
+                value={userData?userData.whatsappNumber:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -229,7 +229,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-               value={userData.birthday}
+               value={userData?userData.birthday:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -240,7 +240,7 @@ function Profile() {
                 <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.maritalStatus}
+                value={userData?userData.maritalStatus:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -262,7 +262,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.religion}
+                value={userData?userData.religion:""}
                 id="outlined-basic"
                 variant="filled"
                 label="Religion"
@@ -273,7 +273,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.nationality}
+                value={userData?userData.nationality:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -284,7 +284,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.educationalRemarks}
+                value={userData?userData.educationalRemarks:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -296,7 +296,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData.covidStatus}
+                value={userData?userData.covidStatus:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -307,7 +307,7 @@ function Profile() {
                   <TextField 
                   sx={{ width: "18%" }}
                 size="small"
-                value={userData.medicalCondition}
+                value={userData?userData.medicalCondition:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -516,7 +516,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.jobTypeUuid}
+                  value={jobRequirement?jobRequirement.jobTypeUuid:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -527,7 +527,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.workingHours}
+                  value={jobRequirement?jobRequirement.workingHours:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -539,7 +539,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.startTime}
+                  value={jobRequirement?jobRequirement.startTime:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -551,7 +551,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.endTime}
+                  value={jobRequirement?jobRequirement.endTime:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -563,7 +563,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.totalSimultaneousJob}
+                  value={jobRequirement?jobRequirement.totalSimultaneousJob:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -585,7 +585,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.minSalaryExpectedStr}
+                  value={jobRequirement?jobRequirement.minSalaryExpectedStr:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -596,7 +596,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.maxSalaryExpectedStr}
+                  value={jobRequirement?jobRequirement.maxSalaryExpectedStr:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -608,7 +608,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.openToTraining}
+                  value={jobRequirement?jobRequirement.openToTraining:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -619,7 +619,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.traningMode}
+                  value={jobRequirement?jobRequirement.traningMode:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -630,7 +630,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.jobRemarks}
+                  value={jobRequirement?jobRequirement.jobRemarks:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -650,7 +650,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement.vehicle}
+                  value={jobRequirement?jobRequirement.vehicle:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -673,7 +673,7 @@ function Profile() {
                  <TextField
                   sx={{ width: "18%" }}
                   size="small"
-               value={expandLastJob.totalExperienceStr}
+               value={expandLastJob?expandLastJob.totalExperienceStr:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -684,7 +684,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob.totalExperienceYears}
+                  value={expandLastJob?expandLastJob.totalExperienceYears:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -696,7 +696,7 @@ function Profile() {
              <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob.totalExperienceMonths}
+                  value={expandLastJob?expandLastJob.totalExperienceMonths:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -708,7 +708,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob.jobTypeUuid}
+                  value={expandLastJob?expandLastJob.jobTypeUuid:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -720,7 +720,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                 value={expandLastJob.reasonForLeavingJob}
+                 value={expandLastJob?expandLastJob.reasonForLeavingJob:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -743,7 +743,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob.jobDurationMonths}
+                  value={expandLastJob?expandLastJob.jobDurationMonths:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -755,7 +755,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                 value={expandLastJob.jobDurationYears}
+                 value={expandLastJob?expandLastJob.jobDurationYears:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -786,7 +786,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.addressLine1}
+                  value={currentaddressData?currentaddressData.addressLine1:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -797,7 +797,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.addressLine2}
+                  value={currentaddressData?currentaddressData.addressLine2:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -809,7 +809,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.landmark}
+                  value={currentaddressData?currentaddressData.landmark:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -821,7 +821,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.postalCode}
+                  value={currentaddressData?currentaddressData.postalCode:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -833,7 +833,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.countryUuid}
+                  value={currentaddressData?currentaddressData.countryUuid:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -854,7 +854,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.stateUuid}
+                  value={currentaddressData?currentaddressData.stateUuid:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -865,7 +865,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.cityUuid}
+                  value={currentaddressData?currentaddressData.cityUuid:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -877,7 +877,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData.locality}
+                  value={currentaddressData?currentaddressData.micromarketUuid:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -906,7 +906,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.addressLine1}
+                  value={permanentAddressData?permanentAddressData.addressLine1:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -917,7 +917,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.addressLine2}
+                  value={permanentAddressData?permanentAddressData.addressLine2:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -929,7 +929,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.landmark}
+                  value={permanentAddressData?permanentAddressData.landmark:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -941,7 +941,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.postalCode}
+                  value={permanentAddressData?permanentAddressData.postalCode:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -953,7 +953,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.countryName}
+                  value={permanentAddressData?permanentAddressData.countryName:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -974,7 +974,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.stateName}
+                  value={permanentAddressData?permanentAddressData.stateName:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -985,7 +985,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.cityName}
+                  value={permanentAddressData?permanentAddressData.cityName:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -997,7 +997,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData.locality}
+                  value={permanentAddressData?permanentAddressData.micromarketUuid:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
