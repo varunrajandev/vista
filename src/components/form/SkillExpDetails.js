@@ -153,7 +153,7 @@ function SkillExpDetails(props) {
           sx={{width:"35%"}}
           options={otherlanguageDD}
           getOptionLabel={(option) => option.value}
-          value={otherLanguages==!null?otherLanguages.map((item) => (item)):[]}
+          value={otherLanguages?otherLanguages.map((item) => (item)):[]}
           onChange={(event, newValue) => {
             setOtherLanguages([...newValue]);
           }}
