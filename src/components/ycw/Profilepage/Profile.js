@@ -16,7 +16,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-
+import moment from 'moment';
 const BOX = styled(Box)({
   display: "flex",
 });
@@ -101,6 +101,11 @@ function Profile() {
     fetchData();
   }, []);
   console.log("data is ", data);
+let dateofBirth=moment(userData.birthday).utc().format('MM/DD/YYYY')
+let StartTime=moment(userData.birthday).format('LT');
+let JobStartTime=moment(jobRequirement.startTime).format('LT');
+let JobEndTime=moment(jobRequirement.endTime).format('LT');
+  console.log("dob is =>",StartTime )
 
 
   return (
@@ -129,6 +134,17 @@ function Profile() {
                 size="small"
                 value={userData?userData.sourcingChannel:""}
                 label="Sourcing Channel"
+                color="secondary"
+                InputLabelProps={{ shrink: true }}
+                id="outlined-basic"
+                variant="filled"
+                focused
+              />
+               <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={userData?userData.otherSourcingChannel:""}
+                label="Other Sourcing Channel"
                 color="secondary"
                 InputLabelProps={{ shrink: true }}
                 id="outlined-basic"
@@ -170,17 +186,7 @@ function Profile() {
                 focused
               />
 
-<TextField
-                sx={{ width: "18%" }}
-                size="small"
-                color="secondary"
-                label="Phone Number*"
-                value={userData?userData.mobileNo:""}
-                id="outlined-basic"
-                InputLabelProps={{ shrink: true }}
-                variant="filled"
-                focused
-              />
+         
             </Box>
 
             <Box
@@ -191,8 +197,20 @@ function Profile() {
                 mt: 4,
               }}
             >
-           
 
+
+            <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                color="secondary"
+                label="Phone Number*"
+                value={userData?userData.mobileNo:""}
+                id="outlined-basic"
+                InputLabelProps={{ shrink: true }}
+                variant="filled"
+                focused
+              />
+        
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
@@ -229,7 +247,7 @@ function Profile() {
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-               value={userData?userData.birthday:""}
+               value={dateofBirth?dateofBirth:""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -237,17 +255,7 @@ function Profile() {
                 InputLabelProps={{ shrink: true }}
                 focused
               />
-                <TextField
-                sx={{ width: "18%" }}
-                size="small"
-                value={userData?userData.maritalStatus:""}
-                id="outlined-basic"
-                variant="filled"
-                color="secondary"
-                label="Marital Status*"
-                InputLabelProps={{ shrink: true }}
-                focused
-              />
+           
             </Box>
 
             <Box
@@ -259,6 +267,18 @@ function Profile() {
               }}
             >
             
+            <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={userData?userData.maritalStatus:""}
+                id="outlined-basic"
+                variant="filled"
+                color="secondary"
+                label="Marital Status*"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
@@ -270,6 +290,18 @@ function Profile() {
                 InputLabelProps={{ shrink: true }}
                 focused
               />
+                <TextField
+                sx={{ width: "18%" }}
+                size="small"
+                value={userData?userData.otherReligion:""}
+                id="outlined-basic"
+                variant="filled"
+                label="Other Religion"
+                color="secondary"
+                InputLabelProps={{ shrink: true }}
+                focused
+              />
+
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
@@ -293,6 +325,20 @@ function Profile() {
                 focused
               />
 
+        
+        
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 4,
+              }}
+            >
+            
+          
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
@@ -305,7 +351,7 @@ function Profile() {
                 focused
               />
                   <TextField 
-                  sx={{ width: "18%" }}
+                  sx={{ width: "80%" }}
                 size="small"
                 value={userData?userData.medicalCondition:""}
                 id="outlined-basic"
@@ -524,6 +570,7 @@ function Profile() {
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
+                
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
@@ -539,7 +586,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.startTime:""}
+                  value={JobStartTime?JobStartTime:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -551,7 +598,7 @@ function Profile() {
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.endTime:""}
+                  value={JobEndTime?JobEndTime:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
