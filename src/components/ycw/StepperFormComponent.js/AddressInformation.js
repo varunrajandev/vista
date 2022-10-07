@@ -86,7 +86,7 @@ function AddressInformation() {
         setCityNamep(responseData.data[1].cityUuid)
         setLocalityp(responseData.data[1].micromarketUuid)
         setAddressProofTypep(responseData.data[1].addressProofType)
-        setIsPermanent(responseData.data[1].permanent)
+        setIsPermanent(responseData.data[0].permanent)
     }
 
     async function fetchDorpDown() {
@@ -95,11 +95,9 @@ function AddressInformation() {
         setDocumnetTypeDD(responseType.data)
         setDocumnetTypeDDp(responseType.data)
     }
-
     useEffect(() => {
         AddressGetById()
         fetchDorpDown()
-
         if (postalCode.length == 6) {
             AddressFetchByPincode(postalCode, 1)
         }
@@ -121,25 +119,23 @@ function AddressInformation() {
                         "cityUuid": cityName,
                         "countryUuid": countryName,
                         "landmark": landmark,
-                        "locality": locality,
                         "micromarketUuid": locality,
-                        "permanent": !isPermanent,
+                        "permanent": isPermanent,
                         "postalCode": postalCode,
                         "stateUuid": stateName,
                         "userId": ids || id
                     },
                     {
-                        "addressLine1": addressLine1p,
-                        "addressLine2": addressLine2p,
-                        "addressProofType": addressProofTypep,
-                        "cityUuid": cityNamep,
-                        "countryUuid": countryNamep,
-                        "landmark": landmarkp,
-                        "locality": localityp,
-                        "micromarketUuid": localityp,
-                        "permanent": isPermanent,
-                        "postalCode": postalCodep,
-                        "stateUuid": stateNamep,
+                        "addressLine1":isPermanent?addressLine1: addressLine1p,
+                        "addressLine2":isPermanent? addressLine2:addressLine2p,
+                        "addressProofType":isPermanent?addressProofType: addressProofTypep,
+                        "cityUuid":isPermanent? cityName:cityNamep,
+                        "countryUuid":isPermanent?countryName:countryNamep,
+                        "landmark":isPermanent?landmark:landmarkp,
+                        "micromarketUuid":isPermanent?locality:localityp,
+                        "permanent": !isPermanent,
+                        "postalCode":isPermanent?postalCode: postalCodep,
+                        "stateUuid":isPermanent? stateName:stateNamep,
                         "userId": ids || id
                     }])
             setNotify(
@@ -149,6 +145,7 @@ function AddressInformation() {
                     type: "success"
                 }
             )
+            localStorage.setItem('number', 4)
             setAddressData(response.data.data)
 
         } catch (error) {

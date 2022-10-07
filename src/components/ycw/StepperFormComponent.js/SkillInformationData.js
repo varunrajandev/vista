@@ -17,7 +17,7 @@ function SkillInformationData() {
     const [skillRemarks, setSkillRemarks] = React.useState("");
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
     const [otherLanguages, setOtherLanguages] = React.useState([]);
-    const [status, setStatus] = useState(false)
+    const [status, setStatus] = useState()
     const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
 
     
@@ -43,14 +43,14 @@ function SkillInformationData() {
       const allSkillFetchById = async() =>{
         let allSkillData = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
         let responseAllSkill = await allSkillData.json();
-        console.log(responseAllSkill)
+        setStatus(responseAllSkill.status)
         setPrimaryLanguage(responseAllSkill.data.primaryLanguage)
         setOtherLanguages(responseAllSkill.data.otherLanguage)
         setSkillRemarks(responseAllSkill.data.skillRemarks)
         setPrimarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto[0].uuid)
         setSecondarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
         setTertiarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto)
-        
+       
         
       }
       allSkillFetchById()
@@ -137,7 +137,7 @@ function SkillInformationData() {
         
       </Box>
 
-       <Box sx={{display:(status?"none":"block")}}><SkillQuestion/></Box> 
+       <Box sx={{display:(status?"block":"none")}}><SkillQuestion/></Box> 
 
     </Box>
     </>

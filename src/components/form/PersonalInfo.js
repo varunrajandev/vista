@@ -80,6 +80,8 @@ function PersonalInfo(props) {
     userProfile,
   } = props;
 
+  console.log(birthday)
+
   if (whatsappAvailable === "Same as mobile number") {
     setWhatsapp(phoneNumber)
   }

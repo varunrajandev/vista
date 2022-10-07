@@ -109,7 +109,7 @@ const datatGetById = async() => {
              type:"success"}
             )
           localStorage.setItem('ID', response.data.data.userId);
-          response.data.status?localStorage.setItem('steps', 2):localStorage.setItem('steps', 1)
+          // response.data.status?localStorage.setItem('steps', 2):localStorage.setItem('steps', 1)
           setCurrentSteps(2)
         
     } catch (error) {

@@ -26,6 +26,8 @@ const steps = [
 
 function YcwStepper() {
     const {currentSteps, setCurrentSteps} = useContext(multiStepContext)
+    let newNumber = localStorage.getItem('number');
+    // setCurrentSteps(newNumber)
 
     function showSteps(steps){
         switch(steps){

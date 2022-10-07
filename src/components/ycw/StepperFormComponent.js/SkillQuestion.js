@@ -22,9 +22,10 @@ function SkillQuestion() {
 
   const [allQuestion, setAllQuestion] = useState([])
   const [storeQuestion, setStoreQuestion] = useState([]);
-  const [notify, setNotify] = useState({isOpen:false, message:"", type:""})
+  const [answer, setAnswer] = useState([]);
+  const [notify, setNotify] = useState({ isOpen: false, message: "", type: "" })
 
-  const {id} = useParams()
+  const { id } = useParams()
   let ids = localStorage.getItem('ID')
 
   const { currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext);
@@ -38,51 +39,57 @@ function SkillQuestion() {
       setAllQuestion(responseQuestion.data);
     };
 
-    // const getResponseQuestionById = async()=>{
-    //   let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/YCW0015181`)
-    //   let Answer = await allResponse.json();
-    //   //console.log("answer======", Answer.data.skillsMappingDto)
-    //   Answer.data.skillsMappingDto.map((item)=>(
-    //     // console.log(item.skillDto)
-    //     item.skillDto.map((item1)=>(
-    //       // console.log(items.question)
-    //       item1.question.map((item2)=>(
-    //         console.log(item2.answer)
-    //         ))
-    //     ))
-    //   ))
-    // }
-    // getResponseQuestionById()
+    const getResponseQuestionById = async () => {
+      let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
+      let Answer = await allResponse.json();
+      setAnswer(Answer)
+      console.log("first", Answer)
+      //console.log("answer======", Answer.data.skillsMappingDto)
+      // Answer.data.skillsMappingDto.map((item)=>(
+      //   item.skillDto.map((item1)=>(
+      //     item1.question.map((item2)=>(
+      //       item2.answer.map((item3)=>(
+      //         console.log(item3)
+      //         ))
+      //         ))
+      //         ))
+      //         ))
+              }
+    getResponseQuestionById()
 
     fetchSkillData();
   }, [id, ids]);
 
-  console.log("all question", allQuestion)
+  // console.log("all question", allQuestion)
 
   async function handleSubmit() {
-     try {
-    let response = await axios.post("http://13.126.160.155:8080/user/skill/save/userResponse",{
-      skillDto:storeQuestion,
-      userId:ids || id
-    });
+    try {
+      let response = await axios.post("http://13.126.160.155:8080/user/skill/save/userResponse", {
+        skillDto: storeQuestion,
+        userId: ids || id
+      });
 
-    setNotify(
-      {isOpen:response.data.status,
-       message:response.data.message,
-       type:"success"}
-      )
-      
-     } catch (error) {
       setNotify(
-        {isOpen:true,
-         message:"Error",
-         type:"error"}
-        )
-     }
+        {
+          isOpen: response.data.status,
+          message: response.data.message,
+          type: "success"
+        }
+      )
+
+    } catch (error) {
+      setNotify(
+        {
+          isOpen: true,
+          message: "Error",
+          type: "error"
+        }
+      )
+    }
   }
 
   const handleChangeInput = (event, newValue, questions, uuid, index) => {
-    
+
     const values = [...storeQuestion];
     values[index] = {
       "question": [
@@ -100,10 +107,10 @@ function SkillQuestion() {
 
   return (
     <>
-    <Notify 
-    notify={notify}
-    setNotify={setNotify}
-  />
+      <Notify
+        notify={notify}
+        setNotify={setNotify}
+      />
       <Box>
         <Box
           marginTop={5}
@@ -149,10 +156,13 @@ function SkillQuestion() {
                       />
                     )}
                   />
+   
                 </Box>
               </Box>
             ))}
           </Box>
+
+
 
           <Box
             sx={{
@@ -163,12 +173,23 @@ function SkillQuestion() {
               gap: "20px",
             }}
           >
-            <Button variant="contained" onClick={() => { setCurrentSteps(2)}}>  back </Button>
+            <Button variant="contained" onClick={() => { setCurrentSteps(2) }}>  back </Button>
             <Button variant="contained" onClick={handleSubmit}>save</Button>
-            <Button variant="contained" onClick={() => { setCurrentSteps(3)}}>next</Button>
+            <Button variant="contained" onClick={() => { setCurrentSteps(3) }}>next</Button>
           </Box>
         </Box>
       </Box>
+{/* 
+      {
+        answer.data.skillsMappingDto.map((item)=>(
+        item.skillDto.map((item1)=>(
+          item1.question.map((item2)=>(
+            item2.answer.map((item3)=>(
+            <h5>{item3}</h5>
+            ))
+            ))
+            ))
+            ))} */}
     </>
   );
 }
