@@ -24,11 +24,11 @@ import { useEffect } from "react";
 import { masterApiforAll } from "../../AlllData";
 import { MasterApiForLocation } from "../../AlllData";
 import AlertTitle from "@mui/material/AlertTitle";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 function UserRegistration() {
   const [genderDD, setGenderDD] = React.useState([]);
@@ -38,17 +38,15 @@ function UserRegistration() {
   const [skillsDD, setSkillsDD] = React.useState([]);
   const [workingHrDD, setWorkingHrDD] = React.useState([]);
 
-  const [helperText, setHelperText] = React.useState("")
+  const [helperText, setHelperText] = React.useState("");
   const [candidatemobileNumber, setCandidateMobileNumber] = React.useState("");
   const [candidateFirstName, setCandidateFirstName] = React.useState();
   const [candidateLastName, setCandidateLastName] = React.useState();
   const [candidategender, setCandidateGender] = React.useState();
   const [candidateage, setCandidateAge] = React.useState();
   const [candidateworkingHr, setCandidateWorkingHr] = React.useState();
-  const [candidateprimarySkills, setCandidatePrimarySkills] =
-    React.useState();
-  const [candidateOtherSkills, setCandidateOtherSkills] =
-    React.useState();
+  const [candidateprimarySkills, setCandidatePrimarySkills] = React.useState();
+  const [candidateOtherSkills, setCandidateOtherSkills] = React.useState();
   const [candidatecity, setCandidateCity] = React.useState();
   const [candidatelocality, setCandidateLocality] = React.useState();
   const [candidatereligion, setCandidateReligion] = React.useState();
@@ -67,7 +65,8 @@ function UserRegistration() {
   const [isErrorforAge, setIsErrorforAge] = React.useState(false);
   const [textfieldshow, setTextfieldshow] = React.useState("none");
   const [textfieldshowSkill, setTextfieldshowSkill] = React.useState("none");
-  const [registeredSuccessfully, setRegisteredSuccessfully] = React.useState(false);
+  const [registeredSuccessfully, setRegisteredSuccessfully] =
+    React.useState(false);
 
   function alphacheck(e) {
     const regex = /[A-Za-z]/;
@@ -83,15 +82,23 @@ function UserRegistration() {
     }
   }
 
-
   useEffect(() => {
     const fetchData = async () => {
       let genderDD = await fetch(masterApiforAll + "user/drop-down/get/gender");
-      let cityDataDD = await fetch("http://13.126.160.155:8081/locationmaster/city/get/all")
-      let localityDataDD = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${candidatecity}`);
-      let ReligionDataDD = await fetch(masterApiforAll + "user/drop-down/get/religion");
+      let cityDataDD = await fetch(
+        MasterApiForLocation + "/locationmaster/city/get/all"
+      );
+      let localityDataDD = await fetch(
+        MasterApiForLocation +
+          `/locationmaster/micromarket/list/${candidatecity}`
+      );
+      let ReligionDataDD = await fetch(
+        masterApiforAll + "user/drop-down/get/religion"
+      );
       let skillsDataDD = await fetch(masterApiforAll + "user/skill/get/skills");
-      let workingHrDataDD = await fetch(masterApiforAll + "user/drop-down/get/workingHours");
+      let workingHrDataDD = await fetch(
+        masterApiforAll + "user/drop-down/get/workingHours"
+      );
 
       let skillsDropDown = await skillsDataDD.json();
       let cityDropDown = await cityDataDD.json();
@@ -108,7 +115,7 @@ function UserRegistration() {
       let workingHrDropDownList = await workingHrDropDown.data;
 
       setGenderDD(DDgender);
-      setCityDD(cityDropDownList)
+      setCityDD(cityDropDownList);
       setLocalityDD(localityDropDownList || [{ names: "please Select City" }]);
       setReligionDD(ReligionDropDownList);
       setSkillsDD(skillsDropDownList);
@@ -117,20 +124,21 @@ function UserRegistration() {
 
     fetchData();
   }, [candidatecity]);
-  
 
-  async function checkMobilenumber(){
-    let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${candidatemobileNumber}`)
+  async function checkMobilenumber() {
+    let checkNumber = await fetch(
+      masterApiforAll + `user/worker/checkProfile/${candidatemobileNumber}`
+    );
     let response = await checkNumber.json();
-   // setAvailableNumberResponse(response.data)
-   response.data?setHelperText("Number is already exist Please Update the Profile"):setHelperText()
+    // setAvailableNumberResponse(response.data)
+    response.data
+      ? setHelperText("Number is already exist Please Update the Profile")
+      : setHelperText();
   }
 
   useEffect(() => {
-  checkMobilenumber();
-
-  },[candidatemobileNumber.length===10?candidatemobileNumber:""])
-
+    checkMobilenumber();
+  }, [candidatemobileNumber.length === 10 ? candidatemobileNumber : ""]);
 
   const handleClick = async () => {
     try {
@@ -151,11 +159,10 @@ function UserRegistration() {
         cityUuid: candidatecity,
         otherReligion: candidatereligionOther,
         otherSkill: candidateOtherSkills,
-
       });
-      setRegisteredSuccessfully(true)
+      setRegisteredSuccessfully(true);
       setTimeout(function () {
-        setRegisteredSuccessfully(false)
+        setRegisteredSuccessfully(false);
         window.location.reload(false);
       }, 4000);
     } catch (error) {
@@ -171,8 +178,8 @@ function UserRegistration() {
           marginRight: "auto",
         }}
       >
-        <Card   sx={{ width:"350px" , padding: "0px" }}>
-          <CardContent >
+        <Card sx={{ width: "350px", padding: "0px" }}>
+          <CardContent>
             <Box
               sx={{
                 fontSize: "22px",
@@ -223,15 +230,26 @@ function UserRegistration() {
                       (e.target.value = Math.max(0, parseInt(e.target.value))
                         .toString()
                         .slice(0, 10))
-                    )
-                   
+                    );
                   }}
                   onChange={(e) => {
                     setCandidateMobileNumber(e.target.value);
                   }}
-                    error={candidatemobileNumber.length === 10||candidatemobileNumber.length < 1 ? false : true}
-                    helperText={candidatemobileNumber.length===10? helperText:(candidatemobileNumber.length === 10 ||candidatemobileNumber.length <1 ? "" : "please fill 10 digit number")}
-                     // error={isError}
+                  error={
+                    candidatemobileNumber.length === 10 ||
+                    candidatemobileNumber.length < 1
+                      ? false
+                      : true
+                  }
+                  helperText={
+                    candidatemobileNumber.length === 10
+                      ? helperText
+                      : candidatemobileNumber.length === 10 ||
+                        candidatemobileNumber.length < 1
+                      ? ""
+                      : "please fill 10 digit number"
+                  }
+                  // error={isError}
                   // helperText={helpertext}
                   //   if (
                   //     e.target.value.length < 1 ||
@@ -243,7 +261,6 @@ function UserRegistration() {
                   //     setIsError(true);
                   //     setHelpertext("Please Enter correct Number");
                   //   }
-                
                 />
               </Grid>
 
@@ -341,16 +358,14 @@ function UserRegistration() {
                     ) {
                       setIsErrorforAge(false);
                       setHelpertextAge("");
-                    }
-                    else {
+                    } else {
                       setIsErrorforAge(true);
                       setHelpertextAge("Please Enter correct Age");
                     }
                   }}
                 />
               </Grid>
-              <Grid lg={12} sm={12} sx={12}
-                spacing={2.5} item>
+              <Grid lg={12} sm={12} sx={12} spacing={2.5} item>
                 <Grid lg={12} sm={12} sx={12} item>
                   <Autocomplete
                     disablePortal
@@ -359,10 +374,10 @@ function UserRegistration() {
                     options={skillsDD}
                     onChange={(event, newValue) => {
                       if (newValue.name === "Others") {
-                        setTextfieldshowSkill("visible")
+                        setTextfieldshowSkill("visible");
                         setCandidatePrimarySkills(newValue.uuid);
                       } else {
-                        setTextfieldshowSkill("none")
+                        setTextfieldshowSkill("none");
                         setCandidatePrimarySkills(newValue.uuid);
                       }
                     }}
@@ -384,8 +399,7 @@ function UserRegistration() {
                   />
                 </Grid>
 
-                <Grid 
-                sx={{display: `${textfieldshowSkill}`}} mt={2.5} item >
+                <Grid sx={{ display: `${textfieldshowSkill}` }} mt={2.5} item>
                   <TextField
                     sx={{ width: "200px", display: `${textfieldshowSkill}` }}
                     required
@@ -397,8 +411,6 @@ function UserRegistration() {
                     onInput={(e) => {
                       setCandidateOtherSkills(e.target.value);
                     }}
-                    pattern="[a-zA-Z]*"
-                    onKeyPress={(e) => alphacheck(e)}
                   />
                 </Grid>
               </Grid>
@@ -456,8 +468,6 @@ function UserRegistration() {
                 />
               </Grid>
 
-
-
               <Grid lg={12} sm={12} sx={12} item>
                 <Autocomplete
                   disablePortal
@@ -485,9 +495,7 @@ function UserRegistration() {
                 />
               </Grid>
 
-              <Grid lg={12} sm={12} sx={12}
-                spacing={2.5} item>
-
+              <Grid lg={12} sm={12} sx={12} spacing={2.5} item>
                 <Grid lg={12} sm={12} sx={12} item>
                   <Autocomplete
                     disablePortal
@@ -496,13 +504,12 @@ function UserRegistration() {
                     options={religionDD}
                     onChange={(event, newValue) => {
                       if (newValue.key === "OTHERS") {
-                        setTextfieldshow("visible")
+                        setTextfieldshow("visible");
                         setCandidateReligion(newValue.key);
                       } else {
-                        setTextfieldshow("none")
+                        setTextfieldshow("none");
                         setCandidateReligion(newValue.key);
                       }
-
                     }}
                     onInputChange={(event, newInputValue) => {
                       setCandidateReligion(newInputValue);
@@ -515,18 +522,16 @@ function UserRegistration() {
                         placeholder="Religion"
                         onChange={(event, newValue) => {
                           setCandidateReligion("");
-                          setTextfieldshow("none")
+                          setTextfieldshow("none");
                         }}
                       />
                     )}
                     getOptionLabel={(item) => `${item.value}`}
                   />
                 </Grid>
-                <Grid mt={2.5}
-                 sx={{display: `${textfieldshow}`}} 
-                 item>
+                <Grid mt={2.5} sx={{ display: `${textfieldshow}` }} item>
                   <TextField
-                    sx={{ width: "200px"}}
+                    sx={{ width: "200px" }}
                     required
                     size="small"
                     id="standard-size-small"
@@ -536,12 +541,10 @@ function UserRegistration() {
                     onInput={(e) => {
                       setCandidateReligionOther(e.target.value);
                     }}
-                    pattern="[a-zA-Z]*"
-                    onKeyPress={(e) => alphacheck(e)}
                   />
                 </Grid>
               </Grid>
-              <Grid lg={12} sm={12} sx={12} item >
+              <Grid lg={12} sm={12} sx={12} item>
                 <TextField
                   required
                   sx={{
@@ -583,11 +586,20 @@ function UserRegistration() {
                 />
               </Grid>
             </Grid>
-            <Grid mt={4} sx={{
-              textAlign: "center",
-              justifyContent: "center",
-            }} item>
-              <Button sx={{ width: "200px", }} variant="contained" color="success" onClick={handleClick}>
+            <Grid
+              mt={4}
+              sx={{
+                textAlign: "center",
+                justifyContent: "center",
+              }}
+              item
+            >
+              <Button
+                sx={{ width: "200px" }}
+                variant="contained"
+                color="success"
+                onClick={handleClick}
+              >
                 Submit
               </Button>
             </Grid>
@@ -599,9 +611,7 @@ function UserRegistration() {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">
-              Profile Saved
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">Profile Saved</DialogTitle>
           </Dialog>
         </Grid>
       </Grid>

@@ -1081,7 +1081,7 @@ console.log("goooo",ycwSearchUserIdList)
 
 <TableBody component={Paper}>
 
-              {tableData.map((item) => (
+              {tableData?tableData.map((item) => (
                 <StyledTableRow
                   onClick={() => { setId(item.userId); { setStatusData(item.profileStatus.value) } }}
                   key={item.userId}
@@ -1097,32 +1097,29 @@ console.log("goooo",ycwSearchUserIdList)
                     component="th"
                     scope="item"
                     style={{
-                      borderLeft:
+                      borderLeft:item.profileStatus?
                         (item.profileStatus.value === "ACTIVE" &&
                           "5px solid #0A9475") ||
-                        // (item.profileStatus.value ===
-                        //   "ACTIVE & NOT AVAILABLE" &&
-                        //   "5px solid #f7aa02") ||
                         (item.profileStatus.value === "INACTIVE" &&
-                          "5px solid #F55F71"),
+                          "5px solid #F55F71"):""
                     }}
                   >
-                    {item.userId || "--"}
+                    {item.userId?item.userId: "--"}
                   </TableCell>
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.name || "--"}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.mobileNo || "--"}
+                    {item.name?item.name : "--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.gender?item.gender.value:"--"}
+                    {item.mobileNo ?item.mobileNo : "--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.cityName || "--"}
+                    {item?.gender?.value}
+                  </TableCell>
+
+                  <TableCell sx={{ fontSize: "13px" }} align="left">
+                    {item.cityName?item.cityName: "--"}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
@@ -1135,15 +1132,8 @@ console.log("goooo",ycwSearchUserIdList)
 
 
                   <TableCell sx={{ fontSize: "13px" }} align="left">
-
-                    {item.workingHours?item.workingHours.value:"--"}
-
-                 
-
+                       {item?.workingHours?.value}
                   </TableCell>
-
-               
-
 
                   <TableCell sx={{ fontSize: "13px"  }} align="left">
                   <LinearProgress variant="determinate" value={item.percentage}
@@ -1163,16 +1153,16 @@ console.log("goooo",ycwSearchUserIdList)
                         boxSizing: "border-box",
                       }}
                       style={{
-                        backgroundColor:
+                        backgroundColor:item.profileStatus?
                           (item.profileStatus.value ===
                             "ACTIVE" &&
                             "#E6F4F1") ||
-                          (item.profileStatus.value ===
-                            "ACTIVE & NOT AVAILABLE" &&
-                            "#FFF7E5") ||
+                          // (item.profileStatus.value ===
+                          //   "ACTIVE & NOT AVAILABLE" &&
+                          //   "#FFF7E5") ||
                           (item.profileStatus.value === "INACTIVE" &&
-                            "#FEEFF0"),
-                        color:
+                            "#FEEFF0"):"",
+                        color:item.profileStatus?
                           (item.profileStatus.value ===
                             "ACTIVE" &&
                             "#0A9475") ||
@@ -1180,14 +1170,14 @@ console.log("goooo",ycwSearchUserIdList)
                           //   "ACTIVE & NOT AVAILABLE" &&
                           //   "#FFB701") ||
                           (item.profileStatus.value === "INACTIVE" &&
-                            "#F55F71"),
+                            "#F55F71"):""
                       }}
                     >
-                      {item.profileStatus.value || "--"}
+                      {item.profileStatus?item.profileStatus.value: "--"}
                     </Typography>
                   </TableCell>
                 </StyledTableRow>
-              ))}
+              )):""}
             </TableBody>
           </Table>
         </TableContainer>

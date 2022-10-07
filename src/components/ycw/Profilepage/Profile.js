@@ -15,8 +15,10 @@ import DataUsageOutlinedIcon from "@mui/icons-material/DataUsageOutlined";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import moment from 'moment';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import WorkIcon from "@mui/icons-material/Work";
+import { masterApiforAll } from "../../../AlllData";
+import moment from "moment";
 const BOX = styled(Box)({
   display: "flex",
 });
@@ -53,15 +55,14 @@ function Profile() {
   const [tertiarySkillsDto, setTertiarySkillsDto] = React.useState([]);
   const [subSkillsDto, setSubSkillsDto] = React.useState([]);
   const [data, setdata] = React.useState([]);
-  const[ expandLastJob,setExpandLastJob]= React.useState({});
+  const [expandLastJob, setExpandLastJob] = React.useState({});
   const { id } = useParams();
-  //console.log("userData", secondarySkillsQuestions);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         let ycwprofiledata = await fetch(
-          `http://13.126.160.155:8080/user/worker/get/details/${id}`
+          masterApiforAll + `user/worker/get/details/${id}`
         );
         let profiletadata = await ycwprofiledata.json();
         let useprofiledata = await profiletadata.data;
@@ -86,13 +87,15 @@ function Profile() {
         setSecondarySkillsDto(
           useprofiledata.skillResponseDto.skillsMappingDto[1].skillDto
         );
-        // setSecondarySkillsQuestions(useprofiledata.skillResponseDto.skillsMappingDto[1].skillDto.question)
+
         setTertiarySkillsDto(
           useprofiledata.skillResponseDto.skillsMappingDto[2].skillDto
         );
-        setSkillotherLanguage(useprofiledata.skillResponseDto.otherLanguage)
-        // setSubSkillsDto(properSkillsDto.skillDto)
-        setExpandLastJob(useprofiledata.jobRequirementResponseDto.userExperienceRequestDto)
+        setSkillotherLanguage(useprofiledata.skillResponseDto.otherLanguage);
+
+        setExpandLastJob(
+          useprofiledata.jobRequirementResponseDto.userExperienceRequestDto
+        );
         setname(userData.firstName);
       } catch (error) {
         console.log(error);
@@ -101,12 +104,11 @@ function Profile() {
     fetchData();
   }, []);
   console.log("data is ", data);
-let dateofBirth=moment(userData.birthday).utc().format('MM/DD/YYYY')
-let StartTime=moment(userData.birthday).format('LT');
-let JobStartTime=moment(jobRequirement.startTime).format('LT');
-let JobEndTime=moment(jobRequirement.endTime).format('LT');
-  console.log("dob is =>",StartTime )
-
+  let dateofBirth = moment(userData.birthday).utc().format("MM/DD/YYYY");
+  let StartTime = moment(userData.birthday).format("LT");
+  let JobStartTime = moment(jobRequirement.startTime).format("LT");
+  let JobEndTime = moment(jobRequirement.endTime).format("LT");
+  console.log("dob is =>", StartTime);
 
   return (
     <>
@@ -132,7 +134,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.sourcingChannel:""}
+                value={userData ? userData.sourcingChannel : ""}
                 label="Sourcing Channel"
                 color="secondary"
                 InputLabelProps={{ shrink: true }}
@@ -140,10 +142,10 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 variant="filled"
                 focused
               />
-               <TextField
+              <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.otherSourcingChannel:""}
+                value={userData ? userData.otherSourcingChannel : ""}
                 label="Other Sourcing Channel"
                 color="secondary"
                 InputLabelProps={{ shrink: true }}
@@ -154,7 +156,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.firstName:""}
+                value={userData ? userData.firstName : ""}
                 label="First Name*"
                 color="secondary"
                 InputLabelProps={{ shrink: true }}
@@ -168,7 +170,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 size="small"
                 label="Last Name*"
                 color="secondary"
-                value={userData?userData.lastName:""}
+                value={userData ? userData.lastName : ""}
                 id="outlined-basic"
                 variant="filled"
                 InputLabelProps={{ shrink: true }}
@@ -178,15 +180,13 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 sx={{ width: "18%" }}
                 size="small"
                 label="gender"
-                value={userData?userData.gender:""}
+                value={userData ? userData.gender : ""}
                 color="secondary"
                 id="outlined-basic"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 focused
               />
-
-         
             </Box>
 
             <Box
@@ -197,25 +197,23 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 mt: 4,
               }}
             >
-
-
-            <TextField
+              <TextField
                 sx={{ width: "18%" }}
                 size="small"
                 color="secondary"
                 label="Phone Number*"
-                value={userData?userData.mobileNo:""}
+                value={userData ? userData.mobileNo : ""}
                 id="outlined-basic"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 focused
               />
-        
+
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
                 color="secondary"
-                value={userData?userData.secondaryMobileNumber:""}
+                value={userData ? userData.secondaryMobileNumber : ""}
                 id="outlined-basic"
                 variant="filled"
                 label="Alternate Phone Number*"
@@ -225,7 +223,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.whatsappAvailable:""}
+                value={userData ? userData.whatsappAvailable : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -236,7 +234,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.whatsappNumber:""}
+                value={userData ? userData.whatsappNumber : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -247,7 +245,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-               value={dateofBirth?dateofBirth:""}
+                value={dateofBirth ? dateofBirth : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -255,7 +253,6 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 InputLabelProps={{ shrink: true }}
                 focused
               />
-           
             </Box>
 
             <Box
@@ -266,11 +263,10 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 mt: 4,
               }}
             >
-            
-            <TextField
+              <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.maritalStatus:""}
+                value={userData ? userData.maritalStatus : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -282,7 +278,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.religion:""}
+                value={userData ? userData.religion : ""}
                 id="outlined-basic"
                 variant="filled"
                 label="Religion"
@@ -290,10 +286,10 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 InputLabelProps={{ shrink: true }}
                 focused
               />
-                <TextField
+              <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.otherReligion:""}
+                value={userData ? userData.otherReligion : ""}
                 id="outlined-basic"
                 variant="filled"
                 label="Other Religion"
@@ -305,7 +301,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.nationality:""}
+                value={userData ? userData.nationality : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -316,7 +312,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.educationalRemarks:""}
+                value={userData ? userData.educationalRemarks : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -324,9 +320,6 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 InputLabelProps={{ shrink: true }}
                 focused
               />
-
-        
-        
             </Box>
 
             <Box
@@ -337,12 +330,10 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 mt: 4,
               }}
             >
-            
-          
               <TextField
                 sx={{ width: "18%" }}
                 size="small"
-                value={userData?userData.covidStatus:""}
+                value={userData ? userData.covidStatus : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -350,10 +341,10 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 InputLabelProps={{ shrink: true }}
                 focused
               />
-                  <TextField 
-                  sx={{ width: "80%" }}
+              <TextField
+                sx={{ width: "80%" }}
                 size="small"
-                value={userData?userData.medicalCondition:""}
+                value={userData ? userData.medicalCondition : ""}
                 id="outlined-basic"
                 variant="filled"
                 color="secondary"
@@ -363,8 +354,8 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               />
             </Box>
             {/* ========================== Personal Data Section Code End================= */}
-                        {/* ========================== Skills Section Code Start================= */}
-                        <Box mt={6}>
+            {/* ========================== Skills Section Code Start================= */}
+            <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>
                 Skill and Language Details
               </h3>
@@ -380,7 +371,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={skills.primaryLanguage}
+                  value={skills?skills.primaryLanguage:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -389,18 +380,17 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   focused
                 />
 
-                  <TextField
-                    sx={{ width: "59%" }}
-                    size="small"
-                    value={skillotherLanguage.map((item) => (item.value))}
-                    id="outlined-basic"
-                    variant="filled"
-                    color="secondary"
-                    label="Other Language"
-                    InputLabelProps={{ shrink: true }}
-                    focused
-                  />
-          
+                <TextField
+                  sx={{ width: "59%" }}
+                  size="small"
+                  value={skillotherLanguage?skillotherLanguage.map((item) => item.value):""}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Other Language"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
               </Box>
               <Box mt={4}>
                 <h4>Primary Skills</h4>
@@ -412,7 +402,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                     flexWrap: "wrap",
                   }}
                 >
-                  <h3> {primarySkillsDto.name}</h3>
+                  <h3> {primarySkillsDto?primarySkillsDto.name:""}</h3>
                 </Box>
                 <Box
                   sx={{
@@ -422,26 +412,42 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                     mt: 2,
                   }}
                 >
-                  {primarySkillsQuestions?primarySkillsQuestions.map((item) => (
-                    <Box >
-                      <TextField
-                        sx={{ width: "350px" }}
-                        size="small"
-                        value={item.question ? item.question : ""}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="Questions"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
-                      {item.answer.map((value) => (
-                        <Box sx={{ display: "flex" }} mt={1}>
-                          <Box sx={{ fontSize: "15px", fontWeight: 900 }}> Answer :-   </Box>  <Box mt={.1} sx={{ fontSize: "13px", fontWeight: 400 }}> {value ? value : ""}</Box>
-                        </Box>
-                      ))}
+                  {primarySkillsQuestions ? (
+                    primarySkillsQuestions.map((item) => (
+                      <Box>
+                        <TextField
+                          sx={{ width: "350px" }}
+                          size="small"
+                          value={item.question ? item.question : ""}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Questions"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                        {item.answer.map((value) => (
+                          <Box sx={{ display: "flex" }} mt={1}>
+                            <Box sx={{ fontSize: "15px", fontWeight: 900 }}>
+                              {" "}
+                              Answer :-{" "}
+                            </Box>{" "}
+                            <Box
+                              mt={0.1}
+                              sx={{ fontSize: "13px", fontWeight: 400 }}
+                            >
+                              {" "}
+                              {value ? value : ""}
+                            </Box>
+                          </Box>
+                        ))}
+                      </Box>
+                    ))
+                  ) : (
+                    <Box mt={1}>
+                      <h5>No Questions</h5>
                     </Box>
-                  )):<Box mt={1}><h5 >No Questions</h5></Box>}
+                  )}
                 </Box>
               </Box>
               <Box mt={4}>
@@ -453,34 +459,51 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                     flexWrap: "wrap",
                   }}
                 >
-                  {secondarySkillsDto.map((item) => (
-                    <Box >
+                  {secondarySkillsDto?secondarySkillsDto.map((item) => (
+                    <Box>
                       <h3>{item.name}</h3>
-                      <Box sx={{ display: "flex", gap: "2%", }}>
-
-                        {item.question?item.question.map((value) => (
-                          <Box mt={2}  >
-                            <TextField
-                              sx={{ width: "350px" }}
-                              size="small"
-                              value={value.question ? value.question : ""}
-                              id="outlined-basic"
-                              variant="filled"
-                              color="secondary"
-                              label="Question"
-                              InputLabelProps={{ shrink: true }}
-                              focused
-                            />
-                            {value.answer.map((result) => (
-                              <Box sx={{ display: "flex" }} mt={1}>
-                                <Box sx={{ fontSize: "15px", fontWeight: 900 }}> Answer :-   </Box>  <Box mt={.1} sx={{ fontSize: "13px", fontWeight: 400 }}> {result ? result : null}</Box>
-                              </Box>
-                            ))}
+                      <Box sx={{ display: "flex", gap: "2%" }}>
+                        {item.question ? (
+                          item.question.map((value) => (
+                            <Box mt={2}>
+                              <TextField
+                                sx={{ width: "350px" }}
+                                size="small"
+                                value={value.question ? value.question : ""}
+                                id="outlined-basic"
+                                variant="filled"
+                                color="secondary"
+                                label="Question"
+                                InputLabelProps={{ shrink: true }}
+                                focused
+                              />
+                              {value.answer.map((result) => (
+                                <Box sx={{ display: "flex" }} mt={1}>
+                                  <Box
+                                    sx={{ fontSize: "15px", fontWeight: 900 }}
+                                  >
+                                    {" "}
+                                    Answer :-{" "}
+                                  </Box>{" "}
+                                  <Box
+                                    mt={0.1}
+                                    sx={{ fontSize: "13px", fontWeight: 400 }}
+                                  >
+                                    {" "}
+                                    {result ? result : null}
+                                  </Box>
+                                </Box>
+                              ))}
+                            </Box>
+                          ))
+                        ) : (
+                          <Box mt={1}>
+                            <h5>No Questions</h5>
                           </Box>
-                        )):<Box mt={1}><h5 >No Questions</h5></Box>}
+                        )}
                       </Box>
                     </Box>
-                  ))}
+                  )):""}
                 </Box>
               </Box>
               <Box mt={4}>
@@ -493,33 +516,54 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                     flexWrap: "wrap",
                   }}
                 >
-                  {tertiarySkillsDto.map((item) => (
-                    <Box mt={2} sx={{ display: "flex", flexDirection: "column", }}>
-                      <h3 > {item.name}</h3>
-                      <Box sx={{ display: "flex", gap: "2%", }}>
-                        {item.question ? item.question.map((value) => (
-                          <Box mt={2}>
-                            <TextField
-                              sx={{ width: "350px" }}
-                              size="small"
-                              value={value.question ? value.question : null}
-                              label="Questions"
-                              color="secondary"
-                              InputLabelProps={{ shrink: true }}
-                              id="outlined-basic"
-                              variant="filled"
-                              focused
-                            />
-                            {value.answer.map((result) => (
-                              <Box sx={{ display: "flex" }} mt={1}>
-                                <Box sx={{ fontSize: "15px", fontWeight: 900 }}> Answer :-   </Box>  <Box mt={.1} sx={{ fontSize: "13px", fontWeight: 400 }}> {result ? result : "No Answer"}</Box>
-                              </Box>
-                            ))}
+                  {tertiarySkillsDto?tertiarySkillsDto.map((item) => (
+                    <Box
+                      mt={2}
+                      sx={{ display: "flex", flexDirection: "column" }}
+                    >
+                      <h3> {item.name}</h3>
+                      <Box sx={{ display: "flex", gap: "2%" }}>
+                        {item.question ? (
+                          item.question.map((value) => (
+                            <Box mt={2}>
+                              <TextField
+                                sx={{ width: "350px" }}
+                                size="small"
+                                value={value.question ? value.question : null}
+                                label="Questions"
+                                color="secondary"
+                                InputLabelProps={{ shrink: true }}
+                                id="outlined-basic"
+                                variant="filled"
+                                focused
+                              />
+                              {value.answer.map((result) => (
+                                <Box sx={{ display: "flex" }} mt={1}>
+                                  <Box
+                                    sx={{ fontSize: "15px", fontWeight: 900 }}
+                                  >
+                                    {" "}
+                                    Answer :-{" "}
+                                  </Box>{" "}
+                                  <Box
+                                    mt={0.1}
+                                    sx={{ fontSize: "13px", fontWeight: 400 }}
+                                  >
+                                    {" "}
+                                    {result ? result : "No Answer"}
+                                  </Box>
+                                </Box>
+                              ))}
+                            </Box>
+                          ))
+                        ) : (
+                          <Box mt={1}>
+                            <h5>No Questions</h5>
                           </Box>
-                        )) : <Box mt={1}><h5 >No Questions</h5></Box>}
+                        )}
                       </Box>
                     </Box>
-                  ))}
+                  )):""}
                 </Box>
               </Box>
               <Box
@@ -533,7 +577,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "550px" }}
                   size="small"
-                  value={skills.skillRemarks}
+                  value={skills?skills.skillRemarks:""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -545,24 +589,24 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
             </Box>
             {/* ========================== Skills Section Code End================= */}
 
-          {/* ========================== Job Requirement Section Code Start================= */}
-          
-          <Box mt={6}>
+            {/* ========================== Job Requirement Section Code Start================= */}
+
+            <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>Job Requirement</h3>
-              
+
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
                   alignItems: "center",
                   flexWrap: "wrap",
                   mt: 4,
+                  gap: "32px",
                 }}
               >
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.jobTypeUuid:""}
+                  value={jobRequirement ? jobRequirement.jobTypeName : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -570,11 +614,23 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-                
+
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.workingHours:""}
+                  value={jobRequirement ? jobRequirement.otherJobTypeUuid : ""}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Other Job Type"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={jobRequirement ? jobRequirement.workingHours : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -586,7 +642,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={JobStartTime?JobStartTime:""}
+                  value={JobStartTime ? JobStartTime : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -598,7 +654,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={JobEndTime?JobEndTime:""}
+                  value={JobEndTime ? JobEndTime : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -610,7 +666,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.totalSimultaneousJob:""}
+                  value={
+                    jobRequirement ? jobRequirement.totalSimultaneousJob : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -618,21 +676,13 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-              </Box>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  mt: 4,
-                }}
-              >
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.minSalaryExpectedStr:""}
+                  value={
+                    jobRequirement ? jobRequirement.minSalaryExpectedStr : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -643,7 +693,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.maxSalaryExpectedStr:""}
+                  value={
+                    jobRequirement ? jobRequirement.maxSalaryExpectedStr : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -655,7 +707,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.openToTraining:""}
+                  value={jobRequirement ? jobRequirement.openToTraining : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -666,7 +718,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.traningMode:""}
+                  value={jobRequirement ? jobRequirement.traningMode : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -677,7 +729,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.jobRemarks:""}
+                  value={jobRequirement ? jobRequirement.jobRemarks : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -685,19 +737,10 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mt: 4,
-                }}
-              >
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={jobRequirement?jobRequirement.vehicle:""}
+                  value={jobRequirement ? jobRequirement.vehicle : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -705,10 +748,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-                </Box>
               </Box>
-              <Box mt={6}>
-              <h3 style={{ marginBottom: "6px" }}>Job Experience Details</h3>
               <Box
                 sx={{
                   display: "flex",
@@ -716,11 +756,23 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   alignItems: "center",
                   mt: 4,
                 }}
+              ></Box>
+            </Box>
+            <Box mt={6}>
+              <h3 style={{ marginBottom: "6px" }}>Job Experience Details</h3>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "32px",
+                  alignItems: "center",
+                  mt: 4,
+                }}
               >
-                 <TextField
+                <TextField
                   sx={{ width: "18%" }}
                   size="small"
-               value={expandLastJob?expandLastJob.totalExperienceStr:""}
+                  value={expandLastJob ? expandLastJob.totalExperienceStr : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -731,7 +783,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob?expandLastJob.totalExperienceYears:""}
+                  value={
+                    expandLastJob ? expandLastJob.totalExperienceYears : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -739,11 +793,13 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-             
-             <TextField
+
+                <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob?expandLastJob.totalExperienceMonths:""}
+                  value={
+                    expandLastJob ? expandLastJob.totalExperienceMonths : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -755,7 +811,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob?expandLastJob.jobTypeUuid:""}
+                  value={expandLastJob ? expandLastJob.jobTypeUuid : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -767,7 +823,19 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                 value={expandLastJob?expandLastJob.reasonForLeavingJob:""}
+                  value={expandLastJob ? expandLastJob.otherJobTypeUuid : ""}
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Other Last Job Type"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={expandLastJob ? expandLastJob.reasonForLeavingJob : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -775,22 +843,25 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-               
-              </Box>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mt: 4,
-                }}
-              >
-                
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={expandLastJob?expandLastJob.jobDurationMonths:""}
+                  value={
+                    expandLastJob ? expandLastJob.otherReasonForLeavingJob : ""
+                  }
+                  id="outlined-basic"
+                  variant="filled"
+                  color="secondary"
+                  label="Other Reason For Leaving Job"
+                  InputLabelProps={{ shrink: true }}
+                  focused
+                />
+
+                <TextField
+                  sx={{ width: "18%" }}
+                  size="small"
+                  value={expandLastJob ? expandLastJob.jobDurationMonths : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -802,7 +873,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                 value={expandLastJob?expandLastJob.jobDurationYears:""}
+                  value={expandLastJob ? expandLastJob.jobDurationYears : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -810,9 +881,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-                 <Box sx={{width: "18%"}}></Box>
-                 <Box sx={{width: "18%"}}></Box>
-               <Box sx={{width: "18%"}}></Box>
+                <Box sx={{ width: "18%" }}></Box>
+                <Box sx={{ width: "18%" }}></Box>
+                <Box sx={{ width: "18%" }}></Box>
               </Box>
             </Box>
             {/* ========================== Job Requirement Section Code End================= */}
@@ -833,7 +904,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.addressLine1:""}
+                  value={
+                    currentaddressData ? currentaddressData.addressLine1 : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -844,7 +917,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.addressLine2:""}
+                  value={
+                    currentaddressData ? currentaddressData.addressLine2 : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -856,7 +931,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.landmark:""}
+                  value={currentaddressData ? currentaddressData.landmark : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -868,7 +943,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.postalCode:""}
+                  value={
+                    currentaddressData ? currentaddressData.postalCode : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -880,7 +957,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.countryUuid:""}
+                  value={
+                    currentaddressData ? currentaddressData.countryName : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -901,7 +980,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.stateUuid:""}
+                  value={currentaddressData ? currentaddressData.stateName : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -912,7 +991,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.cityUuid:""}
+                  value={currentaddressData ? currentaddressData.cityName : ""}
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -924,7 +1003,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={currentaddressData?currentaddressData.micromarketUuid:""}
+                  value={
+                    currentaddressData ? currentaddressData.micromarketName : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -953,7 +1034,11 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.addressLine1:""}
+                  value={
+                    permanentAddressData
+                      ? permanentAddressData.addressLine1
+                      : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -964,7 +1049,11 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.addressLine2:""}
+                  value={
+                    permanentAddressData
+                      ? permanentAddressData.addressLine2
+                      : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -976,7 +1065,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.landmark:""}
+                  value={
+                    permanentAddressData ? permanentAddressData.landmark : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -988,7 +1079,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.postalCode:""}
+                  value={
+                    permanentAddressData ? permanentAddressData.postalCode : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -1000,7 +1093,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.countryName:""}
+                  value={
+                    permanentAddressData ? permanentAddressData.countryName : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -1021,7 +1116,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.stateName:""}
+                  value={
+                    permanentAddressData ? permanentAddressData.stateName : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -1032,7 +1129,9 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.cityName:""}
+                  value={
+                    permanentAddressData ? permanentAddressData.cityName : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -1044,7 +1143,11 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                 <TextField
                   sx={{ width: "18%" }}
                   size="small"
-                  value={permanentAddressData?permanentAddressData.micromarketUuid:""}
+                  value={
+                    permanentAddressData
+                      ? permanentAddressData.micromarketName
+                      : ""
+                  }
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
@@ -1060,12 +1163,11 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
             </Box>
             {/* ========================== Permanent Address Data Section Code End================= */}
 
-  
             {/* ========================== Bank Details Section Code Start================= */}
 
             <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>Bank Details</h3>
-              {bankDetails.map((item) => (
+              {bankDetails?bankDetails.map((item) => (
                 <Box sx={{ dispkay: "flex" }}>
                   <Box
                     sx={{
@@ -1182,7 +1284,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                     <Box sx={{ width: "18%" }}></Box>
                   </Box>
                 </Box>
-              ))}
+              )):""}
             </Box>
 
             {/* ========================== Bank Details Section Code End================= */}
@@ -1190,59 +1292,55 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
 
             <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>Documents</h3>
-              <Box sx={{ display: "flex", gap: "30px", flexWrap: "wrap", }}>
-                {documents.map((item) => (
+              <Box sx={{ display: "flex", gap: "30px", flexWrap: "wrap" }}>
+                {documents?documents.map((item) => (
                   // <Box>
-                    <StyleBox>
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          flexDirection: "column",
-                          gap: "10px",
-                          alignItems: "center",
-                          mt: 4,
-                        }}
-                      >
-                        <Box>
-                          <BookmarkBorderIcon />
-                          <TextField
-                            size="small"
-                            value={item.documentContext}
-                            id="outlined-basic"
-                            variant="filled"
-                            color="secondary"
-                            label="Document Upload Type"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
-                        <Box>
-                          <AttachFileIcon />
-                          <TextField
-                            size="small"
-                            value={item.fileName}
-                            id="outlined-basic"
-                            variant="filled"
-                            color="secondary"
-                            label="File Name"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
+                  <StyleBox>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        flexDirection: "column",
+                        gap: "10px",
+                        alignItems: "center",
+                        mt: 4,
+                      }}
+                    >
+                      <Box>
+                        <BookmarkBorderIcon />
+                        <TextField
+                          size="small"
+                          value={item.documentContext}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Document Upload Type"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
                       </Box>
-                      <Box ml={6} mt={2}>
-                        <a href={item.fileUrl} target="blank" download>
-                          <img width="90%" src={item.fileUrl} />
-                        </a>
+                      <Box>
+                        <AttachFileIcon />
+                        <TextField
+                          size="small"
+                          value={item.fileName}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="File Name"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
                       </Box>
-
-                    </StyleBox>
+                    </Box>
+                    <Box ml={6} mt={2}>
+                      <a href={item.fileUrl} target="blank" download>
+                        <img width="90%" src={item.fileUrl} />
+                      </a>
+                    </Box>
+                  </StyleBox>
                   // </Box>
-                ))}
-
-
+                )):""}
               </Box>
             </Box>
             {/* ========================== Documents Section Code End================= */}
@@ -1251,8 +1349,8 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
               <h3 style={{ marginBottom: "6px" }}>
                 Household Members Information
               </h3>
-              <Box sx={{ display: "flex", gap: "3%", flexWrap: "wrap", }}>
-                {householdMembers.map((item) => (
+              <Box sx={{ display: "flex", gap: "3%", flexWrap: "wrap" }}>
+                {householdMembers?householdMembers.map((item) => (
                   <StyleBox>
                     <Box
                       sx={{
@@ -1285,6 +1383,49 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                           focused
                         />
                       </Box>
+
+                      <Box>
+                        <WorkIcon
+                          sx={{
+                            color: "action.active",
+                            mr: 1,
+                            my: 0.5,
+                            marginTop: "15px",
+                          }}
+                        />
+                        <TextField
+                          size="small"
+                          value={item.jobTypeUuid}
+                          id="outlined-basic"
+                          variant="standard"
+                          color="secondary"
+                          label="Occupation"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                      </Box>
+
+                      <Box>
+                        <WorkIcon
+                          sx={{
+                            color: "action.active",
+                            mr: 1,
+                            my: 0.5,
+                            marginTop: "15px",
+                          }}
+                        />
+                        <TextField
+                          size="small"
+                          value={item.otherJobType}
+                          id="outlined-basic"
+                          variant="standard"
+                          color="secondary"
+                          label="Other Occupation"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                      </Box>
+
                       <Box>
                         <PersonAddAltIcon
                           sx={{
@@ -1301,6 +1442,26 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                           variant="standard"
                           color="secondary"
                           label="Relationship"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                      </Box>
+                      <Box>
+                        <PersonAddAltIcon
+                          sx={{
+                            color: "action.active",
+                            mr: 1,
+                            my: 0.5,
+                            marginTop: "15px",
+                          }}
+                        />
+                        <TextField
+                          size="small"
+                          value={item.otherrRlationship}
+                          id="outlined-basic"
+                          variant="standard"
+                          color="secondary"
+                          label="Other Relationship"
                           InputLabelProps={{ shrink: true }}
                           focused
                         />
@@ -1358,7 +1519,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                         />
                         <TextField
                           size="small"
-                          value={item.email}
+                          value={item.address}
                           id="outlined-basic"
                           variant="standard"
                           color="secondary"
@@ -1369,7 +1530,7 @@ let JobEndTime=moment(jobRequirement.endTime).format('LT');
                       </Box>
                     </Box>
                   </StyleBox>
-                ))}
+                )):""}
               </Box>
             </Box>
             {/* ==========================Household Members Information Code End================= */}
