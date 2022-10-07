@@ -2,6 +2,7 @@
   "name": "care_crew_project",
   "version": "0.1.0",
   "private": true,
+  "homepage":"http://localhost:8080/login",
   "dependencies": {
     "@date-io/date-fns": "^2.14.0",
     "@emotion/react": "^11.9.3",
@@ -28,6 +29,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "build:staging": "env-cmd -f .env.staging npm run build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
