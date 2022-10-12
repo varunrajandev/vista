@@ -202,6 +202,8 @@ function PersonalInfo(props) {
             onChange={(e) => {
               setLname(e.target.value);
             }}
+            pattern="[a-zA-Z]*"
+            onKeyPress={(e) => alphacheck(e)}
           />
 
           <FormControl sx={{ minWidth: 120, display: "flex", width: "18%" }} size="small" >

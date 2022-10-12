@@ -34,7 +34,7 @@ function SkillExpDetails(props) {
     async function fetchData() {
       let primarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
       let secondarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill=${primarySkill}`);
-      let tertiarySkillData = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
+      let tertiarySkillData = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill=${primarySkill}`);
       let primaryLanguagedata = await fetch(masterApi + "/drop-down/get/language?language");
       let otherLanguagedata = await fetch(masterApi + `/drop-down/get/language?language=${primaryLanguage}`);
 

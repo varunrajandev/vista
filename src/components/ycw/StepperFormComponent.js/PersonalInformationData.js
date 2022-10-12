@@ -23,7 +23,7 @@ function PersonalInformationData() {
   const [birthday, setBirthday] = useState(null);
   const [maritalStatus, setMaritalStatus] = useState("");
   const [religion, setReligion] = useState("");
-const [otherreligion, setOtherReligion] =useState("")
+  const [otherreligion, setOtherReligion] =useState("")
   const [education, setEducation] = useState("");
   const [educationalRemarks, setEducationalRemarks] = useState("");
   const [covidStatus, setCovidStatus] = useState("");
@@ -49,7 +49,7 @@ const datatGetById = async() => {
   setSource(allDataResponse.data.sourcingChannel);
   setOtherSource(allDataResponse.data.otherSourcingChannel)
   setFirstname(allDataResponse.data.firstName);
-  // setMiddlename(allDataResponse.data.middleName);
+  setAge(allDataResponse.data.age);
   setLastname(allDataResponse.data.lastName);
   setGender(allDataResponse.data.gender);
   setMobile(allDataResponse.data.mobileNo);
@@ -81,6 +81,7 @@ const datatGetById = async() => {
         let response = await axios.post("http://13.126.160.155:8080/user/worker/profile",
         {
             "birthday":birthday,
+            "age": age,
             covidStatus,
             educationalRemarks,
              firstName:firstname,
@@ -109,8 +110,6 @@ const datatGetById = async() => {
              type:"success"}
             )
           localStorage.setItem('ID', response.data.data.userId);
-          // response.data.status?localStorage.setItem('steps', 2):localStorage.setItem('steps', 1)
-          setCurrentSteps(2)
         
     } catch (error) {
       setNotify(
@@ -129,6 +128,7 @@ const datatGetById = async() => {
       let response = await axios.post("http://13.126.160.155:8080/user/worker/profile",
       {
           "birthday":birthday,
+           age,
           "covidStatus":covidStatus,
           "educationalRemarks":educationalRemarks,
            firstName:firstname,

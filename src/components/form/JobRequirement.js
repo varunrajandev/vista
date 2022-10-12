@@ -135,6 +135,7 @@ console.log("reasonLeaving",ReasonLeaving)
             <MenuItem value={"Two_Wheeler"}>Two-Wheeler</MenuItem>
             <MenuItem value={"Three_Wheeler"}>Three-Wheeler</MenuItem>
             <MenuItem value={"Four_Wheeler"}>Four-Wheeler</MenuItem>
+            <MenuItem value={"Not_Available"}>Not Available</MenuItem>
           </Select>
         </FormControl>
         {/* </Box> */}

@@ -207,12 +207,12 @@ function CurrentAdd(props) {
         </FormControl>
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-          <InputLabel id="demo-select-small">Locality</InputLabel>
+          <InputLabel id="demo-select-small">Supply Hub</InputLabel>
           <Select
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            label="Locality"
+            label="Supply Hub"
             value={locality}
             onChange={(e) => {
               setLocality(e.target.value);

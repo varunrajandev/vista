@@ -26,6 +26,7 @@ function SkillInformationData() {
     let TertiarySkillArray = [];
     let otherLanguageArray = []
     let ids = localStorage.getItem('ID')
+    let steps = localStorage.getItem('steps')
    
     if(secondarySkill){
       secondarySkill.map((item)=>{

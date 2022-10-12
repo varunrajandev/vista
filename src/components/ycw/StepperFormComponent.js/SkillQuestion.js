@@ -24,6 +24,7 @@ function SkillQuestion() {
   const [storeQuestion, setStoreQuestion] = useState([]);
   const [answer, setAnswer] = useState([]);
   const [notify, setNotify] = useState({ isOpen: false, message: "", type: "" })
+  
 
   const { id } = useParams()
   let ids = localStorage.getItem('ID')
@@ -31,44 +32,52 @@ function SkillQuestion() {
   const { currentSteps, setCurrentSteps, personalData, setAddressData } = useContext(multiStepContext);
 
 
+  async function fetchSkillData(){
+    let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${ids || id}`)
+    let responseQuestion = await QuestionData.json();
+    setAllQuestion(responseQuestion.data);
+  };
+
+  const getResponseQuestionById = async () => {
+    let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
+    let Answer = await allResponse.json();
+    setAnswer(Answer)
+    console.log("answer======", Answer)
+    Answer.data.skillsMappingDto.map((item)=>(
+      item.skillDto.map((item1)=>(
+        item1.question.map((item2)=>{
+          console.log(item2.question);
+          item2.answer.map((item3)=>(
+            console.log(item3)
+            ))
+          })
+            ))
+            ))
+            }
+
 
   useEffect(() => {
-    const fetchSkillData = async () => {
-      let QuestionData = await fetch(`http://13.126.160.155:8080/user/skill/get/all/question?userId=${ids || id}`)
-      let responseQuestion = await QuestionData.json();
-      setAllQuestion(responseQuestion.data);
-    };
-
-    const getResponseQuestionById = async () => {
-      let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
-      let Answer = await allResponse.json();
-      setAnswer(Answer)
-      console.log("first", Answer)
-      //console.log("answer======", Answer.data.skillsMappingDto)
-      // Answer.data.skillsMappingDto.map((item)=>(
-      //   item.skillDto.map((item1)=>(
-      //     item1.question.map((item2)=>(
-      //       item2.answer.map((item3)=>(
-      //         console.log(item3)
-      //         ))
-      //         ))
-      //         ))
-      //         ))
-              }
     getResponseQuestionById()
+    fetchSkillData()
+    setInterval(() => {
+      fetchSkillData()
+    }, 5000);
 
-    fetchSkillData();
+ 
   }, [id, ids]);
 
-  // console.log("all question", allQuestion)
+  
+
+ console.log("all question", allQuestion)
 
   async function handleSubmit() {
+
     try {
       let response = await axios.post("http://13.126.160.155:8080/user/skill/save/userResponse", {
         skillDto: storeQuestion,
         userId: ids || id
       });
-
+      
       setNotify(
         {
           isOpen: response.data.status,
@@ -87,6 +96,8 @@ function SkillQuestion() {
       )
     }
   }
+
+
 
   const handleChangeInput = (event, newValue, questions, uuid, index) => {
 
@@ -179,17 +190,21 @@ function SkillQuestion() {
           </Box>
         </Box>
       </Box>
-{/* 
-      {
-        answer.data.skillsMappingDto.map((item)=>(
+
+   {/* {   answer.data.skillsMappingDto.map((item)=>(
         item.skillDto.map((item1)=>(
-          item1.question.map((item2)=>(
-            item2.answer.map((item3)=>(
-            <h5>{item3}</h5>
-            ))
-            ))
-            ))
-            ))} */}
+          item1.question.map((item2)=>{
+            return ( 
+              <h5>{item2.question}</h5>
+            )
+            item2.answer.map((item3)=>{
+              return (<p>{item3}</p>)
+            })
+            })
+              ))
+              ))
+              } */}
+              
     </>
   );
 }
