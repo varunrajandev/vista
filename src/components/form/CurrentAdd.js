@@ -9,53 +9,74 @@ import { multiStepContext } from "../../ContextApi/StepContext";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 function CurrentAdd(props) {
-  const [countryDD, setCountryDD] = useState([])
-  const [stateDD, setStateDD] = useState([])
-  const [cityDD, setCityDD] = useState([])
-  const [localityDD, setLocalityDD] = useState([])
+  const [countryDD, setCountryDD] = useState([]);
+  const [stateDD, setStateDD] = useState([]);
+  const [cityDD, setCityDD] = useState([]);
+  const [localityDD, setLocalityDD] = useState([]);
   const {
     marginTopSize,
     labelData,
-    isPermanent, setIsPermanent,
-    addressL1, setAddressL1,
-    addressL2, setAddressL2,
-    landmark, setLandmark,
-    pinCode, setPinCode,
-    country, setCountry,
-    state, setState,
-    city, setCity,
-    locality, setLocality,
-    addressProofType, setAddressProofType,
-    countryID, setCountryID,
-    stateID, setStateID,
-    cityID, setCityID,
+    isPermanent,
+    setIsPermanent,
+    addressL1,
+    setAddressL1,
+    addressL2,
+    setAddressL2,
+    landmark,
+    setLandmark,
+    pinCode,
+    setPinCode,
+    country,
+    setCountry,
+    state,
+    setState,
+    city,
+    setCity,
+    locality,
+    setLocality,
+    addressProofType,
+    setAddressProofType,
+    countryID,
+    setCountryID,
+    stateID,
+    setStateID,
+    cityID,
+    setCityID,
     addressData,
     AllAddress,
-    documnetTypeDD
-  } = props
+    documnetTypeDD,
+  } = props;
 
-  const {currentSteps, setCurrentSteps, personalData, setAddressData} = useContext(multiStepContext)
-
+  const { currentSteps, setCurrentSteps, personalData, setAddressData } =
+    useContext(multiStepContext);
 
   useEffect(() => {
     async function fetchData() {
-      let countryData = await fetch("http://13.126.160.155:8081/locationmaster/country/get/all");
-      let stateData = await fetch(`http://13.126.160.155:8081/locationmaster/state/get/states/by/${country}`);
-      let cityData = await fetch(`http://13.126.160.155:8081/locationmaster/city/get/cities/by/${state}`);
-      let localityData = await fetch(`http://13.126.160.155:8081/locationmaster/micromarket/list/${city}`);
+      let countryData = await fetch(
+        "http://13.126.160.155:8081/locationmaster/country/get/all"
+      );
+      let stateData = await fetch(
+        `http://13.126.160.155:8081/locationmaster/state/get/states/by/${country}`
+      );
+      let cityData = await fetch(
+        `http://13.126.160.155:8081/locationmaster/city/get/cities/by/${state}`
+      );
+      let localityData = await fetch(
+        `http://13.126.160.155:8081/locationmaster/micromarket/list/${city}`
+      );
       let res1 = await countryData.json();
       let res2 = await stateData.json();
       let res3 = await cityData.json();
       let res4 = await localityData.json();
       setCountryDD(res1.data);
-      setStateDD(res2.data || [{ name: "please Select Country" }])
-      setCityDD(res3.data || [{ name: "please Select State" }])
-      setLocalityDD(res4.data || [{ names: "please Select City" }])
+      setStateDD(res2.data || [{ name: "please Select Country" }]);
+      setCityDD(res3.data || [{ name: "please Select State" }]);
+      setLocalityDD(res4.data || [{ names: "please Select City" }]);
     }
     fetchData();
   }, [country, state, city]);
 
-  console.log({country})
+  console.log({ country });
 
   return (
     <Box
@@ -63,17 +84,19 @@ function CurrentAdd(props) {
         marginTop: marginTopSize,
         display: "grid",
         gap: 1,
-      }}>
-
-      <Box sx={{display:"flex", alignItems:"center"}}>
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         <h5> {labelData}</h5>
-          <Box sx={{display:(marginTopSize?"block":"none")}}>
-          <Checkbox onChange={(e) => setIsPermanent(e.target.checked)}{...label}
+        <Box sx={{ display: marginTopSize ? "block" : "none" }}>
+          <Checkbox
+            onChange={(e) => setIsPermanent(e.target.checked)}
+            {...label}
             color="success"
-            checked={isPermanent?true:false}
+            checked={isPermanent ? true : false}
           />
           <span style={{ fontWeight: "100" }}>Same as current Address</span>
-          </Box>
+        </Box>
       </Box>
 
       <Box
@@ -88,7 +111,7 @@ function CurrentAdd(props) {
           size="small"
           id="outlined-basic"
           label="Flat/Building"
-           value={addressL1}
+          value={addressL1}
           variant="outlined"
           onChange={(e) => {
             setAddressL1(e.target.value);
@@ -121,7 +144,7 @@ function CurrentAdd(props) {
 
         <TextField
           sx={{
-            width: "18%" ,
+            width: "18%",
             "& input[type=number]": {
               "-moz-appearance": "textfield",
             },
@@ -139,8 +162,10 @@ function CurrentAdd(props) {
           value={pinCode}
           label="Pin Code"
           variant="outlined"
-          onInput = {(e) =>{
-            e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,6)
+          onInput={(e) => {
+            e.target.value = Math.max(0, parseInt(e.target.value))
+              .toString()
+              .slice(0, 6);
           }}
           onChange={(e) => {
             setPinCode(e.target.value);
@@ -158,9 +183,10 @@ function CurrentAdd(props) {
             onChange={(e) => {
               setCountry(e.target.value);
             }}
-          >{countryDD.map((item) => (
-            <MenuItem value={item.uuid} >{item.countryName}</MenuItem>
-          ))}
+          >
+            {countryDD.map((item) => (
+              <MenuItem value={item.uuid}>{item.countryName}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
@@ -183,7 +209,10 @@ function CurrentAdd(props) {
             }}
           >
             {stateDD.map((item) => (
-              <MenuItem value={item.value}>{item.key}{item.name}</MenuItem>
+              <MenuItem value={item.value}>
+                {item.key}
+                {item.name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -196,12 +225,15 @@ function CurrentAdd(props) {
             id="demo-select-small"
             label="City"
             value={city}
-      onChange={(e) => {
+            onChange={(e) => {
               setCity(e.target.value);
             }}
           >
             {cityDD.map((item) => (
-              <MenuItem value={item.value}>{item.key}{item.name}</MenuItem>
+              <MenuItem value={item.value}>
+                {item.key}
+                {item.name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -219,7 +251,10 @@ function CurrentAdd(props) {
             }}
           >
             {localityDD.map((item) => (
-              <MenuItem value={item.id}>{item.name}{item.names}</MenuItem>
+              <MenuItem value={item.id}>
+                {item.name}
+                {item.names}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -236,15 +271,14 @@ function CurrentAdd(props) {
               setAddressProofType(e.target.value);
             }}
           >
-            {documnetTypeDD.map(item=>(
+            {documnetTypeDD.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
             ))}
-            </Select>
+          </Select>
         </FormControl>
         <div style={{ width: "18%" }}></div>
       </Box>
     </Box>
-
   );
 }
 

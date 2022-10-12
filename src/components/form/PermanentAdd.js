@@ -8,19 +8,28 @@ import { AddressData } from "../../AddressData";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 function PermanentAdd(props) {
-
   const {
-    addressL1, setAddressL1,
-    addressL2, setAddressL2,
-    landmark, setLandmark,
-    pinCode, setPinCode,
-    country, setCountry,
-    state, setState,
-    city, setCity,
-    locality, setLocality,
-    addressProofType, setAddressProofType,
-    check, setCheck
-  } = props
+    addressL1,
+    setAddressL1,
+    addressL2,
+    setAddressL2,
+    landmark,
+    setLandmark,
+    pinCode,
+    setPinCode,
+    country,
+    setCountry,
+    state,
+    setState,
+    city,
+    setCity,
+    locality,
+    setLocality,
+    addressProofType,
+    setAddressProofType,
+    check,
+    setCheck,
+  } = props;
 
   const res = AddressData.filter((word) => word.admin_name === state);
 
@@ -31,8 +40,6 @@ function PermanentAdd(props) {
   });
   var set = new Set(arr);
   let newArr = [...set];
-
-
 
   return (
     <Box sx={{ marginTop: 7 }}>
@@ -46,191 +53,188 @@ function PermanentAdd(props) {
         <span style={{ fontWeight: "100" }}>Same as current Address</span>
       </h5>
       <Box style={{ display: check === true && "none" }}>
-       
-          <Box
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          <TextField
+            sx={{ width: "18%" }}
+            size="small"
+            id="outlined-basic"
+            label="Address Line 1"
+            variant="outlined"
+            onChange={(e) => {
+              setAddressL1(e.target.value);
+            }}
+          />
+
+          <TextField
+            sx={{ width: "18%" }}
+            size="small"
+            id="outlined-basic"
+            label="Address Line 2"
+            variant="outlined"
+            onChange={(e) => {
+              setAddressL2(e.target.value);
+            }}
+          />
+
+          <TextField
+            sx={{ width: "18%" }}
+            size="small"
+            id="outlined-basic"
+            label="Landmark"
+            variant="outlined"
+            onChange={(e) => {
+              setLandmark(e.target.value);
+            }}
+          />
+
+          <TextField
             sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent:"space-between",
+              width: "18%",
+              "& input[type=number]": {
+                "-moz-appearance": "textfield",
+              },
+              "& input[type=number]::-webkit-outer-spin-button": {
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
+              "& input[type=number]::-webkit-inner-spin-button": {
+                "-webkit-appearance": "none",
+                margin: 0,
+              },
             }}
-          >
-            <TextField
-              sx={{ width: "18%" }}
-              size="small"
-              id="outlined-basic"
-              label="Address Line 1"
-              variant="outlined"
-              onChange={(e) => {
-                setAddressL1(e.target.value);
-              }}
-            />
-
-            <TextField
-              sx={{ width: "18%" }}
-              size="small"
-              id="outlined-basic"
-              label="Address Line 2"
-              variant="outlined"
-              onChange={(e) => {
-                setAddressL2(e.target.value);
-              }}
-            />
-
-            <TextField
-              sx={{ width: "18%" }}
-              size="small"
-              id="outlined-basic"
-              label="Landmark"
-              variant="outlined"
-              onChange={(e) => {
-                setLandmark(e.target.value);
-              }}
-            />
-
-            <TextField
-              sx={{
-                width: "18%" ,
-                "& input[type=number]": {
-                  "-moz-appearance": "textfield",
-                },
-                "& input[type=number]::-webkit-outer-spin-button": {
-                  "-webkit-appearance": "none",
-                  margin: 0,
-                },
-                "& input[type=number]::-webkit-inner-spin-button": {
-                  "-webkit-appearance": "none",
-                  margin: 0,
-                },
-              }}
-              size="small"
-              id="outlined-basic"
-              label="Pin Code"
-              variant="outlined"
-              onChange={(e) => {
-                setPinCode(e.target.value);
-              }}
-            />
-
-            <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
-              <InputLabel id="demo-select-small">Country</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                label="Country"
-                onChange={(e) => {
-                  setCountry(e.target.value);
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={"India"}>India</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Box
-            display={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "30px",
+            size="small"
+            id="outlined-basic"
+            label="Pin Code"
+            variant="outlined"
+            onChange={(e) => {
+              setPinCode(e.target.value);
             }}
-          >
-            <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
-              <InputLabel id="demo-select-small">State</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                label="State"
-                onChange={(e) => {
-                  setState(e.target.value);
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {newArr.map((item) => (
-                  <MenuItem value={item}>{item}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          />
 
-            <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
-              <InputLabel id="demo-select-small">City</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                label="City"
-                onChange={(e) => {
-                  setCity(e.target.value);
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {res.map((item) => (
-                  <MenuItem value={item.city}>{item.city}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+            <InputLabel id="demo-select-small">Country</InputLabel>
+            <Select
+              sx={{ width: "100%" }}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              label="Country"
+              onChange={(e) => {
+                setCountry(e.target.value);
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={"India"}>India</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
 
-            <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
-              <InputLabel id="demo-select-small">Locality</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                label="Locality"
-                onChange={(e) => {
-                  setLocality(e.target.value);
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={"Phase1"}>Phase1</MenuItem>
-                <MenuItem value={"Phase2"}>Phase2</MenuItem>
-                <MenuItem value={"Phase3"}>Phase3</MenuItem>
-              </Select>
-            </FormControl>
+        <Box
+          display={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "30px",
+          }}
+        >
+          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+            <InputLabel id="demo-select-small">State</InputLabel>
+            <Select
+              sx={{ width: "100%" }}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              label="State"
+              onChange={(e) => {
+                setState(e.target.value);
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {newArr.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-            <FormControl sx={{ minWidth: 120, width:"18%" }} size="small">
-              <InputLabel id="demo-select-small">Address Proof Type</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small"
-                id="demo-select-small"
-                label="Address Proof Type"
-                onChange={(e) => {
-                  setAddressProofType(e.target.value);
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={"Aadhar Card"}>Aadhar Card</MenuItem>
-                <MenuItem value={"Light Bill"}>Light Bill</MenuItem>
-                <MenuItem value={"Gas Bill"}>Gas Bill</MenuItem>
-                <MenuItem value={"Domicile Certificate"}>
-                  Room Agreement
-                </MenuItem>
-                <MenuItem value={"Voter ID"}>Voter ID</MenuItem>
-                <MenuItem value={"Ration Card"}>Ration Card</MenuItem>
-                <MenuItem value={"Driving Licence"}>Driving Licence</MenuItem>
-                <MenuItem value={"Passport"}>Passport</MenuItem>
-                <MenuItem value={"Bank Passbook"}>Bank Passbook</MenuItem>
-                <MenuItem value={"Panchayat Certificate"}>
-                  Panchayat Certificate
-                </MenuItem>
-              </Select>
-            </FormControl>
-            <div style={{width:"18%"}}></div>
-            </Box>
+          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+            <InputLabel id="demo-select-small">City</InputLabel>
+            <Select
+              sx={{ width: "100%" }}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              label="City"
+              onChange={(e) => {
+                setCity(e.target.value);
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {res.map((item) => (
+                <MenuItem value={item.city}>{item.city}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+            <InputLabel id="demo-select-small">Locality</InputLabel>
+            <Select
+              sx={{ width: "100%" }}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              label="Locality"
+              onChange={(e) => {
+                setLocality(e.target.value);
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={"Phase1"}>Phase1</MenuItem>
+              <MenuItem value={"Phase2"}>Phase2</MenuItem>
+              <MenuItem value={"Phase3"}>Phase3</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
+            <InputLabel id="demo-select-small">Address Proof Type</InputLabel>
+            <Select
+              sx={{ width: "100%" }}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              label="Address Proof Type"
+              onChange={(e) => {
+                setAddressProofType(e.target.value);
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={"Aadhar Card"}>Aadhar Card</MenuItem>
+              <MenuItem value={"Light Bill"}>Light Bill</MenuItem>
+              <MenuItem value={"Gas Bill"}>Gas Bill</MenuItem>
+              <MenuItem value={"Domicile Certificate"}>Room Agreement</MenuItem>
+              <MenuItem value={"Voter ID"}>Voter ID</MenuItem>
+              <MenuItem value={"Ration Card"}>Ration Card</MenuItem>
+              <MenuItem value={"Driving Licence"}>Driving Licence</MenuItem>
+              <MenuItem value={"Passport"}>Passport</MenuItem>
+              <MenuItem value={"Bank Passbook"}>Bank Passbook</MenuItem>
+              <MenuItem value={"Panchayat Certificate"}>
+                Panchayat Certificate
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <div style={{ width: "18%" }}></div>
         </Box>
       </Box>
+    </Box>
   );
 }
 
