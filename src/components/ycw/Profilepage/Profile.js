@@ -57,9 +57,12 @@ function Profile() {
   const [skills, setSkills] = React.useState([]);
   const [skillotherLanguage, setSkillotherLanguage] = React.useState([]);
   const [primarySkillsDto, setPrimarySkillsDto] = React.useState("");
-  const [primarySkillsQuestions, setPrimarySkillsQuestions] = React.useState([]);
+  const [primarySkillsQuestions, setPrimarySkillsQuestions] = React.useState(
+    []
+  );
   const [secondarySkillsDto, setSecondarySkillsDto] = React.useState([]);
-  const [secondarySkillsQuestions, setSecondarySkillsQuestions] = React.useState([]);
+  const [secondarySkillsQuestions, setSecondarySkillsQuestions] =
+    React.useState([]);
   const [tertiarySkillsDto, setTertiarySkillsDto] = React.useState([]);
   const [subSkillsDto, setSubSkillsDto] = React.useState([]);
   const [data, setdata] = React.useState([]);
@@ -112,11 +115,11 @@ function Profile() {
     fetchData();
   }, []);
   console.log("data is ", data);
-  let dateofBirth = moment(userData.birthday).utc().format("MM/DD/YYYY");
+  let dateofBirth = moment(userData.birthday).utc().format("DD/MM/YYYY");
   let StartTime = moment(userData.birthday).format("LT");
   let JobStartTime = moment(jobRequirement.startTime).format("LT");
   let JobEndTime = moment(jobRequirement.endTime).format("LT");
-  console.log("dob is =>", StartTime);
+  // console.log("dob is =>", StartTime);
 
   return (
     <>
@@ -472,56 +475,56 @@ function Profile() {
                 >
                   {secondarySkillsDto
                     ? secondarySkillsDto.map((item) => (
-                      <Box>
-                        <h3>{item.name}</h3>
-                        <Box sx={{ display: "flex", gap: "2%" }}>
-                          {item.question ? (
-                            item.question.map((value) => (
-                              <Box mt={2}>
-                                <TextField
-                                  sx={{ width: "350px" }}
-                                  size="small"
-                                  value={value.question ? value.question : ""}
-                                  id="outlined-basic"
-                                  variant="filled"
-                                  color="secondary"
-                                  label="Question"
-                                  InputLabelProps={{ shrink: true }}
-                                  focused
-                                />
-                                {value.answer.map((result) => (
-                                  <Box sx={{ display: "flex" }} mt={1}>
-                                    <Box
-                                      sx={{
-                                        fontSize: "15px",
-                                        fontWeight: 900,
-                                      }}
-                                    >
-                                      {" "}
-                                      Answer :-{" "}
-                                    </Box>{" "}
-                                    <Box
-                                      mt={0.1}
-                                      sx={{
-                                        fontSize: "13px",
-                                        fontWeight: 400,
-                                      }}
-                                    >
-                                      {" "}
-                                      {result ? result : null}
+                        <Box>
+                          <h3>{item.name}</h3>
+                          <Box sx={{ display: "flex", gap: "2%" }}>
+                            {item.question ? (
+                              item.question.map((value) => (
+                                <Box mt={2}>
+                                  <TextField
+                                    sx={{ width: "350px" }}
+                                    size="small"
+                                    value={value.question ? value.question : ""}
+                                    id="outlined-basic"
+                                    variant="filled"
+                                    color="secondary"
+                                    label="Question"
+                                    InputLabelProps={{ shrink: true }}
+                                    focused
+                                  />
+                                  {value.answer.map((result) => (
+                                    <Box sx={{ display: "flex" }} mt={1}>
+                                      <Box
+                                        sx={{
+                                          fontSize: "15px",
+                                          fontWeight: 900,
+                                        }}
+                                      >
+                                        {" "}
+                                        Answer :-{" "}
+                                      </Box>{" "}
+                                      <Box
+                                        mt={0.1}
+                                        sx={{
+                                          fontSize: "13px",
+                                          fontWeight: 400,
+                                        }}
+                                      >
+                                        {" "}
+                                        {result ? result : null}
+                                      </Box>
                                     </Box>
-                                  </Box>
-                                ))}
+                                  ))}
+                                </Box>
+                              ))
+                            ) : (
+                              <Box mt={1}>
+                                <h5>No Questions</h5>
                               </Box>
-                            ))
-                          ) : (
-                            <Box mt={1}>
-                              <h5>No Questions</h5>
-                            </Box>
-                          )}
+                            )}
+                          </Box>
                         </Box>
-                      </Box>
-                    ))
+                      ))
                     : ""}
                 </Box>
               </Box>
@@ -537,61 +540,61 @@ function Profile() {
                 >
                   {tertiarySkillsDto
                     ? tertiarySkillsDto.map((item) => (
-                      <Box
-                        mt={2}
-                        sx={{ display: "flex", flexDirection: "column" }}
-                      >
-                        <h3> {item.name}</h3>
-                        <Box sx={{ display: "flex", gap: "2%" }}>
-                          {item.question ? (
-                            item.question.map((value) => (
-                              <Box mt={2}>
-                                <TextField
-                                  sx={{ width: "350px" }}
-                                  size="small"
-                                  value={
-                                    value.question ? value.question : null
-                                  }
-                                  label="Questions"
-                                  color="secondary"
-                                  InputLabelProps={{ shrink: true }}
-                                  id="outlined-basic"
-                                  variant="filled"
-                                  focused
-                                />
-                                {value.answer.map((result) => (
-                                  <Box sx={{ display: "flex" }} mt={1}>
-                                    <Box
-                                      sx={{
-                                        fontSize: "15px",
-                                        fontWeight: 900,
-                                      }}
-                                    >
-                                      {" "}
-                                      Answer :-{" "}
-                                    </Box>{" "}
-                                    <Box
-                                      mt={0.1}
-                                      sx={{
-                                        fontSize: "13px",
-                                        fontWeight: 400,
-                                      }}
-                                    >
-                                      {" "}
-                                      {result ? result : "No Answer"}
+                        <Box
+                          mt={2}
+                          sx={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <h3> {item.name}</h3>
+                          <Box sx={{ display: "flex", gap: "2%" }}>
+                            {item.question ? (
+                              item.question.map((value) => (
+                                <Box mt={2}>
+                                  <TextField
+                                    sx={{ width: "350px" }}
+                                    size="small"
+                                    value={
+                                      value.question ? value.question : null
+                                    }
+                                    label="Questions"
+                                    color="secondary"
+                                    InputLabelProps={{ shrink: true }}
+                                    id="outlined-basic"
+                                    variant="filled"
+                                    focused
+                                  />
+                                  {value.answer.map((result) => (
+                                    <Box sx={{ display: "flex" }} mt={1}>
+                                      <Box
+                                        sx={{
+                                          fontSize: "15px",
+                                          fontWeight: 900,
+                                        }}
+                                      >
+                                        {" "}
+                                        Answer :-{" "}
+                                      </Box>{" "}
+                                      <Box
+                                        mt={0.1}
+                                        sx={{
+                                          fontSize: "13px",
+                                          fontWeight: 400,
+                                        }}
+                                      >
+                                        {" "}
+                                        {result ? result : "No Answer"}
+                                      </Box>
                                     </Box>
-                                  </Box>
-                                ))}
+                                  ))}
+                                </Box>
+                              ))
+                            ) : (
+                              <Box mt={1}>
+                                <h5>No Questions</h5>
                               </Box>
-                            ))
-                          ) : (
-                            <Box mt={1}>
-                              <h5>No Questions</h5>
-                            </Box>
-                          )}
+                            )}
+                          </Box>
                         </Box>
-                      </Box>
-                    ))
+                      ))
                     : ""}
                 </Box>
               </Box>
@@ -617,7 +620,6 @@ function Profile() {
               </Box>
             </Box>
             {/* ========================== Skills Section Code End================= */}
-
             {/* ========================== Job Requirement Section Code Start================= */}
 
             <Box mt={6}>
@@ -916,7 +918,6 @@ function Profile() {
               </Box>
             </Box>
             {/* ========================== Job Requirement Section Code End================= */}
-
             {/* ========================== Current Address Data Section Code Start================= */}
 
             <Box mt={6}>
@@ -1038,7 +1039,7 @@ function Profile() {
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
-                  label="Locality"
+                  label="Supply Hub"
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
@@ -1046,7 +1047,9 @@ function Profile() {
                   sx={{ width: "18%" }}
                   size="small"
                   value={
-                    currentaddressData ? currentaddressData.addressProofType : ""
+                    currentaddressData
+                      ? currentaddressData.addressProofType
+                      : ""
                   }
                   id="outlined-basic"
                   variant="filled"
@@ -1059,7 +1062,9 @@ function Profile() {
                   sx={{ width: "18%" }}
                   size="small"
                   value={
-                    currentaddressData ? currentaddressData.otherAddressProofType : ""
+                    currentaddressData
+                      ? currentaddressData.otherAddressProofType
+                      : ""
                   }
                   id="outlined-basic"
                   variant="filled"
@@ -1068,7 +1073,6 @@ function Profile() {
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-
               </Box>
             </Box>
             {/* ========================== Current Address Data Section Code End================= */}
@@ -1203,7 +1207,7 @@ function Profile() {
                   id="outlined-basic"
                   variant="filled"
                   color="secondary"
-                  label="Locality"
+                  label="Supply Hub"
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
@@ -1238,124 +1242,117 @@ function Profile() {
                   InputLabelProps={{ shrink: true }}
                   focused
                 />
-              
               </Box>
             </Box>
             {/* ========================== Permanent Address Data Section Code End================= */}
-
             {/* ========================== Bank Details Section Code Start================= */}
 
             <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>Bank Details</h3>
               {bankDetails
                 ? bankDetails.map((item) => (
-                  <Box sx={{ dispkay: "flex" }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mt: 4,
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      <TextField
-                        sx={{ width: "18%" }}
-                        size="small"
-                        value={item.accountHolderName}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="Account Holder Name"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
-                      <TextField
-                        sx={{ width: "18%" }}
-                        size="small"
-                        value={item.accountNumber}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="Account Number"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
-                      <TextField
-                        sx={{ width: "18%" }}
-                        size="small"
-                        value={item.accountType}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="Account Type"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
-                      <TextField
-                        sx={{ width: "18%" }}
-                        size="small"
-                        value={item.bankName}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="Bank Name"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
+                    <Box sx={{ dispkay: "flex" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mt: 4,
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <TextField
+                          sx={{ width: "18%" }}
+                          size="small"
+                          value={item.accountHolderName}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Account Holder Name"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                        <TextField
+                          sx={{ width: "18%" }}
+                          size="small"
+                          value={item.accountNumber}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Account Number"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                        <TextField
+                          sx={{ width: "18%" }}
+                          size="small"
+                          value={item.accountType}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Account Type"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                        <TextField
+                          sx={{ width: "18%" }}
+                          size="small"
+                          value={item.bankName}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Bank Name"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
 
-                      <TextField
-                        sx={{ width: "18%" }}
-                        size="small"
-                        value={item.ifscCode}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="IFSC Code"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
+                        <TextField
+                          sx={{ width: "18%" }}
+                          size="small"
+                          value={item.ifscCode}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="IFSC Code"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                      </Box>
 
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mt: 4,
+                        }}
+                      >
+                        <TextField
+                          sx={{ width: "18%" }}
+                          size="small"
+                          value={item.branchName}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Branch Name"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+
+                        <TextField
+                          sx={{ width: "79.8%" }}
+                          size="small"
+                          value={item.branchAddress}
+                          id="outlined-basic"
+                          variant="filled"
+                          color="secondary"
+                          label="Branch Address"
+                          InputLabelProps={{ shrink: true }}
+                          focused
+                        />
+                      </Box>
                     </Box>
-
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mt: 4,
-                      }}
-                    >
-
-
-
-                      <TextField
-                        sx={{ width: "18%" }}
-                        size="small"
-                        value={item.branchName}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="Branch Name"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
-
-                      <TextField
-                        sx={{ width: "79.8%" }}
-                        size="small"
-                        value={item.branchAddress}
-                        id="outlined-basic"
-                        variant="filled"
-                        color="secondary"
-                        label="Branch Address"
-                        InputLabelProps={{ shrink: true }}
-                        focused
-                      />
-
-                    </Box>
-                  </Box>
-                ))
+                  ))
                 : ""}
             </Box>
 
@@ -1364,56 +1361,59 @@ function Profile() {
 
             <Box mt={6}>
               <h3 style={{ marginBottom: "6px" }}>Documents</h3>
-              <Box mt={3} sx={{ display: "flex", gap: "30px", flexWrap: "wrap" }}>
+              <Box
+                mt={3}
+                sx={{ display: "flex", gap: "30px", flexWrap: "wrap" }}
+              >
                 {documents
                   ? documents.map((item) => (
-                    // <Box>
-                    <StyleBox>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          flexDirection: "column",
-                          gap: "10px",
-                          alignItems: "center",
-                          mt: 4,
-                        }}
-                      >
-                        <Box>
-                          <BookmarkBorderIcon />
-                          <TextField
-                            size="small"
-                            value={item.documentContext}
-                            id="outlined-basic"
-                            variant="filled"
-                            color="secondary"
-                            label="Document Upload Type"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
+                      // <Box>
+                      <StyleBox>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            flexDirection: "column",
+                            gap: "10px",
+                            alignItems: "center",
+                            mt: 4,
+                          }}
+                        >
+                          <Box>
+                            <BookmarkBorderIcon />
+                            <TextField
+                              size="small"
+                              value={item.documentContext}
+                              id="outlined-basic"
+                              variant="filled"
+                              color="secondary"
+                              label="Document Upload Type"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
+                          <Box>
+                            <AttachFileIcon />
+                            <TextField
+                              size="small"
+                              value={item.fileName}
+                              id="outlined-basic"
+                              variant="filled"
+                              color="secondary"
+                              label="File Name"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
                         </Box>
-                        <Box>
-                          <AttachFileIcon />
-                          <TextField
-                            size="small"
-                            value={item.fileName}
-                            id="outlined-basic"
-                            variant="filled"
-                            color="secondary"
-                            label="File Name"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
+                        <Box ml={6} mt={2}>
+                          <a href={item.fileUrl} target="blank" download>
+                            <img width="90%" src={item.fileUrl} />
+                          </a>
                         </Box>
-                      </Box>
-                      <Box ml={6} mt={2}>
-                        <a href={item.fileUrl} target="blank" download>
-                          <img width="90%" src={item.fileUrl} />
-                        </a>
-                      </Box>
-                    </StyleBox>
-                    // </Box>
-                  ))
+                      </StyleBox>
+                      // </Box>
+                    ))
                   : ""}
               </Box>
             </Box>
@@ -1426,186 +1426,186 @@ function Profile() {
               <Box mt={3} sx={{ display: "flex", gap: "3%", flexWrap: "wrap" }}>
                 {householdMembers
                   ? householdMembers.map((item) => (
-                    <StyleBoxHouseHold>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: "25px",
-                          justifyContent: "space-between",
-                          mt: 4,
-                        }}
-                      >
-                        <Box>
-                          <PersonOutlineIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
+                      <StyleBoxHouseHold>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "25px",
+                            justifyContent: "space-between",
+                            mt: 4,
+                          }}
+                        >
+                          <Box sx={{ width: "18%" }}>
+                            <PersonOutlineIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
 
-                          <TextField
-                            size="small"
-                            value={item.name}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Name"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
+                            <TextField
+                              size="small"
+                              value={item.name}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Name"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
 
-                        <Box>
-                          <WorkIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
-                          <TextField
-                            size="small"
-                            value={item.jobTypeUuid}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Occupation"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
+                          <Box sx={{ width: "18%" }}>
+                            <WorkIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
+                            <TextField
+                              size="small"
+                              value={item.jobTypeUuid}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Occupation"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
 
-                        <Box>
-                          <WorkIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
-                          <TextField
-                            size="small"
-                            value={item.otherJobType}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Other Occupation"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
+                          <Box sx={{ width: "18%" }}>
+                            <WorkIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
+                            <TextField
+                              size="small"
+                              value={item.otherJobType}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Other Occupation"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
 
-                        <Box>
-                          <PersonAddAltIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
-                          <TextField
-                            size="small"
-                            value={item.relationship}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Relationship"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
-                        <Box>
-                          <PersonAddAltIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
-                          <TextField
-                            size="small"
-                            value={item.otherrRlationship}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Other Relationship"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
+                          <Box sx={{ width: "18%" }}>
+                            <PersonAddAltIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
+                            <TextField
+                              size="small"
+                              value={item.relationship}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Relationship"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
+                          <Box sx={{ width: "18%" }}>
+                            <PersonAddAltIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
+                            <TextField
+                              size="small"
+                              value={item.otherrRlationship}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Other Relationship"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
 
-                        <Box>
-                          <CallIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
-                          <TextField
-                            size="small"
-                            value={item.mobileNo}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Mobile Number"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
-                        <Box>
-                          <DataUsageOutlinedIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
-                          <TextField
-                            size="small"
-                            value={item.age}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Age"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
-                        </Box>
+                          <Box sx={{ width: "18%" }}>
+                            <CallIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
+                            <TextField
+                              size="small"
+                              value={item.mobileNo}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Mobile Number"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
+                          <Box sx={{ width: "18%" }}>
+                            <DataUsageOutlinedIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
+                            <TextField
+                              size="small"
+                              value={item.age}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Age"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
 
-                        <Box sx={{ width: "59%" }}>
-                          <LocationOnIcon
-                            sx={{
-                              color: "action.active",
-                              mr: 1,
-                              my: 0.5,
-                              marginTop: "15px",
-                            }}
-                          />
-                          <TextField
-                            size="small"
-                            sx={{ width: "95.5%" }}
-                            value={item.address}
-                            id="outlined-basic"
-                            variant="standard"
-                            color="secondary"
-                            label="Address"
-                            InputLabelProps={{ shrink: true }}
-                            focused
-                          />
+                          <Box sx={{ width: "59%" }}>
+                            <LocationOnIcon
+                              sx={{
+                                color: "action.active",
+                                mr: 1,
+                                my: 0.5,
+                                marginTop: "15px",
+                              }}
+                            />
+                            <TextField
+                              size="small"
+                              sx={{ width: "95.5%" }}
+                              value={item.address}
+                              id="outlined-basic"
+                              variant="standard"
+                              color="secondary"
+                              label="Address"
+                              InputLabelProps={{ shrink: true }}
+                              focused
+                            />
+                          </Box>
                         </Box>
-                      </Box>
-                    </StyleBoxHouseHold>
-                  ))
+                      </StyleBoxHouseHold>
+                    ))
                   : ""}
               </Box>
             </Box>

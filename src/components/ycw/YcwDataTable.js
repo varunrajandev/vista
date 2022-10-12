@@ -16,18 +16,15 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { masterApi } from "../../AlllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { LinearProgress } from '@mui/material';
-
+import { LinearProgress } from "@mui/material";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />
-const label = { inputProps: { "aria-label": "Checkbox demo" } };;
-
-
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 //table style
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -55,7 +52,7 @@ function Right() {
   const [searchItem, setSearchItem] = React.useState("");
   const [searchDD, setSearchDD] = React.useState([]);
   const [cityDD, setCityDD] = React.useState([]);
-  const [searchycwStatus, setSearchYcwStatus]= React.useState("");
+  const [searchycwStatus, setSearchYcwStatus] = React.useState("");
   const [ycwSearchUserId, setYcwSearchUserId] = React.useState([]);
   const [ycwSearchUserIdList, setYcwSearchUserIdList] = React.useState("");
   const [SearchByName, setSearchByName] = React.useState("");
@@ -84,18 +81,14 @@ function Right() {
   let navigate = useNavigate();
 
   ///onclick status
-  const [statusData, setStatusData] = useState("")
-  const [id, setId] = useState("")
+  const [statusData, setStatusData] = useState("");
+  const [id, setId] = useState("");
 
-
-
-  console.log("Datatale", tableData)
+  console.log("Datatale", tableData);
 
   useEffect(() => {
     const fetchData = async () => {
-      let jobType = await fetch(
-        masterApi + "/skill/get/skills"
-      );
+      let jobType = await fetch(masterApi + "/skill/get/skills");
       let ycwStatusApidrop = await fetch(
         masterApi + "/drop-down/get/profileStatus?flag=all"
       );
@@ -114,29 +107,26 @@ function Right() {
       setJobTypeApi(JobTypeApi);
       setYcwStatus(ycwStatusApi);
       setCityDD(cityDropDown);
-     
     };
 
     fetchData();
-
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchDataTable = async () => {
-    let data = await fetch(
-      masterApi + `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
-     );
-     let res = await data.json();
-     let newData = await res.data;
-     setTableData(newData.data);
-    }
-    
-    fetchDataTable();
+      let data = await fetch(
+        masterApi +
+          `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+      );
+      let res = await data.json();
+      let newData = await res.data;
+      setTableData(newData.data);
+    };
 
-  },[ycwidorder, worktype, statusycw, ycwCity])
+    fetchDataTable();
+  }, [ycwidorder, worktype, statusycw, ycwCity]);
 
   useEffect(() => {
-
     const fetchSearchData = async () => {
       let searchData = await fetch(
         masterApi + `/worker/search/user?searchTerm=${searchItem}`
@@ -146,22 +136,23 @@ function Right() {
       setSearchDD(responseSearchData || [{ name: "No Data" }]);
     };
     if (searchItem.length > 3) {
-      fetchSearchData()
+      fetchSearchData();
       // searchDD.map((item)=>{
       //   setYcwSearchUserIdList(item.userId)
       // })
-      
     }
-  }, [searchItem])
+  }, [searchItem]);
 
-console.log("searchDD",searchDD)
-console.log("goooo",ycwSearchUserIdList)
+  console.log("searchDD", searchDD);
+  console.log("goooo", ycwSearchUserIdList);
 
-     return (
+  return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} sx={{ paddingLeft: "30px" }}>
       {/* //Add Ycw Section section */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h5" sx={{ fontWeight: "900", paddingTop: "20px" }}>Yellow Collar Workers (YCW)</Typography>
+        <Typography variant="h5" sx={{ fontWeight: "900", paddingTop: "20px" }}>
+          Yellow Collar Workers (YCW)
+        </Typography>
         <NavLink style={{ textDecoration: "none" }} to="/ycw/add">
           <Button
             variant="contained"
@@ -171,17 +162,17 @@ console.log("goooo",ycwSearchUserIdList)
             ADD NEW YCW
           </Button>
         </NavLink>
-         </Box>
+      </Box>
 
-          {/* Filter and Search Section Like Search and All DropDown Code Start */}
-        <Box
+      {/* Filter and Search Section Like Search and All DropDown Code Start */}
+      <Box
         sx={{
           display: "flex",
           gap: "20px",
           alignItems: "center",
           marginTop: "30px",
-         }}
-          >
+        }}
+      >
         <Autocomplete
           sx={{ width: "25%", backgroundColor: "white" }}
           freeSolo
@@ -190,13 +181,13 @@ console.log("goooo",ycwSearchUserIdList)
           onChange={(event, newValue) => {
             setYcwSearchUserId(newValue.userId);
             setSearchYcwStatus(newValue.profileStatus);
-             if(newValue.profileStatus=="ACTIVE"){
-            navigate(`/ycw/profile/${newValue.userId}`)
-             } else if(newValue.profileStatus=="IN_ACTIVE"){
-              navigate(`/ycw/add/${newValue.userId}`)
-             }else{
-              navigate("/ycw")
-             }
+            if (newValue.profileStatus == "ACTIVE") {
+              navigate(`/ycw/profile/${newValue.userId}`);
+            } else if (newValue.profileStatus == "IN_ACTIVE") {
+              navigate(`/ycw/add/${newValue.userId}`);
+            } else {
+              navigate("/ycw");
+            }
           }}
           disableClearable
           size="small"
@@ -207,7 +198,7 @@ console.log("goooo",ycwSearchUserIdList)
               <TextField
                 placeholder="Search by Name & Mobile Number"
                 onChange={(e) => {
-                   setSearchItem(e.target.value);
+                  setSearchItem(e.target.value);
                 }}
                 {...params}
                 InputProps={{
@@ -228,7 +219,6 @@ console.log("goooo",ycwSearchUserIdList)
           onChange={(event, newValue) => {
             setWorkType(newValue.uuid);
           }}
-
           onInputChange={(event, newInputValue) => {
             setWorkType("");
           }}
@@ -244,7 +234,6 @@ console.log("goooo",ycwSearchUserIdList)
           )}
           getOptionLabel={(item) => `${item.name}`}
         />
-
 
         <Autocomplete
           disablePortal
@@ -279,7 +268,6 @@ console.log("goooo",ycwSearchUserIdList)
           sx={{ width: "20%" }}
           onChange={(event, newValue) => {
             setYcwCity(newValue.uuid);
-            
           }}
           onInputChange={(event, newInputValue) => {
             setYcwCity(newInputValue);
@@ -303,8 +291,11 @@ console.log("goooo",ycwSearchUserIdList)
       {/* DataTableList code Start From Here*/}
       <Box marginTop={5}>
         <h4> All YCWS ({tableData.length})</h4>
-        <TableContainer >
-          <Table sx={{ minWidth: "100%", marginTop: "10px" }} aria-label="simple table">
+        <TableContainer>
+          <Table
+            sx={{ minWidth: "100%", marginTop: "10px" }}
+            aria-label="simple table"
+          >
             <TableHead bgColor={"#e1e2e3"}>
               <TableRow>
                 <TableCell
@@ -324,29 +315,34 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("userId") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("userId");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorUserId("blue")
-                              setBtnColor1UserId("black")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorUserId("blue");
+                              setBtnColor1UserId("black");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
@@ -354,35 +350,41 @@ console.log("goooo",ycwSearchUserIdList)
                       />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("userId") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("userId");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("blue")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("blue");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1UserId }} />
+                        sx={{ marginTop: "-17px", color: btnColor1UserId }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
@@ -403,62 +405,74 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("firstName") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("firstName");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorName("blue")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorName("blue");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorName }} />
+                        sx={{ marginTop: "-5px", color: btnColorName }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("firstName") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("firstName");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorName("black")
-                              setBtnColor1Name("blue")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorName("black");
+                              setBtnColor1Name("blue");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-16px", color: btnColor1Name }} />
+                        sx={{ marginTop: "-16px", color: btnColor1Name }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
@@ -479,62 +493,74 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("mobileNo") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("mobileNo");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorNamePhone("blue")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorNamePhone("blue");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorPhone }} />
+                        sx={{ marginTop: "-5px", color: btnColorPhone }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("mobileNo") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("mobileNo");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorNamePhone("black")
-                              setBtnColor1Phone("blue")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorNamePhone("black");
+                              setBtnColor1Phone("blue");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1Phone }} />
+                        sx={{ marginTop: "-17px", color: btnColor1Phone }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
@@ -555,62 +581,74 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("gender") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("gender");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorGender("blue")
-                              setBtnColor1Gender("black")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorGender("blue");
+                              setBtnColor1Gender("black");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorGender }} />
+                        sx={{ marginTop: "-5px", color: btnColorGender }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("gender") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("gender");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("blue")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("blue");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1Gender }} />
+                        sx={{ marginTop: "-17px", color: btnColor1Gender }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
@@ -631,63 +669,74 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("cityName") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("cityName");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorCity("blue")
-                              setBtnColor1City("black")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
-
+                              setBtnColorCity("blue");
+                              setBtnColor1City("black");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorCity }} />
+                        sx={{ marginTop: "-5px", color: btnColorCity }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("cityName") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("cityName");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorCity("black")
-                              setBtnColor1City("blue")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorCity("black");
+                              setBtnColor1City("blue");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1City }} />
+                        sx={{ marginTop: "-17px", color: btnColor1City }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
@@ -708,63 +757,74 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("primarySkill") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("primarySkill");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorSkills("blue")
-                              setBtnColor1Skills("black")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
-
+                              setBtnColorSkills("blue");
+                              setBtnColor1Skills("black");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorSkills }} />
+                        sx={{ marginTop: "-5px", color: btnColorSkills }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("primarySkill") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("primarySkill");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("blue")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("blue");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1Skills }} />
+                        sx={{ marginTop: "-17px", color: btnColor1Skills }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
@@ -785,68 +845,79 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("totalExperience") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("totalExperience");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorExp("blue")
-                              setBtnColor1Exp("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
-
+                              setBtnColorExp("blue");
+                              setBtnColor1Exp("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorExp }} />
+                        sx={{ marginTop: "-5px", color: btnColorExp }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("totalExperience") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("totalExperience");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("blue")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("blue");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1Exp }} />
+                        sx={{ marginTop: "-17px", color: btnColor1Exp }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "14%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "15%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
@@ -862,67 +933,79 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("workingHours") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("workingHours");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("blue")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("blue");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorWorkHr }} />
+                        sx={{ marginTop: "-5px", color: btnColorWorkHr }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("workingHours") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("workingHours");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("blue")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("blue");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1WorkHr }} />
+                        sx={{ marginTop: "-17px", color: btnColor1WorkHr }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "13%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "14%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
@@ -938,63 +1021,74 @@ console.log("goooo",ycwSearchUserIdList)
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("percentage") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("percentage");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("blue")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("blue");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-
-                        sx={{ marginTop: "-5px", color: btnColorJobs }} />
+                        sx={{ marginTop: "-5px", color: btnColorJobs }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("percentage") }; { setycwIdOrder("desc") }
+                          {
+                            setFilterName("percentage");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorWorkHr("black")
-                              setBtnColor1WorkHr("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("blue")
-                              setBtnColorStatus("black")
-                              setBtnColor1Status("black")
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("blue");
+                              setBtnColorStatus("black");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1Jobs }} />
+                        sx={{ marginTop: "-17px", color: btnColor1Jobs }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
@@ -1011,173 +1105,193 @@ console.log("goooo",ycwSearchUserIdList)
                         flexDirection: "column",
                         gap: "-5px",
                         cursor: "pointer",
-
                       }}
                     >
                       <ArrowDropUpIcon
                         onClick={() => {
-                          { setFilterName("profileStatus") }; { setycwIdOrder("asc") }
+                          {
+                            setFilterName("profileStatus");
+                          }
+                          {
+                            setycwIdOrder("asc");
+                          }
                           {
                             {
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorStatus("blue")
-                              setBtnColor1Status("black")
-
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorStatus("blue");
+                              setBtnColor1Status("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-5px", color: btnColorStatus }} />
+                        sx={{ marginTop: "-5px", color: btnColorStatus }}
+                      />
                       <ArrowDropDownIcon
                         onClick={() => {
-                          { setFilterName("profileStatus") }; { setycwIdOrder("desc") } { { setBtnColorStatus("black") } }
+                          {
+                            setFilterName("profileStatus");
+                          }
+                          {
+                            setycwIdOrder("desc");
+                          }
                           {
                             {
-                              setBtnColor1Status("blue")
-                              setBtnColorName("black")
-                              setBtnColor1Name("black")
-                              setBtnColorUserId("black")
-                              setBtnColor1UserId("black")
-                              setBtnColor1Phone("black")
-                              setBtnColorNamePhone("black")
-                              setBtnColorGender("black")
-                              setBtnColor1Gender("black")
-                              setBtnColorCity("black")
-                              setBtnColor1City("black")
-                              setBtnColorExp("black")
-                              setBtnColor1Exp("black")
-                              setBtnColorJobs("black")
-                              setBtnColor1Jobs("black")
-                              setBtnColorSkills("black")
-                              setBtnColor1Skills("black")
+                              setBtnColorStatus("black");
+                            }
+                          }
+                          {
+                            {
+                              setBtnColor1Status("blue");
+                              setBtnColorName("black");
+                              setBtnColor1Name("black");
+                              setBtnColorUserId("black");
+                              setBtnColor1UserId("black");
+                              setBtnColor1Phone("black");
+                              setBtnColorNamePhone("black");
+                              setBtnColorGender("black");
+                              setBtnColor1Gender("black");
+                              setBtnColorCity("black");
+                              setBtnColor1City("black");
+                              setBtnColorExp("black");
+                              setBtnColor1Exp("black");
+                              setBtnColorJobs("black");
+                              setBtnColor1Jobs("black");
+                              setBtnColorSkills("black");
+                              setBtnColor1Skills("black");
                             }
                           }
                         }}
-                        sx={{ marginTop: "-17px", color: btnColor1Status }} />
+                        sx={{ marginTop: "-17px", color: btnColor1Status }}
+                      />
                     </Box>
                   </Box>
                 </TableCell>
               </TableRow>
             </TableHead>
 
+            {/*...........................Table Body.............................. */}
 
-{/*...........................Table Body.............................. */}
-
-
-
-<TableBody component={Paper}>
-
-              {tableData?tableData.map((item) => (
-                <StyledTableRow
-                  onClick={() => { setId(item.userId); { setStatusData(item.profileStatus.value) } }}
-                  key={item.userId}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    zIndex: "999",
-                    border: "1px solid #E0E0E0",
-                    fontSize: "13px"
-                  }}
-                >
-                  <TableCell
-                    sx={{ fontSize: "13px" }}
-                    component="th"
-                    scope="item"
-                    style={{
-                      borderLeft:item.profileStatus?
-                        (item.profileStatus.value === "ACTIVE" &&
-                          "5px solid #0A9475") ||
-                        (item.profileStatus.value === "INACTIVE" &&
-                          "5px solid #F55F71"):""
-                    }}
-                  >
-                    {item.userId?item.userId: "--"}
-                  </TableCell>
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.name?item.name : "--"}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.mobileNo ?item.mobileNo : "--"}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item?.gender?.value}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.cityName?item.cityName: "--"}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.primarySkill?item.primarySkill: "--"}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                    {item.totalExperience || "--"}
-                  </TableCell>
-
-
-                  <TableCell sx={{ fontSize: "13px" }} align="left">
-                       {item?.workingHours?.value}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "13px"  }} align="left">
-                  <LinearProgress variant="determinate" value={item.percentage}
-                   color="secondary"
-                  /> {item.percentage}%
-                    {/* {"--"} */}
-                  </TableCell>
-                  <TableCell align="left" sx={{ border: "none" }}>
-                    <Typography
-                      sx={{
-                        width: "150px",
-                        padding: "8px",
-                        borderRadius: "5px",
-                        fontSize: "11px",
-                        textAlign: "center",
-                        fontWeight: "950",
-                        boxSizing: "border-box",
+            <TableBody component={Paper}>
+              {tableData
+                ? tableData.map((item) => (
+                    <StyledTableRow
+                      onClick={() => {
+                        setId(item.userId);
+                        {
+                          setStatusData(item.profileStatus.value);
+                        }
                       }}
-                      style={{
-                        backgroundColor:item.profileStatus?
-                          (item.profileStatus.value ===
-                            "ACTIVE" &&
-                            "#E6F4F1") ||
-                          // (item.profileStatus.value ===
-                          //   "ACTIVE & NOT AVAILABLE" &&
-                          //   "#FFF7E5") ||
-                          (item.profileStatus.value === "INACTIVE" &&
-                            "#FEEFF0"):"",
-                        color:item.profileStatus?
-                          (item.profileStatus.value ===
-                            "ACTIVE" &&
-                            "#0A9475") ||
-                          // (item.profileStatus.value ===
-                          //   "ACTIVE & NOT AVAILABLE" &&
-                          //   "#FFB701") ||
-                          (item.profileStatus.value === "INACTIVE" &&
-                            "#F55F71"):""
+                      key={item.userId}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        zIndex: "999",
+                        border: "1px solid #E0E0E0",
+                        fontSize: "13px",
                       }}
                     >
-                      {item.profileStatus?item.profileStatus.value: "--"}
-                    </Typography>
-                  </TableCell>
-                </StyledTableRow>
-              )):""}
+                      <TableCell
+                        sx={{ fontSize: "13px" }}
+                        component="th"
+                        scope="item"
+                        style={{
+                          borderLeft: item.profileStatus
+                            ? (item.profileStatus.value === "ACTIVE" &&
+                                "5px solid #0A9475") ||
+                              (item.profileStatus.value === "INACTIVE" &&
+                                "5px solid #F55F71")
+                            : "",
+                        }}
+                      >
+                        {item.userId ? item.userId : "--"}
+                      </TableCell>
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        {item.name ? item.name : "--"}
+                      </TableCell>
+
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        {item.mobileNo ? item.mobileNo : "--"}
+                      </TableCell>
+
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        {item?.gender?.value}
+                      </TableCell>
+
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        {item.cityName ? item.cityName : "--"}
+                      </TableCell>
+
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        {item.primarySkill ? item.primarySkill : "--"}
+                      </TableCell>
+
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        {item.totalExperience || "--"}
+                      </TableCell>
+
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        {item?.workingHours?.value}
+                      </TableCell>
+
+                      <TableCell sx={{ fontSize: "13px" }} align="left">
+                        <LinearProgress
+                          variant="determinate"
+                          value={item.percentage}
+                          color="secondary"
+                        />{" "}
+                        {item.percentage}%{/* {"--"} */}
+                      </TableCell>
+                      <TableCell align="left" sx={{ border: "none" }}>
+                        <Typography
+                          sx={{
+                            width: "150px",
+                            padding: "8px",
+                            borderRadius: "5px",
+                            fontSize: "11px",
+                            textAlign: "center",
+                            fontWeight: "950",
+                            boxSizing: "border-box",
+                          }}
+                          style={{
+                            backgroundColor: item.profileStatus
+                              ? (item.profileStatus.value === "ACTIVE" &&
+                                  "#E6F4F1") ||
+                                // (item.profileStatus.value ===
+                                //   "ACTIVE & NOT AVAILABLE" &&
+                                //   "#FFF7E5") ||
+                                (item.profileStatus.value === "INACTIVE" &&
+                                  "#FEEFF0")
+                              : "",
+                            color: item.profileStatus
+                              ? (item.profileStatus.value === "ACTIVE" &&
+                                  "#0A9475") ||
+                                // (item.profileStatus.value ===
+                                //   "ACTIVE & NOT AVAILABLE" &&
+                                //   "#FFB701") ||
+                                (item.profileStatus.value === "INACTIVE" &&
+                                  "#F55F71")
+                              : "",
+                          }}
+                        >
+                          {item.profileStatus ? item.profileStatus.value : "--"}
+                        </Typography>
+                      </TableCell>
+                    </StyledTableRow>
+                  ))
+                : ""}
             </TableBody>
           </Table>
         </TableContainer>
