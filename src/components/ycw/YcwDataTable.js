@@ -21,6 +21,7 @@ import { masterApi } from "../../AlllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { LinearProgress } from "@mui/material";
+import TablePagination from "@mui/material/TablePagination";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -77,6 +78,8 @@ function Right() {
   const [btnColor1WorkHr, setBtnColor1WorkHr] = useState("black");
   const [btnColorJobs, setBtnColorJobs] = useState("black");
   const [btnColor1Jobs, setBtnColor1Jobs] = useState("black");
+  const [page, setPage] = React.useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(20);
 
   let navigate = useNavigate();
 
@@ -85,6 +88,19 @@ function Right() {
   const [id, setId] = useState("");
 
   console.log("Datatale", tableData);
+  console.log("searchDD", searchDD);
+
+  // ========= Pagination Code Function Start==========
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(1);
+  };
+
+  // ========= Pagination Code Function End==========
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,7 +132,9 @@ function Right() {
     const fetchDataTable = async () => {
       let data = await fetch(
         masterApi +
-        `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=1&pageSize=30&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+
+          `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=${page}&pageSize=${rowsPerPage}&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+
       );
       let res = await data.json();
       let newData = await res.data;
@@ -124,7 +142,8 @@ function Right() {
     };
 
     fetchDataTable();
-  }, [ycwidorder, worktype, statusycw, ycwCity]);
+    console.log("rowsPerPage", rowsPerPage);
+  }, [ycwidorder, worktype, statusycw, ycwCity, rowsPerPage, page]);
 
   useEffect(() => {
     const fetchSearchData = async () => {
@@ -208,7 +227,7 @@ function Right() {
               />
             </Box>
           )}
-          getOptionLabel={(item) => `${item.name}`}
+          getOptionLabel={(item) => `${item.name} & ${item.mobile}`}
         />
         <Autocomplete
           disablePortal
@@ -362,8 +381,6 @@ function Right() {
                               setBtnColor1UserId("blue");
                               setBtnColorName("black");
                               setBtnColor1Name("black");
-                              setBtnColorName("black");
-                              setBtnColor1Name("black");
                               setBtnColor1Phone("black");
                               setBtnColorNamePhone("black");
                               setBtnColorGender("black");
@@ -477,7 +494,7 @@ function Right() {
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "10%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "8%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
@@ -741,7 +758,7 @@ function Right() {
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "14%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "13%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
@@ -1005,11 +1022,11 @@ function Right() {
                   </Box>
                 </TableCell>
                 <TableCell
-                  sx={{ fontSize: "10px", fontWeight: "900", width: "14%" }}
+                  sx={{ fontSize: "10px", fontWeight: "900", width: "15%" }}
                   align="left"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box>Update Status</Box>
+                    <Box sx={{ letterSpacing: "1px" }}>Update Status</Box>
                     <Box
                       style={{
                         alignItem: "",
@@ -1097,7 +1114,7 @@ function Right() {
                   align="center"
                 >
                   <Box sx={{ display: "flex" }}>
-                    <Box>STATUS</Box>
+                    <Box ml={4}>STATUS</Box>
                     <Box
                       style={{
                         alignItem: "",
@@ -1129,6 +1146,8 @@ function Right() {
                               setBtnColor1City("black");
                               setBtnColorSkills("black");
                               setBtnColor1Skills("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
                               setBtnColorExp("black");
                               setBtnColor1Exp("black");
                               setBtnColorJobs("black");
@@ -1168,6 +1187,8 @@ function Right() {
                               setBtnColor1City("black");
                               setBtnColorExp("black");
                               setBtnColor1Exp("black");
+                              setBtnColorWorkHr("black");
+                              setBtnColor1WorkHr("black");
                               setBtnColorJobs("black");
                               setBtnColor1Jobs("black");
                               setBtnColorSkills("black");
@@ -1298,6 +1319,20 @@ function Right() {
       </Box>
       {statusData === "INACTIVE" && <Navigate to={`/ycw/add/${id}`} />}
       {statusData === "ACTIVE" && <Navigate to={`/ycw/profile/${id}`} />}
+
+      {/* ============ Pagination Code  Start   ==============*/}
+      <Box>
+        <TablePagination
+          rowsPerPageOptions={[20, 40, 60, 100]}
+          component="div"
+          count={200}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
+      {/* ============  Pagination Code  End  ==============*/}
     </Box>
   );
 }
