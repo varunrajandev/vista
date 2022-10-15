@@ -19,6 +19,16 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import WorkIcon from "@mui/icons-material/Work";
 import { masterApiforAll } from "../../../AlllData";
 import moment from "moment";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import { CardActionArea } from "@mui/material";
+import carecrewimg from "../../../images/CareCrewImg.png";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const BOX = styled(Box)({
   display: "flex",
@@ -34,6 +44,8 @@ const StyleBox = styled(Box)({
   width: "22%",
   paddingBottom: "30px",
 });
+
+
 
 const StyleBoxHouseHold = styled(Box)({
   display: "flex",
@@ -68,6 +80,7 @@ function Profile() {
   const [data, setdata] = React.useState([]);
   const [expandLastJob, setExpandLastJob] = React.useState({});
   const { id } = useParams();
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,6 +128,14 @@ function Profile() {
     fetchData();
   }, []);
   console.log("data is ", data);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  
+   const handleClose = () => {
+    setOpen(false);
+  };
   let dateofBirth = moment(userData.birthday).utc().format("DD/MM/YYYY");
   let StartTime = moment(userData.birthday).format("LT");
   let JobStartTime = moment(jobRequirement.startTime).format("LT");
@@ -363,6 +384,7 @@ function Profile() {
                 focused
               />
             </Box>
+           
             {/* ========================== Personal Data Section Code End================= */}
             {/* ========================== Skills Section Code Start================= */}
             <Box mt={6}>
@@ -1611,6 +1633,147 @@ function Profile() {
             </Box>
             {/* ==========================Household Members Information Code End================= */}
           </Box>
+          {/* ==========================Id card Information Code Start================= */}
+          <Box mt={4}>
+            <h3 style={{ marginBottom: "6px" }}>ID Card</h3>
+
+            <Card  sx={{ maxWidth: 367, marginTop:"30px" }} onClick={handleClickOpen}>
+              <CardActionArea>
+                <Box sx={{ backgroundColor: "yellow", padding: "10px" }}>
+                  <img
+                    sx={{ padding: "5px" }}
+                    height="50px"
+                    width="320px"
+                    src={carecrewimg}
+                    alt="Care Crew"
+                  />
+                </Box>
+                <CardContent>
+                  <Typography variant="body2">
+                    <Box sx={{ display: "flex", gap: "29px" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                          gap: "3px",
+                          fontWeight: 900,
+                          fontSize: "16px",
+                        }}
+                      >
+                        <h4>Registration ID: </h4>
+                        <h4>Name: </h4>
+                        <h4>Location: </h4>
+                        <h4>Working Time: </h4>
+                        <h4>Experience: </h4>
+                        <h4> Monthly Salary: </h4>
+                        <h4> Proof of Id: </h4>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                          gap: "5px",
+                          fontWeight: 400,
+                          color: "black",
+                          fontSize: "15px",
+                        }}
+                      >
+                        <p>{id}</p>
+                        <p>
+                          {userData.firstName?userData.firstName:"--"} {userData.lastName?userData.lastName:""}
+                        </p>
+                        <p>
+                          
+                          {currentaddressData.micromarketName?currentaddressData.micromarketName:""}, {currentaddressData.cityName?currentaddressData.cityName:""}
+                        </p>
+                        <p>{jobRequirement.workingHours?jobRequirement.workingHours:"--"}</p>
+                        <p>{expandLastJob.totalExperienceYears ? expandLastJob.totalExperienceYears : "--"} Years</p>
+                        <p>&#8377; {jobRequirement?jobRequirement.maxSalaryExpectedStr:"--"}</p>
+                        <p>{currentaddressData?currentaddressData.addressProofType:"--"}</p>
+                      </Box>
+                    </Box>
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Box>
+
+          {/* ==========================Id Card Information Code End================= */}
+          {/* =============  Id card Open     ============       */}
+    
+          <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+          <Card  sx={{ maxWidth: 450}} onClick={handleClickOpen}>
+              <CardActionArea>
+                <Box sx={{ backgroundColor: "yellow", padding: "14px" }}>
+                  <img
+                    sx={{ padding: "5px" }}
+                    height="50px"
+                    width="320px"
+                    src={carecrewimg}
+                    alt="Care Crew"
+                  />
+                </Box>
+                <CardContent>
+                  <Typography variant="body2">
+                    <Box sx={{ display: "flex", gap: "30px" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                          gap: "3px",
+                          fontWeight: 900,
+                          fontSize: "16px",
+                        }}
+                      >
+                        <h4>Registration ID: </h4>
+                        <h4>Name: </h4>
+                        <h4>Location: </h4>
+                        <h4>Working Time: </h4>
+                        <h4>Experience: </h4>
+                        <h4>Monthly Salary: </h4>
+                        <h4>Proof of Id: </h4>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                          gap: "5px",
+                          fontWeight: 400,
+                          color: "black",
+                          fontSize: "15px",
+                        }}
+                      >
+                        <p>{id}</p>
+                        <p>
+                          {userData.firstName?userData.firstName:"--"} {userData.lastName?userData.lastName:""}
+                        </p>
+                        <p>
+                        {currentaddressData.micromarketName?currentaddressData.micromarketName:""}, {currentaddressData.cityName?currentaddressData.cityName:""}
+                        
+                        </p>
+                        <p>{jobRequirement.workingHours?jobRequirement.workingHours:"--"}</p>
+                        <p>{expandLastJob.totalExperienceStr?expandLastJob.totalExperienceYears:"--"} Years </p> 
+                        <p>&#8377; {jobRequirement.maxSalaryExpectedStr?jobRequirement.maxSalaryExpectedStr:"--"}</p>
+                        <p>{currentaddressData.addressProofType?currentaddressData.addressProofType:"--"}</p>
+                      </Box>
+                    </Box>
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+       
+      </Dialog>
+      
+        {/* ========== Id card Open  =========== */}
         </Box>
       </Box>
     </>
