@@ -10,11 +10,6 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { useParams } from "react-router-dom";
 import Notify from "../../Notification/Notify";
 
-let Array = [];
-
-
-
-
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 
@@ -22,7 +17,9 @@ function SkillQuestion() {
 
   const [allQuestion, setAllQuestion] = useState([])
   const [storeQuestion, setStoreQuestion] = useState([]);
-  const [answer, setAnswer] = useState([]);
+  const [answer1, setAnswer1] = useState([]);
+  const [answer2, setAnswer2] = useState([]);
+  const [answer3, setAnswer3] = useState([]);
   const [notify, setNotify] = useState({ isOpen: false, message: "", type: "" })
   
 
@@ -41,34 +38,25 @@ function SkillQuestion() {
   const getResponseQuestionById = async () => {
     let allResponse = await fetch(`http://13.126.160.155:8080/user/skill/${ids || id}`)
     let Answer = await allResponse.json();
-    setAnswer(Answer)
-    console.log("answer======", Answer)
-    Answer.data.skillsMappingDto.map((item)=>(
-      item.skillDto.map((item1)=>(
-        item1.question.map((item2)=>{
-          console.log(item2.question);
-          item2.answer.map((item3)=>(
-            console.log(item3)
-            ))
-          })
-            ))
-            ))
-            }
+
+    setAnswer1(Answer.data.skillsMappingDto[0].skillDto[0].question)
+    setAnswer2(Answer.data.skillsMappingDto[1].skillDto[0].question)
+    setAnswer3(Answer.data.skillsMappingDto[2].skillDto[0].question)
+
+    console.log(answer1, answer2, answer3)
+  }
+
 
 
   useEffect(() => {
     getResponseQuestionById()
     fetchSkillData()
-    setInterval(() => {
-      fetchSkillData()
-    }, 5000);
+    // setInterval(() => {
+    //   fetchSkillData()
+    // }, 15000);
 
  
   }, [id, ids]);
-
-  
-
- console.log("all question", allQuestion)
 
   async function handleSubmit() {
 
@@ -115,6 +103,7 @@ function SkillQuestion() {
     }
     setStoreQuestion(values);
   };
+  
 
   return (
     <>
@@ -191,21 +180,42 @@ function SkillQuestion() {
         </Box>
       </Box>
 
-   {/* {   answer.data.skillsMappingDto.map((item)=>(
-        item.skillDto.map((item1)=>(
-          item1.question.map((item2)=>{
-            return ( 
-              <h5>{item2.question}</h5>
-            )
-            item2.answer.map((item3)=>{
-              return (<p>{item3}</p>)
-            })
-            })
-              ))
-              ))
-              } */}
-              
-    </>
+<Box sx={{display:"flex", flexWrap:"wrap", gap:"15px", mt:"20px"}}>
+ 
+{answer1?answer1.map((item)=>(
+    <div style={{display:"grid", gap:"4px", width:"220px", backgroundColor:"white", padding:"10px", borderRadius:"10px"}}>
+      <h6>{item.question}</h6>
+      <div style={{display:"flex", gap:"10px"}}>{item.answer.map((items)=>(
+        <p style={{fontSize:"10px"}}>{items},</p>
+      ))}</div>
+       <h6>Primary</h6>
+    </div>
+    
+  )):""}
+
+{answer2?answer2.map((item1)=>(
+    <div style={{display:"grid", gap:"4px", width:"220px", backgroundColor:"white", padding:"10px", borderRadius:"10px"}}>
+      <h6>{item1.question}</h6>
+      <p style={{display:"flex", gap:"10px"}}>{item1.answer.map((items)=>(
+        <p style={{fontSize:"10px"}}>{items},</p>
+      ))}</p>
+      <h6>Secondary</h6>
+    </div>
+    
+  )):""}
+
+{answer3?answer3.map((item3)=>(
+    <div style={{display:"grid", gap:"4px", width:"220px", backgroundColor:"white", padding:"10px", borderRadius:"10px"}}>
+      <h6>{item3.question}</h6>
+      <p style={{display:"flex", gap:"10px"}}>{item3.answer.map((items)=>(
+        <p style={{fontSize:"10px"}}>{items},</p>
+      ))}</p>
+      <h6>Tertiary</h6>
+    </div>
+    
+  )):""}
+</Box>
+</>
   );
 }
 

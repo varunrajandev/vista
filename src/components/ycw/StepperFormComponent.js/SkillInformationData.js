@@ -58,7 +58,7 @@ function SkillInformationData() {
     }, [ids, id])
     
 
-    console.log("status", status)
+   // console.log("status", status)
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
     

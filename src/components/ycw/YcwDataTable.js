@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Button, Typography, Checkbox } from "@mui/material";
+import { Box, Button, Typography, Checkbox, Badge } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -132,7 +132,9 @@ function Right() {
     const fetchDataTable = async () => {
       let data = await fetch(
         masterApi +
+
           `/worker/get/all/worker?city=${ycwCity}&filter=${filterName}&pageNo=${page}&pageSize=${rowsPerPage}&skills=${worktype}&sortby=${ycwidorder}&status=${statusycw}`
+
       );
       let res = await data.json();
       let newData = await res.data;
@@ -1207,109 +1209,109 @@ function Right() {
             <TableBody component={Paper}>
               {tableData
                 ? tableData.map((item) => (
-                    <StyledTableRow
-                      onClick={() => {
-                        setId(item.userId);
-                        {
-                          setStatusData(item.profileStatus.value);
-                        }
-                      }}
-                      key={item.userId}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        zIndex: "999",
-                        border: "1px solid #E0E0E0",
-                        fontSize: "13px",
+                  <StyledTableRow
+                    onClick={() => {
+                      setId(item.userId);
+                      {
+                        setStatusData(item.profileStatus.value);
+                      }
+                    }}
+                    key={item.userId}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      zIndex: "999",
+                      border: "1px solid #E0E0E0",
+                      fontSize: "13px",
+                    }}
+                  >
+                    <TableCell
+                      sx={{ fontSize: "13px" }}
+                      component="th"
+                      scope="item"
+                      style={{
+                        borderLeft: item.profileStatus
+                          ? (item.profileStatus.value === "ACTIVE" &&
+                            "5px solid #0A9475") ||
+                          (item.profileStatus.value === "INACTIVE" &&
+                            "5px solid #F55F71")
+                          : "",
                       }}
                     >
-                      <TableCell
-                        sx={{ fontSize: "13px" }}
-                        component="th"
-                        scope="item"
+                      {item.userId ? item.userId : "--"}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      {item.name ? item.name : "--"}
+                    </TableCell>
+
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      {item.mobileNo ? item.mobileNo : "--"}
+                    </TableCell>
+
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      {item?.gender?.value}
+                    </TableCell>
+
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      {item.cityName ? item.cityName : "--"}
+                    </TableCell>
+
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      {item.primarySkill ? item.primarySkill : "--"}
+                    </TableCell>
+
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      {item.totalExperience || "--"}
+                    </TableCell>
+
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      {item?.workingHours?.value}
+                    </TableCell>
+
+                    <TableCell sx={{ fontSize: "13px" }} align="left">
+                      <LinearProgress
+                        variant="determinate"
+                        value={item.percentage}
+                        color="secondary"
+                      />{" "}
+                      {item.percentage}%{/* {"--"} */}
+                    </TableCell>
+                    <TableCell align="left" sx={{ border: "none" }}>
+                      <Typography
+                        sx={{
+                          width: "150px",
+                          padding: "8px",
+                          borderRadius: "5px",
+                          fontSize: "11px",
+                          textAlign: "center",
+                          fontWeight: "950",
+                          boxSizing: "border-box",
+                        }}
                         style={{
-                          borderLeft: item.profileStatus
+                          backgroundColor: item.profileStatus
                             ? (item.profileStatus.value === "ACTIVE" &&
-                                "5px solid #0A9475") ||
-                              (item.profileStatus.value === "INACTIVE" &&
-                                "5px solid #F55F71")
+                              "#E6F4F1") ||
+                            // (item.profileStatus.value ===
+                            //   "ACTIVE & NOT AVAILABLE" &&
+                            //   "#FFF7E5") ||
+                            (item.profileStatus.value === "INACTIVE" &&
+                              "#FEEFF0")
+                            : "",
+                          color: item.profileStatus
+                            ? (item.profileStatus.value === "ACTIVE" &&
+                              "#0A9475") ||
+                            // (item.profileStatus.value ===
+                            //   "ACTIVE & NOT AVAILABLE" &&
+                            //   "#FFB701") ||
+                            (item.profileStatus.value === "INACTIVE" &&
+                              "#F55F71")
                             : "",
                         }}
                       >
-                        {item.userId ? item.userId : "--"}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        {item.name ? item.name : "--"}
-                      </TableCell>
-
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        {item.mobileNo ? item.mobileNo : "--"}
-                      </TableCell>
-
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        {item?.gender?.value}
-                      </TableCell>
-
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        {item.cityName ? item.cityName : "--"}
-                      </TableCell>
-
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        {item.primarySkill ? item.primarySkill : "--"}
-                      </TableCell>
-
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        {item.totalExperience || "--"}
-                      </TableCell>
-
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        {item?.workingHours?.value}
-                      </TableCell>
-
-                      <TableCell sx={{ fontSize: "13px" }} align="left">
-                        <LinearProgress
-                          variant="determinate"
-                          value={item.percentage}
-                          color="secondary"
-                        />{" "}
-                        {item.percentage}%{/* {"--"} */}
-                      </TableCell>
-                      <TableCell align="left" sx={{ border: "none" }}>
-                        <Typography
-                          sx={{
-                            width: "150px",
-                            padding: "8px",
-                            borderRadius: "5px",
-                            fontSize: "11px",
-                            textAlign: "center",
-                            fontWeight: "950",
-                            boxSizing: "border-box",
-                          }}
-                          style={{
-                            backgroundColor: item.profileStatus
-                              ? (item.profileStatus.value === "ACTIVE" &&
-                                  "#E6F4F1") ||
-                                // (item.profileStatus.value ===
-                                //   "ACTIVE & NOT AVAILABLE" &&
-                                //   "#FFF7E5") ||
-                                (item.profileStatus.value === "INACTIVE" &&
-                                  "#FEEFF0")
-                              : "",
-                            color: item.profileStatus
-                              ? (item.profileStatus.value === "ACTIVE" &&
-                                  "#0A9475") ||
-                                // (item.profileStatus.value ===
-                                //   "ACTIVE & NOT AVAILABLE" &&
-                                //   "#FFB701") ||
-                                (item.profileStatus.value === "INACTIVE" &&
-                                  "#F55F71")
-                              : "",
-                          }}
-                        >
-                          {item.profileStatus ? item.profileStatus.value : "--"}
-                        </Typography>
-                      </TableCell>
-                    </StyledTableRow>
-                  ))
+                        {item.profileStatus ? item.profileStatus.value : "--"}
+                      </Typography>
+                    </TableCell>
+                  </StyledTableRow>
+                ))
                 : ""}
             </TableBody>
           </Table>

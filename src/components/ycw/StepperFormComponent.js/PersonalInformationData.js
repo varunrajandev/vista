@@ -114,7 +114,7 @@ const datatGetById = async() => {
     } catch (error) {
       setNotify(
         {isOpen:true,
-         message:"Please Filled phone Number",
+         message:!mobile?"Please fill phone number":"Error",
          type:"error"}
         )
     }
