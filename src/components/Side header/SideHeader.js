@@ -48,7 +48,7 @@ const SideHeader = () => {
             <p>YCW</p>
           </NavLink>
         </DIV>
-        <DIV>
+        {/* <DIV>
           <NavLink
             to="/cx"
             style={({ isActive }) => {
@@ -72,7 +72,7 @@ const SideHeader = () => {
             <WorkIcon />
             <p>jobs</p>
           </NavLink>
-        </DIV>
+        </DIV> */}
       </Box>
     </Box>
   );
