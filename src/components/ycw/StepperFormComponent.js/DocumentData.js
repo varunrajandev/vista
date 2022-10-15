@@ -70,13 +70,11 @@ function DocumentData() {
         formData
       );
       setNotify(
-        {
-          isOpen: response.data.status,
-          message: response.data.message,
-          type: "success"
-        }
-      )
-      setDocumentData(response.data)
+        {isOpen:response.data.status,
+         message:response.data.message,
+         type:"success"}
+        )
+      // setDocumentData(response.data)
     }
     catch (error) {
       setNotify(
@@ -90,6 +88,10 @@ function DocumentData() {
   };
   return (
     <Box bgcolor="#e1e2e3" padding="20px" flex={7} minWidth={"90%"}>
+    <Notify 
+    notify={notify}
+    setNotify={setNotify}
+  />
       <Box marginTop={5} sx={{ padding: 3, bgcolor: "white", borderRadius: 3, }} >
         <Box sx={{ display: "flex", flexWrap: "wrap", rowGap: "30px", justifyContent: "space-between" }}>
           {/* First Document */}

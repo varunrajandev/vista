@@ -32,7 +32,7 @@ function StepContext() {
           householdData,setHouseholdData,
           documentData,setDocumentData,
         }}
-      >
+        >
         <App/>
       </multiStepContext.Provider>
     </div>
