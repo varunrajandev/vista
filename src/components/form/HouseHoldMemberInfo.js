@@ -13,7 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
-import { FilterData, masterApi } from "../../AlllData";
+import { FilterData, masterApi } from "../../AllData";
 
 
 function HouseHoldMemberInfo(props) {
@@ -213,7 +213,7 @@ function HouseHoldMemberInfo(props) {
             </FormControl>
 
             <TextField
-              label="Others Last Job"
+              label="Relative Job"
               name="otherJobType"
               size="small"
               value={inputField.otherJobType}

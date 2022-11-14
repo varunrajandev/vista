@@ -15,7 +15,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { multiStepContext } from "../../ContextApi/StepContext";
-import { masterApi, masterApiforAll } from "../../AlllData";
+import { masterApi, masterApiforAll } from "../../AllData";
 import indianflag from "../../images/india.png";
 import AlertTitle from "@mui/material/AlertTitle";
 import InputLabel from "@mui/material/InputLabel";

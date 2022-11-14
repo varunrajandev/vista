@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import JobRequirement from '../../form/JobRequirement';
-import { JobRequirementApis, masterApi } from '../../../AlllData';
+import { JobRequirementApis, masterApi } from '../../../AllData';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Notify from '../../Notification/Notify';

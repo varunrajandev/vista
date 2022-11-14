@@ -13,10 +13,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
-import { FilterData, masterApi } from "../../AlllData";
+import { FilterData, masterApi } from "../../AllData";
 
 function BankAccount(props) {
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
   const [accountTypeDD, setAccountTypeDD] = useState([{}]);
   const { setInputFields, inputFields, ifscCodeData } = props;
 
@@ -108,6 +108,7 @@ function BankAccount(props) {
               justifyContent: "space-between",
               marginBottom: 5,
             }}
+            key={index}
           >
             <TextField
               style={{ width: "18%" }}
@@ -206,7 +207,7 @@ function BankAccount(props) {
               }}
             >
               <IconButton aria-label="delete">
-                <DeleteIcon onClick={() => handleRemoveFields(index)} />
+                {index !== 0 ? (<DeleteIcon onClick={() => handleRemoveFields(index)} />) : null }
               </IconButton>
 
               <Switch

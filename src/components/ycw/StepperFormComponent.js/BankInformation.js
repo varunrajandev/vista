@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import { BankApi, masterApi } from "../../../AlllData";
+import { BankApi, masterApi } from "../../../AllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import BankAccount from "../../form/BankAccount";
 import Notify from "../../Notification/Notify";
@@ -68,8 +68,6 @@ function BankInformation() {
       },
     ])
   }
-
-  console.log(inputFields[0].branchAddress);
 
   useEffect(() => {
     if (inputFields[0].ifscCode.length === 11) {

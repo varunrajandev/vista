@@ -18,7 +18,7 @@ function FormControlSingleSelect(props) {
             }}
           >
             {dataDD.map((items, index) => (
-              <MenuItem key={index} value={values?items.name:items.key}>{values?items.name:items.key}</MenuItem>
+              <MenuItem key={index} value={values?items.name:items.key}>{values?items.name:items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>

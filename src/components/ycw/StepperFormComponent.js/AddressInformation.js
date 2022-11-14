@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { masterApi } from "../../../AlllData";
+import { masterApi } from "../../../AllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import CurrentAdd from "../../form/CurrentAdd";
 import Notify from "../../Notification/Notify";

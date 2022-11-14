@@ -7,7 +7,7 @@ import Select from "@mui/material/Select";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { JobType, PreferredWorkingHour, year, months } from "../../AlllData";
+import { JobType, PreferredWorkingHour, year, months } from "../../AllData";
 import Checkbox from "@mui/material/Checkbox";
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
@@ -69,14 +69,14 @@ console.log("reasonLeaving",ReasonLeaving)
     fetchData()
   }, [])
 
-
+console.log(endTime)
   return (
     <Box sx={{ marginTop: 7, display: "grid", gap: 1, }}>
       <h5>Job Requirements</h5>
       <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", rowGap: "30px" }}>
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Preferred Job Types</InputLabel>
-          <Select sx={{ width: "100%" }} label="Preferred Job Types" value={preferJob}
+          <Select sx={{ width: "100%" }} label="Preferred Job Types" value={preferJob || sessionStorage.getItem('primarySkill')}
             onChange={(e) => { setPreferJob(e.target.value) }}
           >
             {jobtypeDD.map((item) => (
@@ -117,7 +117,7 @@ console.log("reasonLeaving",ReasonLeaving)
         </LocalizationProvider>
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <TimePicker label="Preferred End Time" value={endTime} onChange={(newValue) => {
+          <TimePicker label="Preferred End Time" value={endTime || new Date().setHours(12,0,0)} onChange={(newValue) => {
             setEndTime(newValue);
           }}
             renderInput={(params) => (
@@ -157,7 +157,7 @@ console.log("reasonLeaving",ReasonLeaving)
                 '-webkit-appearance': 'none',
                 margin: 0
               }
-            }} size="small" label="last salary withdraw" variant="outlined" onChange={(e) => {
+            }} size="small" label="Last Salary Withdraw" variant="outlined" onChange={(e) => {
           setMinSal(e.target.value)
         }}
           value={minSal}
@@ -191,14 +191,15 @@ console.log("reasonLeaving",ReasonLeaving)
           <Select sx={{ width: "100%" }} labelId="demo-select-small" id="demo-select-small" label="Open to Training?" onChange={(e) => {
             setOpenToTraining(e.target.value)
           }}>
-            <MenuItem value={true}>YES</MenuItem>
-            <MenuItem value={false}>NO</MenuItem>
+            <MenuItem value="yes">Yes</MenuItem>
+            <MenuItem value="no">No</MenuItem>
+            <MenuItem value="maybe">Maybe</MenuItem>
           </Select>
         </FormControl>
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Training Mode</InputLabel>
-          <Select sx={{ width: "100%" }} label="Training Mode" disabled={!openToTraining} onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Training Mode" disabled={openToTraining === 'no'} onChange={(e) => {
             setTraningMode(e.target.value)
           }}
             value={traningMode}

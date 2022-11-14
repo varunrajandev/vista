@@ -17,7 +17,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import WorkIcon from "@mui/icons-material/Work";
-import { masterApiforAll } from "../../../AlllData";
+import { masterApiforAll } from "../../../AllData";
 import moment from "moment";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";

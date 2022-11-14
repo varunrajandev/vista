@@ -1,11 +1,11 @@
 import { Box, Button, TextField, Autocomplete, Checkbox } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { masterApi } from "../../../AlllData";
+import { masterApi } from "../../../AllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import SkillExpDetails from "../../form/SkillExpDetails";
-import { Cuisines } from "../../../AlllData";
+import { Cuisines } from "../../../AllData";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { useParams } from "react-router-dom";
 import Notify from "../../Notification/Notify";

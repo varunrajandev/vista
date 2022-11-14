@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useContext, useEffect } from 'react'
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { masterApi } from '../../../AlllData';
+import { masterApi } from '../../../AllData';
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import SkillExpDetails from '../../form/SkillExpDetails'
 import Notify from '../../Notification/Notify';
@@ -12,7 +12,7 @@ import SkillQuestion from './SkillQuestion';
 function SkillInformationData() {
     //Skill and Experience Deatails
     const [primarySkill, setPrimarySkill] = React.useState("");
-    const [secondarySkill, setSecondarySkill] = React.useState([]);
+    const [secondarySkill, setSecondarySkill] = React.useState("");
     const [tertiarySkill, setTertiarySkill] = React.useState([]);
     const [skillRemarks, setSkillRemarks] = React.useState("");
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
@@ -28,12 +28,12 @@ function SkillInformationData() {
     let ids = localStorage.getItem('ID')
     let steps = localStorage.getItem('steps')
    
-    if(secondarySkill){
+    /* if(secondarySkill){
       secondarySkill.map((item)=>{
-          SecondarySkillArray.push(item.uuid)
+          // SecondarySkillArray.push(item.uuid)
       })
     }
-
+ */
     if(TertiarySkillArray){
       tertiarySkill.map((item)=>{
         TertiarySkillArray.push(item.uuid)
@@ -75,11 +75,11 @@ function SkillInformationData() {
           "skillRequestDtos": [
             {
               "skillLevel": "PRIMARY",
-              "skillUuid": [primarySkill]
+              "skillUuid": primarySkill
             },
             {
               "skillLevel": "SECONDARY",
-              "skillUuid": SecondarySkillArray
+              "skillUuid": secondarySkill
             },
             {
               "skillLevel": "TERTIARY",
@@ -132,8 +132,9 @@ function SkillInformationData() {
        
 
           <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
+              <Button variant='contained' onClick={()=>{setCurrentSteps(1)}}>back</Button>
               <Button variant='contained' onClick={handleSubmit}>save</Button>
-              {/* (()=>{setCurrentSteps(4)}) */}
+              <Button variant='contained' onClick={()=>{setCurrentSteps(3)}}>next</Button>
           </Box>
         
       </Box>

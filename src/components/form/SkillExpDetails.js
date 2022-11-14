@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, Checkbox, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import { Cuisines, masterApi } from "../../AlllData";
+import { Cuisines, masterApi } from "../../AllData";
 import FormControlSingleSelect from "../MuiComponents/FormControlSingleSelect";
 import MultiSelected from "../MuiComponents/MultiSelected";
 import TextFieldComponent from "../MuiComponents/TextFieldComponent";
@@ -34,7 +34,7 @@ function SkillExpDetails(props) {
     async function fetchData() {
       let primarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill`);
       let secondarySkilldata = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill=${primarySkill}`);
-      let tertiarySkillData = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill=${primarySkill}`);
+      let tertiarySkillData = await fetch(`http://13.126.160.155:8080/user/skill/get/skills?skill=${primarySkill},${secondarySkill}`);
       let primaryLanguagedata = await fetch(masterApi + "/drop-down/get/language?language");
       let otherLanguagedata = await fetch(masterApi + `/drop-down/get/language?language=${primaryLanguage}`);
 
@@ -72,29 +72,20 @@ function SkillExpDetails(props) {
           <InputLabel id="demo-select-small" required>Primary Skill</InputLabel>
           <Select sx={{ width: "100%" }} value={primarySkill} label="Primary Skill==">
             {pSkillDD.map((items, index) => (
-              <MenuItem key={index} onClick={() => { setPrimarySkill(items.uuid) }} value={items.uuid}>{items.name}</MenuItem>
+              <MenuItem key={index} onClick={() => { setPrimarySkill(items.uuid); sessionStorage.setItem('primarySkill', items.uuid) }} value={items.uuid}>{items.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        <Autocomplete
-          multiple
-          disableCloseOnSelect
-          size="small"
-          options={sSkillDD}
-          sx={{ width: "30%" }}
-          getOptionLabel={(option) => option.name}
-          value={secondarySkill?secondarySkill.map((item) => (item)):""}
-          onChange={(event, newValue) => {
-            setSecondarySkill([...newValue]);
-          }}
-          renderInput={(params) => (
-            <TextField {...params}
-              label="Secondary Skill"
-
-            />
-          )}
-        />
+        <FormControl sx={{ minWidth: 120, width: "30%" }} size="small">
+          <InputLabel id="demo-select-small" required>Secondary Skill</InputLabel>
+          <Select sx={{ width: "100%" }} value={secondarySkill} label="Secondary Skill">
+            {sSkillDD.map((items, index) => (
+              <MenuItem key={index} onClick={() => { 
+                setSecondarySkill(items.uuid) }} value={items.uuid}>{items.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
       {/* <Autocomplete
         id="size-small-outlined"
