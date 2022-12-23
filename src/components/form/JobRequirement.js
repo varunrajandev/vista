@@ -7,14 +7,14 @@ import Select from "@mui/material/Select";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { JobType, PreferredWorkingHour, year, months } from "../../AlllData";
+import { JobType, PreferredWorkingHour, year, months } from "../../AllData";
 import Checkbox from "@mui/material/Checkbox";
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import TextFieldComponent from "../MuiComponents/TextFieldComponent";
 import FormControlSingleSelect from "../MuiComponents/FormControlSingleSelect";
-
+import {isEmpty} from "lodash";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -69,14 +69,23 @@ console.log("reasonLeaving",ReasonLeaving)
     fetchData()
   }, [])
 
+  useEffect(() => {
+    if (isEmpty(preferJob) && !isEmpty(sessionStorage.getItem('primarySkill'))){
+      setPreferJob(sessionStorage.getItem('primarySkill'))
+    }
+    if (isEmpty(endTime)){
+      setEndTime(new Date(new Date().setHours(12,0,0)))
+    }
+  }, []);
 
+console.log(endTime)
   return (
     <Box sx={{ marginTop: 7, display: "grid", gap: 1, }}>
       <h5>Job Requirements</h5>
       <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", rowGap: "30px" }}>
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Preferred Job Types</InputLabel>
-          <Select sx={{ width: "100%" }} label="Preferred Job Types" value={preferJob}
+          <Select sx={{ width: "100%" }} label="Preferred Job Types" value={preferJob || ''}
             onChange={(e) => { setPreferJob(e.target.value) }}
           >
             {jobtypeDD.map((item) => (
@@ -98,7 +107,7 @@ console.log("reasonLeaving",ReasonLeaving)
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Preferred Working Hours</InputLabel>
-          <Select sx={{ width: "100%" }} label="Preferred Working Hours" value={preferWorkHour}>
+          <Select sx={{ width: "100%" }} label="Preferred Working Hours" value={preferWorkHour || ''}>
             {workingDD.map((item) => (
               <MenuItem onClick={() => { setPreferWorkHour(item.key) }} value={item.key}>{item.value}</MenuItem>
             ))}
@@ -128,7 +137,7 @@ console.log("reasonLeaving",ReasonLeaving)
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel>Cycle/Bike available for travel?</InputLabel>
-          <Select sx={{ width: "100%" }} label="Cycle/Bike available for travel?" value={vehicleAvailable} onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Cycle/Bike available for travel?" value={vehicleAvailable || ''} onChange={(e) => {
             setVehicleAvailable(e.target.value)
           }}>
             <MenuItem value={"Cycle"}>Cycle</MenuItem>
@@ -157,7 +166,7 @@ console.log("reasonLeaving",ReasonLeaving)
                 '-webkit-appearance': 'none',
                 margin: 0
               }
-            }} size="small" label="last salary withdraw" variant="outlined" onChange={(e) => {
+            }} size="small" label="Last Salary Withdraw" variant="outlined" onChange={(e) => {
           setMinSal(e.target.value)
         }}
           value={minSal}
@@ -188,20 +197,21 @@ console.log("reasonLeaving",ReasonLeaving)
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Open to Training?</InputLabel>
-          <Select sx={{ width: "100%" }} labelId="demo-select-small" id="demo-select-small" label="Open to Training?" onChange={(e) => {
+          <Select sx={{ width: "100%" }} labelId="demo-select-small" id="demo-select-small" label="Open to Training?" value={openToTraining || ''} onChange={(e) => {
             setOpenToTraining(e.target.value)
           }}>
-            <MenuItem value={true}>YES</MenuItem>
-            <MenuItem value={false}>NO</MenuItem>
+            <MenuItem value="yes">Yes</MenuItem>
+            <MenuItem value="no">No</MenuItem>
+            <MenuItem value="maybe">Maybe</MenuItem>
           </Select>
         </FormControl>
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Training Mode</InputLabel>
-          <Select sx={{ width: "100%" }} label="Training Mode" disabled={!openToTraining} onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Training Mode" disabled={openToTraining === 'no'} onChange={(e) => {
             setTraningMode(e.target.value)
           }}
-            value={traningMode}
+            value={traningMode || ''}
           >
             {trainingDD.map((item) => (
               <MenuItem value={item.key}>{item.value}</MenuItem>
@@ -218,7 +228,7 @@ console.log("reasonLeaving",ReasonLeaving)
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Total Experience (years)</InputLabel>
-          <Select sx={{ width: "100%" }} label="Total Experience (years)" value={jobExpYear} onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Total Experience (years)" value={jobExpYear || ''} onChange={(e) => {
             setJobExpYear(e.target.value)
           }}>
           {year.map(item=>(
@@ -229,7 +239,7 @@ console.log("reasonLeaving",ReasonLeaving)
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Total Experience (months)</InputLabel>
-          <Select sx={{ width: "100%" }}label="Total Experience (months)" value={jobExpMonth} onChange={(e) => {
+          <Select sx={{ width: "100%" }}label="Total Experience (months)" value={jobExpMonth || ''} onChange={(e) => {
             setJobExpMonth(e.target.value)
           }}>
              {months.map(item=>(
@@ -268,7 +278,7 @@ console.log("reasonLeaving",ReasonLeaving)
 
           <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Last Job Duration (years)</InputLabel>
-          <Select sx={{ width: "100%" }} label="Last Job Duration (years)" value={LastjobDurationYear} onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Last Job Duration (years)" value={LastjobDurationYear || ''} onChange={(e) => {
             setLastJobDurationYear(e.target.value)
           }}>
              {year.map(item=>(
@@ -279,7 +289,7 @@ console.log("reasonLeaving",ReasonLeaving)
 
         <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
           <InputLabel id="demo-select-small">Last Job Duration (months)</InputLabel>
-          <Select sx={{ width: "100%" }} label="Last Job Duration (months)" value={LastjobDurationMonths} onChange={(e) => {
+          <Select sx={{ width: "100%" }} label="Last Job Duration (months)" value={LastjobDurationMonths || ''} onChange={(e) => {
             setLastJobDurationMonths(e.target.value)
           }}>
             {months.map(item=>(

@@ -1,0 +1,2 @@
+// Headers
+export const HEADERS = {};

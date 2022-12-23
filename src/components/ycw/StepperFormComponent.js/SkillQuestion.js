@@ -1,14 +1,15 @@
 import { Box, Button, TextField, Autocomplete, Checkbox } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { masterApi } from "../../../AlllData";
+import { masterApi } from "../../../AllData";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import SkillExpDetails from "../../form/SkillExpDetails";
-import { Cuisines } from "../../../AlllData";
+import { Cuisines } from "../../../AllData";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { useParams } from "react-router-dom";
 import Notify from "../../Notification/Notify";
+import { isEmpty, size } from "lodash";
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -59,7 +60,15 @@ function SkillQuestion() {
   }, [id, ids]);
 
   async function handleSubmit() {
-
+    /* const checkQuestion = true;
+    if (!isEmpty(allQuestion) && size(allQuestion) !== 0){
+      const allQuestionLength = allQuestion.length;
+      
+    }
+    console.log(allQuestion, storeQuestion)
+    if (!checkQuestion){
+      return false;
+    } */
     try {
       let response = await axios.post("http://13.126.160.155:8080/user/skill/save/userResponse", {
         skillDto: storeQuestion,

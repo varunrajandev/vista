@@ -1,16 +1,11 @@
-import React from "react";
-import YcwDataTable from "../../components/ycw/YcwDataTable";
-import { data } from "../../Data";
-import { useEffect } from "react";
-import { Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../../Redux/Posts/action";
+// React
+import React from 'react';
+import YcwDataTable from '../../components/ycw/YcwDataTable';
 
-function YcwDataList() {
-  return (
-    <>
-      <YcwDataTable />
-    </>
-  );
-}
+/**
+ * @description
+ */
+const YcwDataList = () => <YcwDataTable />;
+
+// Default Export
 export default YcwDataList;

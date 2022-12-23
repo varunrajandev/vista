@@ -2,7 +2,7 @@ import { Box, Button } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
-import { masterApi } from '../../../AlllData'
+import { masterApi } from '../../../AllData'
 import { multiStepContext } from '../../../ContextApi/StepContext'
 import HouseHoldMemberInfo from '../../form/HouseHoldMemberInfo'
 import { Navigate, useParams } from "react-router-dom";
@@ -16,12 +16,11 @@ function HouseHoldMemberData() {
       otherJobType:"",
       mobileNo: "",
       name: "",
-      relationship: "",
+      relationship: null,
       otherrRlationship:"",
       otherJobType:"",
-      relationship:"",
       locality:"",
-      addressType:"",
+      addressType: null,
       address:""
 
     }
@@ -60,6 +59,7 @@ function HouseHoldMemberData() {
 
 
   async function handleSubmit() {
+    console.log(inputFields)
     try {
       let response = await axios.post(masterApi + "/worker/familyMember",
         {

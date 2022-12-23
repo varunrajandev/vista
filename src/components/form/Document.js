@@ -18,7 +18,7 @@ import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import Popup from "../Popup";
 import { useState } from "react";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-import { addressProof, idProof } from "../../AlllData";
+import { addressProof, idProof } from "../../AllData";
 
 const BOX = styled(Box)({
   display: "flex",

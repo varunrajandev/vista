@@ -1,9 +1,10 @@
 import { Box, Button } from '@mui/material'
 import axios from 'axios';
+import { isEmpty } from 'lodash';
 import React, { useContext, useEffect } from 'react'
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { masterApi } from '../../../AlllData';
+import { masterApi } from '../../../AllData';
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import SkillExpDetails from '../../form/SkillExpDetails'
 import Notify from '../../Notification/Notify';
@@ -12,7 +13,7 @@ import SkillQuestion from './SkillQuestion';
 function SkillInformationData() {
     //Skill and Experience Deatails
     const [primarySkill, setPrimarySkill] = React.useState("");
-    const [secondarySkill, setSecondarySkill] = React.useState([]);
+    const [secondarySkill, setSecondarySkill] = React.useState("");
     const [tertiarySkill, setTertiarySkill] = React.useState([]);
     const [skillRemarks, setSkillRemarks] = React.useState("");
     const [primaryLanguage, setPrimaryLanguage] = React.useState("");
@@ -28,12 +29,12 @@ function SkillInformationData() {
     let ids = localStorage.getItem('ID')
     let steps = localStorage.getItem('steps')
    
-    if(secondarySkill){
+    /* if(secondarySkill){
       secondarySkill.map((item)=>{
-          SecondarySkillArray.push(item.uuid)
+          // SecondarySkillArray.push(item.uuid)
       })
     }
-
+ */
     if(TertiarySkillArray){
       tertiarySkill.map((item)=>{
         TertiarySkillArray.push(item.uuid)
@@ -49,7 +50,7 @@ function SkillInformationData() {
         setOtherLanguages(responseAllSkill.data.otherLanguage)
         setSkillRemarks(responseAllSkill.data.skillRemarks)
         setPrimarySkill(responseAllSkill.data.skillsMappingDto[0].skillDto[0].uuid)
-        setSecondarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto)
+        setSecondarySkill(responseAllSkill.data.skillsMappingDto[1].skillDto[0].uuid)
         setTertiarySkill(responseAllSkill.data.skillsMappingDto[2].skillDto)
        
         
@@ -58,14 +59,17 @@ function SkillInformationData() {
     }, [ids, id])
     
 
-   // console.log("status", status)
+   console.log("status", status)
 
     const {currentSteps, setCurrentSteps, personalData, setAddressData, skillData, setSkillData} = useContext(multiStepContext)
     
 
     async function handleSubmit(){
-
-    
+      if (isEmpty(primaryLanguage) && isEmpty(primarySkill) && isEmpty(secondarySkill)){
+        setNotify({isOpen:true, message:"Please Select All Mandatory Fields", type:"error"})
+        return false;
+      }
+      sessionStorage.setItem('primarySkill', primarySkill)
       try {
         let response = await axios.post(masterApi+"/skill/save",
         {
@@ -79,7 +83,7 @@ function SkillInformationData() {
             },
             {
               "skillLevel": "SECONDARY",
-              "skillUuid": SecondarySkillArray
+              "skillUuid": [secondarySkill]
             },
             {
               "skillLevel": "TERTIARY",
@@ -132,8 +136,9 @@ function SkillInformationData() {
        
 
           <Box sx={{display:"flex", alignItems:"end", height:"100px", justifyContent:"right", gap:"20px"}}>
+              {!status ? (<Button variant='contained' onClick={()=>{setCurrentSteps(1)}}>back</Button>) : null}
               <Button variant='contained' onClick={handleSubmit}>save</Button>
-              {/* (()=>{setCurrentSteps(4)}) */}
+              {!status ? (<Button variant='contained' onClick={()=>{sessionStorage.setItem('primarySkill', primarySkill); setCurrentSteps(3)}}>next</Button>) : null}
           </Box>
         
       </Box>

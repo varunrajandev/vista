@@ -15,13 +15,15 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { multiStepContext } from "../../ContextApi/StepContext";
-import { masterApi, masterApiforAll } from "../../AlllData";
+import { masterApi, masterApiforAll } from "../../AllData";
 import indianflag from "../../images/india.png";
 import AlertTitle from "@mui/material/AlertTitle";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { setStorage } from "../../utils/storage.util";
+import Auth from "../../auth/Auth";
 
 function Login() {
   const [mobileNumber, setMobileNumber] = React.useState("");
@@ -36,8 +38,14 @@ function Login() {
   const [errorvalue, setErrorValue] = React.useState("");
   const [userType, setUserType] = React.useState("");
 
+  
   let navigate = useNavigate();
-
+  
+  React.useEffect(() => {
+    if (Auth.hasAccessToken()){
+      navigate('/');
+    }
+  },[]);
   // const renderButtonforResendOtp =()=>{
   //   return <Button onClick={handleClickforReSendOTP} sx={{cursor:"ponter"}}>Resend</Button>;
 
@@ -100,19 +108,8 @@ function Login() {
           }
         );
 
-        localStorage.setItem("Response", JSON.stringify(response.data.status));
-        localStorage.setItem(
-          "ResponseName",
-          JSON.stringify(response.data.data.firstName)
-        );
-        localStorage.setItem(
-          "ResponseLastName",
-          JSON.stringify(response.data.data.lastName)
-        );
-        localStorage.setItem(
-          "ResponseUserType",
-          JSON.stringify(response.data.data.userType)
-        );
+        setStorage("userToken", JSON.stringify(response?.data?.data ?? {}));
+        setStorage("token","8e1c0458-d211-4312-b5ec-ad52470d4980");
 
         if (response.data.data.userType === "OPS") {
           navigate("/ycw");

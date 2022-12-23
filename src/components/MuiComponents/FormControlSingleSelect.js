@@ -11,14 +11,15 @@ function FormControlSingleSelect(props) {
             sx={{ width: "100%" }}
             labelId="demo-select-small"
             id="demo-select-small"
-            value={data}
+            value={data || ''}
             label={labelData}
             onChange={(e) => {
                 setData(e.target.value);
             }}
           >
+            <MenuItem value="">Select Options</MenuItem>
             {dataDD.map((items, index) => (
-              <MenuItem key={index} value={values?items.name:items.key}>{values?items.name:items.key}</MenuItem>
+              <MenuItem key={index} value={values?items.name:items.key}>{values?items.name:items.value}</MenuItem>
             ))}
           </Select>
         </FormControl>

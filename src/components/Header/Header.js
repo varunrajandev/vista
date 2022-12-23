@@ -5,6 +5,7 @@ import image from "../../images/careCrew1.png";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { multiStepContext } from "../../ContextApi/StepContext";
 import { useNavigate } from "react-router-dom";
+import { getStorage } from "../../utils/storage.util";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -14,13 +15,12 @@ const StyledToolbar = styled(Toolbar)({
 });
 
 export default function Header() {
-  const loginLocalStorageData = localStorage.getItem("ResponseName");
-  const loginLocalStorageDataLastName = localStorage.getItem("ResponseLastName");
   const { loginData, setLoginData } = useContext(multiStepContext);
-  const loginLocalStorageUserType = localStorage.getItem("ResponseUserType");
-  const userTypeofLogin = JSON.parse(loginLocalStorageUserType);
-  let LoginUserName = JSON.parse(loginLocalStorageData);
-  let LoginUserLastName = JSON.parse(loginLocalStorageDataLastName);
+  let userResponse = getStorage("userToken");
+  userResponse = JSON.parse(userResponse);
+  const userTypeofLogin = userResponse?.userType ?? '';
+  let LoginUserName = userResponse?.firstName ?? '';
+  let LoginUserLastName = userResponse?.lastName ?? '';
   let navigate = useNavigate();
   return (
     <AppBar
@@ -41,7 +41,7 @@ export default function Header() {
             <Avatar alt={LoginUserName} src="/static/images/avatar/1.jpg" />
             <h4>
               {LoginUserName} {LoginUserLastName}
-              <h6 style={{ "margin-top": "5px" }}>{userTypeofLogin}</h6>
+              <h6 style={{ "marginTop": "5px" }}>{userTypeofLogin}</h6>
             </h4>
             <PowerSettingsNewIcon
             sx={{

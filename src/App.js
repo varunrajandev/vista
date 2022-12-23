@@ -1,65 +1,41 @@
-import { Stack } from "@mui/material";
-import { Box } from "@mui/system";
-import React, { useContext } from "react";
-import Header from "./components/Header/Header";
-import SideHeader from "./components/Side header/SideHeader";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import YcwAllData from "./pages/ycw/YcwAllData";
-import AddNewData from "./pages/ycw/AddNewData";
-import Cx from "./pages/CX/Cx";
-import JobsTable from "./pages/Jobs/JobsTable";
-import AddNewCustomer from "./pages/CX/AddNewCustomer";
-import AddNewRequest from "./pages/Jobs/AddNewRequest";
-import DashBoard from "./pages/YcwDetailsPage/JobDetails/DashBoard";
-import BasicInformation from "./pages/YcwDetailsPage/JobDetails/BasicInformation";
-import Login from "./pages/Login/Login";
-import Profile from "./components/ycw/Profilepage/Profile";
-import UserRegistration from "./pages/UserRegistration/UserRegistration";
-import { multiStepContext } from "./ContextApi/StepContext";
-
-function App() {
-  const { loginData, setLoginData } = useContext(multiStepContext);
-  const loginLocalStorageData = localStorage.getItem("Response");
-  const loginLocalStorageUserType = localStorage.getItem("ResponseUserType");
-  const userTypeofLogin = JSON.parse(loginLocalStorageUserType);
-  console.log("loginLocalStorageUserType", userTypeofLogin);
-  return (
-    <>
-      <BrowserRouter>
-        <Box>
-          {loginLocalStorageData && <Header />}
-
-          <Stack direction="row">
-            {userTypeofLogin == "OPS" && loginLocalStorageData && (
-              <SideHeader />
-            )}
-
-            <Routes>
-              <Route path="/" element={<YcwAllData />} />
-              <Route path="/ycw" element={<YcwAllData />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registration" element={<UserRegistration />} />
-              <Route path="/ycw/add" element={<AddNewData />} />
-              <Route path="/ycw/profile/:id" element={<Profile />} />
-              <Route path="/ycw/add/dashboard/:id" element={<DashBoard />} />
-              <Route path="/ycw/add/:id" element={<AddNewData />} />
-              <Route
-                path="/ycw/add/dashboard/basicinfo/:id"
-                element={<BasicInformation />}
-              />
-
-              <Route path="/cx" element={<Cx />} />
-              <Route path="/cx/new" element={<AddNewCustomer />} />
-
-              <Route path="/jobs" element={<JobsTable />} />
-              <Route path="/jobs/new" element={<AddNewRequest />} />
-              <Route path="/jobs/new" element={<AddNewRequest />} />
-            </Routes>
-          </Stack>
-        </Box>
-      </BrowserRouter>
-    </>
+/***************NPM DEPENDENCIES ****************/
+import React from 'react';
+import { isEmpty } from 'lodash';
+import { Box } from '@mui/system';
+import { Stack } from '@mui/material';
+import { useSelector, shallowEqual } from 'react-redux';
+/***************LOCAL DEPENDENCIES **************/
+import Auth from './auth/Auth';
+import Routes from './routes/root.routes';
+import Header from './components/Header/Header';
+import Notify from './components/Notification/Notify';
+import SideHeader from './components/Side header/SideHeader';
+import { getError } from './store/selectors/common.selector';
+// App
+const App = () => {
+  // get the auth state
+  const isAuth = Auth.hasAccessToken();
+  // selectors
+  // selector
+  const [error] = useSelector(
+    (state) => [getError(state)],
+    shallowEqual
   );
-}
+  return (
+    <Box>
+      {/* Start error section */}
+      <Notify
+        notify={{ isOpen: !isEmpty(error), message: error, type: 'error' }}
+      />
+      {/* End error section */}
+      {isAuth && <Header />}
+      <Stack direction='row'>
+        {isAuth && <SideHeader />}
+        <Routes />
+      </Stack>
+    </Box>
+  );
+};
 
+// Default Export
 export default App;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   TextField,
   IconButton,
@@ -13,7 +14,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
-import { FilterData, masterApi } from "../../AlllData";
+import { FilterData, masterApi } from "../../AllData";
+import axios from "axios";
 
 
 function HouseHoldMemberInfo(props) {
@@ -24,10 +26,24 @@ function HouseHoldMemberInfo(props) {
   const [relation, setRelation] = React.useState("");
   const { setInputFields, inputFields } = props;
 
-  const handleChangeInput = (index, event) => {
+  const ID = localStorage.getItem("ID")
+  const { id } = useParams()
+
+  const handleChangeInput = (index, event) => {    
     const values = [...inputFields];
     values[index][event.target.name] = event.target.value;
     setInputFields(values);
+    if (event.target.name === 'addressType'){
+      if (event.target.value !== null){
+        axios.get(`http://13.126.160.155:8080/user/address/get/address/${id || ID}?isPermanent=${event.target.value}`)
+        .then(res => {
+          const values = [...inputFields];
+          values[index]['address'] = res?.data?.data ?? '';
+          setInputFields(values);
+        })
+
+      }
+    }
   };
 
 
@@ -46,11 +62,10 @@ function HouseHoldMemberInfo(props) {
         otherJobType: "",
         mobileNo: "",
         name: "",
-        relationship: "",
+        relationship: null,
         otherrRlationship: "",
-        relationship: "",
         locality: "",
-        addressType: "",
+        addressType: null,
         address: ""
       },
     ]);
@@ -141,7 +156,7 @@ function HouseHoldMemberInfo(props) {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 name="relationship"
-                value={inputField.relationship}
+                value={inputField?.relationship ?? ''}
                 label="Occupation"
                 onChange={(event) => handleChangeInput(index, event)}
               >
@@ -202,7 +217,7 @@ function HouseHoldMemberInfo(props) {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 name="jobTypeUuid"
-                value={inputField.jobTypeUuid}
+                value={inputField?.jobTypeUuid ?? ''}
                 label="Occupation"
                 onChange={(event) => handleChangeInput(index, event)}
               >
@@ -213,7 +228,7 @@ function HouseHoldMemberInfo(props) {
             </FormControl>
 
             <TextField
-              label="Others Last Job"
+              label="Relative Job"
               name="otherJobType"
               size="small"
               value={inputField.otherJobType}
@@ -229,7 +244,7 @@ function HouseHoldMemberInfo(props) {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 name="addressType"
-                value={inputField.addressType}
+                value={inputField?.addressType ?? ''}
                 label="Address Type"
                 onChange={(event) => handleChangeInput(index, event)}
               >

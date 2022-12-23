@@ -1,18 +1,19 @@
 import { Box, Button } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import { BankApi, masterApi } from "../../../AlllData";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
+import { BankApi, masterApi } from "../../../AllData";
 import { multiStepContext } from "../../../ContextApi/StepContext";
 import BankAccount from "../../form/BankAccount";
 import Notify from "../../Notification/Notify";
 
 function BankInformation() {
+  const navigate = useNavigate();
   //bank account
   const [boolean, setBoolean] = useState(false)
   const [inputFields, setInputFields] = useState([
     {
-      accountType: "",
+      accountType: null,
       bankName: "",
       branchName: "",
       branchAddress: "",
@@ -38,7 +39,7 @@ function BankInformation() {
 
     setInputFields([
       {
-        accountType: data.accountType ? data.accountType : "",
+        accountType: data.accountType ? data.accountType : null,
         bankName: AccountTypeData.data.bankName ? AccountTypeData.data.bankName : "",
         branchName: AccountTypeData.data.branchName ? AccountTypeData.data.branchName : "",
         branchAddress: AccountTypeData.data.branchAddress ? AccountTypeData.data.branchAddress : "",
@@ -58,7 +59,7 @@ function BankInformation() {
 
     setInputFields([
       {
-        accountType: allDataResponse.data[0].accountType,
+        accountType: allDataResponse?.data[0]?.accountType ?? null,
         bankName: ifscCodeData.bankName ? ifscCodeData.bankName : allDataResponse.data[0].bankName,
         branchName: ifscCodeData.branchName ? ifscCodeData.branchName : allDataResponse.data[0].branchName,
         branchAddress: ifscCodeData.branchAddress ? ifscCodeData.branchAddress : allDataResponse.data[0].branchAddress,
@@ -68,8 +69,6 @@ function BankInformation() {
       },
     ])
   }
-
-  console.log(inputFields[0].branchAddress);
 
   useEffect(() => {
     if (inputFields[0].ifscCode.length === 11) {
@@ -89,7 +88,7 @@ function BankInformation() {
           {
             "accountHolderName": inputFields[0].accountHolderName,
             "accountNumber": inputFields[0].accountNumber,
-            "accountType": inputFields[0].accountType,
+            "accountType": inputFields[0]?.accountType ?? null,
             "bankName": inputFields[0].bankName,
             "branchAddress": inputFields[0].branchAddress,
             "branchName": inputFields[0].branchName,
@@ -140,11 +139,10 @@ function BankInformation() {
           <Box sx={{ display: "flex", alignItems: "end", height: "100px", justifyContent: "right", gap: "20px" }}>
             <Button variant='contained' onClick={(() => { setCurrentSteps(4) })}>back</Button>
             <Button variant='contained' onClick={handleSubmit}>save</Button>
-            <Button variant='contained' onClick={()=>{setBoolean(true)}}>Finish</Button>
+            <Button variant='contained' onClick={()=>{ setCurrentSteps(1); navigate('/ycw')}}>Finish</Button>
           </Box>
           </Box>
       </Box>
-     {boolean && <Navigate to="/ycw" />} 
 
     </>
   );

@@ -13,10 +13,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import Switch from "@mui/material/Switch";
-import { FilterData, masterApi } from "../../AlllData";
+import { FilterData, masterApi } from "../../AllData";
+import { each, keys } from "lodash";
 
 function BankAccount(props) {
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState({});
   const [accountTypeDD, setAccountTypeDD] = useState([{}]);
   const { setInputFields, inputFields, ifscCodeData } = props;
 
@@ -35,8 +36,8 @@ function BankAccount(props) {
     setInputFields(values);
   };
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
+  const handleChange = (c, id) => {
+    setChecked({[id]: c});
   };
 
   const handleSubmit = (e) => {
@@ -48,7 +49,7 @@ function BankAccount(props) {
     setInputFields([
       ...inputFields,
       {
-        accountType: "",
+        accountType: null,
         bankName: "",
         branchName: "",
         branchAddress: "",
@@ -65,7 +66,6 @@ function BankAccount(props) {
     values.splice(index, 1);
     setInputFields(values);
   };
-
   return (
     <Box
       sx={{
@@ -108,6 +108,7 @@ function BankAccount(props) {
               justifyContent: "space-between",
               marginBottom: 5,
             }}
+            key={index}
           >
             <TextField
               style={{ width: "18%" }}
@@ -161,7 +162,7 @@ function BankAccount(props) {
                 labelId="demo-select-small"
                 id="demo-select-small"
                 name="accountType"
-                value={inputField.accountType}
+                value={inputField?.accountType ?? ''}
                 label="Type of Account"
                 onChange={(event) => handleChangeInput(index, event)}
               >
@@ -206,12 +207,12 @@ function BankAccount(props) {
               }}
             >
               <IconButton aria-label="delete">
-                <DeleteIcon onClick={() => handleRemoveFields(index)} />
+                {index !== 0 ? (<DeleteIcon onClick={() => handleRemoveFields(index)} />) : null }
               </IconButton>
 
               <Switch
-                checked={checked}
-                onChange={handleChange}
+                checked={checked[index]}
+                onChange={(event) => handleChange(event.target.checked, index)}
                 inputProps={{ "aria-label": "controlled" }}
               />
               <span style={{ fontSize: "13px", fontWeight: "bolder" }}>

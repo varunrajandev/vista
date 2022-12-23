@@ -2,10 +2,11 @@ import { Box, Button } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { multiStepContext } from '../../../ContextApi/StepContext';
 import JobRequirement from '../../form/JobRequirement';
-import { JobRequirementApis, masterApi } from '../../../AlllData';
+import { JobRequirementApis, masterApi } from '../../../AllData';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Notify from '../../Notification/Notify';
+import { isEmpty, size } from 'lodash';
 
 function JobRequirementData() {
     //job requirements:
@@ -13,13 +14,13 @@ function JobRequirementData() {
   const [openToTraining, setOpenToTraining] = useState(false);
   const [preferJob, setPreferJob] = useState("");
   const [ preferOtherJob, setPreferOtherJob] =useState("");
-  const [workingHour, setWorkingHour] = useState("");
+  const [workingHour, setWorkingHour] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [vehicle, setVehicle] = useState("")
   const [minSalaryExpected, setMinSalaryExpected] = useState("")
   const [maxSalaryExpected, setMaxSalaryExpected] = useState("")
-  const [traningMode, setTraningMode] = useState("")
+  const [traningMode, setTraningMode] = useState(null)
   const [jobRemarks, setJobRemarks] = useState("");
   const [experienceRemarks, setExperienceRemarks] = useState("");
   const [lastJobType, setLastJobType] = useState([]);
@@ -114,7 +115,7 @@ if(stt >endt){
           "experienceRemarks": experienceRemarks,
           "jobDurationMonths": LastjobDurationMonths,
           "jobDurationYears": LastjobDurationYear,
-          "jobTypeUuid": lastJobType,
+          "jobTypeUuid": isEmpty(lastJobType) && !size(lastJobType) ? null : lastJobType,
           "otherJobTypeUuid": lastJobTypeOther,
           "reasonForLeavingJob": reasonLeaving,
           "otherReasonForLeavingJob":otherreasonLeaving ,

@@ -1,516 +1,1105 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Box, TextField, Typography } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { maritalstatus, masterApi, sourcing } from "../../AlllData";
-import { multiStepContext } from "../../ContextApi/StepContext";
-import { createTheme, ThemeProvider } from "@mui/material";
-
-
-
-
-
+/*****************NPM DEPENDENCIES ***************/
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+  useContext,
+} from 'react';
+import {
+  Button,
+  Box,
+  TextField,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  createTheme,
+  ThemeProvider,
+  FormHelperText,
+  CircularProgress
+} from '@mui/material';
+import { debounce } from 'lodash';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { useForm, Controller } from 'react-hook-form';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+/*****************LOCAL DEPENDENCIES ***************/
+import { masterApi, WhatsAppStatus } from '../../AllData';
+import Notify from '../Notification/Notify';
+import { multiStepContext } from '../../ContextApi/StepContext';
+// Theme
 const theme = createTheme({
   components: {
     MuiFormLabel: {
       styleOverrides: {
-        asterisk: { color: "red" },
+        asterisk: { color: 'red' },
       },
     },
   },
-})
+});
 
+// Form Validation Schema
+const schema = yup.object().shape({
+  sourcingChannel: yup
+    .string()
+    .nullable()
+    .required('Sourcing Channel is required'),
+  otherSourcingChannel: yup.string().when('sourcingChannel', {
+    is: (val) => val === 'Others',
+    then: (schema) => schema.nullable().required('Other Sourcing is required'),
+    otherwise: (schema) => schema.nullable().notRequired(),
+  }),
+  firstName: yup
+    .string()
+    .nullable()
+    .required('First Name is required')
+    .matches(/^[A-Za-z ]*$/, 'Please Enter Only Alphabet'),
+  lastName: yup
+    .string()
+    .nullable()
+    .matches(/^[A-Za-z ]*$/, 'Please Enter Only Alphabet'),
+  gender: yup.string().nullable().required('Gender is required'),
+  mobileNo: yup
+    .string()
+    .nullable()
+    .required('Phone Number is Required')
+    .matches(/^[0-9]{10}$/, 'Please Enter Valid Phone Number'), // phone validation
+  secondaryMobileNumber: yup.string().nullable(),
+  whatsappAvailable: yup
+    .string()
+    .nullable()
+    .required('Whatsapp Available is required'),
+  whatsappNumber: yup.string().when('whatsappAvailable', {
+    is: (val) =>
+      val === 'otherNumber' ||
+      val === 'mobileNumber' ||
+      val === 'secondaryNumber',
+    then: (schema) => schema.nullable().required('Other Number is required'),
+    otherwise: (schema) => schema.nullable().notRequired(),
+  }),
+  birthday: yup
+    .date()
+    .nullable()
+    .min(new Date(1900, 0, 1), 'DOB must be later than ${value}')
+    .max(new Date(), 'Date not greater then today')
+    .typeError('Please Enter valid DOB format MM/DD/YYYY')
+    .required('Date is required'),
+  maritalStatus: yup.string().nullable().required('Marital Status is required'),
+  religion: yup.string().nullable().required('Religion is required'),
+  otherReligion: yup.string().when('religion', {
+    is: (val) => val === 'OTHERS',
+    then: (schema) => schema.nullable().required('Other Religion is required'),
+    otherwise: (schema) => schema.nullable().notRequired(),
+  }),
+  covidStatus: yup.string().nullable().required('Covid Status is required'),
+});
 
-function PersonalInfo(props) {
-  const [sourcingDD, setSourcingDD] = useState([])
-  const [religionDD, setReligionDD] = useState([])
-  const [maritalDD, setMaritalDD] = useState([])
-  const [genderDD, setGenderDD] = useState([])
-  const [covidDD, setCovidDD] = useState([])
-  const [educationDD, setEducationDD] = useState([])
-  const [whatsAppValue, setWhatsAppValue] = useState("")
-  const [helperText, setHelperText] = useState("")
+// Default Form Fields
+const formFields = {
+  sourcingChannel: null,
+  otherSourcingChannel: null,
+  firstName: null,
+  lastName: null,
+  gender: null,
+  mobileNo: null,
+  secondaryMobileNumber: null,
+  whatsappAvailable: null,
+  whatsappNumber: null,
+  age: null,
+  birthday: null,
+  maritalStatus: null,
+  religion: null,
+  otherReligion: null,
+  education: null,
+  educationalRemarks: null,
+  covidStatus: null,
+  medicalCondition: null,
+  isoCode: 'IN',
+  nationality: 'INDIAN',
+  userType: 'WORKER',
+  secondaryMobileVerified: false,
+  profileStatus: 'IN_ACTIVE',
+};
 
+/** @type {*} */
+const getWhatsUp = {
+  mobileNumber: 'mobileNo',
+  secondaryNumber: 'secondaryMobileNumber',
+};
 
-
-  const [message, setMessage] = useState('');
-
-  function alphacheck(e) {
-    const regex = /[A-Za-z]/;
-    const chars = e.target.value.split('');
-    const char = chars.pop();
-    console.log(char);
-    if (!regex.test(char)) {
-      e.target.value = chars.join('');
-      e.preventDefault();
-      return false;
+/**
+ * @description update the select state & handle auto save
+ * @param {string} key
+ * @param {string} label
+ * @param {string} value
+ * @param {object} error
+ * @param {function} onChangeFn
+ * @param {function} saveFn
+ * @param {object} formValues
+ * @param {function|null} [extraFn=null]
+ * @param {object|null} [extraProps=null]
+ */
+const getSelectProps = (
+  key,
+  label,
+  value,
+  error,
+  onChangeFn,
+  saveFn,
+  formValues,
+  id = null,
+  extraFn = null,
+  extraProps = null
+) => ({
+  id: key,
+  sx: { width: '100%' },
+  label,
+  value: value || '',
+  error: error?.message ? true : false,
+  onChange: ({ target: { value } }) => {
+    onChangeFn(value);
+    if (extraFn && extraProps) {
+      extraFn(extraProps.key, extraProps.values[extraProps.getValue[value]]);
     }
-    else {
-      return true;
+    if (id) {
+      saveFn({ ...formValues, [key]: value }, false);
     }
-  }
+  },
+});
 
+/**
+ * @description update the input state & handle auto save
+ * @param {string} key
+ * @param {string} label
+ * @param {string} value
+ * @param {object} error
+ * @param {function} onChangeFn
+ * @param {function} saveFn
+ * @param {function|null} extraFn
+ */
+const getInputProps = (
+  key,
+  label,
+  value,
+  placeholder,
+  error,
+  onChangeFn,
+  saveFn,
+  extraFn = null
+) => ({
+  id: key,
+  size: 'small',
+  variant: 'outlined',
+  label,
+  value: value || '',
+  placeholder,
+  error: error?.message ? true : false,
+  helperText: error?.message,
+  onChange: ({ target: { value } }) => {
+    onChangeFn(value);
+    saveFn(key, value);
+    if (extraFn) {
+      extraFn(value);
+    }
+  },
+});
 
+/**
+ * @description
+ * @param {*} e
+ */
+const PersonalInfo = () => {
+  // local states
+  const [dropDownList, setDropDownList] = useState({
+    source: [],
+    religion: [],
+    marital: [],
+    gender: [],
+    covid: [],
+    education: [],
+  });
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: '',
+    type: 'info',
+  });
+  const [loading, setLoading] = useState(false);
+  const { setCurrentSteps } = useContext(multiStepContext);
 
+  // navigate
+  const navigate = useNavigate();
+
+  // param
+  const { id } = useParams();
+
+  // get the id from local storage
+  let ID = localStorage.getItem('ID');
+
+  // form instance
   const {
-    walk, setWalk,
-    otherSource, setOtherSource,
-    fname, setFname,
-    age, setAge,
-    lname, setLname,
-    gender, setGender,
-    phoneNumber, setPhoneNumber,
-    alternateNumber, setAlternateNumber,
-    whatsappAvailable, setWhatsappAvailable,
-    whatsapp, setWhatsapp,
-    birthday, setBirthday,
-    maritalStatus, setMaritalStatus,
-    religion, setReligion,
-    otherreligion, setOtherReligion,
-    education, setEducation,
-    educationalRemarks, setEducationalRemarks,
-    covidStatus, setCovidStatus,
-    medicalCondition, setMedicalCondition,
-    submitted, setSubmitted,
-    userProfile,
-  } = props;
+    reset,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    trigger,
+    setError,
+    clearErrors,
+  } = useForm({
+    defaultValues: { ...formFields },
+    resolver: yupResolver(schema),
+  });
 
-  console.log(birthday)
+  // get the updated form values
+  const updatedFormValues = watch();
 
-  if (whatsappAvailable === "Same as mobile number") {
-    setWhatsapp(phoneNumber)
-  }
-  if (whatsappAvailable === "Same as alternte number") {
-    setWhatsapp(alternateNumber)
-  }
+  /**
+   * @description calculate the age
+   * @param {string | date} birthDate
+   */
+  const getAge = (birthDate) =>
+    new Date().getFullYear() - new Date(birthDate).getFullYear();
 
-  const { setCurrentSteps, setPersonalData, personalData } = useContext(multiStepContext)
-
-
+  // call the user details by id
   useEffect(() => {
-    const dataFetch = async () => {
-      let sourceData = await fetch(masterApi + "/drop-down/get/sourceChannel?flag=all");
-      let religionData = await fetch(masterApi + "/drop-down/get/religion");
-      let maritalData = await fetch(masterApi + "/drop-down/get/maritalStatus")
-      let genderData = await fetch(masterApi + "/drop-down/get/gender")
-      let covidData = await fetch(masterApi + "/drop-down/get/covidVaccination")
-      let educationData = await fetch(masterApi + "/drop-down/get/education")
-
-
-      let res = await sourceData.json();
-      let res1 = await religionData.json();
-      let res2 = await maritalData.json();
-      let res3 = await genderData.json();
-      let res4 = await covidData.json();
-      let res5 = await educationData.json();
-      setSourcingDD(res.data)
-      setReligionDD(res1.data)
-      setMaritalDD(res2.data)
-      setGenderDD(res3.data)
-      setCovidDD(res4.data)
-      setEducationDD(res5.data)
+    if (id || ID) {
+      fetch(`http://13.126.160.155:8080/user/worker/profile/${id || ID}`)
+        .then((res) => res.json())
+        .then((res) =>
+          reset({
+            ...formFields,
+            ...(res?.data ?? {}),
+            age: res?.data?.age ?? getAge(res?.data?.birthday),
+          })
+        );
     }
-    dataFetch()
-    checkMobilenumber()
-  }, [phoneNumber.length === 10 ? phoneNumber : ""])
-  console.log(userProfile)
+  }, [id || ID]);
 
-  const handleChange = (event) => {
-    setWalk(event.target.value);
+  // call the drop down api
+  useEffect(() => {
+    const requestParams = [
+      fetch(`${masterApi}/drop-down/get/sourceChannel?flag=all`),
+      fetch(`${masterApi}/drop-down/get/religion`),
+      fetch(`${masterApi}/drop-down/get/maritalStatus`),
+      fetch(`${masterApi}/drop-down/get/gender`),
+      fetch(`${masterApi}/drop-down/get/covidVaccination`),
+      fetch(`${masterApi}/drop-down/get/education`),
+    ];
+
+    Promise.allSettled(requestParams)
+      .then(async ([source, religion, marital, gender, covid, education]) => {
+        const sourceResponse = source.value;
+        const religionResponse = religion.value;
+        const maritalResponse = marital.value;
+        const genderResponse = gender.value;
+        const covidResponse = covid.value;
+        const educationResponse = education.value;
+        return [
+          await sourceResponse.json(),
+          await religionResponse.json(),
+          await maritalResponse.json(),
+          await genderResponse.json(),
+          await covidResponse.json(),
+          await educationResponse.json(),
+        ];
+      })
+      .then(([source, religion, marital, gender, covid, education]) =>
+        setDropDownList({
+          source: source?.data ?? [],
+          religion: religion?.data ?? [],
+          marital: marital?.data ?? [],
+          gender: gender?.data ?? [],
+          covid: covid?.data ?? [],
+          education: education?.data ?? [],
+        })
+      );
+    return () => localStorage.removeItem('ID');
+  }, []);
+
+  /**
+   * @description update user profile
+   * @param {object} requestBody
+   * @param {boolean} [isNotify=true]
+   */
+  const handleProfile = async (
+    requestBody,
+    isNotify = true,
+    isNext = false
+  ) => {
+    try {
+      let response = await axios.post(
+        'http://13.126.160.155:8080/user/worker/profile',
+        { ...requestBody, ...(id || ID ? { userId: id || ID } : {}) }
+      );
+      if (response.data.status) {
+        console.log(response)
+        navigate(`/ycw/add/${response?.data?.data?.userId ?? ''}`);
+        localStorage.setItem('ID', response?.data?.data?.userId ?? '');
+        if (isNotify) {
+          const message = response.data.message;
+          setNotify({ isOpen: message, message, type: 'success' });
+        }
+        if (isNext) setCurrentSteps(2);
+      }
+    } catch (error) {
+      console.log(error)
+      setNotify({
+        isOpen: true,
+        message: error?.message ?? 'Server Error',
+        type: 'error',
+      });
+    }
   };
 
-  console.log("birthday type is", typeof birthday, birthday)
-  if (!personalData.status && birthday) {
-    let PickYear = birthday.getFullYear()
-    console.log(PickYear)
-    const d = new Date();
-    let CurrentYear = d.getFullYear();
-    setAge(CurrentYear - PickYear)
-  }
-  else setAge(age)
+  /**
+   * @description handle auto save
+   * @param {string} key
+   * @param {string} value
+   */
+  const handleAutoSave = async (key, value) => {
+    // check id - user id
+    if (id || ID) {
+      // get the validated form field
+      const validated = await trigger(key);
+      // check the form field
+      if (validated) {
+        // save value
+        handleProfile({ ...updatedFormValues, [key]: value }, false);
+      }
+    }
+  };
 
-  async function checkMobilenumber() {
-    let checkNumber = await fetch(`http://13.126.160.155:8080/user/worker/checkProfile/${phoneNumber}`)
-    let response = await checkNumber.json();
-    response.data ? setHelperText("Number is already exist") : setHelperText()
+  /**
+   * @description handle input change, check id and validate input then save value
+   *
+   */
+  const handleInputChange = useCallback(debounce(handleAutoSave, 500), []);
 
-  }
-
+  /**
+   * @description check user mobile number
+   * @param {string | number} phoneNumber
+   */
+  const checkMobileNumber = async (phoneNumber) =>
+    phoneNumber.length === 10
+      ? await fetch(
+          `http://13.126.160.155:8080/user/worker/checkProfile/${phoneNumber}?userId=${
+            id || ID
+          }`
+        )
+          .then((res) => res.json())
+          .then((res) =>
+            res.data
+              ? setError('mobileNo', { message: res?.message ?? '' })
+              : clearErrors('mobileNo')
+          )
+      : clearErrors('mobileNo');
 
   return (
-    <ThemeProvider theme={theme}>
-      <form>
-
-        <h5 style={{ marginBottom: "6px" }}>Personal Information</h5>
+    <>
+      <Box>
+        <Notify notify={notify} />
+      </Box>
+      <Box bgcolor='#e1e2e3' padding='20px' flex={7} minWidth={'90%'}>
         <Box
+          marginTop={5}
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            padding: 3,
+            bgcolor: 'white',
+            borderRadius: 3,
           }}
         >
-
-          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-            <InputLabel id="demo-select-small" required >Sourcing Channel</InputLabel>
-            <Select
-              sx={{ width: "100%" }}
-              label="Sourcing Channel"
-              onChange={handleChange}
-              value={walk}
+          {updatedFormValues?.uuid ? (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'right',
+                gap: '5px',
+              }}
             >
-              {sourcingDD.map((item) => (
-                <MenuItem value={item.value}>{item.value}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <h5>{loading ? 'Saving' : 'Saved'}</h5>
+              {loading ? <CircularProgress /> : <VerifiedIcon color='secondary' fontSize='13px' />}
+            </div>
+          ) : null}
 
-          <TextField
-            sx={{ width: "18%" }}
-            size="small"
-            disabled={walk === "Others" ? false : true}
-            label="Other Source"
-            value={otherSource}
-            placeholder="Please Mention..."
-            variant="outlined"
-            onChange={(event) => {
-              setOtherSource(event.target.value);
-            }}
-          />
-
-          <TextField required
-            sx={{ width: "18%" }}
-            size="small"
-            type="text"
-            label="First Name"
-            value={fname}
-            variant="outlined"
-            onChange={(event) => {
-              setFname(event.target.value);
-            }}
-            pattern="[a-zA-Z]*"
-            onKeyPress={(e) => alphacheck(e)}
-          />
-
-          <TextField sx={{ width: "18%" }} size="small" label="Last Name"
-            variant="outlined"
-            value={lname}
-            onChange={(e) => {
-              setLname(e.target.value);
-            }}
-            pattern="[a-zA-Z]*"
-            onKeyPress={(e) => alphacheck(e)}
-          />
-
-          <FormControl sx={{ minWidth: 120, display: "flex", width: "18%" }} size="small" >
-            <InputLabel required id="demo-select-small">Gender</InputLabel>
-            <Select width={"100%"} value={gender} label="gender" onChange={(event) => {
-              setGender(event.target.value);
-            }}>
-              {genderDD.map((item) => (<MenuItem value={item.key}>{item.value}</MenuItem>))}
-            </Select>
-          </FormControl>
-
+          <ThemeProvider theme={theme}>
+            <form
+              onSubmit={handleSubmit(handleProfile)}
+              noValidate
+              autoComplete='off'
+            >
+              <h5 style={{ marginBottom: '6px' }}>Personal Information</h5>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+                  <InputLabel required>Sourcing Channel</InputLabel>
+                  <Controller
+                    control={control}
+                    name='sourcingChannel'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <Select
+                          {...getSelectProps(
+                            'sourcingChannel',
+                            'Sourcing Channel',
+                            value,
+                            error,
+                            onChange,
+                            handleProfile,
+                            updatedFormValues,
+                            id || ID
+                          )}
+                        >
+                          {dropDownList.source.map((item) => (
+                            <MenuItem key={item.key} value={item.value}>
+                              {item.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {error?.message ? (
+                          <FormHelperText error={true}>
+                            {error?.message}
+                          </FormHelperText>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </FormControl>
+                <Controller
+                  control={control}
+                  name='otherSourcingChannel'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      {...(updatedFormValues?.sourcingChannel === 'Others'
+                        ? { required: true }
+                        : {})}
+                      sx={{ width: '18%' }}
+                      disabled={updatedFormValues?.sourcingChannel !== 'Others'}
+                      {...getInputProps(
+                        'otherSourcingChannel',
+                        'Other Source',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name='firstName'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      required
+                      sx={{ width: '18%' }}
+                      type='text'
+                      {...getInputProps(
+                        'firstName',
+                        'First Name',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name='lastName'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      sx={{ width: '18%' }}
+                      {...getInputProps(
+                        'lastName',
+                        'Last Name',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+                <FormControl
+                  sx={{ minWidth: 120, display: 'flex', width: '18%' }}
+                  size='small'
+                >
+                  <InputLabel required id='demo-select-small'>
+                    Gender
+                  </InputLabel>
+                  <Controller
+                    control={control}
+                    name='gender'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <Select
+                          {...getSelectProps(
+                            'gender',
+                            'Gender',
+                            value,
+                            error,
+                            onChange,
+                            handleProfile,
+                            updatedFormValues,
+                            id || ID
+                          )}
+                        >
+                          {dropDownList.gender.map((item) => (
+                            <MenuItem key={item.key} value={item.key}>
+                              {item.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {error?.message ? (
+                          <FormHelperText error={true}>
+                            {error?.message}
+                          </FormHelperText>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </FormControl>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  mt: 4,
+                }}
+              >
+                <Controller
+                  control={control}
+                  name='mobileNo'
+                  render={({
+                    field: { onChange, onBlur, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      required
+                      type='number'
+                      sx={{
+                        width: '18%',
+                        '& input[type=number]': {
+                          '-moz-appearance': 'textfield',
+                        },
+                        '& input[type=number]::-webkit-outer-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                        '& input[type=number]::-webkit-inner-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                      }}
+                      {...getInputProps(
+                        'mobileNo',
+                        'Phone Number',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange,
+                        checkMobileNumber
+                      )}
+                      autoComplete='mobileNo'                     
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name='secondaryMobileNumber'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      sx={{
+                        width: '18%',
+                        '& input[type=number]': {
+                          '-moz-appearance': 'textfield',
+                        },
+                        '& input[type=number]::-webkit-outer-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                        '& input[type=number]::-webkit-inner-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                      }}
+                      type='number'
+                      onWheel={(e) => e.target.blur()}
+                      {...getInputProps(
+                        'secondaryMobileNumber',
+                        'Alternate Phone Number',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                      autoComplete='secondary-mobileNo'
+                      onInput={(e) => {
+                        e.target.value = Math.max(0, parseInt(e.target.value))
+                          .toString()
+                          .slice(0, 6);
+                      }}
+                    />
+                  )}
+                />
+                <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+                  <InputLabel required>Whatsapp Available?</InputLabel>
+                  <Controller
+                    control={control}
+                    name='whatsappAvailable'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <Select
+                          {...getSelectProps(
+                            'whatsappAvailable',
+                            'Whatsapp Available',
+                            value,
+                            error,
+                            onChange,
+                            handleProfile,
+                            updatedFormValues,
+                            id || ID,
+                            setValue,
+                            {
+                              key: 'whatsappNumber',
+                              values: updatedFormValues,
+                              getValue: getWhatsUp,
+                            }
+                          )}
+                        >
+                          {WhatsAppStatus.map((item) => (
+                            <MenuItem key={item.value} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {error?.message ? (
+                          <FormHelperText error={true}>
+                            {error?.message}
+                          </FormHelperText>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </FormControl>
+                <Controller
+                  control={control}
+                  name='whatsappNumber'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      {...(updatedFormValues?.whatsappAvailable ===
+                        'mobileNumber' ||
+                      updatedFormValues?.whatsappAvailable ===
+                        'secondaryNumber' ||
+                      updatedFormValues?.whatsappAvailable === 'otherNumber'
+                        ? { required: true }
+                        : {})}
+                      sx={{
+                        width: '18%',
+                        '& input[type=number]': {
+                          '-moz-appearance': 'textfield',
+                        },
+                        '& input[type=number]::-webkit-outer-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                        '& input[type=number]::-webkit-inner-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                      }}
+                      type='number'
+                      disabled={
+                        updatedFormValues.whatsappAvailable === 'notAvailable'
+                      }
+                      {...getInputProps(
+                        'whatsappNumber',
+                        'Whatsapp Number',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name='age'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      sx={{
+                        width: '18%',
+                        '& input[type=number]': {
+                          '-moz-appearance': 'textfield',
+                        },
+                        '& input[type=number]::-webkit-outer-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                        '& input[type=number]::-webkit-inner-spin-button': {
+                          '-webkit-appearance': 'none',
+                          margin: 0,
+                        },
+                      }}
+                      type='number'
+                      {...getInputProps(
+                        'age',
+                        'Age',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mt: 4,
+                }}
+              >
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Controller
+                    control={control}
+                    name='birthday'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <DesktopDatePicker
+                        label='DOB'
+                        value={value || ''}
+                        disableFuture
+                        onChange={async (dateValue) => {
+                          onChange(dateValue);
+                          handleInputChange('birthday', dateValue);
+                          const validated = await trigger('birthday');
+                          if (validated) {
+                            setValue('age', getAge(dateValue));
+                          } else {
+                            setValue('age', '');
+                          }
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            required
+                            {...params}
+                            sx={{ width: '18%' }}
+                            size='small'
+                            error={error?.message ? true : false}
+                            helperText={error?.message}
+                          />
+                        )}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+                <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+                  <InputLabel required>Marital Status</InputLabel>
+                  <Controller
+                    control={control}
+                    name='maritalStatus'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <Select
+                          {...getSelectProps(
+                            'maritalStatus',
+                            'Marital Status',
+                            value,
+                            error,
+                            onChange,
+                            handleProfile,
+                            updatedFormValues,
+                            id || ID
+                          )}
+                        >
+                          {dropDownList.marital.map((item) => (
+                            <MenuItem key={item.key} value={item.key}>
+                              {item.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {error?.message ? (
+                          <FormHelperText error={true}>
+                            {error?.message}
+                          </FormHelperText>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </FormControl>
+                <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+                  <InputLabel required>Religion</InputLabel>
+                  <Controller
+                    control={control}
+                    name='religion'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <Select
+                          {...getSelectProps(
+                            'religion',
+                            'Religion',
+                            value,
+                            error,
+                            onChange,
+                            handleProfile,
+                            updatedFormValues,
+                            id || ID
+                          )}
+                        >
+                          {dropDownList.religion.map((item) => (
+                            <MenuItem key={item.key} value={item.key}>
+                              {item.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {error?.message ? (
+                          <FormHelperText error={true}>
+                            {error?.message}
+                          </FormHelperText>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </FormControl>
+                <Controller
+                  control={control}
+                  name='otherReligion'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      {...(updatedFormValues?.religion === 'OTHERS'
+                        ? { required: true }
+                        : {})}
+                      sx={{ width: '18%' }}
+                      disabled={updatedFormValues?.religion !== 'OTHERS'}
+                      InputLabelProps={{ shrink: true }}
+                      {...getInputProps(
+                        'otherReligion',
+                        'Other Religion',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+                <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+                  <InputLabel id='demo-select-small'>
+                    Educational Qualifications
+                  </InputLabel>
+                  <Controller
+                    control={control}
+                    name='education'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <Select
+                          {...getSelectProps(
+                            'education',
+                            'Educational Qualifications',
+                            value,
+                            error,
+                            onChange,
+                            handleProfile,
+                            updatedFormValues,
+                            id || ID
+                          )}
+                        >
+                          {dropDownList.education.map((item) => (
+                            <MenuItem key={item.key} value={item.key}>
+                              {item.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {error?.message ? (
+                          <FormHelperText error={true}>
+                            {error?.message}
+                          </FormHelperText>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </FormControl>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  mt: 4,
+                }}
+              >
+                <Controller
+                  control={control}
+                  name='educationalRemarks'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      sx={{ width: '18%' }}
+                      {...getInputProps(
+                        'educationalRemarks',
+                        'Educational Remarks',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+                <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+                  <InputLabel required>COVID Vaccination Status</InputLabel>
+                  <Controller
+                    control={control}
+                    name='covidStatus'
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <>
+                        <Select
+                          {...getSelectProps(
+                            'covidStatus',
+                            'COVID Vaccination Status',
+                            value,
+                            error,
+                            onChange,
+                            handleInputChange,
+                            updatedFormValues,
+                            id || ID
+                          )}
+                        >
+                          {dropDownList.covid.map((item) => (
+                            <MenuItem key={item.key} value={item.key}>
+                              {item.value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {error?.message ? (
+                          <FormHelperText error={true}>
+                            {error?.message}
+                          </FormHelperText>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </FormControl>
+                <Controller
+                  control={control}
+                  name='medicalCondition'
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      sx={{ width: '59%' }}
+                      {...getInputProps(
+                        'medicalCondition',
+                        'Medical Condition(if any)',
+                        value,
+                        '',
+                        error,
+                        onChange,
+                        handleInputChange
+                      )}
+                    />
+                  )}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'end',
+                  height: '100px',
+                  justifyContent: 'right',
+                  gap: '20px',
+                }}
+              >
+                <Button variant='contained' type='submit'>
+                  Save
+                </Button>
+                <Button
+                  variant='contained'
+                  onClick={handleSubmit((fields) =>
+                    handleProfile(fields, true, true)
+                  )}
+                >
+                  next
+                </Button>
+              </Box>
+            </form>
+          </ThemeProvider>
         </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4, }}>
-          <TextField required
-            type="number"
-            sx={{
-              width: "18%",
-              '& input[type=number]': {
-                '-moz-appearance': 'textfield'
-              },
-              '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              },
-              '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              }
-            }}
-            size="small"
-            value={phoneNumber}
-            label="Phone Number"
-            onInput={(e) => {
-              e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
-            }}
-            onChange={(e) => {
-              setPhoneNumber(e.target.value);
-            }}
-            error={phoneNumber.length == 10 || phoneNumber.length < 1 ? false : true}
-            helperText={phoneNumber.length === 10 ? helperText : (phoneNumber.length == 10 || phoneNumber.length < 1 ? "" : "please fill 10 digit number")}
-          />
-
-          <TextField
-            sx={{
-              width: "18%",
-              '& input[type=number]': {
-                '-moz-appearance': 'textfield'
-              },
-              '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              },
-              '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              }
-            }}
-            size="small"
-            type="number"
-            onWheel={(e) => e.target.blur()}
-            id="outlined-basic"
-            label="Alternate Phone Number"
-            value={alternateNumber}
-            onInput={(e) => {
-              e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
-            }}
-            onChange={(e) => {
-              setAlternateNumber(e.target.value);
-            }}
-           error={alternateNumber !== null?( alternateNumber.length == 10||alternateNumber.length < 1  ? false : true):""}
-           helperText={alternateNumber !== null?( alternateNumber.length == 10||alternateNumber.length < 1  ? "" : "please fill 10 digit number"):""}
-          />
-
-          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-            <InputLabel id="demo-select-small" required>Whatsapp Available?</InputLabel>
-            <Select
-              sx={{ width: "100%" }}
-              labelId="demo-select-small"
-              id="demo-select-small"
-              value={whatsappAvailable}
-              label="Whatsapp Available  "
-              onChange={(e) => {
-                setWhatsappAvailable(e.target.value);
-              }}
-            >
-              {WhatsAppStatus.map((item, index) => (
-                <MenuItem key={index} value={item.value}>{item.value}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <TextField
-            sx={{
-              width: "18%",
-              '& input[type=number]': {
-                '-moz-appearance': 'textfield'
-              },
-              '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              },
-              '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              }
-            }}
-            size="small"
-            id="outlined-basic"
-            type="number"
-            label="Whatsapp Number*"
-            value={whatsapp}
-            onInput={(e) => {
-              e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
-            }}
-            onChange={(e) => {
-              setWhatsapp(e.target.value);
-            }}
-            disabled={whatsappAvailable === "Not Available" ? true : false}
-            error={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 || whatsapp.length < 1 ? false : true) : false}
-            helperText={whatsappAvailable ? (whatsapp != null && whatsapp.length == 10 || whatsapp.length < 1 ? "" : "please fill 10 digit number") : ""}
-          />
-
-          <TextField
-            sx={{
-              width: "18%",
-              '& input[type=number]': {
-                '-moz-appearance': 'textfield'
-              },
-              '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              },
-              '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0
-              }
-            }}
-            size="small"
-            value={age}
-            type="number"
-            id="outlined-basic"
-            label="Age"
-            variant="outlined"
-            onChange={(event) => {
-              setAge(event.target.value);
-            }}
-            onInput={(e) => {
-              e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 2)
-            }}
-          />
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mt: 4,
-          }}
-        >
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DesktopDatePicker
-              label="DOB"
-              value={birthday}
-              onChange={(newValue) => {
-                setBirthday(newValue);
-              }}
-              renderInput={(params) => (
-                <TextField required {...params} size="small" sx={{ width: "18%" }} />
-              )}
-            />
-          </LocalizationProvider>
-
-          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-            <InputLabel id="demo-select-small" required>Marital Status</InputLabel>
-            <Select
-              sx={{ width: "100%" }}
-              labelId="demo-select-small"
-              value={maritalStatus}
-              id="demo-select-small"
-              label="Marital Status"
-              onChange={(e) => {
-                setMaritalStatus(e.target.value);
-              }}
-            >
-              {maritalDD.map((item) => (
-                <MenuItem value={item.key}>{item.value}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-            <InputLabel id="demo-select-small" required>Religion</InputLabel>
-            <Select
-              sx={{ width: "100%" }}
-              labelId="demo-select-small"
-              value={religion}
-              id="demo-select-small"
-              label="Religion"
-              onChange={(e) => {
-                setReligion(e.target.value);
-              }}
-            >
-              {religionDD.map((item) => (
-                <MenuItem value={item.key}>{item.value}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-
-          <TextField
-            label="Other Religion"
-            size="small"
-            sx={{ width: "18%", }}
-            disabled={religion === "OTHERS" ? false : true}
-            value={otherreligion}
-            InputLabelProps={{ shrink: true }}
-            onChange={(e)=>{setOtherReligion(e.target.value)}}
-          />
-
-          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-            <InputLabel id="demo-select-small">
-              Educational Qualifications
-            </InputLabel>
-            <Select
-              sx={{ width: "100%" }}
-              labelId="demo-select-small"
-              id="demo-select-small"
-              value={education}
-              label="Educational Qualifications"
-              onChange={(e) => {
-                setEducation(e.target.value);
-              }}
-            >
-
-
-
-              {educationDD.map((item) => (
-                <MenuItem value={item.key}>{item.value}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-        
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mt: 4,
-          }}
-        >
-            <TextField
-            sx={{ width: "18%" }}
-            size="small"
-            id="outlined-basic"
-            value={educationalRemarks}
-            label="Educational Remarks"
-            variant="outlined"
-            onChange={(e) => {
-              setEducationalRemarks(e.target.value);
-            }}
-          />
-
-          <FormControl sx={{ minWidth: 120, width: "18%" }} size="small">
-            <InputLabel id="demo-select-small" required>
-              COVID Vaccination Status
-            </InputLabel>
-            <Select
-              sx={{ width: "100%" }}
-              value={covidStatus}
-              label="COVID Vaccination Status*"
-              onChange={(e) => {
-                setCovidStatus(e.target.value);
-              }}
-            >
-              {covidDD.map((item) => (
-                <MenuItem value={item.key}>{item.value}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <TextField
-            sx={{ width: "59%" }}
-            size="small"
-            id="outlined-basic"
-            value={medicalCondition}
-            label="Medical Condition(if any)"
-            variant="outlined"
-            onChange={(e) => {
-              setMedicalCondition(e.target.value);
-            }}
-          />
-        </Box>
-      </form>
-    </ThemeProvider>
+      </Box>
+    </>
   );
-}
+};
 
-const WhatsAppStatus = [
-  { key: true, value: "Same as mobile number" },
-  { key: true, value: "Same as alternte number" },
-  { key: true, value: "Other number" },
-  { key: false, value: "Not Available" },
-]
-export default PersonalInfo;
-
-
+export default memo(PersonalInfo);
