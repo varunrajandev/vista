@@ -37,6 +37,8 @@ import DropDown from '../../../components/shared/DropDown';
 const {
   CX_SOURCE,
   PROFESSION,
+  RELIGION,
+  GENDER,
   YCW: { GET_PROFILE },
   CUSTOMER: { POST },
 } = ENDPOINTS;
@@ -118,6 +120,8 @@ const PersonalInfo = ({ view }) => {
   const [dropDownList, setDropDownList] = useState({
     source: [],
     profession: [],
+    gender: [],
+    religion: [],
   });
 
   // navigate
@@ -158,15 +162,27 @@ const PersonalInfo = ({ view }) => {
 
   // call the drop down api
   useEffect(() => {
-    axios.all([CX_SOURCE, PROFESSION].map((url) => Axios.get(url))).then(
-      axios.spread(({ data: source }, { data: profession }) =>
-        setDropDownList((prevState) => ({
-          ...prevState,
-          source: source?.data ?? [],
-          profession: profession?.data ?? [],
-        }))
+    axios
+      .all(
+        [CX_SOURCE, PROFESSION, RELIGION, GENDER].map((url) => Axios.get(url))
       )
-    );
+      .then(
+        axios.spread(
+          (
+            { data: source },
+            { data: profession },
+            { data: religion },
+            { data: gender }
+          ) =>
+            setDropDownList((prevState) => ({
+              ...prevState,
+              source: source?.data ?? [],
+              profession: profession?.data ?? [],
+              religion: religion?.data ?? [],
+              gender: gender?.data ?? [],
+            }))
+        )
+      );
   }, []);
 
   /**
@@ -358,6 +374,47 @@ const PersonalInfo = ({ view }) => {
             />
           )}
         />
+        <FormControl
+          sx={{ minWidth: 120, display: 'flex', width: '18%' }}
+          size='small'
+        >
+          <InputLabel id='demo-select-small'>Gender</InputLabel>
+          <Controller
+            control={control}
+            name='gender'
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <>
+                <DropDown
+                  {...getDropDownProps(
+                    'gender',
+                    'Gender',
+                    value,
+                    error,
+                    onChange
+                  )}
+                >
+                  {dropDownList.gender.map((item) => (
+                    <MenuItem key={item.key} value={item.key}>
+                      {item.value}
+                    </MenuItem>
+                  ))}
+                </DropDown>
+                {error?.message ? (
+                  <FormHelperText error={true}>{error?.message}</FormHelperText>
+                ) : null}
+              </>
+            )}
+          />
+        </FormControl>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mt: 2,
+        }}
+      >
         <Controller
           control={control}
           name='mobileNo'
@@ -394,14 +451,6 @@ const PersonalInfo = ({ view }) => {
             />
           )}
         />
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          mt: 4,
-        }}
-      >
         <Controller
           control={control}
           name='secondaryMobileNumber'
@@ -561,8 +610,16 @@ const PersonalInfo = ({ view }) => {
             />
           )}
         />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          mt: 2,
+        }}
+      >
         <FormControl
-          sx={{ minWidth: 120, width: '18%' }}
+          sx={{ minWidth: 120, width: '18%', marginRight: '32px' }}
           size='small'
           {...(view ? { variant: 'filled' } : {})}
           disabled={view}
@@ -592,6 +649,59 @@ const PersonalInfo = ({ view }) => {
             )}
           />
         </FormControl>
+        <FormControl
+          sx={{ minWidth: 120, width: '18%', marginRight: '32px' }}
+          size='small'
+        >
+          <InputLabel>Religion</InputLabel>
+          <Controller
+            control={control}
+            name='religion'
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <>
+                <DropDown
+                  {...getDropDownProps(
+                    'religion',
+                    'Religion',
+                    value,
+                    error,
+                    onChange
+                  )}
+                >
+                  {dropDownList.religion.map((item) => (
+                    <MenuItem key={item.key} value={item.key}>
+                      {item.value}
+                    </MenuItem>
+                  ))}
+                </DropDown>
+                {error?.message ? (
+                  <FormHelperText error={true}>{error?.message}</FormHelperText>
+                ) : null}
+              </>
+            )}
+          />
+        </FormControl>
+        <Controller
+          control={control}
+          name='otherReligion'
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              {...(updatedFormValues?.religion === 'OTHERS' ? {} : {})}
+              // ? { required: true }
+              sx={{ width: '18%' }}
+              disabled={updatedFormValues?.religion !== 'OTHERS'}
+              InputLabelProps={{ shrink: true }}
+              {...getInputProps(
+                'otherReligion',
+                'Other Religion',
+                value,
+                '',
+                error,
+                onChange
+              )}
+            />
+          )}
+        />
       </Box>
       {!view ? (
         <StepperButtons
@@ -599,7 +709,9 @@ const PersonalInfo = ({ view }) => {
           nextUrl={true}
           handleNext={handleSubmit(() => handleSave(false, true))}
         />
-      ) : <br/>}
+      ) : (
+        <br />
+      )}
     </form>
   );
 };

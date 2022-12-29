@@ -87,6 +87,8 @@ export const COLUMNS = [
 
 // Person Form fields
 export const PERSON_INFO_FORM_FIELDS = {
+  gender: null,
+  religion: null,
   sourcingChannel: null,
   firstName: null,
   middleName: null,
@@ -100,6 +102,7 @@ export const PERSON_INFO_FORM_FIELDS = {
   userType: 'CUSTOMER',
   user: null,
   profileStatus: 'IN_ACTIVE',
+  otherReligion: null
 };
 
 // Post Person Form Fields
@@ -115,7 +118,13 @@ export const POST_PERSON_INFO_FORM_FIELDS = ({
   email = null,
   professsion = null,
   userId = null,
+  gender = null,
+  religion = null,
+  otherReligion = null
 }) => ({
+  otherReligion,
+  gender,
+  religion,
   userId,
   sourcingChannel,
   firstName,

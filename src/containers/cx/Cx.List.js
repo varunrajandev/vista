@@ -385,7 +385,7 @@ const List = () => {
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
-                    {row.openJobs}
+                    {row.openJob}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_active`}

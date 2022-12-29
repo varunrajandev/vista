@@ -122,26 +122,30 @@ const BasicInfo = ({ redirect, view }) => {
 
   // call api & get the job details by id
   useEffect(() => {
-    const url = redirect ? `userId=${id}` : `jobId=${id}`;
-    Axios.get(`${GET_BY_ID}?${url}`)
-      .then((res) => res.data)
-      .then((res) => {
-        if (res?.status ?? false) {
-          if (!redirect) {
-            Axios.get(`${USERS_URL.url}${res?.data?.userId}&userType=CUSTOMER`)
-              .then((r) => r.data)
-              .then((r) => {
-                setDropDownList((prevState) => ({
-                  ...prevState,
-                  customer: r?.data ?? [],
-                }));
-                reset({ ...(res?.data ?? {}) });
-              });
-          } else {
-            reset({ ...(res?.data ?? {}) });
+    if (id) {
+      const url = redirect ? `userId=${id}` : `jobId=${id}`;
+      Axios.get(`${GET_BY_ID}?${url}`)
+        .then((res) => res.data)
+        .then((res) => {
+          if (res?.status ?? false) {
+            if (!redirect) {
+              Axios.get(
+                `${USERS_URL.url}${res?.data?.userId}&userType=CUSTOMER`
+              )
+                .then((r) => r.data)
+                .then((r) => {
+                  setDropDownList((prevState) => ({
+                    ...prevState,
+                    customer: r?.data ?? [],
+                  }));
+                  reset({ ...(res?.data ?? {}) });
+                });
+            } else {
+              reset({ ...(res?.data ?? {}) });
+            }
           }
-        }
-      });
+        });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, reset]);
 

@@ -235,7 +235,7 @@ const AddressInfo = ({ view }) => {
         }}
         updatedValues={updatedFormFields}
         skip
-        view
+        view={view}
       />
       {!view ? (
         <StepperButtons
