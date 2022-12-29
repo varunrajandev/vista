@@ -14,6 +14,7 @@ import { ENDPOINTS } from '../../../config/api.config';
 import { ADDRESS_INFO_FORM_FIELDS } from '../Ycw.Config';
 import { addressFormSchema } from '../../../utils/validation-schema.util';
 import ROUTE_CONFIG from '../../../config/route.config';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
 
 // Destructuring
 const {
@@ -127,15 +128,17 @@ const AddressInfo = () => {
       Axios.get(`${GET_ADDRESS}${id}`)
         .then((res) => res.data)
         .then((res) => {
-          // call the related dropdown apis
-          handleDropDownAPIs('currentAddress', res.data[0]);
-          handleDropDownAPIs('permanentAddress', res.data[1]);
-          // update the state
-          reset({
-            currentAddress: { ...res.data[0] },
-            permanentAddress: { ...res.data[1] },
-          });
-          setIsPermanent(res.data[1]?.permanentSameAsCurrent ?? false);
+          if (res?.status ?? false) {
+            // call the related dropdown apis
+            handleDropDownAPIs('currentAddress', res.data?.[0] ?? {});
+            handleDropDownAPIs('permanentAddress', res?.data?.[1] ?? {});
+            // update the state
+            reset({
+              currentAddress: { ...(res?.data?.[0] ?? {}) },
+              permanentAddress: { ...(res?.data?.[1] ?? {}) },
+            });
+            setIsPermanent(res?.data?.[1]?.permanentSameAsCurrent ?? false);
+          }
         });
     }
   }, [handleDropDownAPIs, id, reset]);
@@ -211,18 +214,19 @@ const AddressInfo = () => {
     const updatedFormValues = { ...getValues() };
     Axios.post(SAVE_ADDRESS, [
       {
-        ...updatedFormValues.currentAddress,
+        ...convertEmptyStringIntoNull(updatedFormValues.currentAddress),
         userId: id,
         permanent: false,
-        addressProofType: updatedFormValues?.currentAddress?.addressProofType || null
-        
+        addressProofType:
+          updatedFormValues?.currentAddress?.addressProofType || null,
       },
       {
-        ...updatedFormValues.permanentAddress,
+        ...convertEmptyStringIntoNull(updatedFormValues.permanentAddress),
         userId: id,
         permanent: true,
         permanentSameAsCurrent: isPermanent,
-        addressProofType: updatedFormValues?.permanentAddress?.addressProofType || null
+        addressProofType:
+          updatedFormValues?.permanentAddress?.addressProofType || null,
       },
     ])
       .then((res) => res.data)
@@ -230,7 +234,7 @@ const AddressInfo = () => {
         setIsLoading(false);
         if (res?.status ?? false) {
           if (isNotify) {
-            setNotify({ message: res?.message ?? 'abc' });
+            setNotify({ message: res?.message ?? '' });
             setTimeout(() => setNotify({ message: '' }), 4000);
           }
           if (isNext) {

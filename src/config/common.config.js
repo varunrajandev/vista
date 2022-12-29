@@ -1,5 +1,6 @@
 // Bg Color
 export const GET_STATUS_BG_COLOR_CODE = {
+  CREATED: '#E6F4F1',
   ACTIVE: '#E6F4F1',
   INACTIVE: '#FEEFF0',
   IN_ACTIVE: '#FEEFF0',

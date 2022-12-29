@@ -1,35 +1,47 @@
 /***************LOCAL DEPENDENCIES ****************/
 import { ENDPOINTS } from '../../config/api.config';
+import ROUTE_CONFIG from '../../config/route.config';
 import { getColumnProps } from '../../utils/helper.util';
 
 // Destructuring
-const { CITY, JOBS_STATUS, LOCALITY, JOBS, USERS } = ENDPOINTS;
+const { CITY, JOBS_STATUS, LOCALITY_1, JOBS, USERS } = ENDPOINTS;
 
 // Urls
 export /** @type {*} */
 const URLS = [
   { key: 'city', url: CITY },
   { key: 'status', url: JOBS_STATUS },
-  { key: 'locality', url: LOCALITY },
+  { key: 'locality', url: LOCALITY_1 },
 ];
 export const GET_URL = { key: 'search', url: JOBS.GET };
 export const USERS_URL = { key: 'users', url: USERS };
-
+export const GET_URL_BY_ID = { key: 'detailsById', url: JOBS.GET_BY_ID };
 // Query Filters
 export /** @type {*} */
 const QUERY_FILTERS = {
-  city: '',
   filter: 'jobId',
-  jobActiveStage: '',
-  micromsrket: '',
   pageNo: 1,
   pageSize: 20,
   sortby: 'desc',
-  status: '',
 };
 
 /** @type {*} */
 export const MODULE_NAME = 'JOBS';
+
+// Links
+export const LINKS = [{ name: 'JOB', to: '', active: true }];
+
+// Button Links
+export const BUTTON_LINKS = {
+  EDIT: (id) => ({
+    to: ROUTE_CONFIG.JOBS.EDIT(id, 1),
+    text: 'EDIT JOB',
+  }),
+  CLOSE: {
+    to: '/jobs',
+    text: 'CLOSE',
+  },
+};
 
 // Table columns
 export const COLUMNS = [
@@ -46,7 +58,7 @@ export const COLUMNS = [
     style: true,
   },
   {
-    ...getColumnProps('cityName', 'LOCATION', '5%'),
+    ...getColumnProps('microMarketName', 'SUPPLY HUB', '5%'),
     style: true,
   },
   {
@@ -82,7 +94,7 @@ export const BASIC_INFO_FORM_FIELDS = {
   houseSize: 0,
   jobCurrentStatus: null,
   jobDescription: null,
-  jobStatus: null,
+  jobStatus: 'CREATED',
   landMark: null,
   language: null,
   maxBudget: 0,
@@ -97,4 +109,5 @@ export const BASIC_INFO_FORM_FIELDS = {
   traingType: null,
   userId: null,
   workingHours: null,
+  jobId: null,
 };

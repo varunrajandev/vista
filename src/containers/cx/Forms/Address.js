@@ -14,12 +14,13 @@ import { ENDPOINTS } from '../../../config/api.config';
 import { ADDRESS_INFO_FORM_FIELDS } from '../../ycw/Ycw.Config';
 import { addressFormSchema } from '../../../utils/validation-schema.util';
 import ROUTE_CONFIG from '../../../config/route.config';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
 
 // Destructuring
 const {
   STATE_BY_ID,
   COUNTRY,
-  GET_ADDRESS,
+  YCW: { GET_BY_ID },
   SAVE_ADDRESS,
   CITY_BY_ID,
   MARKET_BY_ID,
@@ -33,7 +34,7 @@ const address = {
   cityUuid: [],
 };
 
-const AddressInfo = () => {
+const AddressInfo = ({ view }) => {
   // local state
   const [notify, setNotify] = useState({ message: '' });
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +42,7 @@ const AddressInfo = () => {
     country: [],
     currentAddress: {
       ...address,
-    }
+    },
   });
   // get the id from url
   const { id, step } = useParams();
@@ -115,15 +116,20 @@ const AddressInfo = () => {
   // call the api when id exist
   useEffect(() => {
     if (id) {
-      Axios.get(`${GET_ADDRESS}${id}`)
+      Axios.get(`${GET_BY_ID}${id}`)
         .then((res) => res.data)
         .then((res) => {
-          // call the related dropdown apis
-          handleDropDownAPIs('currentAddress', res.data[0]);
-          // update the state
-          reset({
-            currentAddress: { ...res.data[0] },
-          });
+          if (res?.status ?? false) {
+            // call the related dropdown apis
+            handleDropDownAPIs(
+              'currentAddress',
+              res?.data?.addressDtos?.[0] ?? {}
+            );
+            // update the state
+            reset({
+              currentAddress: { ...(res?.data?.addressDtos?.[0] ?? {}) },
+            });
+          }
         });
     }
   }, [handleDropDownAPIs, id, reset]);
@@ -149,12 +155,11 @@ const AddressInfo = () => {
     setIsLoading(true);
     const updatedFormValues = { ...getValues() };
     Axios.post(SAVE_ADDRESS, [
-      { ...{ ...updatedFormValues.currentAddress, userId: id } },
       {
         ...{
-          ...updatedFormValues.permanentAddress,
+          ...convertEmptyStringIntoNull(updatedFormValues.currentAddress),
           userId: id,
-          permanent: !updatedFormValues.currentAddress.permanent,
+          permanent: false,
         },
       },
     ])
@@ -163,14 +168,14 @@ const AddressInfo = () => {
         setIsLoading(false);
         if (res?.status ?? false) {
           if (isNotify) {
-            setNotify({ message: res?.message ?? 'abc' });
+            setNotify({ message: res?.message ?? '' });
             setTimeout(() => setNotify({ message: '' }), 4000);
           }
           if (isNext) {
             navigate(
-              ROUTE_CONFIG.YCW.EDIT(
+              ROUTE_CONFIG.CX.EDIT(
                 res?.data[0]?.userId ?? '',
-                parseInt(step || 4) + 1
+                parseInt(step || 2) + 1
               )
             );
           }
@@ -230,13 +235,16 @@ const AddressInfo = () => {
         }}
         updatedValues={updatedFormFields}
         skip
+        view
       />
-      <StepperButtons
-        loading={isLoading}
-        nextUrl={true}
-        backUrl={ROUTE_CONFIG.YCW.EDIT(id, parseInt(step || 4) - 1)}
-        handleNext={handleSubmit(() => handleSave(false, true))}
-      />
+      {!view ? (
+        <StepperButtons
+          loading={isLoading}
+          nextUrl={true}
+          backUrl={ROUTE_CONFIG.CX.EDIT(id, parseInt(step || 2) - 1)}
+          handleNext={handleSubmit(() => handleSave(false, true))}
+        />
+      ) : <br />}
     </form>
   );
 };

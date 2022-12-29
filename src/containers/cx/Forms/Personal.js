@@ -8,7 +8,6 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
-  Select,
   FormHelperText,
 } from '@mui/material';
 import { debounce, size, isEmpty } from 'lodash';
@@ -24,16 +23,22 @@ import {
   WHATS_UP,
   GET_WHATS_UP_MAPPER,
 } from '../../ycw/Ycw.Config';
-import { PERSON_INFO_FORM_FIELDS } from './../Cx.Config';
+import {
+  PERSON_INFO_FORM_FIELDS,
+  POST_PERSON_INFO_FORM_FIELDS,
+} from './../Cx.Config';
 import { Axios } from '../../../http';
 import ROUTE_CONFIG from '../../../config/route.config';
 import { ENDPOINTS } from '../../../config/api.config';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
+import DropDown from '../../../components/shared/DropDown';
 
 // Destructuring
 const {
   CX_SOURCE,
   PROFESSION,
-  CUSTOMER: { GET_BY_ID, POST },
+  YCW: { GET_PROFILE },
+  CUSTOMER: { POST },
 } = ENDPOINTS;
 
 /**
@@ -46,7 +51,7 @@ const {
  * @param {function|null} [extraFn=null]
  * @param {object|null} [extraProps=null]
  */
-const getSelectProps = (
+const getDropDownProps = (
   key,
   label,
   value,
@@ -106,7 +111,7 @@ const getInputProps = (
  * @description
  * @param {*}
  */
-const PersonalInfo = () => {
+const PersonalInfo = ({ view }) => {
   // local state
   const [notify, setNotify] = useState({ message: '' });
   const [isLoading, setIsLoading] = useState(false);
@@ -143,9 +148,11 @@ const PersonalInfo = () => {
   // call the user details by id
   useEffect(() => {
     if (id) {
-      Axios.get(`${GET_BY_ID}${id}`)
+      Axios.get(`${GET_PROFILE}${id}`)
         .then((res) => res.data)
-        .then((res) => reset(res?.data ?? {}));
+        .then((res) =>
+          reset(POST_PERSON_INFO_FORM_FIELDS({ ...(res?.data ?? {}) }))
+        );
     }
   }, [id]);
 
@@ -171,7 +178,7 @@ const PersonalInfo = () => {
     setIsLoading(true);
     const updatedValues = { ...getValues() };
     Axios.post(POST, {
-      ...updatedValues,
+      ...convertEmptyStringIntoNull(updatedValues),
     })
       .then((res) => res.data)
       .then((res) => {
@@ -184,7 +191,7 @@ const PersonalInfo = () => {
             }, 4000);
           }
           navigate(
-            ROUTE_CONFIG.YCW.EDIT(
+            ROUTE_CONFIG.CX.EDIT(
               res?.data?.userId ?? '',
               isNext ? parseInt(step || 1) + 1 : 1
             )
@@ -209,17 +216,18 @@ const PersonalInfo = () => {
     setValue('whatsappAvailable', '');
     setValue('whatsappNumber', '');
     if (phoneNumber.length === 10) {
-      Axios.get(`${CHECK_DUPLICATE_MOBILE}${phoneNumber}?userId=${id}`).then(
-        (res) =>
-          res?.data?.data
-            ? setError('mobileNo', { message: res?.data?.message ?? '' })
-            : clearErrors('mobileNo')
+      Axios.get(
+        `${CHECK_DUPLICATE_MOBILE}${phoneNumber}?userId=${id}&userType=CUSTOMER`
+      ).then((res) =>
+        res?.data?.data
+          ? setError('mobileNo', { message: res?.data?.message ?? '' })
+          : clearErrors('mobileNo')
       );
     } else {
       clearErrors('mobileNo');
     }
   };
-  console.log(dropDownList, 'dropDownList');
+
   // update data on change
   useEffect(() => {
     const subscription = watch(async (value, { name, type }) => {
@@ -258,15 +266,20 @@ const PersonalInfo = () => {
           alignItems: 'center',
         }}
       >
-        <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
-          <InputLabel required>Sourcing Channel</InputLabel>
+        <FormControl
+          sx={{ minWidth: 120, width: '18%' }}
+          size='small'
+          {...(view ? { variant: 'filled' } : {})}
+          disabled={view}
+        >
+          <InputLabel>Sourcing Channel</InputLabel>
           <Controller
             control={control}
             name='sourcingChannel'
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <>
-                <Select
-                  {...getSelectProps(
+                <DropDown
+                  {...getDropDownProps(
                     'sourcingChannel',
                     'Sourcing Channel',
                     value,
@@ -279,7 +292,7 @@ const PersonalInfo = () => {
                       {item.value}
                     </MenuItem>
                   ))}
-                </Select>
+                </DropDown>
                 {error?.message ? (
                   <FormHelperText error={true}>{error?.message}</FormHelperText>
                 ) : null}
@@ -292,7 +305,6 @@ const PersonalInfo = () => {
           name='firstName'
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
-              required
               sx={{ width: '18%' }}
               type='text'
               {...getInputProps(
@@ -303,6 +315,8 @@ const PersonalInfo = () => {
                 error,
                 onChange
               )}
+              {...(view ? { variant: 'filled' } : {})}
+              disabled={view}
             />
           )}
         />
@@ -320,6 +334,8 @@ const PersonalInfo = () => {
                 error,
                 onChange
               )}
+              {...(view ? { variant: 'filled' } : {})}
+              disabled={view}
             />
           )}
         />
@@ -337,6 +353,8 @@ const PersonalInfo = () => {
                 error,
                 onChange
               )}
+              {...(view ? { variant: 'filled' } : {})}
+              disabled={view}
             />
           )}
         />
@@ -371,6 +389,8 @@ const PersonalInfo = () => {
                 checkMobileNumber
               )}
               autoComplete='mobileNo'
+              {...(view ? { variant: 'filled' } : {})}
+              disabled={view}
             />
           )}
         />
@@ -415,20 +435,27 @@ const PersonalInfo = () => {
               onInput={(e) => {
                 e.target.value = Math.max(0, parseInt(e.target.value))
                   .toString()
-                  .slice(0, 6);
+                  .slice(0, 10);
               }}
+              {...(view ? { variant: 'filled' } : {})}
+              disabled={view}
             />
           )}
         />
-        <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
-          <InputLabel required>Whatsapp Available?</InputLabel>
+        <FormControl
+          sx={{ minWidth: 120, width: '18%' }}
+          size='small'
+          {...(view ? { variant: 'filled' } : {})}
+          disabled={view}
+        >
+          <InputLabel>Whatsapp Available?</InputLabel>
           <Controller
             control={control}
             name='whatsappAvailable'
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <>
-                <Select
-                  {...getSelectProps(
+                <DropDown
+                  {...getDropDownProps(
                     'whatsappAvailable',
                     'Whatsapp Available',
                     value,
@@ -449,7 +476,7 @@ const PersonalInfo = () => {
                         </MenuItem>
                       ))
                     : null}
-                </Select>
+                </DropDown>
                 {error?.message ? (
                   <FormHelperText error={true}>{error?.message}</FormHelperText>
                 ) : null}
@@ -465,7 +492,7 @@ const PersonalInfo = () => {
               {...(updatedFormValues?.whatsappAvailable === 'mobileNumber' ||
               updatedFormValues?.whatsappAvailable === 'secondaryNumber' ||
               updatedFormValues?.whatsappAvailable === 'otherNumber'
-                ? { required: true }
+                ? {}
                 : {})}
               sx={{
                 width: '18%',
@@ -485,7 +512,8 @@ const PersonalInfo = () => {
               disabled={
                 updatedFormValues.whatsappAvailable === 'notAvailable' ||
                 updatedFormValues?.whatsappAvailable === 'mobileNumber' ||
-                updatedFormValues?.whatsappAvailable === 'secondaryNumber'
+                updatedFormValues?.whatsappAvailable === 'secondaryNumber' ||
+                view
               }
               {...getInputProps(
                 'whatsappNumber',
@@ -495,6 +523,7 @@ const PersonalInfo = () => {
                 error,
                 onChange
               )}
+              {...(view ? { variant: 'filled' } : {})}
             />
           )}
         />
@@ -503,7 +532,7 @@ const PersonalInfo = () => {
           name='email'
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
-              type='number'
+              type='text'
               sx={{
                 width: '18%',
                 '& input[type=number]': {
@@ -524,22 +553,28 @@ const PersonalInfo = () => {
                 value,
                 '',
                 error,
-                onChange,
-                checkMobileNumber
+                onChange
               )}
               autoComplete='email'
+              {...(view ? { variant: 'filled' } : {})}
+              disabled={view}
             />
           )}
         />
-        <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+        <FormControl
+          sx={{ minWidth: 120, width: '18%' }}
+          size='small'
+          {...(view ? { variant: 'filled' } : {})}
+          disabled={view}
+        >
           <InputLabel>Profession</InputLabel>
           <Controller
             control={control}
             name='professsion'
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <>
-                <Select
-                  {...getSelectProps(
+                <DropDown
+                  {...getDropDownProps(
                     'professsion',
                     'Profession',
                     value,
@@ -552,17 +587,19 @@ const PersonalInfo = () => {
                       {item.value}
                     </MenuItem>
                   ))}
-                </Select>
+                </DropDown>
               </>
             )}
           />
         </FormControl>
       </Box>
-      <StepperButtons
-        loading={isLoading}
-        nextUrl={true}
-        handleNext={handleSubmit(() => handleSave(false, true))}
-      />
+      {!view ? (
+        <StepperButtons
+          loading={isLoading}
+          nextUrl={true}
+          handleNext={handleSubmit(() => handleSave(false, true))}
+        />
+      ) : <br/>}
     </form>
   );
 };

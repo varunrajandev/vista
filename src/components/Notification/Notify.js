@@ -7,7 +7,7 @@ import { Alert, Snackbar } from '@mui/material';
  * @param {*} { notify }
  */
 const Notify = ({ notify }) => (
-  <Snackbar open={notify?.message ?? false} autoHideDuration={5000}>
+  <Snackbar open={notify?.message ? true : false} autoHideDuration={5000}>
     <Alert severity={notify?.type ?? 'success'}>{notify?.message ?? ''}</Alert>
   </Snackbar>
 );

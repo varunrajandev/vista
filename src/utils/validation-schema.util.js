@@ -70,7 +70,7 @@ const personalFormSchema = yup.object().shape({
     .nullable()
     .min(new Date(1900, 0, 1), 'DOB must be later')
     .max(new Date(), 'Date not greater then today')
-    .typeError('Please Enter valid DOB format dd/mm/yyyy')
+    .typeError('Please Enter valid DOB format mm/dd/yyyy')
     .notRequired('Date is required'),
   maritalStatus: yup
     .string()
@@ -121,11 +121,15 @@ const jobFormSchema = yup.object().shape({
     .notRequired('Preferred Job Types is required'),
   startTime: yup
     .date()
+    .nullable()
+    .transform((v, o) => (o === '' ? null : v))
     .notRequired()
     .max(yup.ref('endTime'), 'Please Enter Start Time Greater Then End Time')
     .typeError('Please Enter Valid Time'),
   endTime: yup
     .date()
+    .nullable()
+    .transform((v, o) => (o === '' ? null : v))
     .notRequired()
     .min(yup.ref('startTime'), 'Please Enter End Time less Then Start Time'),
   traningMode: yup.string().nullable().notRequired('Training mode is required'),
@@ -145,11 +149,13 @@ const houseHoldFormSchema = yup.object().shape({
       mobileNo: yup
         .string()
         .nullable()
-        .notRequired('Mobile Number is required')
-        .matches(/^[0-9]{10}$/, 'Please Enter Valid Phone Number'),
+        .transform((v, o) => (o === '' ? null : v))
+        .matches(/^[0-9]{10}$/, 'Please Enter Valid Phone Number')
+        .notRequired('Mobile Number is required'),
       relationship: yup
         .string()
         .nullable()
+        .transform((v, o) => (o === '' ? null : v))
         .notRequired('Relationship is required'),
     })
   ),
@@ -181,12 +187,17 @@ const bankFormSchema = yup.object().shape({
 
 export /** @type {*} */
 const basicInfoFormSchema = yup.object().shape({
-  skillUuid: yup.string().nullable().notRequired('Please select Job Type'),
-  familyMember: yup
-    .string()
+  userId: yup.string().nullable().required('Please Select Customer'),
+  skillUuid: yup.string().nullable().required('Please select Job Type'),
+  workingHours: yup.string().nullable().required('Please select Working Hours'),
+  startDate: yup
+    .date()
     .nullable()
-    .notRequired('Members in Family is required')
-    .matches(/^[0-9]$/, 'Please Enter Valid Family Members'),
+    .transform((v, o) => (o === '' ? null : v))
+    .min(new Date(1900, 0, 1), 'Start must be later')
+    .max(new Date(), 'Start Date not greater then today')
+    .typeError('Please Enter valid Start Date format mm/dd/yyyy')
+    .notRequired('Date is required'),
 });
 
 export /** @type {*} */
@@ -194,38 +205,52 @@ const perFormSchema = yup.object().shape({
   sourcingChannel: yup
     .string()
     .nullable()
-    .required('Sourcing Channel is required'),
+    .notRequired('Sourcing Channel is required'),
   firstName: yup
     .string()
     .nullable()
-    .required('First Name is required')
+    .notRequired('First Name is required')
+    .transform((v, o) => (o === '' ? null : v))
     .matches(/^[A-Za-z ]*$/, 'Please Enter Only Alphabet'),
   middleName: yup
     .string()
     .nullable()
+    .transform((v, o) => (o === '' ? null : v))
     .matches(/^[A-Za-z ]*$/, 'Please Enter Only Alphabet'),
   lastName: yup
     .string()
     .nullable()
+    .transform((v, o) => (o === '' ? null : v))
     .matches(/^[A-Za-z ]*$/, 'Please Enter Only Alphabet'),
   mobileNo: yup
     .string()
     .nullable()
     .required('Phone Number is Required')
+    .transform((v, o) => (o === '' ? null : v))
     .matches(/^[0-9]{10}$/, 'Please Enter Valid Phone Number'),
-  secondaryMobileNumber: yup.string().nullable(),
+  secondaryMobileNumber: yup
+    .string()
+    .nullable()
+    .transform((v, o) => (o === '' ? null : v))
+    .matches(/^[0-9]{10}$/, 'Please Enter Valid Phone Number'),
   whatsappAvailable: yup
     .string()
     .nullable()
-    .required('Whatsapp Available is required'),
+    .transform((v, o) => (o === '' ? null : v))
+    .notRequired('Whatsapp Available is required'),
   whatsappNumber: yup.string().when('whatsappAvailable', {
     is: (val) =>
       val === 'otherNumber' ||
       val === 'mobileNumber' ||
       val === 'secondaryNumber',
-    then: (schema) => schema.nullable().required('Other Number is required'),
+    then: (schema) => schema.nullable().notRequired('Other Number is required'),
     otherwise: (schema) => schema.nullable().notRequired(),
   }),
+  email: yup
+    .string()
+    .nullable()
+    .transform((v, o) => (o === '' ? null : v))
+    .email('Please Enter Valid Email'),
 });
 
 export /** @type {*} */

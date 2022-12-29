@@ -26,6 +26,7 @@ import Notify from '../../../components/Notification/Notify';
 import StepperButtons from './../../../components/shared/stepper/button';
 import { houseHoldFormSchema } from '../../../utils/validation-schema.util';
 import DropDown from '../../../components/shared/DropDown';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
 
 // Destructuring
 const { FAMILY_MEMBER, GET_ADDRESS_BY_ID, OCCUPATION , RELATION } = ENDPOINTS;
@@ -131,7 +132,7 @@ const HouseHoldInfo = () => {
     setIsLoading(true);
     const updatedValues = { ...getValues() };
     Axios.post(FAMILY_MEMBER, {
-      familyMemberDto: updatedValues?.houseHold ?? [],
+      familyMemberDto: updatedValues?.houseHold.map(houseHold => convertEmptyStringIntoNull(houseHold)) ?? [],
       userId: id,
     })
       .then((res) => res.data)

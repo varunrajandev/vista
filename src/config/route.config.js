@@ -6,6 +6,7 @@ const commonRoutes = (routeName) => ({
   LIST: `/${routeName}`,
   ADD: `/${routeName}/add/1`,
   EDIT: (id, step) => `/${routeName}/${id}/edit/${step}`,
+  PROFILE: (id, status = '') => `/${routeName}/${id}/profile/${status}`,
 });
 
 /** @type {*} */
@@ -14,7 +15,6 @@ const ROUTE_CONFIG = {
   REGISTRATION: '/registration',
   YCW: {
     ...commonRoutes('ycw'),
-    PROFILE: (id) => `/ycw/${id}/profile`,
   },
   CX: {
     ...commonRoutes('cx'),

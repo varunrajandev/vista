@@ -32,6 +32,7 @@ import { Axios } from '../../../http';
 import ROUTE_CONFIG from '../../../config/route.config';
 import { ENDPOINTS } from '../../../config/api.config';
 import DropDown from '../../../components/shared/DropDown';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
 
 // Destructuring
 const { SOURCE, RELIGION, MARITAL_STATUS, GENDER, COVID, EDUCATION } =
@@ -206,7 +207,7 @@ const PersonalInfo = () => {
    */
   const handleSave = (isNotify = false, isNext = false) => {
     setIsLoading(true);
-    const updatedValues = { ...getValues() };
+    const updatedValues = convertEmptyStringIntoNull({ ...getValues() });
     Axios.post(GET_PROFILE.url, {
       ...updatedValues,
       isoCode: 'IN',
@@ -252,7 +253,7 @@ const PersonalInfo = () => {
     setValue('whatsappAvailable', '');
     setValue('whatsappNumber', '');
     if (phoneNumber.length === 10) {
-      Axios.get(`${CHECK_DUPLICATE_MOBILE}${phoneNumber}?userId=${id}`).then(
+      Axios.get(`${CHECK_DUPLICATE_MOBILE}${phoneNumber}?userId=${id}&userType=WORKER`).then(
         (res) =>
           res?.data?.data
             ? setError('mobileNo', { message: res?.data?.message ?? '' })
@@ -637,6 +638,9 @@ const PersonalInfo = () => {
                   '-webkit-appearance': 'none',
                   margin: 0,
                 },
+              }}
+              inputProps={{
+                min: 0
               }}
               type='number'
               id='age'

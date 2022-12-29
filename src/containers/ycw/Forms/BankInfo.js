@@ -32,7 +32,7 @@ import { requestQuery } from '../../../utils/request.util';
 import Notify from '../../../components/Notification/Notify';
 import { bankFormSchema } from '../../../utils/validation-schema.util';
 import StepperButtons from './../../../components/shared/stepper/button';
-import { prePareBankResponse } from '../../../utils/helper.util';
+import { convertEmptyStringIntoNull, prePareBankResponse } from '../../../utils/helper.util';
 import DropDown from '../../../components/shared/DropDown';
 
 // Styled Component
@@ -178,7 +178,7 @@ const BankInfo = () => {
     Axios.post(BANK, {
       bankDetailsResponse: [
         ...updatedValues?.bank.map((bankDetails) => ({
-          ...omit(bankDetails, [
+          ...convertEmptyStringIntoNull(omit(bankDetails, [
             'proofType',
             'file',
             'loading',
@@ -186,7 +186,7 @@ const BankInfo = () => {
             'filePath',
             'fileName',
             'uuid',
-          ]),
+          ])),
         })),
       ],
       userId: id || '',

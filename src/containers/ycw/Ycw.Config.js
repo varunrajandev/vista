@@ -54,17 +54,10 @@ export const CHECK_DUPLICATE_MOBILE = CHECK_MOBILE;
 // Query Filters
 export /** @type {*} */
 const QUERY_FILTERS = {
-  // city: '',
   filter: 'createdAt',
   pageNo: 1,
   pageSize: 20,
-  // skills: '',
   sortby: 'desc',
-  // status: '',
-  // gender: '',
-  // workingHours: '',
-  // microMarket: '',
-  // name: '',
 };
 
 /** @type {*} */
@@ -93,7 +86,7 @@ export const COLUMNS = [
     style: true,
   },
   {
-    ...getColumnProps('microMarket', 'SUPPLY HUB', '8%'),
+    ...getColumnProps('microMarketName', 'SUPPLY HUB', '8%'),
     style: true,
   },
   {
@@ -131,7 +124,7 @@ export const BUTTON_LINKS = {
     text: 'EDIT PROFILE',
   }),
   CLOSE: {
-    to: -1,
+    to: '/ycw',
     text: 'CLOSE',
   },
 };

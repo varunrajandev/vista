@@ -12,7 +12,6 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Select,
   FormHelperText,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -26,11 +25,19 @@ import ROUTE_CONFIG from '../../../config/route.config';
 import Notify from '../../../components/Notification/Notify';
 import StepperButtons from './../../../components/shared/stepper/button';
 import { houseHoldFormSchema } from '../../../utils/validation-schema.util';
+import DropDown from '../../../components/shared/DropDown';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
 
 // Destructuring
-const { FAMILY_MEMBER, GET_ADDRESS_BY_ID, SKILLS, RELATION } = ENDPOINTS;
+const {
+  FAMILY_MEMBER,
+  GET_ADDRESS_BY_ID,
+  SKILLS,
+  RELATION,
+  YCW: { GET_BY_ID },
+} = ENDPOINTS;
 
-const HouseHoldInfo = () => {
+const HouseHoldInfo = ({ view }) => {
   // local state
   const [notify, setNotify] = useState({ message: '' });
   const [isLoading, setIsLoading] = useState(false);
@@ -75,14 +82,14 @@ const HouseHoldInfo = () => {
   // call api & get the details by id
   useEffect(() => {
     if (id) {
-      Axios.get(`${FAMILY_MEMBER}/${id}`)
+      Axios.get(`${GET_BY_ID}/${id}`)
         .then((res) => res.data)
         .then((res) =>
           reset({
-            houseHold: res?.data?.familyMemberDto ?? [
+            houseHold: res?.data?.familyMemberDto?.familyMemberDto ?? [
               { ...HOUSE_HOLD_FORM_FIELDS },
             ],
-            userId: res?.data?.userId ?? '',
+            userId: res?.data?.familyMemberDto?.userId ?? '',
           })
         );
     }
@@ -130,24 +137,21 @@ const HouseHoldInfo = () => {
     setIsLoading(true);
     const updatedValues = { ...getValues() };
     Axios.post(FAMILY_MEMBER, {
-      familyMemberDto: updatedValues?.houseHold ?? [],
+      familyMemberDto:
+        updatedValues?.houseHold.map((house) =>
+          convertEmptyStringIntoNull(house)
+        ) ?? [],
       userId: id,
     })
       .then((res) => res.data)
       .then((res) => {
         setIsLoading(false);
         if (res?.status ?? false) {
-          reset({
-            houseHold: res?.data?.familyMemberDto ?? [
-              { ...HOUSE_HOLD_FORM_FIELDS },
-            ],
-            userId: res?.data?.userId ?? '',
-          });
           if (isNext) {
             navigate(
-              ROUTE_CONFIG.YCW.EDIT(
+              ROUTE_CONFIG.CX.EDIT(
                 res?.data?.userId ?? '',
-                parseInt(step || 7) + 1
+                parseInt(step || 3) + 1
               )
             );
           }
@@ -209,21 +213,23 @@ const HouseHoldInfo = () => {
         }}
       >
         <h5 style={{ marginBottom: '20px' }}>Household Members</h5>
-        <div style={{ marginTop: '-20px' }}>
-          <IconButton aria-label='delete'>
-            <AddIcon
-              sx={{
-                backgroundColor: 'purple',
-                color: 'white',
-                borderRadius: '50%',
-              }}
-              onClick={() => append({ ...HOUSE_HOLD_FORM_FIELDS })}
-            />
-          </IconButton>
-          <span style={{ fontSize: '13px', fontWeight: 'bolder' }}>
-            &nbsp; Add Household Members
-          </span>
-        </div>
+        {!view ? (
+          <div style={{ marginTop: '-20px' }}>
+            <IconButton aria-label='delete'>
+              <AddIcon
+                sx={{
+                  backgroundColor: 'purple',
+                  color: 'white',
+                  borderRadius: '50%',
+                }}
+                onClick={() => append({ ...HOUSE_HOLD_FORM_FIELDS })}
+              />
+            </IconButton>
+            <span style={{ fontSize: '13px', fontWeight: 'bolder' }}>
+              &nbsp; Add Household Members
+            </span>
+          </div>
+        ) : null}
       </Box>
       {fields.map((field, index) => (
         <Box
@@ -241,11 +247,18 @@ const HouseHoldInfo = () => {
             value={updatedFields?.houseHold[index]?.name ?? ''}
             key={field.id}
             {...register(`houseHold.${index}.name`)}
+            {...(view ? { variant: 'filled' } : {})}
+            disabled={view}
           />
-          <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+          <FormControl
+            sx={{ minWidth: 120, width: '18%' }}
+            size='small'
+            {...(view ? { variant: 'filled' } : {})}
+            disabled={view}
+          >
             <InputLabel>Relationship</InputLabel>
             <>
-              <Select
+              <DropDown
                 sx={{ width: '100%' }}
                 value={updatedFields?.houseHold[index]?.relationship ?? ''}
                 label='Occupation'
@@ -257,7 +270,7 @@ const HouseHoldInfo = () => {
                 {dropDownList.relation.map((item) => (
                   <MenuItem value={item.key}>{item.value}</MenuItem>
                 ))}
-              </Select>
+              </DropDown>
               {errors?.houseHold?.[index]?.relationship?.message ? (
                 <FormHelperText error={true}>
                   {errors?.houseHold?.[index]?.relationship?.message}
@@ -271,13 +284,19 @@ const HouseHoldInfo = () => {
             label='Others Relationship'
             value={updatedFields?.houseHold[index]?.otherrRlationship ?? ''}
             disabled={
-              updatedFields?.houseHold[index]?.relationship === 'OTHERS'
-                ? false
-                : true
+              dropDownList.relation.some(
+                (rel) =>
+                  rel.key !== updatedFields?.houseHold[index]?.relationship &&
+                  rel.value === 'Others'
+              ) || view
             }
             {...register(`houseHold.${index}.otherrRlationship`)}
+            {...(view ? { variant: 'filled' } : {})}
           />
           <TextField
+            inputProps={{
+              min: 0,
+            }}
             sx={{
               width: '18%',
               '& input[type=number]': {
@@ -299,8 +318,13 @@ const HouseHoldInfo = () => {
             {...register(`houseHold.${index}.mobileNo`)}
             error={checkMobileNo(index) || false}
             helperText={checkMobileNo(index) || ''}
+            {...(view ? { variant: 'filled' } : {})}
+            disabled={view}
           />
           <TextField
+            inputProps={{
+              min: 0,
+            }}
             type='number'
             style={{ width: '18%' }}
             name='age'
@@ -308,10 +332,17 @@ const HouseHoldInfo = () => {
             value={updatedFields?.houseHold[index]?.age ?? ''}
             size='small'
             {...register(`houseHold.${index}.age`)}
+            {...(view ? { variant: 'filled' } : {})}
+            disabled={view}
           />
-          <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+          <FormControl
+            sx={{ minWidth: 120, width: '18%' }}
+            size='small'
+            {...(view ? { variant: 'filled' } : {})}
+            disabled={view}
+          >
             <InputLabel>Occupation</InputLabel>
-            <Select
+            <DropDown
               sx={{ width: '100%' }}
               value={updatedFields?.houseHold[index]?.jobTypeUuid ?? ''}
               label='Occupation'
@@ -320,7 +351,7 @@ const HouseHoldInfo = () => {
               {dropDownList.skills.map((item) => (
                 <MenuItem value={item.name}>{item.name}</MenuItem>
               ))}
-            </Select>
+            </DropDown>
           </FormControl>
           <TextField
             label='Relative Job'
@@ -330,16 +361,22 @@ const HouseHoldInfo = () => {
             disabled={
               updatedFields?.houseHold[index]?.jobTypeUuid === 'Others'
                 ? false
-                : true
+                : true || view
             }
             {...register(`houseHold.${index}.otherJobType`)}
+            {...(view ? { variant: 'filled' } : {})}
           />
-          <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+          <FormControl
+            sx={{ minWidth: 120, width: '18%' }}
+            size='small'
+            {...(view ? { variant: 'filled' } : {})}
+            disabled={view}
+          >
             <InputLabel>Address Type</InputLabel>
-            <Select
+            <DropDown
               sx={{ width: '100%' }}
               name='addressType'
-              // value={updatedFields?.houseHold[index]?.addressType ?? ''}
+              value={updatedFields?.houseHold[index]?.addressType ?? ''}
               label='Address Type'
               {...register(`houseHold.${index}.addressType`, {
                 onChange: ({ target: { value } }) =>
@@ -349,7 +386,7 @@ const HouseHoldInfo = () => {
               <MenuItem value='false'>Same As Current Address</MenuItem>
               <MenuItem value='true'>Same As Permanent Address</MenuItem>
               <MenuItem value='null'>Other</MenuItem>
-            </Select>
+            </DropDown>
           </FormControl>
           <TextField
             style={{ width: '38.3%' }}
@@ -357,8 +394,10 @@ const HouseHoldInfo = () => {
             value={updatedFields?.houseHold[index]?.address ?? ''}
             size='small'
             {...register(`houseHold.${index}.address`)}
+            {...(view ? { variant: 'filled' } : {})}
+            disabled={view}
           />
-          {index !== 0 ? (
+          {index !== 0 && !view ? (
             <Box
               sx={{
                 display: 'flex',
@@ -373,12 +412,14 @@ const HouseHoldInfo = () => {
           ) : null}
         </Box>
       ))}
-      <StepperButtons
-        loading={isLoading}
-        nextUrl={true}
-        backUrl={ROUTE_CONFIG.YCW.EDIT(id, parseInt(step || 5) - 1)}
-        handleNext={handleSubmit(() => handleSave(false, true))}
-      />
+      {!view ? (
+        <StepperButtons
+          loading={isLoading}
+          nextUrl={true}
+          backUrl={ROUTE_CONFIG.CX.EDIT(id, parseInt(step || 3) - 1)}
+          handleNext={handleSubmit(() => handleSave(false, true))}
+        />
+      ) : null}
     </form>
   );
 };

@@ -9,7 +9,7 @@ import {
   FormControl,
   Select,
 } from '@mui/material';
-
+import DropDown from '../shared/DropDown';
 // Label
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -32,7 +32,8 @@ const CurrentAdd = ({
   isPermanent,
   handleIsPermanent,
   updatedValues,
-  skip
+  skip,
+  view,
 }) => (
   <Box
     sx={{
@@ -77,12 +78,15 @@ const CurrentAdd = ({
         {...register(`${compKey}.addressLine1`, {
           onChange: handleAddress,
         })}
+        {...(view ? { variant: 'filled' } : { variant: 'outlined' })}
+        disabled={view}
       />
       <TextField
         sx={{ width: '18%' }}
         size='small'
         label='Society/Colony/Area'
-        variant='outlined'
+        {...(view ? { variant: 'filled' } : { variant: 'outlined' })}
+        disabled={view}
         value={updatedValues[compKey]?.addressLine2 ?? ''}
         name='addressLine2'
         {...register(`${compKey}.addressLine2`, {
@@ -95,7 +99,8 @@ const CurrentAdd = ({
         value={updatedValues[compKey]?.landmark ?? ''}
         size='small'
         label='Landmark'
-        variant='outlined'
+        {...(view ? { variant: 'filled' } : { variant: 'outlined' })}
+        disabled={view}
         name='landmark'
         {...register(`${compKey}.landmark`, {
           onChange: handleAddress,
@@ -121,7 +126,8 @@ const CurrentAdd = ({
         type='number'
         value={updatedValues[compKey]?.postalCode ?? ''}
         label='Pin Code'
-        variant='outlined'
+        {...(view ? { variant: 'filled' } : { variant: 'outlined' })}
+        disabled={view}
         name='postalCode'
         onInput={(e) => {
           e.target.value = Math.max(0, parseInt(e.target.value))
@@ -133,7 +139,12 @@ const CurrentAdd = ({
         })}
       />
 
-      <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+      <FormControl
+        sx={{ minWidth: 120, width: '18%' }}
+        size='small'
+        {...(view ? { variant: 'filled' } : {})}
+        disabled={view}
+      >
         <InputLabel id='demo-select-small'>Country</InputLabel>
         <Select
           sx={{ width: '100%' }}
@@ -159,9 +170,14 @@ const CurrentAdd = ({
         marginTop: '30px',
       }}
     >
-      <FormControl sx={{ minWidth: 120, width: skip ? '24%' : '18%' }} size='small'>
+      <FormControl
+        sx={{ minWidth: 120, width: skip ? '24%' : '18%' }}
+        size='small'
+        {...(view ? { variant: 'filled' } : {})}
+        disabled={view}
+      >
         <InputLabel id='demo-select-small'>State</InputLabel>
-        <Select
+        <DropDown
           sx={{ width: '100%' }}
           label='State'
           value={updatedValues[compKey]?.stateUuid ?? ''}
@@ -175,12 +191,17 @@ const CurrentAdd = ({
               {item.key}
             </MenuItem>
           ))}
-        </Select>
+        </DropDown>
       </FormControl>
 
-      <FormControl sx={{ minWidth: 120, width: skip ? '24%' : '18%' }} size='small'>
+      <FormControl
+        sx={{ minWidth: 120, width: skip ? '24%' : '18%' }}
+        size='small'
+        {...(view ? { variant: 'filled' } : {})}
+        disabled={view}
+      >
         <InputLabel id='demo-select-small'>City</InputLabel>
-        <Select
+        <DropDown
           sx={{ width: '100%' }}
           label='City'
           name='cityUuid'
@@ -194,12 +215,17 @@ const CurrentAdd = ({
               {item.key}
             </MenuItem>
           ))}
-        </Select>
+        </DropDown>
       </FormControl>
 
-      <FormControl sx={{ minWidth: 120, width: skip ? '24%' : '18%' }} size='small'>
+      <FormControl
+        sx={{ minWidth: 120, width: skip ? '24%' : '18%' }}
+        size='small'
+        {...(view ? { variant: 'filled' } : {})}
+        disabled={view}
+      >
         <InputLabel id='demo-select-small'>Supply Hub</InputLabel>
-        <Select
+        <DropDown
           sx={{ width: '100%' }}
           label={skip ? 'Locality' : 'Supply Hub'}
           value={updatedValues[compKey]?.micromarketUuid ?? ''}
@@ -213,13 +239,18 @@ const CurrentAdd = ({
               {item.name}
             </MenuItem>
           ))}
-        </Select>
+        </DropDown>
       </FormControl>
 
       {!skip ? (
-        <FormControl sx={{ minWidth: 120, width: '18%' }} size='small'>
+        <FormControl
+          sx={{ minWidth: 120, width: '18%' }}
+          size='small'
+          {...(view ? { variant: 'filled' } : {})}
+          disabled={view}
+        >
           <InputLabel id='demo-select-small'>Address Proof Type</InputLabel>
-          <Select
+          <DropDown
             sx={{ width: '100%' }}
             value={updatedValues[compKey]?.addressProofType ?? ''}
             label='Address Proof Type'
@@ -229,9 +260,11 @@ const CurrentAdd = ({
             })}
           >
             {dropDownList.addressProof.map((item) => (
-              <MenuItem key={item.key} value={item.key}>{item.value}</MenuItem>
+              <MenuItem key={item.key} value={item.key}>
+                {item.value}
+              </MenuItem>
             ))}
-          </Select>
+          </DropDown>
         </FormControl>
       ) : null}
       <div style={{ width: '18%' }}></div>

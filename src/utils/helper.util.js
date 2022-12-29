@@ -1,3 +1,5 @@
+import { isArray } from 'lodash';
+import { isEmpty } from 'lodash';
 import {
   forEach,
   map,
@@ -136,14 +138,22 @@ const prePareDoc = (docsById, docsState) =>
           )
         : find(
             docsById,
-            (docById) =>  docById.documentUploadType === docs.documentType && docById.documentSideType === docs.documentSideType
+            (docById) =>
+              docById.documentUploadType === docs.documentType &&
+              docById.documentSideType === docs.documentSideType
           );
 
     return {
       ...docs,
       document: documentDetails,
-      documentType: docsKey === 'random' ? documentDetails?.documentUploadType : docs.documentType,
-      documentContext: docsKey === 'random' ? documentDetails?.documentContext : docs.documentContext,
+      documentType:
+        docsKey === 'random'
+          ? documentDetails?.documentUploadType
+          : docs.documentType,
+      documentContext:
+        docsKey === 'random'
+          ? documentDetails?.documentContext
+          : docs.documentContext,
     };
   });
 
@@ -172,3 +182,19 @@ const prePareBankResponse = (bankDetails) =>
       fileName,
     };
   });
+
+export /**
+ * @description
+ * @param {*} formDetails
+ */
+const convertEmptyStringIntoNull = (formDetails) =>
+  mapValues(formDetails, (formDetail) =>
+    formDetail === '' ? null : formDetail
+  );
+
+export /**
+ * @description
+ * @param {*} item
+ */
+const checkArrayNotEmpty = (item) =>
+  !isEmpty(item) && isArray(item) && size(item) !== 0;

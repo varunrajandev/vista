@@ -14,6 +14,8 @@ import YcwForm from '../containers/ycw/Ycw.Form';
 import CxForm from './../containers/cx/Cx.Form';
 import JobsFrom from './../containers/jobs/Jobs.Form';
 import AuthRegistration from '../containers/auth/Auth.Registration';
+import JobsProfile from '../containers/jobs/Jobs.Profile';
+import CxProfile from '../containers/cx/cx.Profile';
 
 /**
  * @description
@@ -38,6 +40,8 @@ const rootRoutes = () => (
       <Route path='/jobs/:id/edit/:step' element={<JobsFrom />} />
       {/* View Pages */}
       <Route path='/ycw/:id/profile' element={<YcwProfile />} />
+      <Route path='/jobs/:id/profile/:status' element={<JobsProfile />} />
+      <Route path='/CX/:id/profile/:status' element={<CxProfile />} />
     </Route>
   </Routes>
 );

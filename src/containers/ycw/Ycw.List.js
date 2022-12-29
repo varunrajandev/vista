@@ -157,17 +157,7 @@ const List = () => {
             size='small'
             sx={{ bgcolor: 'white', borderRadius: '5px' }}
             placeholder='Search by Name'
-            onKeyDown={({ _key, target: { value } }) =>
-              value.length > 3 ? handleChange(value) : null
-            }
-            //   key === 'Enter'
-            //     ? setFilters((prevState) => ({
-            //         ...prevState,
-            //         name: value || '',
-            //         pageNo: 1,
-            //       }))
-            //     : null
-            // }
+            onChange={({ target: { value } }) => handleChange(value)}
           />
         </Box>
 
@@ -469,7 +459,7 @@ const List = () => {
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
-                    {item?.gender?.value}
+                    {item?.gender?.value ?? '--'}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
@@ -489,7 +479,7 @@ const List = () => {
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
-                    {item?.workingHours?.value}
+                    {item?.workingHours}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>

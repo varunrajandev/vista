@@ -27,6 +27,7 @@ import ROUTE_CONFIG from '../../../config/route.config';
 import StepperButtons from './../../../components/shared/stepper/button';
 import Notify from '../../../components/Notification/Notify';
 import DropDown from '../../../components/shared/DropDown';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
 
 // Destructuring
 const { GET_JOB, SKILLS, WORKING_HOURS, TRAINING_MODE, LEFT_JOB, SKILL_BY_ID } =
@@ -140,7 +141,8 @@ const JobInfo = () => {
     const updatedValues = { ...getValues() };
     setIsLoading(true);
     Axios.post(GET_JOB, {
-      ...updatedValues,
+      ...convertEmptyStringIntoNull(updatedValues),
+      userExperienceRequestDto: convertEmptyStringIntoNull(updatedFields.userExperienceRequestDto),
       userId: id,
       openToTiming: updatedValues.openToTraining,
     })

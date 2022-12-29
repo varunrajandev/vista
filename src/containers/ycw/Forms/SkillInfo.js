@@ -25,6 +25,7 @@ import StepperButtons from './../../../components/shared/stepper/button';
 import { skillsFormSchema } from '../../../utils/validation-schema.util';
 import ROUTE_CONFIG from '../../../config/route.config';
 import DropDown from '../../../components/shared/DropDown';
+import { convertEmptyStringIntoNull } from '../../../utils/helper.util';
 
 //Destructuring
 const { SKILL_BY_ID, SAVE_SKILL, GET_LANGUAGE, SKILLS } = ENDPOINTS;
@@ -157,7 +158,7 @@ const SkillInfo = () => {
   const handleSave = (isNotify = false) => {
     const updatedFields = { ...getValues() };
     setIsLoading(true);
-    const requestBody = {
+    const requestBody = convertEmptyStringIntoNull({
       otherLanguage: updatedFields?.otherLanguage ?? null,
       primaryLanguage: updatedFields?.primaryLanguage ?? null,
       skillRemarks: updatedFields?.skillRemarks ?? '',
@@ -180,7 +181,7 @@ const SkillInfo = () => {
         },
       ],
       userId: id,
-    };
+    });
     Axios.post(SAVE_SKILL, requestBody)
       .then((res) => res.data)
       .then((res) => {

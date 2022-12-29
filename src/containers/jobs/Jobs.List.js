@@ -33,10 +33,13 @@ import {
   MODULE_NAME,
   COLUMNS,
   GET_URL,
-  USERS_URL,
+  // USERS_URL,
 } from './Jobs.Config';
 import ROUTE_CONFIG from '../../config/route.config';
-import { GET_STATUS_COLOR_CODE } from '../../config/common.config';
+import {
+  GET_STATUS_BG_COLOR_CODE,
+  GET_STATUS_COLOR_CODE,
+} from '../../config/common.config';
 import { Axios } from '../../http';
 
 //Table Style
@@ -94,14 +97,11 @@ const List = () => {
    * @param {string} value
    */
   const handleSearch = (value) =>
-    dispatch(
-      get(MODULE_NAME, [
-        {
-          ...USERS_URL,
-          url: `${USERS_URL.url}${value}`,
-        },
-      ])
-    );
+    setFilters((prevState) => ({
+      ...prevState,
+      name: value || '',
+      pageNo: 1,
+    }));
 
   /** @type {*} */
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,59 +137,37 @@ const List = () => {
           marginTop: '30px',
         }}
       >
-        <Autocomplete
-          sx={{ width: '25%', backgroundColor: 'white' }}
-          freeSolo
-          id='free-solo-2-demo'
-          onChange={(_event, newValue) =>
-            navigate(
-              newValue.profileStatus === 'ACTIVE'
-                ? ROUTE_CONFIG.YCW.PROFILE(newValue.userId)
-                : newValue.profileStatus === 'IN_ACTIVE'
-                ? ROUTE_CONFIG.YCW.EDIT(newValue.userId, 1)
-                : '/ycw'
-            )
-          }
-          disableClearable
-          size='small'
-          options={details?.users ?? []}
-          renderInput={(params) => (
-            <Box sx={{ display: 'flex' }}>
-              <TextField
-                placeholder='Search by Name & Mobile Number'
-                onChange={(e) =>
-                  e.target.value.length >= 3
-                    ? handleChange(e.target.value)
-                    : null
-                }
-                {...params}
-                InputProps={{
-                  ...params.InputProps,
-                  type: 'search',
-                  autoComplete: 'userInfo',
-                }}
-              />
-            </Box>
-          )}
-          getOptionLabel={(item) =>
-            item.name && item.mobile
-              ? `${item.name} ${item.mobile} ${item.userId}`
-              : ''
-          }
-        />
+        <Box sx={{ display: 'flex' }}>
+          <TextField
+            size='small'
+            sx={{ bgcolor: 'white', borderRadius: '5px' }}
+            placeholder='Search'
+            onChange={({ target: { value } }) => handleChange(value)}
+          />
+        </Box>
         <Autocomplete
           disablePortal
           size='small'
           id='combo-box-demo'
           options={details?.city ?? []}
           sx={{ width: '20%' }}
-          onChange={(_event, value) =>
+          onChange={(_event, value) => {
             setFilters((prevState) => ({
               ...prevState,
               city: value?.uuid ?? '',
               pageNo: 1,
-            }))
-          }
+            }));
+            dispatch(
+              get(MODULE_NAME, [
+                {
+                  key: 'locality',
+                  url: value?.uuid
+                    ? `${URLS[2].url}?cityUuid=${value.uuid}`
+                    : URLS[2].url,
+                },
+              ])
+            );
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -208,7 +186,7 @@ const List = () => {
           onChange={(_event, value) =>
             setFilters((prevState) => ({
               ...prevState,
-              micromsrket: value?.uuid ?? '',
+              micromsrket: value?.id ?? '',
               pageNo: 1,
             }))
           }
@@ -220,7 +198,7 @@ const List = () => {
               label='Select Locality'
             />
           )}
-          getOptionLabel={(item) => `${item.microMarketName}`}
+          getOptionLabel={(item) => `${item.name}`}
         />
 
         <Autocomplete
@@ -338,7 +316,11 @@ const List = () => {
               {dataTable.map((item) => (
                 <StyledTableRow
                   onClick={() =>
-                    navigate(ROUTE_CONFIG.JOBS.EDIT(item?.jobId ?? '', 1))
+                    navigate(
+                      item?.jobStatus?.key === 'ACTIVE'
+                        ? ROUTE_CONFIG.JOBS.PROFILE(item?.jobId, item?.jobStatus?.key)
+                        : ROUTE_CONFIG.JOBS.EDIT(item?.jobId ?? '', 1)
+                    )
                   }
                   key={item?.jobId ?? ''}
                   sx={{
@@ -362,7 +344,7 @@ const List = () => {
                     {item?.jobId ?? '--'}
                   </TableCell>
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
-                    {item?.name ?? '--'}
+                    {item?.jobTypeUuid ?? '--'}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
@@ -370,7 +352,7 @@ const List = () => {
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
-                    {item?.cityName ?? '--'}
+                    {item?.microMarketName ?? '--'}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
@@ -386,11 +368,33 @@ const List = () => {
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
-                    {item?.jobCurrentStatus?.value ?? '--'}
+                    {item?.jobCurrentStatus ?? '--'}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
-                    {item?.jobStatus?.value ?? '--'}
+                    <Typography
+                      sx={{
+                        width: '150px',
+                        padding: '8px',
+                        borderRadius: '5px',
+                        fontSize: '11px',
+                        textAlign: 'center',
+                        fontWeight: '950',
+                        boxSizing: 'border-box',
+                      }}
+                      style={{
+                        backgroundColor:
+                          GET_STATUS_BG_COLOR_CODE[
+                            item?.jobStatus?.key ?? 'CREATED'
+                          ],
+                        color:
+                          GET_STATUS_COLOR_CODE[
+                            item?.jobStatus?.key ?? 'CREATED'
+                          ],
+                      }}
+                    >
+                      {item?.jobStatus?.key ?? '--'}
+                    </Typography>
                   </TableCell>
                 </StyledTableRow>
               ))}

@@ -33,7 +33,6 @@ import {
   MODULE_NAME,
   COLUMNS,
   GET_URL,
-  USERS_URL,
 } from './Cx.Config';
 import {
   GET_STATUS_BG_COLOR_CODE,
@@ -97,14 +96,11 @@ const List = () => {
    * @param {string} value
    */
   const handleSearch = (value) =>
-    dispatch(
-      get(MODULE_NAME, [
-        {
-          ...USERS_URL,
-          url: `${USERS_URL.url}${value}&userType=CUSTOMER`,
-        },
-      ])
-    );
+    setFilters((prevState) => ({
+      ...prevState,
+      name: value || '',
+      pageNo: 1,
+    }));
 
   /** @type {*} */
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,56 +142,37 @@ const List = () => {
           marginTop: '30px',
         }}
       >
-        <Autocomplete
-          sx={{ width: '25%', backgroundColor: 'white' }}
-          freeSolo
-          onChange={(_event, newValue) =>
-            navigate(
-              newValue.profileStatus === 'ACTIVE'
-                ? ROUTE_CONFIG.YCW.PROFILE(newValue.userId)
-                : newValue.profileStatus === 'IN_ACTIVE'
-                ? ROUTE_CONFIG.YCW.EDIT(newValue.userId, 1)
-                : '/ycw'
-            )
-          }
-          disableClearable
-          size='small'
-          options={details?.users ?? []}
-          renderInput={(params) => (
-            <Box sx={{ display: 'flex' }}>
-              <TextField
-                placeholder='Search by Name & Mobile Number'
-                onChange={({ target: { value } }) =>
-                  value.length >= 3 ? handleChange(value) : null
-                }
-                {...params}
-                InputProps={{
-                  ...params.InputProps,
-                  type: 'search',
-                  autoComplete: 'userInfo',
-                }}
-              />
-            </Box>
-          )}
-          getOptionLabel={(item) =>
-            item.name && item.mobile
-              ? `${item.name} ${item.mobile} ${item.userId}`
-              : ''
-          }
-        />
+        <Box sx={{ display: 'flex', width: '20%' }}>
+          <TextField
+            size='small'
+            sx={{ bgcolor: 'white', borderRadius: '5px', width: '100%' }}
+            placeholder='Search'
+            onChange={({ target: { value } }) => handleChange(value)}
+          />
+        </Box>
 
         <Autocomplete
           size='small'
           disablePortal
           options={details?.city ?? []}
           sx={{ width: '20%' }}
-          onChange={(_event, newValue) =>
+          onChange={(_event, value) => {
             setFilters((prevState) => ({
               ...prevState,
-              city: newValue?.cityName ?? '',
+              city: value?.uuid ?? '',
               pageNo: 1,
-            }))
-          }
+            }));
+            dispatch(
+              get(MODULE_NAME, [
+                {
+                  key: 'locality',
+                  url: value?.uuid
+                    ? `${URLS[2].url}?cityUuid=${value.uuid}`
+                    : URLS[2].url,
+                },
+              ])
+            );
+          }}
           renderInput={(params) => (
             <TextField
               sx={{ bgcolor: 'white', borderRadius: '5px' }}
@@ -213,7 +190,7 @@ const List = () => {
           onChange={(_event, newValue) =>
             setFilters((prevState) => ({
               ...prevState,
-              micromsrket: newValue?.microMarketName ?? '',
+              micromsrket: newValue?.id ?? '',
               pageNo: 1,
             }))
           }
@@ -225,7 +202,7 @@ const List = () => {
               label='Select Locality'
             />
           )}
-          getOptionLabel={(item) => `${item.microMarketName}`}
+          getOptionLabel={(item) => `${item.name}`}
         />
 
         <Autocomplete
@@ -341,11 +318,16 @@ const List = () => {
             <TableBody component={Paper}>
               {dataTable.map((row) => (
                 <StyledTableRow
-                onClick={() =>
-                  navigate(
-                    ROUTE_CONFIG.CX.EDIT(row?.userId ?? '', 1)
-                  )
-                }
+                  onClick={() =>
+                    navigate(
+                      row?.profileStatus?.key === 'ACTIVE'
+                        ? ROUTE_CONFIG.CX.PROFILE(
+                            row?.userId ?? '',
+                            row?.profileStatus?.key
+                          )
+                        : ROUTE_CONFIG.CX.EDIT(row?.userId ?? '', 1)
+                    )
+                  }
                   key={row.userId}
                   sx={{
                     '&:last-child td, &:last-child th': { border: 0 },
@@ -360,7 +342,6 @@ const List = () => {
                     sx={{ fontSize: '13px', cursor: 'pointer' }}
                     component='th'
                     scope='row'
-                    
                     style={{
                       borderLeft: `5px solid ${
                         GET_STATUS_COLOR_CODE[
@@ -448,15 +429,15 @@ const List = () => {
       </Box>
       {/* End dataTableList */}
       {size(dataTable) === 0 && !loading ? (
-          <Box display='flex' justifyContent='center' marginTop={1}>
-            No Records Found
-          </Box>
-        ) : null}
-        {loading ? (
-          <Box display='flex' justifyContent='center' marginTop={1}>
-            <CircularProgress />
-          </Box>
-        ) : null}
+        <Box display='flex' justifyContent='center' marginTop={1}>
+          No Records Found
+        </Box>
+      ) : null}
+      {loading ? (
+        <Box display='flex' justifyContent='center' marginTop={1}>
+          <CircularProgress />
+        </Box>
+      ) : null}
       {/* ============ Pagination Code  Start   ==============*/}
       {list?.totalRecords ?? 0 ? (
         <Box display='flex' justifyContent='center' marginTop={1}>
@@ -465,12 +446,13 @@ const List = () => {
             showLastButton
             count={list?.totalPages ?? 0}
             page={filters?.pageNo ?? 1}
-            onChange={(_event, pageNo) =>
+            onChange={(_event, pageNo) => {
               setFilters((prevState) => ({
                 ...prevState,
                 pageNo,
-              }))
-            }
+              }));
+              window.scrollTo(0, 0);
+            }}
           />
         </Box>
       ) : null}

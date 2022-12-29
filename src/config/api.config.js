@@ -12,14 +12,18 @@ export const ENDPOINTS = {
     GET_ALL: `${REACT_APP_API_ENDPOINT}user/customer/get/all/customer`,
     GET_BY_ID: `${REACT_APP_API_ENDPOINT}user/customer/get/details/`,
     POST: `${REACT_APP_API_ENDPOINT}user/customer/save`,
+
   },
   JOBS: {
     GET: `${REACT_APP_API_ENDPOINT}user/job/get/all/job`,
     GET_BY_ID: `${REACT_APP_API_ENDPOINT}user/job/get/`,
     POST: `${REACT_APP_API_ENDPOINT}user/job/create`,
-    POST_BY_AGE: `${REACT_APP_API_ENDPOINT}/job/create/agePreference`,
-    DELETE: `${REACT_APP_API_ENDPOINT}/job/delete/`,
-    PUT_BY_ID: `${REACT_APP_API_ENDPOINT}/job/get/`,
+    POST_BY_AGE: `${REACT_APP_API_ENDPOINT}user/job/create/agePreference`,
+    DELETE: `${REACT_APP_API_ENDPOINT}user/job/delete/`,
+    PUT_BY_ID: `${REACT_APP_API_ENDPOINT}user/job/get/`,
+    UPDATE: `${REACT_APP_API_ENDPOINT}user/job/update/`,
+    STATUS: `${REACT_APP_API_ENDPOINT}user/job/status/update`,
+    DETAILS: `${REACT_APP_API_ENDPOINT}user/customer/get/jobDetails/`
   },
   CITY: `${REACT_APP_API_ENDPOINT_1}locationmaster/city/get/all`,
   LOCALITY: `${REACT_APP_API_ENDPOINT_1}locationmaster/internal/micromarkets/all`,
@@ -69,5 +73,4 @@ export const ENDPOINTS = {
   USER_INTERNAL_ADD: `${REACT_APP_API_ENDPOINT}user/internal/add`,
   OCCUPATION: `${REACT_APP_API_ENDPOINT}user/drop-down/get/occupation`,
   LOCALITY_1: `${REACT_APP_API_ENDPOINT_1}locationmaster/micromarket/list`,
-
 };
