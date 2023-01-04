@@ -141,7 +141,7 @@ const BasicInfo = ({ redirect, view }) => {
                   reset({ ...(res?.data ?? {}) });
                 });
             } else {
-              reset({ ...(res?.data ?? {}) });
+              reset({ ...(res?.data ?? {}), userId: id });
             }
           }
         });
@@ -155,6 +155,7 @@ const BasicInfo = ({ redirect, view }) => {
    * @param {boolean} [isNext=false]
    */
   const handleSave = (isNotify = false, isNext = false) => {
+    console.log(isNotify, isNext);
     const updatedValues = { ...getValues() };
     setIsLoading(true);
     const jobId = updatedValues?.jobId ?? '';
@@ -243,8 +244,6 @@ const BasicInfo = ({ redirect, view }) => {
                 )?.[0] ?? {};
               return (
                 <Autocomplete
-                  {...(view ? { variant: 'filled' } : {})}
-                  disabled={view}
                   freeSolo
                   value={customer || {}}
                   sx={{ width: '25%', backgroundColor: 'white' }}
@@ -267,6 +266,8 @@ const BasicInfo = ({ redirect, view }) => {
                         }
                         error={error?.message ?? false}
                         helperText={error?.message ?? ''}
+                        disabled={view}
+                        {...(view ? { variant: 'filled' } : {})}
                       />
                     </Box>
                   )}
@@ -350,8 +351,6 @@ const BasicInfo = ({ redirect, view }) => {
             name='startTime'
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TimePicker
-                {...(view ? { variant: 'filled' } : {})}
-                disabled={view}
                 label='Preferred Start Time'
                 value={value}
                 onChange={(time) => onChange(time)}
@@ -361,6 +360,8 @@ const BasicInfo = ({ redirect, view }) => {
                     sx={{ width: '18%' }}
                     {...params}
                     error={error?.message ?? false}
+                    disabled={view}
+                    {...(view ? { variant: 'filled' } : {})}
                   />
                 )}
               />
@@ -478,7 +479,7 @@ const BasicInfo = ({ redirect, view }) => {
             {...register('agePreference')}
           >
             {dropDownList.age.map((item) => (
-              <MenuItem key={item.value} value={item.value}>
+              <MenuItem key={item.key} value={item.key}>
                 {item.value}
               </MenuItem>
             ))}
@@ -514,8 +515,7 @@ const BasicInfo = ({ redirect, view }) => {
             name='startDate'
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <DesktopDatePicker
-                disabled={view}
-                disableFuture
+                disablePast
                 label='From Date'
                 value={value}
                 onChange={(date) => onChange(date)}
@@ -525,6 +525,8 @@ const BasicInfo = ({ redirect, view }) => {
                     size='small'
                     sx={{ width: '18%' }}
                     helperText={error?.message ?? ''}
+                    disabled={view}
+                    {...(view ? { variant: 'filled' } : {})}
                   />
                 )}
               />
@@ -551,9 +553,9 @@ const BasicInfo = ({ redirect, view }) => {
           sx={{ width: '18%' }}
           size='small'
           id='outlined-basic'
-          label='Budget (max.)'
-          value={updatedFields?.maxBudget ?? ''}
-          {...register('maxBudget')}
+          label='Budget (min.)'
+          value={updatedFields?.minBudget ?? ''}
+          {...register('minBudget')}
         />
 
         <TextField
@@ -566,9 +568,9 @@ const BasicInfo = ({ redirect, view }) => {
           sx={{ width: '18%' }}
           size='small'
           id='outlined-basic'
-          label='Budget (min.)'
-          value={updatedFields?.minBudget ?? ''}
-          {...register('minBudget')}
+          label='Budget (max.)'
+          value={updatedFields?.maxBudget ?? ''}
+          {...register('maxBudget')}
         />
 
         <TextField

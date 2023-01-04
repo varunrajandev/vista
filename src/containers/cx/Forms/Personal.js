@@ -377,6 +377,8 @@ const PersonalInfo = ({ view }) => {
         <FormControl
           sx={{ minWidth: 120, display: 'flex', width: '18%' }}
           size='small'
+          {...(view ? { variant: 'filled' } : {})}
+          disabled={view}
         >
           <InputLabel id='demo-select-small'>Gender</InputLabel>
           <Controller
@@ -649,9 +651,31 @@ const PersonalInfo = ({ view }) => {
             )}
           />
         </FormControl>
+        <Controller
+          control={control}
+          name='otherProfession'
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              sx={{ width: '18%', marginRight: '32px' }}
+              type='text'
+              {...getInputProps(
+                'otherProfession',
+                'Other Profession',
+                value,
+                '',
+                error,
+                onChange
+              )}
+              {...(view ? { variant: 'filled' } : {})}
+              disabled={updatedFormValues?.professsion !== 'OTHERS' || view}
+            />
+          )}
+        />
         <FormControl
           sx={{ minWidth: 120, width: '18%', marginRight: '32px' }}
           size='small'
+          {...(view ? { variant: 'filled' } : {})}
+          disabled={view}
         >
           <InputLabel>Religion</InputLabel>
           <Controller
@@ -689,7 +713,7 @@ const PersonalInfo = ({ view }) => {
               {...(updatedFormValues?.religion === 'OTHERS' ? {} : {})}
               // ? { required: true }
               sx={{ width: '18%' }}
-              disabled={updatedFormValues?.religion !== 'OTHERS'}
+              disabled={updatedFormValues?.religion !== 'OTHERS' || view}
               InputLabelProps={{ shrink: true }}
               {...getInputProps(
                 'otherReligion',
@@ -699,6 +723,7 @@ const PersonalInfo = ({ view }) => {
                 error,
                 onChange
               )}
+              {...(view ? { variant: 'filled' } : {})}
             />
           )}
         />

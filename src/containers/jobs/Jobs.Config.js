@@ -19,7 +19,7 @@ export const GET_URL_BY_ID = { key: 'detailsById', url: JOBS.GET_BY_ID };
 // Query Filters
 export /** @type {*} */
 const QUERY_FILTERS = {
-  filter: 'jobId',
+  filter: 'createdAt',
   pageNo: 1,
   pageSize: 20,
   sortby: 'desc',
@@ -58,7 +58,7 @@ export const COLUMNS = [
     style: true,
   },
   {
-    ...getColumnProps('microMarketName', 'SUPPLY HUB', '5%'),
+    ...getColumnProps('microMarketName', 'SUPPLY HUB', '10%'),
     style: true,
   },
   {
@@ -66,7 +66,7 @@ export const COLUMNS = [
     style: true,
   },
   {
-    ...getColumnProps('budgetRange', 'BUDGET RANGE', '13%'),
+    ...getColumnProps('budgetRange', 'BUDGET RANGE (In Rupees)', '15%'),
     style: true,
   },
   {

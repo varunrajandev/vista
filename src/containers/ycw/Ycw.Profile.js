@@ -324,7 +324,7 @@ const Profile = () => {
             <TextField
               sx={{ width: '18%' }}
               size='small'
-              value={moment(userData.birthday).utc().format('DD/MM/YYYY') || ''}
+              value={userData.birthday ? moment(userData.birthday).utc().format('DD/MM/YYYY') || '' : ''}
               id='outlined-basic'
               variant='filled'
               color='secondary'
@@ -734,7 +734,7 @@ const Profile = () => {
               <TextField
                 sx={{ width: '18%' }}
                 size='small'
-                value={moment(jobRequirement.startTime).format('LT') || ''}
+                value={jobRequirement.startTime ? moment(jobRequirement.startTime).format('LT') || '' : ''}
                 id='outlined-basic'
                 variant='filled'
                 color='secondary'
@@ -746,7 +746,7 @@ const Profile = () => {
               <TextField
                 sx={{ width: '18%' }}
                 size='small'
-                value={moment(jobRequirement.endTime).format('LT') || ''}
+                value={jobRequirement.endTime ? moment(jobRequirement.endTime).format('LT') || '' : ''}
                 id='outlined-basic'
                 variant='filled'
                 color='secondary'

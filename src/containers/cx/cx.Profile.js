@@ -45,9 +45,9 @@ const Profile = () => {
             setIsActive(checked);
             setIsLoading(false);
             navigate(
-              ROUTE_CONFIG.JOBS.PROFILE(id, checked ? 'ACTIVE' : 'IN_ACTIVE')
+              ROUTE_CONFIG.CX.PROFILE(id, checked ? 'ACTIVE' : 'IN_ACTIVE')
             );
-            setNotify({ message: 'Jobs Updated Successfully' });
+            setNotify({ message: 'Customer Updated Successfully' });
             setTimeout(() => {
               setNotify({ message: '' });
             }, 4000);
@@ -86,7 +86,7 @@ const Profile = () => {
         <Personal view />
         <Address view />
         <HouseHold view />
-        <BasicInfo view />
+        <BasicInfo view redirect/>
       </Box>
     </Box>
   );

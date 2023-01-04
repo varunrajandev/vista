@@ -19,9 +19,8 @@ import {
   TextField,
   Autocomplete,
   CircularProgress,
+  TableSortLabel
 } from '@mui/material';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { NavLink, useNavigate } from 'react-router-dom';
 /***************LOCAL DEPENDENCIES ****************/
 import { requestQuery } from '../../utils/request.util';
@@ -62,7 +61,10 @@ const List = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({ ...QUERY_FILTERS });
-  const [selectedArrowColor, setSelectedArrowColor] = React.useState('');
+  const [selectedSortedKey, setSelectedSortedKey] = useState({
+    key: '',
+    order: 'asc',
+  });
 
   // navigation
   const navigate = useNavigate();
@@ -251,61 +253,26 @@ const List = () => {
                     align='left'
                     key={column.name}
                   >
-                    <Box sx={{ display: 'flex' }}>
-                      <Box
-                        {...(column.style
-                          ? { sx: { letterSpacing: '1px' } }
-                          : { ml: 4 })}
-                      >
-                        {column.name}
-                      </Box>
-                      <Box
-                        style={{
-                          alignItem: '',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '-5px',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <ArrowDropUpIcon
-                          onClick={() => {
-                            setFilters((prevState) => ({
-                              ...prevState,
-                              filter: column.key,
-                              sortby: 'asc',
-                              pageNo: 1,
-                            }));
-                            setSelectedArrowColor(`${column.key}Asc`);
-                          }}
-                          sx={{
-                            marginTop: column.arrowUpMargin,
-                            color:
-                              column.asc === selectedArrowColor
-                                ? 'blue'
-                                : 'black',
-                          }}
-                        />
-                        <ArrowDropDownIcon
-                          onClick={() => {
-                            setFilters((prevState) => ({
-                              ...prevState,
-                              filter: column.key,
-                              sortby: 'desc',
-                              pageNo: 1,
-                            }));
-                            setSelectedArrowColor(`${column.key}Desc`);
-                          }}
-                          sx={{
-                            marginTop: column.arrowDownMargin,
-                            color:
-                              column.desc === selectedArrowColor
-                                ? 'blue'
-                                : 'black',
-                          }}
-                        />
-                      </Box>
-                    </Box>
+                    <TableSortLabel
+                      active={true}
+                      direction={
+                        column.key === selectedSortedKey ? 'desc' : 'asc'
+                      }
+                      onClick={() => {
+                        setFilters((prevState) => ({
+                          ...prevState,
+                          filter: column.key,
+                          sortby:
+                            column.key === selectedSortedKey ? 'asc' : 'desc',
+                          pageNo: 1,
+                        }));
+                        setSelectedSortedKey(
+                          selectedSortedKey !== column.key ? column.key : ''
+                        );
+                      }}
+                    >
+                      {column.name}
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>

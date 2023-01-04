@@ -356,61 +356,6 @@ const List = () => {
                     >
                       {column.name}
                     </TableSortLabel>
-                    {/* <Box sx={{ display: 'flex' }}>
-                      <Box
-                        {...(column.style
-                          ? { sx: { letterSpacing: '1px' } }
-                          : { ml: 4 })}
-                      >
-                        {column.name}
-                      </Box>
-                      <Box
-                        style={{
-                          alignItem: '',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '-5px',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <ArrowDropUpIcon
-                          onClick={() => {
-                            setFilters((prevState) => ({
-                              ...prevState,
-                              filter: column.key,
-                              sortby: 'asc',
-                              pageNo: 1,
-                            }));
-                            setSelectedArrowColor(`${column.key}Asc`);
-                          }}
-                          sx={{
-                            marginTop: column.arrowUpMargin,
-                            color:
-                              column.asc === selectedArrowColor
-                                ? 'blue'
-                                : 'black',
-                          }}
-                        />
-                        <ArrowDropDownIcon
-                          onClick={() => {
-                            setFilters((prevState) => ({
-                              ...prevState,
-                              filter: column.key,
-                              sortby: 'desc',
-                              pageNo: 1,
-                            }));
-                            setSelectedArrowColor(`${column.key}Desc`);
-                          }}
-                          sx={{
-                            marginTop: column.arrowDownMargin,
-                            color:
-                              column.desc === selectedArrowColor
-                                ? 'blue'
-                                : 'black',
-                          }}
-                        />
-                      </Box>
-                    </Box> */}
                   </TableCell>
                 ))}
               </TableRow>

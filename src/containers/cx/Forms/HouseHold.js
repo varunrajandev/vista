@@ -121,7 +121,7 @@ const HouseHoldInfo = ({ view }) => {
           if (res?.status ?? false) {
             update(index, {
               ...updatedFields.houseHold[index],
-              ...(res?.data ?? {}),
+              address: res?.data ?? '',
             });
           }
         });
@@ -384,7 +384,6 @@ const HouseHoldInfo = ({ view }) => {
               })}
             >
               <MenuItem value='false'>Same As Current Address</MenuItem>
-              <MenuItem value='true'>Same As Permanent Address</MenuItem>
               <MenuItem value='null'>Other</MenuItem>
             </DropDown>
           </FormControl>

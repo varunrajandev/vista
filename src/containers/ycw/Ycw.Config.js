@@ -114,7 +114,6 @@ export const COLUMNS = [
 // Links
 export const LINKS = [
   { name: 'PROFILE', to: '', active: true },
-  { name: 'JOBS', to: '', active: false },
 ];
 
 // Button Links

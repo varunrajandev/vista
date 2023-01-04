@@ -142,7 +142,7 @@ const JobInfo = () => {
     setIsLoading(true);
     Axios.post(GET_JOB, {
       ...convertEmptyStringIntoNull(updatedValues),
-      userExperienceRequestDto: convertEmptyStringIntoNull(updatedFields.userExperienceRequestDto),
+      userExperienceRequestDto: convertEmptyStringIntoNull(updatedValues.userExperienceRequestDto),
       userId: id,
       openToTiming: updatedValues.openToTraining,
     })

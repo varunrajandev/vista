@@ -194,8 +194,8 @@ const basicInfoFormSchema = yup.object().shape({
     .date()
     .nullable()
     .transform((v, o) => (o === '' ? null : v))
-    .min(new Date(1900, 0, 1), 'Start must be later')
-    .max(new Date(), 'Start Date not greater then today')
+    .min(new Date(), 'Date not less than today')
+    // .max(new Date(), 'Start Date not greater then today')
     .typeError('Please Enter valid Start Date format mm/dd/yyyy')
     .notRequired('Date is required'),
 });

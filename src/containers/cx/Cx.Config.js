@@ -48,7 +48,7 @@ export const BUTTON_LINKS = {
 // Query Filters
 export /** @type {*} */
 const QUERY_FILTERS = {
-  filter: 'firstName',
+  filter: 'createdAt',
   pageNo: 1,
   pageSize: 20,
   sortby: 'desc',
@@ -63,13 +63,16 @@ export const COLUMNS = [
     ...getColumnProps('userId', 'CUSTOMER ID'),
   },
   {
-    ...getColumnProps('name', 'NAME'),
+    ...getColumnProps('firstName', 'NAME'),
   },
   {
     ...getColumnProps('mobileNo', 'PHONE#'),
   },
   {
     ...getColumnProps('email', 'EMAIL'),
+  },
+  {
+    ...getColumnProps('cityName', 'City'),
   },
   {
     ...getColumnProps('microMarketName', 'SUPPLY HUB'),
@@ -99,6 +102,7 @@ export const PERSON_INFO_FORM_FIELDS = {
   whatsappNumber: null,
   email: null,
   professsion: null,
+  otherProfession: null,
   userType: 'CUSTOMER',
   user: null,
   profileStatus: 'IN_ACTIVE',

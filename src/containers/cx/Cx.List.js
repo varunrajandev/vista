@@ -19,9 +19,8 @@ import {
   Autocomplete,
   Pagination,
   CircularProgress,
+  TableSortLabel
 } from '@mui/material';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { NavLink, useNavigate } from 'react-router-dom';
 /***************LOCAL DEPENDENCIES ****************/
 import { get } from './../../store/action';
@@ -61,7 +60,10 @@ const List = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({ ...QUERY_FILTERS });
-  const [selectedArrowColor, setSelectedArrowColor] = useState('');
+  const [selectedSortedKey, setSelectedSortedKey] = useState({
+    key: '',
+    order: 'asc',
+  });
 
   // navigation
   const navigate = useNavigate();
@@ -213,7 +215,7 @@ const List = () => {
           onChange={(_event, newValue) =>
             setFilters((prevState) => ({
               ...prevState,
-              status: newValue?.value ?? '',
+              status: newValue?.key ?? '',
             }))
           }
           sx={{ width: '20%' }}
@@ -259,58 +261,26 @@ const List = () => {
                     align='left'
                     key={column.key}
                   >
-                    <Box key={`${column.key}_box`} sx={{ display: 'flex' }}>
-                      <Box key={`${column.key}_name`}>{column.name}</Box>
-                      <Box
-                        style={{
-                          alignItem: '',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '-5px',
-                          cursor: 'pointer',
-                        }}
-                        key={`${column.key}_arrow`}
-                      >
-                        <ArrowDropUpIcon
-                          key={`${column.key}_asc`}
-                          onClick={() => {
-                            setFilters((prevState) => ({
-                              ...prevState,
-                              filter: column.key,
-                              sortby: 'asc',
-                              pageNo: 1,
-                            }));
-                            setSelectedArrowColor(`${column.key}Asc`);
-                          }}
-                          sx={{
-                            marginTop: column.arrowUpMargin,
-                            color:
-                              column.asc === selectedArrowColor
-                                ? 'blue'
-                                : 'black',
-                          }}
-                        />
-                        <ArrowDropDownIcon
-                          key={`${column.key}_desc`}
-                          onClick={() => {
-                            setFilters((prevState) => ({
-                              ...prevState,
-                              filter: column.key,
-                              sortby: 'desc',
-                              pageNo: 1,
-                            }));
-                            setSelectedArrowColor(`${column.key}Desc`);
-                          }}
-                          sx={{
-                            marginTop: column.arrowDownMargin,
-                            color:
-                              column.desc === selectedArrowColor
-                                ? 'blue'
-                                : 'black',
-                          }}
-                        />
-                      </Box>
-                    </Box>
+                    <TableSortLabel
+                      active={true}
+                      direction={
+                        column.key === selectedSortedKey ? 'desc' : 'asc'
+                      }
+                      onClick={() => {
+                        setFilters((prevState) => ({
+                          ...prevState,
+                          filter: column.key,
+                          sortby:
+                            column.key === selectedSortedKey ? 'asc' : 'desc',
+                          pageNo: 1,
+                        }));
+                        setSelectedSortedKey(
+                          selectedSortedKey !== column.key ? column.key : ''
+                        );
+                      }}
+                    >
+                      {column.name}
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>
@@ -370,11 +340,19 @@ const List = () => {
                     key={`${row.id}_email`}
                     sx={{ fontSize: '13px' }}
                     align='left'
+
                   >
                     {row.email}
                   </TableCell>
                   <TableCell
-                    key={`${row.id}_locality`}
+                    key={`${row.id}_cityName`}
+                    sx={{ fontSize: '13px' }}
+                    align='left'
+                  >
+                    {row.cityName}
+                  </TableCell>
+                  <TableCell
+                    key={`${row.id}_microMarketName`}
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
