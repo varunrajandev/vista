@@ -124,7 +124,8 @@ export const POST_PERSON_INFO_FORM_FIELDS = ({
   userId = null,
   gender = null,
   religion = null,
-  otherReligion = null
+  otherReligion = null,
+  otherProfession = null,
 }) => ({
   otherReligion,
   gender,
@@ -141,4 +142,5 @@ export const POST_PERSON_INFO_FORM_FIELDS = ({
   email,
   professsion,
   userType: 'CUSTOMER',
+  otherProfession
 });

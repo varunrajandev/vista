@@ -212,7 +212,7 @@ const List = () => {
           onChange={(_event, value) =>
             setFilters((prevState) => ({
               ...prevState,
-              jobActiveStage: value?.key ?? '',
+              status: value?.key ?? '',
               pageNo: 1,
             }))
           }
@@ -220,7 +220,7 @@ const List = () => {
             <TextField
               {...params}
               sx={{ bgcolor: 'white', borderRadius: '5px' }}
-              label='Select Highest Active Stage'
+              label='Select Job Status'
             />
           )}
           getOptionLabel={(item) => `${item.value}`}
@@ -316,6 +316,10 @@ const List = () => {
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>
                     {item?.userId ?? '--'}
+                  </TableCell>
+
+                  <TableCell sx={{ fontSize: '13px' }} align='left'>
+                    {item?.cityName ?? '--'}
                   </TableCell>
 
                   <TableCell sx={{ fontSize: '13px' }} align='left'>

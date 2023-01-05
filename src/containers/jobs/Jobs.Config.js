@@ -58,6 +58,10 @@ export const COLUMNS = [
     style: true,
   },
   {
+    ...getColumnProps('cityName', 'City', '10%'),
+    style: true,
+  },
+  {
     ...getColumnProps('microMarketName', 'SUPPLY HUB', '10%'),
     style: true,
   },
