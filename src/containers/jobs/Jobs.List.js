@@ -157,6 +157,7 @@ const List = () => {
             setFilters((prevState) => ({
               ...prevState,
               city: value?.uuid ?? '',
+              micromsrket: '',
               pageNo: 1,
             }));
             dispatch(
@@ -184,7 +185,8 @@ const List = () => {
           disablePortal
           size='small'
           id='combo-box-demo'
-          options={details?.locality ?? []}
+          options={filters?.city ? details?.locality ?? [] : []}
+          value={!filters?.city && []}
           onChange={(_event, value) =>
             setFilters((prevState) => ({
               ...prevState,
@@ -200,7 +202,7 @@ const List = () => {
               label='Select Locality'
             />
           )}
-          getOptionLabel={(item) => `${item.name}`}
+          getOptionLabel={(item) => `${item?.name ?? ''}`}
         />
 
         <Autocomplete

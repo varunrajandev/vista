@@ -108,10 +108,12 @@ export const BASIC_INFO_FORM_FIELDS = {
   petCount: 0,
   religion: null,
   skillUuid: null,
+  otherSkillUuid: null,
   startDate: '',
   startTime: null,
   traingType: null,
   userId: null,
   workingHours: null,
   jobId: null,
+  otherReligion: null
 };

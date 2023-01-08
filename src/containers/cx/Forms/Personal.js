@@ -243,7 +243,6 @@ const PersonalInfo = ({ view }) => {
       clearErrors('mobileNo');
     }
   };
-
   // update data on change
   useEffect(() => {
     const subscription = watch(async (value, { name, type }) => {

@@ -19,7 +19,7 @@ import {
   Autocomplete,
   Pagination,
   CircularProgress,
-  TableSortLabel
+  TableSortLabel,
 } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
 /***************LOCAL DEPENDENCIES ****************/
@@ -162,6 +162,7 @@ const List = () => {
             setFilters((prevState) => ({
               ...prevState,
               city: value?.uuid ?? '',
+              micromsrket: '',
               pageNo: 1,
             }));
             dispatch(
@@ -188,7 +189,8 @@ const List = () => {
           size='small'
           disablePortal
           id='combo-box-demo'
-          options={details?.locality ?? []}
+          options={filters?.city ? details?.locality ?? [] : []}
+          value={!filters?.city && []}
           onChange={(_event, newValue) =>
             setFilters((prevState) => ({
               ...prevState,
@@ -204,7 +206,7 @@ const List = () => {
               label='Select Locality'
             />
           )}
-          getOptionLabel={(item) => `${item.name}`}
+          getOptionLabel={(item) => `${item?.name ?? ''}`}
         />
 
         <Autocomplete
@@ -320,57 +322,56 @@ const List = () => {
                       }`,
                     }}
                   >
-                    {row.userId}
+                    {row?.userId ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_name`}
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
-                    {row.name}
+                    {row?.name ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_mobileNo`}
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
-                    {row.mobileNo}
+                    {row?.mobileNo ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_email`}
                     sx={{ fontSize: '13px' }}
                     align='left'
-
                   >
-                    {row.email}
+                    {row?.email ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_cityName`}
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
-                    {row.cityName}
+                    {row?.cityName ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_microMarketName`}
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
-                    {row.microMarketName}
+                    {row?.microMarketName ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_jobs`}
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
-                    {row.openJob}
+                    {row?.openJob ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_active`}
                     sx={{ fontSize: '13px' }}
                     align='left'
                   >
-                    {row.activeJob}
+                    {row?.activeJob ?? '--'}
                   </TableCell>
                   <TableCell
                     key={`${row.id}_status`}
@@ -396,7 +397,7 @@ const List = () => {
                           ],
                       }}
                     >
-                      {row.profileStatus ? row.profileStatus.value : '--'}
+                      {row?.profileStatus?.value ?? '--'}
                     </Typography>
                   </TableCell>
                 </StyledTableRow>

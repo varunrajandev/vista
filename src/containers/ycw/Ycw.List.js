@@ -194,6 +194,7 @@ const List = () => {
             setFilters((prevState) => ({
               ...prevState,
               city: value?.uuid ?? '',
+              micromsrket: '',
               pageNo: 1,
             }));
             dispatch(
@@ -221,7 +222,8 @@ const List = () => {
           disablePortal
           size='small'
           id='combo-box-demo'
-          options={details?.microMarket ?? []}
+          options={filters?.city ? details?.locality ?? [] : []}
+          value={!filters?.city && []}
           sx={{ width: '15%' }}
           onChange={(_event, value) =>
             setFilters((prevState) => ({
@@ -237,7 +239,7 @@ const List = () => {
               label='Select Supply Hub'
             />
           )}
-          getOptionLabel={(item) => `${item.name}`}
+          getOptionLabel={(item) => `${item?.name ?? ''}`}
         />
 
         <Autocomplete

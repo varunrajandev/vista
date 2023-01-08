@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { LoadingButton } from '@mui/lab';
 import { useForm, Controller } from 'react-hook-form';
-import { isEmpty, debounce } from 'lodash';
+import { isEmpty, debounce, filter, size } from 'lodash';
 import React, { useState, useEffect, memo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -210,6 +210,15 @@ const BasicInfo = ({ redirect, view }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleAutoSave = useCallback(debounce(handleSave, 500), []);
 
+  const getDisabledKey = (listKey, findKey, findValue, value) => {
+    const updatedList = filter(dropDownList[listKey], [[findKey], value]);
+    if (!isEmpty(updatedList) && size(updatedList) !== 0) {
+      return updatedList[0]?.[findValue] ?? '';
+    } else {
+      return '';
+    }
+  };
+
   /**
    * @description
    * @param {string} value
@@ -315,6 +324,24 @@ const BasicInfo = ({ redirect, view }) => {
           ) : null}
         </FormControl>
 
+        <TextField
+          {...(view ? { variant: 'filled' } : { variant: 'outlined' })}
+          disabled={view ||  getDisabledKey(
+            'skill',
+            'uuid',
+            'name',
+            updatedFields?.skillUuid
+          ) === 'Others'
+            ? false
+            : true}
+          sx={{ width: '18%' }}
+          size='small'
+          id='outlined-basic'
+          label='Other Job Type'
+          value={updatedFields?.otherSkillUuid ?? ''}
+          {...register('otherSkillUuid')}
+        />
+
         <FormControl
           sx={{ minWidth: '18%' }}
           size='small'
@@ -345,6 +372,7 @@ const BasicInfo = ({ redirect, view }) => {
             </FormHelperText>
           ) : null}
         </FormControl>
+
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Controller
             control={control}
@@ -385,7 +413,15 @@ const BasicInfo = ({ redirect, view }) => {
           error={errors?.familyMember?.message ?? false}
           helperText={errors?.familyMember?.message ?? ''}
         />
+      </Box>
 
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          mt: 3,
+        }}
+      >
         <FormControl
           sx={{ minWidth: '18%', display: 'flex' }}
           size='small'
@@ -408,15 +444,7 @@ const BasicInfo = ({ redirect, view }) => {
             ))}
           </DropDown>
         </FormControl>
-      </Box>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          mt: 3,
-        }}
-      >
         <FormControl
           sx={{ minWidth: '18%', display: 'flex' }}
           size='small'
@@ -463,6 +491,17 @@ const BasicInfo = ({ redirect, view }) => {
           </DropDown>
         </FormControl>
 
+        <TextField
+          {...(view ? { variant: 'filled' } : { variant: 'outlined' })}
+          disabled={view || updatedFields?.religion !== 'OTHERS'}
+          sx={{ width: '18%' }}
+          size='small'
+          id='outlined-basic'
+          label='Other Religion'
+          value={updatedFields?.otherReligion ?? ''}
+          {...register('otherReligion')}
+        />
+
         <FormControl
           sx={{ minWidth: '18%' }}
           size='small'
@@ -485,7 +524,16 @@ const BasicInfo = ({ redirect, view }) => {
             ))}
           </DropDown>
         </FormControl>
+      </Box>
 
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mt: 3,
+        }}
+      >
         <FormControl
           sx={{ minWidth: '18%' }}
           size='small'
@@ -533,16 +581,7 @@ const BasicInfo = ({ redirect, view }) => {
             )}
           />
         </LocalizationProvider>
-      </Box>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mt: 3,
-        }}
-      >
         <TextField
           inputProps={{
             min: 0,
@@ -574,7 +613,7 @@ const BasicInfo = ({ redirect, view }) => {
         />
 
         <TextField
-          sx={{ width: '59%' }}
+          sx={{ width: '18%' }}
           size='small'
           id='outlined-basic'
           label='Remarks'
