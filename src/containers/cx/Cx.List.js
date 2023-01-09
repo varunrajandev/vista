@@ -1,6 +1,13 @@
 /***************NPM DEPENDENCIES *****************/
-import React, { memo, useEffect, useState, useMemo, useCallback } from 'react';
-import { debounce, size } from 'lodash';
+import React, {
+  memo,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
+import { debounce, isEmpty, size } from 'lodash';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
   Paper,
@@ -64,6 +71,9 @@ const List = () => {
     key: '',
     order: 'asc',
   });
+
+  // ref
+  const autoCompleteRef = useRef(null);
 
   // navigation
   const navigate = useNavigate();
@@ -159,6 +169,12 @@ const List = () => {
           options={details?.city ?? []}
           sx={{ width: '20%' }}
           onChange={(_event, value) => {
+            const microMarket = autoCompleteRef.current.getElementsByClassName(
+              'MuiAutocomplete-clearIndicator'
+            )?.[0];
+            if (!isEmpty(microMarket)) {
+              microMarket.click();
+            }
             setFilters((prevState) => ({
               ...prevState,
               city: value?.uuid ?? '',
@@ -173,6 +189,7 @@ const List = () => {
                     ? `${URLS[2].url}?cityUuid=${value.uuid}`
                     : URLS[2].url,
                 },
+                URLS[2],
               ])
             );
           }}
@@ -185,19 +202,20 @@ const List = () => {
           )}
           getOptionLabel={(item) => `${item.cityName}`}
         />
+
         <Autocomplete
+          ref={autoCompleteRef}
           size='small'
           disablePortal
           id='combo-box-demo'
-          options={filters?.city ? details?.locality ?? [] : []}
-          value={!filters?.city && []}
-          onChange={(_event, newValue) =>
+          options={details?.locality ?? []}
+          onChange={(_event, newValue) => {
             setFilters((prevState) => ({
               ...prevState,
               micromsrket: newValue?.id ?? '',
               pageNo: 1,
-            }))
-          }
+            }));
+          }}
           sx={{ width: '20%' }}
           renderInput={(params) => (
             <TextField
@@ -206,9 +224,8 @@ const List = () => {
               label='Select Locality'
             />
           )}
-          getOptionLabel={(item) => `${item?.name ?? ''}`}
+          getOptionLabel={(item) => `${item?.name}`}
         />
-
         <Autocomplete
           size='small'
           disablePortal

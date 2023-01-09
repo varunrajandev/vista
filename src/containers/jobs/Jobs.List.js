@@ -1,6 +1,13 @@
 /***************NPM DEPENDENCIES *****************/
-import React, { memo, useEffect, useState, useMemo, useCallback } from 'react';
-import { debounce, size } from 'lodash';
+import React, {
+  memo,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
+import { debounce, size, isEmpty } from 'lodash';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import {
   Pagination,
@@ -19,7 +26,7 @@ import {
   TextField,
   Autocomplete,
   CircularProgress,
-  TableSortLabel
+  TableSortLabel,
 } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
 /***************LOCAL DEPENDENCIES ****************/
@@ -65,6 +72,9 @@ const List = () => {
     key: '',
     order: 'asc',
   });
+
+  // ref
+  const autoCompleteRef = useRef(null);
 
   // navigation
   const navigate = useNavigate();
@@ -154,6 +164,12 @@ const List = () => {
           options={details?.city ?? []}
           sx={{ width: '20%' }}
           onChange={(_event, value) => {
+            const microMarket = autoCompleteRef.current.getElementsByClassName(
+              'MuiAutocomplete-clearIndicator'
+            )?.[0];
+            if (!isEmpty(microMarket)) {
+              microMarket.click();
+            }
             setFilters((prevState) => ({
               ...prevState,
               city: value?.uuid ?? '',
@@ -168,6 +184,7 @@ const List = () => {
                     ? `${URLS[2].url}?cityUuid=${value.uuid}`
                     : URLS[2].url,
                 },
+                URLS[2],
               ])
             );
           }}
@@ -182,11 +199,11 @@ const List = () => {
         />
 
         <Autocomplete
+          ref={autoCompleteRef}
           disablePortal
           size='small'
           id='combo-box-demo'
-          options={filters?.city ? details?.locality ?? [] : []}
-          value={!filters?.city && []}
+          options={details?.locality ?? []}
           onChange={(_event, value) =>
             setFilters((prevState) => ({
               ...prevState,
@@ -202,7 +219,7 @@ const List = () => {
               label='Select Locality'
             />
           )}
-          getOptionLabel={(item) => `${item?.name ?? ''}`}
+          getOptionLabel={(item) => `${item?.name}`}
         />
 
         <Autocomplete
@@ -287,7 +304,10 @@ const List = () => {
                   onClick={() =>
                     navigate(
                       item?.jobStatus?.key === 'ACTIVE'
-                        ? ROUTE_CONFIG.JOBS.PROFILE(item?.jobId, item?.jobStatus?.key)
+                        ? ROUTE_CONFIG.JOBS.PROFILE(
+                            item?.jobId,
+                            item?.jobStatus?.key
+                          )
                         : ROUTE_CONFIG.JOBS.EDIT(item?.jobId ?? '', 1)
                     )
                   }
