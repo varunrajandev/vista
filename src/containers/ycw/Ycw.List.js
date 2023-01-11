@@ -221,7 +221,6 @@ const List = () => {
                     ? `${ENDPOINTS.LOCALITY_1}?cityUuid=${value.uuid}`
                     : ENDPOINTS.LOCALITY_1,
                 },
-                URLS[2],
               ])
             );
           }}
@@ -240,7 +239,7 @@ const List = () => {
           disablePortal
           size='small'
           id='combo-box-demo'
-          options={details?.locality ?? []}
+          options={details?.microMarket ?? []}
           sx={{ width: '15%' }}
           onChange={(_event, value) =>
             setFilters((prevState) => ({

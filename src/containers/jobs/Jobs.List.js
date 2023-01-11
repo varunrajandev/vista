@@ -184,7 +184,6 @@ const List = () => {
                     ? `${URLS[2].url}?cityUuid=${value.uuid}`
                     : URLS[2].url,
                 },
-                URLS[2],
               ])
             );
           }}
@@ -216,7 +215,7 @@ const List = () => {
             <TextField
               {...params}
               sx={{ bgcolor: 'white', borderRadius: '5px' }}
-              label='Select Locality'
+              label='Select Supply Hub'
             />
           )}
           getOptionLabel={(item) => `${item?.name}`}
